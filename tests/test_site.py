@@ -475,3 +475,24 @@ def test_chinese_lines_fill_the_measure(page_factory, site_url):
     }""")
     assert len(fills) >= 3
     assert all(f >= 0.9 * 300 for f in fills), fills
+
+
+@pytest.mark.parametrize(
+    "theme, expected",
+    [
+        ("dark", ["oklch(0.2 0.012 260)", "oklch(0.23 0.012 260)", "oklch(0.26 0.012 260)"]),
+        ("light", ["oklch(0.975 0.004 260)", "oklch(0.955 0.006 260)", "oklch(0.995 0.002 260)"]),
+    ],
+)
+def test_neutral_surfaces(page_factory, site_url, theme, expected):
+    page = page_factory(theme=theme)
+    page.goto(f"{site_url}/components.html")
+    got = page.evaluate(
+        """['--f-bg', '--f-bg-2', '--f-surface'].map(v => {
+          const p = document.createElement('i');
+          p.style.background = `var(${v})`;
+          document.body.append(p);
+          return getComputedStyle(p).backgroundColor;
+        })"""
+    )
+    assert got == expected

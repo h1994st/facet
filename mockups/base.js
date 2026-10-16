@@ -11,6 +11,7 @@ const PAGES = [
   ["shape.html", "Shape"],
   ["glass.html", "Glass"],
   ["layouts.html", "Layout"],
+  ["hero.html", "Hero"],
   ["cast.html", "Cast"],
 ];
 const SITES = [

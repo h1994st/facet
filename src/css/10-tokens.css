@@ -35,11 +35,10 @@
   }
 
   :root {
-    --f-bg: var(--f-unless-light, oklch(0.15 0.012 260))
-      var(--f-unless-dark, oklch(0.975 0.004 260));
-    --f-bg-2: var(--f-unless-light, oklch(0.18 0.012 260))
+    --f-bg: var(--f-unless-light, oklch(0.2 0.012 260)) var(--f-unless-dark, oklch(0.975 0.004 260));
+    --f-bg-2: var(--f-unless-light, oklch(0.23 0.012 260))
       var(--f-unless-dark, oklch(0.955 0.006 260));
-    --f-surface: var(--f-unless-light, oklch(0.21 0.012 260))
+    --f-surface: var(--f-unless-light, oklch(0.26 0.012 260))
       var(--f-unless-dark, oklch(0.995 0.002 260));
     --f-fg: var(--f-unless-light, oklch(0.95 0.01 260)) var(--f-unless-dark, oklch(0.2 0.015 260));
     --f-fg-2: var(--f-unless-light, oklch(0.95 0.01 260 / 0.7))
