@@ -145,13 +145,17 @@ A minimal page:
 The JavaScript is optional. Importing `dist/js/facet.js` initializes itself: each module takes over
 the elements that opt in with a `data-f-*` attribute (`data-f-theme-toggle`, `data-f-liquid`,
 `data-f-scrollspy`, `data-f-nav-cover`, `data-f-autoplay`, `data-f-story`, `data-f-panels`,
-`data-f-deck`, `data-f-type`), and calling `init()` again skips what is already set up. To use one
-module, import it and keep the cleanup it returns:
+`data-f-deck`, `data-f-type`, `data-f-ga4` on `<html>`, `data-f-event`, `data-f-label`), and calling
+`init()` again skips what is already set up. To use one module, import it and keep the cleanup it
+returns:
 
 ```js
 import { init } from "./vendor/facet/dist/js/deck.js";
 const stop = init(document.querySelector("#talk"));
 ```
+
+Analytics is off unless `<html>` carries a GA4 measurement ID, and stays off under Global Privacy
+Control.
 
 Every hook, the deck's slide data, and the reduced-motion and no-JS behavior are documented on the
 reference site's overview page, under "Behavior".

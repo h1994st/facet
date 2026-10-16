@@ -1,6 +1,7 @@
 // Theme toggle: dark → light → auto. Persists to localStorage["facet-theme"]; dark is the default.
 // This module runs after first paint, so a page that wants the saved theme without a flash puts
 // the one-line snippet from the README in its <head>; init() then only labels the toggles.
+// setTheme dispatches facet:theme ({theme}) on document, which analytics reports.
 const KEY = "facet-theme";
 const ORDER = ["dark", "light", "auto"];
 const LABEL = { dark: "Dark", light: "Light", auto: "Auto" };
@@ -18,6 +19,7 @@ function show(value) {
 export function setTheme(value) {
   const theme = valid(value) || "dark";
   show(theme);
+  document.dispatchEvent(new CustomEvent("facet:theme", { detail: { theme } }));
   try {
     localStorage.setItem(KEY, theme);
   } catch {}

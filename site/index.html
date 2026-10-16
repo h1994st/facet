@@ -254,6 +254,24 @@ git -C vendor/facet checkout v0.1.1</pre>
           </thead>
           <tbody>
             <tr>
+              <td>
+                <code>data-f-ga4</code> (on <code>&lt;html&gt;</code>), <code>data-f-event</code>,
+                <code>data-f-label</code>
+              </td>
+              <td><code>analytics.js</code></td>
+              <td
+                data-zh='可选的 Google Analytics 4：<code>&amp;lt;html data-f-ga4="G-…"&amp;gt;</code> 加载一次 gtag 并发送一次 <code>config</code>（即一次页面浏览）。浏览器发送全局隐私控制（GPC）时什么都不加载。<code>data-f-event="name"</code> 在点击时发送这个事件（链接带 <code>link_url</code>，<code>data-f-label</code> 作为 <code>label</code>）；切换主题时发送 <code>theme_change</code>。不提供 Cookie 同意横幅：需要的网站自行接入 GA4 的同意模式。'
+              >
+                Optional Google Analytics 4: <code>&lt;html data-f-ga4="G-…"&gt;</code> loads gtag
+                once and sends one <code>config</code> (one page view). Nothing loads when the
+                browser sends Global Privacy Control. <code>data-f-event="name"</code> sends that
+                event on click (with <code>link_url</code> for links and
+                <code>data-f-label</code> as <code>label</code>); theme switches send
+                <code>theme_change</code>. There is no consent banner: sites that need one wire GA4
+                consent mode themselves.
+              </td>
+            </tr>
+            <tr>
               <td><code>data-f-theme-toggle</code></td>
               <td><code>theme.js</code></td>
               <td

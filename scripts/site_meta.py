@@ -27,6 +27,7 @@ import tokens  # noqa: E402
 ROOT = Path(__file__).resolve().parents[1]
 BASE = "https://shengtuo.me/facet/"
 REPO = "https://github.com/h1994st/facet"
+GA4 = "G-ZMH6NLL7C7"  # shengtuo.me's GA4 property; only published pages carry it
 NOINDEX = ("mockups/",)
 ZH = "zh/"
 LANGS = {"en": ("en", "en_US"), "zh": ("zh-Hans", "zh_CN")}  # hreflang and lang, og:locale
@@ -143,9 +144,13 @@ def move_urls(page: str, rel: str, pages: set[str]) -> str:
 
 
 def set_lang(page: str, lang: str) -> str:
-    """Mark the page's language for search, and for site.js, which then switches by URL."""
+    """Mark the page's language for search, and for site.js, which then switches by URL; and turn
+    on analytics, which only the published pages carry."""
     return re.sub(
-        r"<html\b[^>]*>", f'<html lang="{LANGS[lang][0]}" data-site-lang="{lang}">', page, count=1
+        r"<html\b[^>]*>",
+        f'<html lang="{LANGS[lang][0]}" data-site-lang="{lang}" data-f-ga4="{GA4}">',
+        page,
+        count=1,
     )
 
 
