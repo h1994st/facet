@@ -1,0 +1,37 @@
+# Pinned upstream icons, fetched by icons/fetch.py (`just icons`) into src/icons/.
+# name = { file, sha256 }: the facet name, the file in the package, and its checksum.
+
+[simple-icons]
+base = "https://cdn.jsdelivr.net/npm/simple-icons@16.35.0/"
+license = { file = "LICENSE.md", sha256 = "9046848b63a5c92bff14e4accca80bd987e0623b74adf9226ce5198d312b79d5", out = "LICENSE-simple-icons.md" }
+
+[simple-icons.icons]
+github = { file = "icons/github.svg", sha256 = "3bf8cceead820aec50d4ee825a3fd02c5a1cd6665cc9cf4cbf3d9c8861a204bb" }
+google-scholar = { file = "icons/googlescholar.svg", sha256 = "a9d345ab3bb511c83136949ae1af76470d2c069f14dfb3a0eec852bf59996b6f" }
+instagram = { file = "icons/instagram.svg", sha256 = "f53af2d1fc5292ba1433b5c1faf50005ce6a997fa302d1816989929f379a59dc" }
+x = { file = "icons/x.svg", sha256 = "693e68863eceb8dc9f72e2acd386ab9c20a10858dab2c076212f7084cb7a32fe" }
+rss = { file = "icons/rss.svg", sha256 = "b31e1d6c3147795d2aa186e7515b624bb2b8046b30fce1063f111b36c99b9ef8" }
+orcid = { file = "icons/orcid.svg", sha256 = "c78113284daacc129035a299a9fac8235c152eb586e066d85778fd3eeb335a30" }
+dblp = { file = "icons/dblp.svg", sha256 = "0a3e9d8f36697977871749c058c5c8b02268eff2a71c0770494856a95f4ea5b7" }
+semantic-scholar = { file = "icons/semanticscholar.svg", sha256 = "f517b01b9baad8c61e5ca3b9309ee1f032e0bc2fbc4e2b5f22d853faa50c8a83" }
+wechat = { file = "icons/wechat.svg", sha256 = "74b48b3d315337ce79cb644933b5f975e19996f564fcc4138ed67d45674c43ca" }
+weibo = { file = "icons/sinaweibo.svg", sha256 = "44facf47c6bfa06c312c28acda6aa2ed404ef7f68c2897c8f33ad51b6ba94059" }
+zhihu = { file = "icons/zhihu.svg", sha256 = "3c8d91d4f30d220a8655f17aa4e119f5be8c0d66f5fcf939aecaed8699c628ce" }
+bilibili = { file = "icons/bilibili.svg", sha256 = "0b31005ccf765a9d37be2c42f1d36e44572ccadb088250626d9905ae5d4f3d21" }
+xiaohongshu = { file = "icons/xiaohongshu.svg", sha256 = "847cacc807f5c236031a7477381daa67fd829d89f3f80c16a547ff2efe050794" }
+bluesky = { file = "icons/bluesky.svg", sha256 = "49752973164fbbf4464fbb4776f011c1eff207e5d7ad9254e031af025814eb75" }
+mastodon = { file = "icons/mastodon.svg", sha256 = "b27197d1e47e19f31a80bf5d08b3dc9a8d073083436215f672e8e1016178cbe4" }
+threads = { file = "icons/threads.svg", sha256 = "3511f687f9a5713a3700130627f8d3611fb4cd54d3a9757071c93652c7fe16e8" }
+youtube = { file = "icons/youtube.svg", sha256 = "5038808acbbc4e6edda16cbeb1cc6dec80e4e4ee4e227e039c41229fa222aa8c" }
+
+[bootstrap-icons]
+base = "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.2/"
+license = { file = "LICENSE", sha256 = "0fb3e11bd57e896c5a512afd64864d28a37de45d19835016c87ca1ad19ead969", out = "LICENSE-bootstrap-icons.txt" }
+
+[bootstrap-icons.icons]
+linkedin = { file = "icons/linkedin.svg", sha256 = "ddcbb2735eea12f090ea0ee371d1b9a3462531dc11efd0e944adc2d38c71e2df" }
+email = { file = "icons/envelope-fill.svg", sha256 = "fd95ca77535ac259ebea82fc857056960e8bce9b99bb8a1c0fe43e483b7f30f5" }
+
+# Extra class names that draw an existing icon.
+[aliases]
+twitter = "x"

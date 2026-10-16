@@ -47,6 +47,10 @@ build:
 fonts:
     uv run fonts/build.py
 
+# Refetch the pinned social icons into src/icons/ (network; see icons/sources.toml)
+icons:
+    uv run icons/fetch.py
+
 # Run the test suite (builds first)
 test: build
     uv run pytest -q
