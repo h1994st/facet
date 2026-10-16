@@ -47,6 +47,7 @@
     --f-measure: 40rem;
     --f-gutter: 1.25rem;
     --f-breakout: 9rem;
+    --f-nav-clear: 0px;
 
     --f-space-1: 0.25rem;
     --f-space-2: 0.5rem;
@@ -69,6 +70,11 @@
     --f-dur-1: 150ms;
     --f-dur-2: 250ms;
     --f-dur-3: 600ms;
+  }
+
+  /* A fixed .f-nav floats over the page: layouts reserve room for it. Flow navs need none. */
+  :root:has(.f-nav--fixed) {
+    --f-nav-clear: 4.5rem;
   }
 
   :root:lang(zh) {

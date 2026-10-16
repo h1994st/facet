@@ -4,6 +4,6 @@
     display: grid;
     place-items: center;
     min-height: 100svh;
-    padding-top: 4rem;
+    padding-top: var(--f-nav-clear);
   }
 }

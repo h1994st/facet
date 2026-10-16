@@ -5,7 +5,7 @@
     width: min(100% - 2 * var(--f-gutter), 64rem);
     max-width: none;
     margin-inline: auto;
-    padding-top: 7rem;
+    padding-top: calc(var(--f-nav-clear) + 2.5rem);
     padding-bottom: var(--f-space-5);
   }
 
@@ -71,12 +71,12 @@
   }
 
   .f-resume .f-toc {
-    top: 5rem;
+    top: calc(var(--f-nav-clear) + 0.5rem);
   }
 
   .f-resume section {
     margin-bottom: 2.5rem;
-    scroll-margin-top: 5rem;
+    scroll-margin-top: calc(var(--f-nav-clear) + 0.5rem);
   }
 
   .f-resume section > h2 {
@@ -281,7 +281,7 @@
   /* Below 1024px the index becomes the pill bar under the nav. */
   @media (max-width: 1023px) {
     .f-resume {
-      padding-top: 6rem;
+      padding-top: calc(var(--f-nav-clear) + 1.5rem);
     }
 
     .f-resume__body {
@@ -289,12 +289,12 @@
     }
 
     .f-resume .f-toc {
-      top: 4.25rem;
+      top: var(--f-nav-clear);
       margin-bottom: var(--f-space-5);
     }
 
     .f-resume section {
-      scroll-margin-top: 8rem;
+      scroll-margin-top: calc(var(--f-nav-clear) + 3.5rem);
     }
   }
 
@@ -324,15 +324,12 @@
 
   /* Print: one plain column, no nav, no colors that waste ink. */
   @media print {
-    .f-nav,
-    .f-toc,
-    .f-footer,
-    .f-resume__contact .f-cluster,
-    .f-resume__cat {
-      display: none !important;
+    :root:has(.f-resume)
+      :is(.f-nav, .f-toc, .f-footer, .f-resume__contact .f-cluster, .f-resume__cat) {
+      display: none;
     }
 
-    body {
+    :root:has(.f-resume) body {
       background: #fff;
       color: #000;
     }

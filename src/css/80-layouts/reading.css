@@ -1,12 +1,12 @@
 @layer facet.layouts {
   /* A reading page: a title block, then text in one column on the page grid. */
   .f-reading {
-    padding-top: 2rem;
+    padding-top: var(--f-nav-clear);
     padding-bottom: var(--f-space-5);
   }
 
   .f-reading__title {
-    padding: var(--f-space-8) 0 var(--f-space-4);
+    padding: var(--f-space-5) 0 var(--f-space-4);
   }
 
   .f-reading__title h1 {

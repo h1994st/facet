@@ -51,6 +51,7 @@
     --f-measure: 40rem;
     --f-gutter: 1.25rem;
     --f-breakout: 9rem;
+    --f-nav-clear: 0px;
 
     --f-space-1: 0.25rem;
     --f-space-2: 0.5rem;
@@ -73,6 +74,11 @@
     --f-dur-1: 150ms;
     --f-dur-2: 250ms;
     --f-dur-3: 600ms;
+  }
+
+  /* A fixed .f-nav floats over the page: layouts reserve room for it. Flow navs need none. */
+  :root:has(.f-nav--fixed) {
+    --f-nav-clear: 4.5rem;
   }
 
   :root:lang(zh) {
@@ -3092,7 +3098,7 @@
     width: min(100% - 2 * var(--f-gutter), 64rem);
     max-width: none;
     margin-inline: auto;
-    padding-top: 6rem;
+    padding-top: calc(var(--f-nav-clear) + 1.5rem);
     padding-bottom: var(--f-space-5);
   }
 
@@ -3101,7 +3107,7 @@
   }
 
   .f-docs .f-toc {
-    top: 5rem;
+    top: calc(var(--f-nav-clear) + 0.5rem);
   }
 
   .f-docs__label {
@@ -3120,7 +3126,7 @@
   }
 
   .f-docs section {
-    scroll-margin-top: 5rem;
+    scroll-margin-top: calc(var(--f-nav-clear) + 0.5rem);
   }
 
   /* Below 1024px the TOC is a pill bar (see .f-toc) that stays under the nav. A block parent
@@ -3128,11 +3134,11 @@
   @media (max-width: 1023px) {
     .f-docs {
       display: block;
-      padding-top: 5rem;
+      padding-top: calc(var(--f-nav-clear) + 0.5rem);
     }
 
     .f-docs .f-toc {
-      top: 4.25rem;
+      top: var(--f-nav-clear);
       margin-bottom: var(--f-space-5);
     }
 
@@ -3141,7 +3147,7 @@
     }
 
     .f-docs section {
-      scroll-margin-top: 8rem;
+      scroll-margin-top: calc(var(--f-nav-clear) + 3.5rem);
     }
   }
 }
@@ -3153,7 +3159,7 @@
     display: grid;
     place-items: center;
     min-height: 100svh;
-    padding-top: 4rem;
+    padding-top: var(--f-nav-clear);
   }
 }
 
@@ -3253,7 +3259,7 @@
 
   .f-list__year > h2 {
     position: sticky;
-    top: 5rem;
+    top: calc(var(--f-nav-clear) + 0.5rem);
     align-self: start;
     margin: 0.35rem 0 0;
     color: var(--f-fg-3);
@@ -3334,7 +3340,7 @@
     width: min(100% - 2 * var(--f-gutter), 40rem);
     max-width: none;
     margin-inline: auto;
-    padding-top: 6rem;
+    padding-top: calc(var(--f-nav-clear) + 1.5rem);
     padding-bottom: var(--f-space-5);
     counter-reset: f-sidenote;
   }
@@ -3508,25 +3514,30 @@
 
   /* A centered block for pages that are not a reading column. The nav floats above, so the
      top padding clears it. */
-  .f-wrap {
+  .f-wrap,
+  .f-split,
+  .f-list {
     width: min(100% - 2 * var(--f-gutter), 68rem);
     max-width: none;
     margin-inline: auto;
-    padding-top: 5.5rem;
+    padding-top: calc(var(--f-nav-clear) + 1rem);
     padding-bottom: var(--f-space-5);
   }
 
-  .f-wrap--narrow {
+  .f-wrap--narrow,
+  .f-list {
     width: min(100% - 2 * var(--f-gutter), 46rem);
   }
 
-  .f-wrap > header h1 {
+  .f-wrap > header h1,
+  .f-list > header h1 {
     margin: 0 0 var(--f-space-2);
     font-size: var(--f-text-2xl);
     line-height: 1.1;
   }
 
-  .f-wrap > header p:not(.f-kicker) {
+  .f-wrap > header p:not(.f-kicker),
+  .f-list > header p:not(.f-kicker) {
     max-width: 36rem;
   }
 }
@@ -3535,12 +3546,12 @@
 @layer facet.layouts {
   /* A reading page: a title block, then text in one column on the page grid. */
   .f-reading {
-    padding-top: 2rem;
+    padding-top: var(--f-nav-clear);
     padding-bottom: var(--f-space-5);
   }
 
   .f-reading__title {
-    padding: var(--f-space-8) 0 var(--f-space-4);
+    padding: var(--f-space-5) 0 var(--f-space-4);
   }
 
   .f-reading__title h1 {
@@ -3594,7 +3605,7 @@
     width: min(100% - 2 * var(--f-gutter), 64rem);
     max-width: none;
     margin-inline: auto;
-    padding-top: 7rem;
+    padding-top: calc(var(--f-nav-clear) + 2.5rem);
     padding-bottom: var(--f-space-5);
   }
 
@@ -3660,12 +3671,12 @@
   }
 
   .f-resume .f-toc {
-    top: 5rem;
+    top: calc(var(--f-nav-clear) + 0.5rem);
   }
 
   .f-resume section {
     margin-bottom: 2.5rem;
-    scroll-margin-top: 5rem;
+    scroll-margin-top: calc(var(--f-nav-clear) + 0.5rem);
   }
 
   .f-resume section > h2 {
@@ -3870,7 +3881,7 @@
   /* Below 1024px the index becomes the pill bar under the nav. */
   @media (max-width: 1023px) {
     .f-resume {
-      padding-top: 6rem;
+      padding-top: calc(var(--f-nav-clear) + 1.5rem);
     }
 
     .f-resume__body {
@@ -3878,12 +3889,12 @@
     }
 
     .f-resume .f-toc {
-      top: 4.25rem;
+      top: var(--f-nav-clear);
       margin-bottom: var(--f-space-5);
     }
 
     .f-resume section {
-      scroll-margin-top: 8rem;
+      scroll-margin-top: calc(var(--f-nav-clear) + 3.5rem);
     }
   }
 
@@ -3913,15 +3924,12 @@
 
   /* Print: one plain column, no nav, no colors that waste ink. */
   @media print {
-    .f-nav,
-    .f-toc,
-    .f-footer,
-    .f-resume__contact .f-cluster,
-    .f-resume__cat {
-      display: none !important;
+    :root:has(.f-resume)
+      :is(.f-nav, .f-toc, .f-footer, .f-resume__contact .f-cluster, .f-resume__cat) {
+      display: none;
     }
 
-    body {
+    :root:has(.f-resume) body {
       background: #fff;
       color: #000;
     }

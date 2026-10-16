@@ -8,7 +8,7 @@
     width: min(100% - 2 * var(--f-gutter), 64rem);
     max-width: none;
     margin-inline: auto;
-    padding-top: 6rem;
+    padding-top: calc(var(--f-nav-clear) + 1.5rem);
     padding-bottom: var(--f-space-5);
   }
 
@@ -17,7 +17,7 @@
   }
 
   .f-docs .f-toc {
-    top: 5rem;
+    top: calc(var(--f-nav-clear) + 0.5rem);
   }
 
   .f-docs__label {
@@ -36,7 +36,7 @@
   }
 
   .f-docs section {
-    scroll-margin-top: 5rem;
+    scroll-margin-top: calc(var(--f-nav-clear) + 0.5rem);
   }
 
   /* Below 1024px the TOC is a pill bar (see .f-toc) that stays under the nav. A block parent
@@ -44,11 +44,11 @@
   @media (max-width: 1023px) {
     .f-docs {
       display: block;
-      padding-top: 5rem;
+      padding-top: calc(var(--f-nav-clear) + 0.5rem);
     }
 
     .f-docs .f-toc {
-      top: 4.25rem;
+      top: var(--f-nav-clear);
       margin-bottom: var(--f-space-5);
     }
 
@@ -57,7 +57,7 @@
     }
 
     .f-docs section {
-      scroll-margin-top: 8rem;
+      scroll-margin-top: calc(var(--f-nav-clear) + 3.5rem);
     }
   }
 }

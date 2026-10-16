@@ -114,3 +114,47 @@ def test_footnotes_sit_in_the_margin_on_wide_screens(page_factory, site_url):
         }"""
     )
     assert box["noteLeft"] >= box["articleRight"]
+
+
+def test_nav_clearance_is_opt_in(page_factory, site_url):
+    page = page_factory(width=1280)
+    page.goto(f"{site_url}/tests/flow-nav.html")
+    assert (
+        page.evaluate(
+            "getComputedStyle(document.documentElement).getPropertyValue('--f-nav-clear')"
+        )
+        == "0px"
+    )
+    pad = page.evaluate(
+        "parseFloat(getComputedStyle(document.querySelector('.f-docs')).paddingTop)"
+    )
+    assert pad < 48
+
+
+def test_fixed_nav_is_cleared(page_factory, site_url):
+    for path, sel in [
+        ("docs.html", "h1"),
+        ("margin.html", "h1"),
+        ("resume.html", ".f-resume__head"),
+    ]:
+        page = page_factory(width=1280)
+        page.goto(f"{site_url}/layouts/{path}")
+        nav_bottom = page.evaluate(
+            "document.querySelector('.f-nav').getBoundingClientRect().bottom"
+        )
+        top = page.evaluate(
+            f"document.querySelector('main {sel}, article {sel}, .f-docs {sel}')"
+            ".getBoundingClientRect().top"
+        )
+        assert top >= nav_bottom, path
+
+
+def test_resume_print_rules_are_scoped(page_factory, site_url):
+    page = page_factory(width=1280)
+    page.goto(f"{site_url}/components.html")
+    page.emulate_media(media="print")
+    assert page.evaluate("getComputedStyle(document.querySelector('.f-nav')).display") != "none"
+    page = page_factory(width=1280)
+    page.goto(f"{site_url}/layouts/resume.html")
+    page.emulate_media(media="print")
+    assert page.evaluate("getComputedStyle(document.querySelector('.f-nav')).display") == "none"

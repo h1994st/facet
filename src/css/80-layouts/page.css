@@ -41,25 +41,30 @@
 
   /* A centered block for pages that are not a reading column. The nav floats above, so the
      top padding clears it. */
-  .f-wrap {
+  .f-wrap,
+  .f-split,
+  .f-list {
     width: min(100% - 2 * var(--f-gutter), 68rem);
     max-width: none;
     margin-inline: auto;
-    padding-top: 5.5rem;
+    padding-top: calc(var(--f-nav-clear) + 1rem);
     padding-bottom: var(--f-space-5);
   }
 
-  .f-wrap--narrow {
+  .f-wrap--narrow,
+  .f-list {
     width: min(100% - 2 * var(--f-gutter), 46rem);
   }
 
-  .f-wrap > header h1 {
+  .f-wrap > header h1,
+  .f-list > header h1 {
     margin: 0 0 var(--f-space-2);
     font-size: var(--f-text-2xl);
     line-height: 1.1;
   }
 
-  .f-wrap > header p:not(.f-kicker) {
+  .f-wrap > header p:not(.f-kicker),
+  .f-list > header p:not(.f-kicker) {
     max-width: 36rem;
   }
 }

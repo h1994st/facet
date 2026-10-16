@@ -17,7 +17,7 @@
 
   .f-list__year > h2 {
     position: sticky;
-    top: 5rem;
+    top: calc(var(--f-nav-clear) + 0.5rem);
     align-self: start;
     margin: 0.35rem 0 0;
     color: var(--f-fg-3);
