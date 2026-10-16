@@ -2245,7 +2245,7 @@
   }
 
   /* Squircle facet's own containers; pills and circles keep a plain round corner. */
-  :where([class*="f-"]),
+  :where([class^="f-"], [class*=" f-"]),
   .f-prose :where(pre, img, video, figure, table) {
     corner-shape: squircle;
   }
@@ -2279,7 +2279,7 @@
     text-wrap: balance;
   }
 
-  .f-prose:lang(zh) :where(h1, h2, h3, h4) {
+  .f-prose :where(h1, h2, h3, h4):lang(zh) {
     letter-spacing: 0;
   }
 
@@ -2307,7 +2307,7 @@
     line-height: 1.7;
   }
 
-  .f-prose:lang(zh) :where(p, li) {
+  .f-prose :where(p, li):lang(zh) {
     line-height: var(--f-leading-zh);
   }
 

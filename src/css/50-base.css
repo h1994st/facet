@@ -43,7 +43,7 @@
   }
 
   /* Squircle facet's own containers; pills and circles keep a plain round corner. */
-  :where([class*="f-"]),
+  :where([class^="f-"], [class*=" f-"]),
   .f-prose :where(pre, img, video, figure, table) {
     corner-shape: squircle;
   }

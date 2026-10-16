@@ -49,3 +49,19 @@ def test_contrast_helper_composites_translucent_color(page_factory):
         "<body style='background:#fff;margin:0'><p style='color:rgb(0 0 0 / 0.5)'>x</p></body>"
     )
     assert abs(contrast(page, "p") - 3.95) < 0.1
+
+
+def test_inline_chinese_block_in_english_prose(page_factory, site_url):
+    page = page_factory()
+    page.goto(f"{site_url}/index.html")
+    page.evaluate(
+        "document.querySelector('main').insertAdjacentHTML("
+        "'beforeend', '<h2 lang=\"zh-Hans\">标题</h2><p lang=\"zh-Hans\">正文</p>')"
+    )
+    p = page.evaluate(
+        "(() => { const s = getComputedStyle(document.querySelector('p[lang]'));"
+        " return [s.lineHeight, s.fontSize]; })()"
+    )
+    assert float(p[0][:-2]) == pytest.approx(float(p[1][:-2]) * 1.8)
+    h = page.evaluate("getComputedStyle(document.querySelector('h2[lang]')).letterSpacing")
+    assert h in ("normal", "0px")
