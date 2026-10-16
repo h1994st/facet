@@ -64,8 +64,9 @@ def test_bad_event_name_warns_and_sends_nothing(page_factory, site_url):
 
 def test_theme_switch_is_reported(page_factory, site_url):
     page, _ = open_fixture(page_factory, site_url)
+    # No saved theme: the toggle starts on auto, and the next is dark.
     page.click("[data-f-theme-toggle]")
-    assert ["event", "theme_change", {"theme": "light"}] in layer(page)
+    assert ["event", "theme_change", {"theme": "dark"}] in layer(page)
 
 
 def test_global_privacy_control_turns_it_off(page_factory, site_url):
@@ -103,6 +104,6 @@ def test_blocked_gtag_breaks_nothing_else(page_factory, site_url):
     page.goto(f"{site_url}/tests/analytics.html")
     page.wait_for_function("window.dataLayer && window.dataLayer.length >= 2")
     page.click("[data-f-theme-toggle]")
-    assert page.evaluate("document.documentElement.dataset.theme") == "light"
+    assert page.evaluate("document.documentElement.dataset.theme") == "dark"
     assert all("Failed to load resource" in e or "ERR_FAILED" in e for e in page.errors)
     page.errors.clear()

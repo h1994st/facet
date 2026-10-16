@@ -24,7 +24,7 @@
         --f-deck-image: url(../assets/mist.jpg);
       }
       @media (prefers-color-scheme: light) {
-        :root[data-theme="auto"] .f-deck {
+        :root:not([data-theme="dark"]) .f-deck {
           --f-deck-image: url(../assets/mist.jpg);
         }
       }

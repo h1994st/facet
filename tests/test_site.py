@@ -155,10 +155,44 @@ def test_bogus_saved_values_are_ignored(page_factory, site_url):
     page.goto(f"{site_url}/index.html")
     root = "document.documentElement"
     assert page.evaluate(f"[{root}.dataset.theme, {root}.lang, {root}.dataset.accent]") == [
-        "dark",
+        "auto",
         "en",
         None,
     ]
+
+
+def test_reference_site_defaults_to_auto(browser, site_url):
+    ctx = browser.new_context(color_scheme="light")
+    try:
+        page = ctx.new_page()
+        page.goto(f"{site_url}/components.html")
+        assert page.evaluate("document.documentElement.dataset.theme") == "auto"
+        assert page.get_attribute(
+            '.site-bar button[data-k="theme"][data-v="auto"]', "aria-pressed"
+        ) == ("true")
+    finally:
+        ctx.close()
+
+
+@pytest.mark.parametrize("scheme", ["dark", "light"])
+def test_no_data_theme_follows_the_system(browser, site_url, scheme):
+    bg = {"dark": "oklch(0.2 0.012 260)", "light": "oklch(0.975 0.004 260)"}
+    ctx = browser.new_context(color_scheme=scheme)
+    try:
+        page = ctx.new_page()
+        page.goto(f"{site_url}/tests/no-theme.html")
+        assert page.evaluate("document.documentElement.dataset.theme") is None
+        body = "getComputedStyle(document.body).backgroundColor"
+        assert page.evaluate(body) == bg[scheme]
+        # An explicit theme still wins over the system, and print stays light.
+        for forced in ("dark", "light"):
+            page.evaluate(f"document.documentElement.dataset.theme = {forced!r}")
+            assert page.evaluate(body) == bg[forced]
+        page.evaluate("delete document.documentElement.dataset.theme")
+        page.emulate_media(media="print")
+        assert page.evaluate(body) == bg["light"]
+    finally:
+        ctx.close()
 
 
 def test_auto_theme_shows_pressed(page_factory, site_url):

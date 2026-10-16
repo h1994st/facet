@@ -24,7 +24,7 @@
         --f-panel-image: url(../assets/mist.jpg);
       }
       @media (prefers-color-scheme: light) {
-        :root[data-theme="auto"] .demo-end {
+        :root:not([data-theme="dark"]) .demo-end {
           --f-panel-image: url(../assets/mist.jpg);
         }
       }

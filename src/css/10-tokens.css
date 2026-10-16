@@ -1,10 +1,11 @@
-/* Design tokens. Dark is the default; light overrides it. Every color has both values. */
+/* Design tokens. Every color has a dark and a light value; dark is the theme designed first. */
 @layer facet.tokens {
   /* The theme switch. Each color token is written once, as
        var(--f-unless-light, <dark value>) var(--f-unless-dark, <light value>)
      and the switch keeps exactly one of the two: a switch set to the empty value drops its
-     fallback, one set to initial (invalid) lets it through. Dark is the default; the light theme,
-     auto on a light system, and print flip it. */
+     fallback, one set to initial (invalid) lets it through. The switch starts on dark; the light
+     theme, a light system (unless data-theme="dark" forces dark), and print flip it, so a page
+     with no data-theme follows the system, like auto. */
   :root {
     --f-unless-light: initial;
     --f-unless-dark: ;
@@ -18,7 +19,7 @@
   }
 
   @media (prefers-color-scheme: light) {
-    :root[data-theme="auto"] {
+    :root:not([data-theme="dark"]) {
       --f-unless-light: ;
       --f-unless-dark: initial;
       color-scheme: light;

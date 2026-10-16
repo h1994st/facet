@@ -127,12 +127,13 @@ A minimal page:
 </html>
 ```
 
-- `data-accent` picks the accent (see the tables above); `data-theme` is `dark` (default), `light`
-  or `auto`. The theme toggle remembers its choice in `localStorage["facet-theme"]`. Both work on
-  `<html>` only (`:root[data-accent]`); to give part of a page its own accent, set `--f-accent` and
-  `--f-accent-contrast` on it. The deep shade of the hero card (`.f-hero`) follows;
-  `--f-accent-soft` (the tinted backgrounds) is computed on `:root` and does not, so set it on that
-  part too, to `color-mix(in oklch, var(--f-accent) 16%, transparent)`.
+- `data-accent` picks the accent (see the tables above); `data-theme` is `auto` (the default, which
+  follows the system), `dark` or `light`. The theme toggle remembers its choice in
+  `localStorage["facet-theme"]`. Both work on `<html>` only (`:root[data-accent]`); to give part of
+  a page its own accent, set `--f-accent` and `--f-accent-contrast` on it. The deep shade of the
+  hero card (`.f-hero`) follows; `--f-accent-soft` (the tinted backgrounds) is computed on `:root`
+  and does not, so set it on that part too, to
+  `color-mix(in oklch, var(--f-accent) 16%, transparent)`.
 - A plain `.f-nav` sits in the page flow. Add `.f-nav--fixed` to float it over the page; while one
   is present, `--f-nav-clear` reserves room for it at the top of the layouts (override it if your
   nav is taller).
