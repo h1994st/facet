@@ -553,3 +553,69 @@ def test_secondary_text_tokens_are_readable_on_every_neutral(page_factory, site_
     for pair, (fg, bg) in rgb.items():
         a, b = sorted([_lum(fg), _lum(bg)], reverse=True)
         assert (a + 0.05) / (b + 0.05) >= 4.5, (pair, round((a + 0.05) / (b + 0.05), 2))
+
+
+@pytest.mark.parametrize(
+    "scheme, first", [("light", "oklch(0.99 0.012 260)"), ("dark", "oklch(0.2 0.012 260)")]
+)
+def test_token_ramp_follows_the_theme_in_effect(browser, site_url, scheme, first):
+    # Under auto, the system's scheme decides which ramp is drawn.
+    ctx = browser.new_context(color_scheme=scheme)
+    try:
+        page = ctx.new_page()
+        page.goto(f"{site_url}/tokens.html?theme=auto")
+        got = page.evaluate(
+            "getComputedStyle(document.querySelector('#ramp span')).backgroundColor"
+        )
+        assert got == first
+    finally:
+        ctx.close()
+
+
+def test_chinese_text_shows_the_html_element_name(page_factory, site_url):
+    page = page_factory(lang="zh")
+    page.goto(f"{site_url}/index.html")
+    texts = page.evaluate(
+        "[...document.querySelectorAll('main [data-zh]')].map(e => e.textContent)"
+    )
+    assert any("两者都只在 <html> 上生效" in t for t in texts)
+
+
+@pytest.mark.parametrize("lang", ["en", "zh"])
+def test_code_in_a_table_cell_never_breaks_mid_word(page_factory, site_url, lang):
+    page = page_factory(width=390, lang=lang)
+    page.goto(f"{site_url}/index.html")
+    # Each code fragment in the Behavior table: the pieces it wraps into must be whole words
+    # split only after a hyphen (no line starting or ending inside a word).
+    lines = page.evaluate("""() => [...document.querySelectorAll('#behavior td code')]
+    .flatMap(c => {
+      const r = document.createRange(), t = c.firstChild, tops = [];
+      if (!t) return [];
+      let line = '', top = null;
+      for (let i = 0; i < t.length; i++) {
+        r.setStart(t, i); r.setEnd(t, i + 1);
+        const y = Math.round(r.getBoundingClientRect().top);
+        if (top !== null && y !== top) { tops.push(line); line = ''; }
+        top = y; line += t.data[i];
+      }
+      tops.push(line);
+      return tops.length > 1 ? [tops] : [];
+    })""")
+    for pieces in lines:
+        for piece in pieces[:-1]:
+            assert piece.endswith(("-", " ", "/", ".")), pieces
+
+
+@pytest.mark.parametrize("width", [390, 1280])
+def test_a_wide_table_grows_past_the_text_column(page_factory, site_url, width):
+    page = page_factory(width=width)
+    page.goto(f"{site_url}/index.html")
+    table, text = page.evaluate(
+        "['#behavior table.f-wide', '#behavior > p'].map(s =>"
+        " document.querySelector(s).getBoundingClientRect().toJSON())"
+    )
+    if width == 1280:
+        assert table["width"] > text["width"] + 100
+        assert abs((table["left"] + table["right"]) / 2 - (text["left"] + text["right"]) / 2) < 2
+    else:
+        assert table["left"] >= 0 and table["right"] <= width
