@@ -1,0 +1,64 @@
+@layer facet.base {
+  html {
+    color-scheme: dark;
+    background: var(--f-bg);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  html[data-theme="light"] {
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: light) {
+    html[data-theme="auto"] {
+      color-scheme: light;
+    }
+  }
+
+  body {
+    background: var(--f-bg);
+    color: var(--f-fg);
+    font: 16px/1.6 var(--f-font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a {
+    color: var(--f-accent);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--f-accent);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: var(--f-accent-soft);
+  }
+
+  :lang(zh) {
+    letter-spacing: 0;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+    line-height: var(--f-leading-zh);
+  }
+
+  /* Squircle containers; pills and circles keep a plain round corner. */
+  :where(*) {
+    corner-shape: squircle;
+  }
+
+  :where(.f-pill, .f-btn, .f-chip, .f-nav, .f-nav a, input, .f-avatar, .f-dot) {
+    corner-shape: round;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

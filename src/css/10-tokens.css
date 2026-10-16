@@ -1,0 +1,143 @@
+/* Design tokens. Dark is the default; light overrides it. Every color has both values. */
+@layer facet.tokens {
+  :root {
+    color-scheme: dark;
+    --f-bg: oklch(0.15 0.012 260);
+    --f-bg-2: oklch(0.18 0.012 260);
+    --f-surface: oklch(0.21 0.012 260);
+    --f-fg: oklch(0.95 0.01 260);
+    --f-fg-2: oklch(0.95 0.01 260 / 0.7);
+    --f-fg-3: oklch(0.95 0.01 260 / 0.5);
+    --f-line: rgb(255 255 255 / 0.08);
+    --f-line-2: rgb(255 255 255 / 0.14);
+    --f-shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px -12px rgb(0 0 0 / 0.7);
+    --f-shadow-hi: 0 2px 4px rgb(0 0 0 / 0.45), 0 22px 48px -14px rgb(0 0 0 / 0.8);
+    --f-accent: oklch(0.76 0.06 255);
+    --f-accent-contrast: oklch(0.15 0.012 260);
+    --f-accent-soft: color-mix(in oklch, var(--f-accent) 16%, transparent);
+    --f-success: oklch(0.76 0.06 130);
+    --f-warning: oklch(0.76 0.06 85);
+    --f-danger: oklch(0.76 0.06 15);
+    --f-info: oklch(0.76 0.06 255);
+    --f-success-soft: color-mix(in oklch, var(--f-success) 16%, transparent);
+    --f-warning-soft: color-mix(in oklch, var(--f-warning) 16%, transparent);
+    --f-danger-soft: color-mix(in oklch, var(--f-danger) 16%, transparent);
+    --f-info-soft: color-mix(in oklch, var(--f-info) 16%, transparent);
+    --f-glass-bg: color-mix(in oklch, var(--f-bg) 62%, transparent);
+    --f-glass-blur: 16px;
+    --f-glass-edge: rgb(255 255 255 / 0.12);
+    --cat-edge: rgb(255 255 255 / 0.2);
+    --cat-shadow: rgb(0 0 0 / 0.35);
+
+    --f-font-sans:
+      "Geist", system-ui, -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
+      "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+    --f-font-serif:
+      "Source Serif 4", "Noto Serif SC", "Songti SC", "STSong", "Noto Serif CJK SC", serif;
+    --f-font-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --f-text-xs: clamp(0.75rem, 0.73rem + 0.1vw, 0.8rem);
+    --f-text-sm: clamp(0.85rem, 0.83rem + 0.1vw, 0.9rem);
+    --f-text-md: 1rem;
+    --f-text-lg: clamp(1.15rem, 1.08rem + 0.35vw, 1.3rem);
+    --f-text-xl: clamp(1.4rem, 1.25rem + 0.75vw, 1.75rem);
+    --f-text-2xl: clamp(1.75rem, 1.5rem + 1.25vw, 2.4rem);
+    --f-text-3xl: clamp(2.2rem, 1.7rem + 2.5vw, 3.5rem);
+    --f-leading: 1.6;
+    --f-leading-zh: 1.8;
+    --f-measure: 40rem;
+
+    --f-space-1: 0.25rem;
+    --f-space-2: 0.5rem;
+    --f-space-3: 0.75rem;
+    --f-space-4: 1rem;
+    --f-space-5: 1.5rem;
+    --f-space-6: 2rem;
+    --f-space-7: 3rem;
+    --f-space-8: 4rem;
+
+    --f-r-xs: 6px;
+    --f-r-sm: 10px;
+    --f-r-md: 14px;
+    --f-r-lg: 22px;
+    --f-r-xl: 30px;
+    --f-r-pill: 999px;
+
+    --f-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
+    --f-ease-spring: cubic-bezier(0.3, 1.4, 0.5, 1);
+    --f-dur-1: 150ms;
+    --f-dur-2: 250ms;
+    --f-dur-3: 600ms;
+  }
+
+  :root:lang(zh) {
+    --f-measure: 36rem;
+  }
+
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --f-bg: oklch(0.975 0.004 260);
+    --f-bg-2: oklch(0.955 0.006 260);
+    --f-surface: oklch(0.995 0.002 260);
+    --f-fg: oklch(0.2 0.015 260);
+    --f-fg-2: oklch(0.2 0.015 260 / 0.72);
+    --f-fg-3: oklch(0.2 0.015 260 / 0.65);
+    --f-line: rgb(0 0 0 / 0.08);
+    --f-line-2: rgb(0 0 0 / 0.14);
+    --f-shadow: 0 1px 2px rgb(0 0 0 / 0.05), 0 12px 32px -14px rgb(0 0 0 / 0.18);
+    --f-shadow-hi: 0 2px 4px rgb(0 0 0 / 0.06), 0 22px 48px -16px rgb(0 0 0 / 0.26);
+    --f-accent: oklch(0.52 0.07 255);
+    --f-accent-contrast: #fff;
+    --f-success: oklch(0.52 0.07 130);
+    --f-warning: oklch(0.52 0.07 85);
+    --f-danger: oklch(0.52 0.07 15);
+    --f-info: oklch(0.52 0.07 255);
+    --f-glass-bg: color-mix(in oklch, var(--f-bg) 72%, transparent);
+    --f-glass-edge: rgb(255 255 255 / 0.7);
+    --cat-edge: transparent;
+    --cat-shadow: rgb(29 35 43 / 0.13);
+    --f-accent-soft: color-mix(in oklch, var(--f-accent) 16%, transparent);
+    --f-success-soft: color-mix(in oklch, var(--f-success) 16%, transparent);
+    --f-warning-soft: color-mix(in oklch, var(--f-warning) 16%, transparent);
+    --f-danger-soft: color-mix(in oklch, var(--f-danger) 16%, transparent);
+    --f-info-soft: color-mix(in oklch, var(--f-info) 16%, transparent);
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root[data-theme="auto"] {
+      color-scheme: light;
+      --f-bg: oklch(0.975 0.004 260);
+      --f-bg-2: oklch(0.955 0.006 260);
+      --f-surface: oklch(0.995 0.002 260);
+      --f-fg: oklch(0.2 0.015 260);
+      --f-fg-2: oklch(0.2 0.015 260 / 0.72);
+      --f-fg-3: oklch(0.2 0.015 260 / 0.65);
+      --f-line: rgb(0 0 0 / 0.08);
+      --f-line-2: rgb(0 0 0 / 0.14);
+      --f-shadow: 0 1px 2px rgb(0 0 0 / 0.05), 0 12px 32px -14px rgb(0 0 0 / 0.18);
+      --f-shadow-hi: 0 2px 4px rgb(0 0 0 / 0.06), 0 22px 48px -16px rgb(0 0 0 / 0.26);
+      --f-accent: oklch(0.52 0.07 255);
+      --f-accent-contrast: #fff;
+      --f-success: oklch(0.52 0.07 130);
+      --f-warning: oklch(0.52 0.07 85);
+      --f-danger: oklch(0.52 0.07 15);
+      --f-info: oklch(0.52 0.07 255);
+      --f-glass-bg: color-mix(in oklch, var(--f-bg) 72%, transparent);
+      --f-glass-edge: rgb(255 255 255 / 0.7);
+      --cat-edge: transparent;
+      --cat-shadow: rgb(29 35 43 / 0.13);
+      --f-accent-soft: color-mix(in oklch, var(--f-accent) 16%, transparent);
+      --f-success-soft: color-mix(in oklch, var(--f-success) 16%, transparent);
+      --f-warning-soft: color-mix(in oklch, var(--f-warning) 16%, transparent);
+      --f-danger-soft: color-mix(in oklch, var(--f-danger) 16%, transparent);
+      --f-info-soft: color-mix(in oklch, var(--f-info) 16%, transparent);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --f-dur-1: 0ms;
+      --f-dur-2: 0ms;
+      --f-dur-3: 0ms;
+    }
+  }
+}

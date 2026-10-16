@@ -1,0 +1,136 @@
+@layer facet.prose {
+  .f-prose {
+    max-width: var(--f-measure);
+  }
+
+  .f-prose :is(h1, h2, h3, h4) {
+    font-family: var(--f-font-serif);
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+  }
+
+  .f-prose:lang(zh) :is(h1, h2, h3, h4),
+  .f-prose :lang(zh) :is(h1, h2, h3, h4) {
+    letter-spacing: 0;
+  }
+
+  .f-prose h1 {
+    margin: 0 0 var(--f-space-3);
+    font-size: var(--f-text-2xl);
+    line-height: 1.2;
+  }
+
+  .f-prose h2 {
+    margin: var(--f-space-6) 0 var(--f-space-3);
+    font-size: var(--f-text-xl);
+    line-height: 1.25;
+  }
+
+  .f-prose h3 {
+    margin: var(--f-space-5) 0 var(--f-space-2);
+    font-size: var(--f-text-lg);
+    line-height: 1.3;
+  }
+
+  /* :where() keeps these at the lowest specificity so .f-meta and .f-kicker win inside prose. */
+  .f-prose :where(p, li) {
+    color: var(--f-fg-2);
+    line-height: 1.7;
+  }
+
+  .f-prose:lang(zh) :is(p, li),
+  .f-prose :lang(zh) :is(p, li) {
+    line-height: var(--f-leading-zh);
+  }
+
+  .f-prose :is(ul, ol) {
+    padding-left: 1.4em;
+  }
+
+  .f-prose a {
+    text-underline-offset: 0.2em;
+  }
+
+  .f-prose :not(pre) > code {
+    padding: 0.1rem 0.35rem;
+    border-radius: var(--f-r-xs);
+    background: color-mix(in oklch, var(--f-fg) 8%, transparent);
+    color: var(--f-fg);
+    font: 0.88em var(--f-font-mono);
+  }
+
+  .f-prose pre {
+    margin: var(--f-space-5) 0;
+    padding: 0.95rem 1.1rem;
+    overflow: auto;
+    border: 1px solid var(--f-line);
+    border-radius: var(--f-r-md);
+    background: var(--f-bg-2);
+    color: var(--f-fg);
+    font: 0.86rem/1.65 var(--f-font-mono);
+  }
+
+  .f-prose blockquote {
+    margin: var(--f-space-5) 0;
+    padding: 0.2rem 0 0.2rem 1.1rem;
+    border-left: 2px solid var(--f-accent);
+    color: var(--f-fg);
+    font: 500 var(--f-text-lg) / 1.6 var(--f-font-serif);
+  }
+
+  .f-prose figure {
+    margin: var(--f-space-5) 0;
+  }
+
+  .f-prose figure img,
+  .f-prose figure video {
+    width: 100%;
+    border-radius: var(--f-r-md);
+  }
+
+  .f-prose figcaption {
+    margin-top: 0.6rem;
+    color: var(--f-fg-3);
+    font-size: var(--f-text-sm);
+  }
+
+  .f-prose hr {
+    margin: var(--f-space-6) 0;
+    border: 0;
+    border-top: 1px solid var(--f-line);
+  }
+
+  .f-prose table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    border-collapse: collapse;
+    font-size: var(--f-text-sm);
+  }
+
+  .f-prose :is(th, td) {
+    padding: var(--f-space-2) var(--f-space-3);
+    border: 1px solid var(--f-line);
+    text-align: left;
+  }
+
+  .f-prose th {
+    background: var(--f-bg-2);
+    color: var(--f-fg);
+  }
+
+  .f-meta {
+    color: var(--f-fg-3);
+    font-size: var(--f-text-sm);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .f-kicker {
+    margin: 0 0 0.6rem;
+    color: var(--f-accent);
+    font: 600 0.78rem/1 var(--f-font-mono);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+}

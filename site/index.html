@@ -4,10 +4,25 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>facet</title>
+    <script>
+      try {
+        const s = JSON.parse(localStorage.getItem("facet-site") || "{}");
+        if (s.theme) document.documentElement.dataset.theme = s.theme;
+        if (s.lang) document.documentElement.lang = s.lang === "zh" ? "zh-Hans" : "en";
+      } catch {}
+    </script>
     <link rel="stylesheet" href="dist/facet.css" />
     <script type="module" src="dist/js/facet.js"></script>
   </head>
   <body>
-    <main class="f-prose"><h1>facet</h1></main>
+    <main class="f-prose">
+      <p class="f-kicker">Red Dot Tracker</p>
+      <h1>facet</h1>
+      <p>
+        Duna Feline keeps her notes on the Purrometheus dashboard, and the
+        <a href="https://example.com/hairball">Hairball</a> post explains why the red dot always
+        moves.
+      </p>
+    </main>
   </body>
 </html>
