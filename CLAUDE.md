@@ -7,6 +7,7 @@ repository. What facet is, and which sites use it, is in `README.md`.
 
 ```bash
 brew bundle        # install tooling (just, prettier); `just deps` does the same
+uv sync            # install the Python environment from uv.lock
 just               # list recipes
 just fmt [files]   # format everything, or only the given files
 just check         # check formatting without changing files
@@ -98,6 +99,9 @@ just site          # assemble the GitHub Pages site into _site/ (what CI deploys
 - **Dependencies:** never edit `Brewfile` directly; add or remove tools with
   `brew bundle add <formula>` / `brew bundle remove <formula>`. `.claude/settings.json` denies
   editing it, and `.claude/hooks/protect-brewfile.sh` denies shell writes to it.
+- **Python:** dependencies change only through `uv add` / `uv remove` (`--dev` for dev tools), never
+  by editing `pyproject.toml`; `.claude/hooks/protect-pyproject.sh` denies it and `settings.json`
+  denies editing `uv.lock`. Ruff formats and lints Python (`just fmt`, `just check`).
 - **CI:** `.github/workflows/ci.yml` runs `just check` on every PR and push to `main`, with the same
   Prettier version as the Brewfile's (pinned in the workflow; bump both together). `pages.yml`
   deploys `just site` to GitHub Pages on every push to `main`.

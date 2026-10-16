@@ -16,15 +16,23 @@ fmt *files:
     #!/usr/bin/env bash
     set -euo pipefail
     if [[ -n "{{ files }}" ]]; then
-        prettier --write --ignore-unknown {{ files }}
+        py=(); other=()
+        for f in {{ files }}; do [[ $f == *.py ]] && py+=("$f") || other+=("$f"); done
+        (( ${#py[@]} )) && uv run ruff format "${py[@]}" && uv run ruff check --fix "${py[@]}"
+        (( ${#other[@]} )) && prettier --write --ignore-unknown "${other[@]}"
+        true
     else
         prettier --write {{ prettier_globs }}
+        uv run ruff format .
+        uv run ruff check --fix .
         just --fmt --unstable
     fi
 
-# Check formatting without changing files
+# Check formatting and lint without changing files
 check:
     prettier --check {{ prettier_globs }}
+    uv run ruff format --check .
+    uv run ruff check .
     just --fmt --check --unstable
 
 # Assemble the GitHub Pages site into _site/

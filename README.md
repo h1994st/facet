@@ -61,10 +61,11 @@ template's site.
 
 ## Layout
 
+- `pyproject.toml`: the uv project for the Python tooling (fonts, images, tests).
 - `mockups/`: design explorations (type, color, shape, glass, layout, the cats), viewable with
   `just serve` at http://localhost:8000/mockups/.
 - `mockups/assets/craft.py`: draws the demo images and video loop the mockups use
-  (`uv run --with pillow mockups/assets/craft.py`; the loop needs ffmpeg).
+  (`uv run mockups/assets/craft.py`; the loop needs ffmpeg).
 
 ## License
 
