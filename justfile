@@ -18,9 +18,13 @@ fmt *files:
     if [[ -n "{{ files }}" ]]; then
         py=(); other=()
         for f in {{ files }}; do [[ $f == *.py ]] && py+=("$f") || other+=("$f"); done
-        (( ${#py[@]} )) && uv run ruff format "${py[@]}" && uv run ruff check --fix "${py[@]}"
-        (( ${#other[@]} )) && prettier --write --ignore-unknown "${other[@]}"
-        true
+        if (( ${#py[@]} )); then
+            uv run ruff format "${py[@]}"
+            uv run ruff check --fix "${py[@]}"
+        fi
+        if (( ${#other[@]} )); then
+            prettier --write --ignore-unknown "${other[@]}"
+        fi
     else
         prettier --write {{ prettier_globs }}
         uv run ruff format .
