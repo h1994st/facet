@@ -142,6 +142,8 @@ A minimal page:
   every animation and transition on the page, yours included. A layered `!important` beats unlayered
   CSS, even unlayered `!important`, so neither can be overridden.
 - Set `lang="zh-Hans"` on any element for Chinese typography.
+- A table that needs more room than the text column can take `class="f-wide"`: inside `.f-prose` it
+  grows to the page's wide width, centered, and never past the gutters.
 
 ### Behavior
 

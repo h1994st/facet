@@ -108,14 +108,33 @@
   }
 
   .f-prose :is(th, td) {
-    padding: var(--f-space-2) var(--f-space-3);
+    padding: var(--f-space-3) var(--f-space-4);
     border: 1px solid var(--f-line);
+    line-height: 1.6;
     text-align: left;
+    vertical-align: top;
+  }
+
+  /* Code in a cell breaks only where a word may (after a hyphen), never mid-word, even inside
+     Chinese text, which otherwise breaks anywhere. */
+  .f-prose :is(th, td) code {
+    overflow-wrap: normal;
+    word-break: normal;
   }
 
   .f-prose th {
     background: var(--f-bg-2);
     color: var(--f-fg);
+  }
+
+  /* A table that needs more room: .f-wide lets it grow past the text column, centered, up to the
+     page grid's wide width (the measure plus a breakout each side) and never past the gutters.
+     A table that is itself a page-grid child takes the grid's wide column instead. */
+  .f-prose table.f-wide:not(.f-page > *) {
+    --f-table-wide: min(var(--f-measure) + 2 * var(--f-breakout), 100vw - 2 * var(--f-gutter));
+    width: var(--f-table-wide);
+    max-width: none;
+    margin-inline: calc((100% - var(--f-table-wide)) / 2);
   }
 
   .f-meta {

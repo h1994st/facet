@@ -38,11 +38,41 @@
         text-decoration: none;
       }
       /* Module names stay whole; a narrow table scrolls inside itself instead. */
-      #behavior td:nth-child(2) code {
-        white-space: nowrap;
+      /* On wider screens hook and module names stay whole (the tables are .f-wide); on a phone
+         they wrap after a hyphen, so the table fits. */
+      @media (min-width: 641px) {
+        #behavior td:is(:first-child, :nth-child(2)) code {
+          white-space: nowrap;
+        }
       }
+
       #behavior td:last-child {
         min-width: 15rem;
+      }
+      /* On a phone three columns do not fit: each row becomes a block, the hook and module on
+         top and the description under them. */
+      @media (max-width: 640px) {
+        #behavior :is(table, tbody, tr) {
+          display: block;
+        }
+        #behavior thead {
+          display: none;
+        }
+        #behavior tr {
+          display: flex;
+          flex-wrap: wrap;
+          margin-bottom: var(--f-space-3);
+          border: 1px solid var(--f-line);
+          border-radius: var(--f-r-md);
+        }
+        #behavior td {
+          border: 0;
+        }
+        #behavior td:last-child {
+          flex-basis: 100%;
+          min-width: 0;
+          padding-top: 0;
+        }
       }
       .site-links span {
         display: block;
@@ -197,7 +227,7 @@ git -C vendor/facet checkout v0.1.1</pre>
 &lt;/html&gt;</pre>
         <ul>
           <li
-            data-zh='<code>data-accent</code> 选择强调色（十三种，见色彩页）；<code>data-theme</code> 取 <code>auto</code>（默认，跟随系统）、<code>dark</code> 或 <code>light</code>，主题按钮把选择记在 <code>localStorage["facet-theme"]</code> 里。两者都只在 <code>&lt;html&gt;</code> 上生效（<code>:root[data-accent]</code>）；要让页面的某一部分换一种强调色，在它上面设置 <code>--f-accent</code> 和 <code>--f-accent-contrast</code>。主卡片（<code>.f-hero</code>）的深色会随之改变；<code>--f-accent-soft</code>（浅色底）在 <code>:root</code> 上算好，不会跟着变，所以也在这一部分上把它设为 <code>color-mix(in oklch, var(--f-accent) 16%, transparent)</code>。'
+            data-zh='<code>data-accent</code> 选择强调色（十三种，见色彩页）；<code>data-theme</code> 取 <code>auto</code>（默认，跟随系统）、<code>dark</code> 或 <code>light</code>，主题按钮把选择记在 <code>localStorage["facet-theme"]</code> 里。两者都只在 <code>&amp;lt;html&amp;gt;</code> 上生效（<code>:root[data-accent]</code>）；要让页面的某一部分换一种强调色，在它上面设置 <code>--f-accent</code> 和 <code>--f-accent-contrast</code>。主卡片（<code>.f-hero</code>）的深色会随之改变；<code>--f-accent-soft</code>（浅色底）在 <code>:root</code> 上算好，不会跟着变，所以也在这一部分上把它设为 <code>color-mix(in oklch, var(--f-accent) 16%, transparent)</code>。'
           >
             <code>data-accent</code> picks the accent (thirteen, on the Color page);
             <code>data-theme</code> is <code>auto</code> (the default, which follows the system),
@@ -247,7 +277,7 @@ git -C vendor/facet checkout v0.1.1</pre>
           already set up are skipped, and a module that fails is reported in the console without
           stopping the others.
         </p>
-        <table>
+        <table class="f-wide">
           <thead>
             <tr>
               <th data-zh="属性">Hook</th>
@@ -417,7 +447,7 @@ stop();</pre>
           is hidden (a beam retracts to its start, so it grows again when it comes back). Positions
           and sizes are percentages of the board.
         </p>
-        <table>
+        <table class="f-wide">
           <thead>
             <tr>
               <th data-zh="元素">Piece</th>
