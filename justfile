@@ -66,4 +66,9 @@ site: build
     cp -RL site/. _site/
     rm -rf _site/tests
     cp -R mockups _site/mockups
+    uv run scripts/site_meta.py _site
     touch _site/.nojekyll
+
+# Redraw the reference site's share card and icon (site/card.png, site/favicon.svg)
+card:
+    uv run scripts/card.py

@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title data-zh="搜索与分享 · facet">SEO · facet</title>
+    <meta
+      name="description"
+      content="How to make a facet site easy to find and share: the head of every page, structured data per layout, bilingual URLs, sitemaps and images."
+      data-zh="让使用 facet 的网站容易被搜到、分享时好看：每一页的 head、每种版式的结构化数据、双语地址、站点地图和图片。"
+    />
+    <script src="site.js"></script>
+    <link rel="stylesheet" href="dist/facet.css" />
+    <link rel="stylesheet" href="site.css" />
+    <script type="module" src="dist/js/facet.js"></script>
+    <style>
+      main pre {
+        margin: var(--f-space-4) 0;
+        overflow-x: auto;
+      }
+      #schema td:first-child {
+        white-space: nowrap;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="site-page f-prose">
+      <header>
+        <p class="f-kicker" data-zh="指南">Guide</p>
+        <h1 data-zh="搜索与分享">Search and sharing</h1>
+        <p
+          data-zh="facet 负责页面的样子，搜索引擎看的是页面里的内容和 <code>&amp;lt;head&amp;gt;</code>。这一页列出每个使用 facet 的网站该做的事，以及哪些 facet 已经替你做好了。"
+        >
+          facet takes care of how a page looks; search engines read what is in the page and its
+          <code>&lt;head&gt;</code>. This page lists what every facet site should add, and what
+          facet already does for you.
+        </p>
+      </header>
+
+      <section>
+        <h2 data-zh="facet 已经做好的">What facet already does</h2>
+        <ul>
+          <li
+            data-zh="内容就在 HTML 里。故事页、全页面板和演示文稿没有 JavaScript 也能读，所以搜索引擎读到的和访客看到的一样。"
+          >
+            Content lives in the HTML. Story, panels and deck pages read fine without JavaScript, so
+            a crawler indexes what a visitor sees.
+          </li>
+          <li
+            data-zh="每种版式都用语义标签：<code>main</code>、<code>nav</code>、<code>article</code>、<code>section</code>，以及有层级的标题。"
+          >
+            Every layout uses semantic elements (<code>main</code>, <code>nav</code>,
+            <code>article</code>, <code>section</code>) and a heading hierarchy.
+          </li>
+          <li
+            data-zh="字体自托管并使用 <code>font-display: swap</code>，文字不会因为等字体而空白；中文标题字体按需分片，一页只下载用到的字。"
+          >
+            Fonts are self-hosted with <code>font-display: swap</code>, so text never waits for a
+            font, and the Chinese heading font is sliced so a page downloads only the glyphs it
+            uses.
+          </li>
+          <li
+            data-zh="对比度至少 4.5:1，照顾减少动效的设置，键盘可以操作每个控件。可访问性和搜索看重的是同一套东西。"
+          >
+            Text contrast is at least 4.5:1, motion respects reduced-motion settings, and every
+            control works from the keyboard. Accessibility and search reward the same things.
+          </li>
+          <li data-zh="猫是装饰：它们带 <code>aria-hidden</code>，不会混进页面文字。">
+            The cats are decoration: they carry <code>aria-hidden</code> and never mix into the
+            page's text.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 data-zh="每一页的 head">The head of every page</h2>
+        <p
+          data-zh="标题和描述每页都不一样：标题先写这一页，再写网站名，60 个字符以内；描述 50 到 160 个字符，写给搜索结果里的读者。规范链接、分享图片和 <code>og:url</code> 用绝对地址。"
+        >
+          Give every page its own title and description. Put the page first and the site name after,
+          within about 60 characters; write the description, 50 to 160 characters, for a reader
+          scanning search results. The canonical link, the share image and
+          <code>og:url</code> are absolute URLs.
+        </p>
+        <pre class="f-code">
+&lt;html lang="en" data-accent="moss"&gt;
+&lt;head&gt;
+  &lt;meta charset="utf-8" /&gt;
+  &lt;meta name="viewport" content="width=device-width, initial-scale=1" /&gt;
+  &lt;title&gt;Chasing the red dot · Duna's notes&lt;/title&gt;
+  &lt;meta name="description" content="Twelve rooms, one red dot, and what Duna learned about light." /&gt;
+  &lt;link rel="canonical" href="https://example.com/notes/red-dot/" /&gt;
+
+  &lt;meta property="og:type" content="article" /&gt;
+  &lt;meta property="og:title" content="Chasing the red dot" /&gt;
+  &lt;meta property="og:description" content="Twelve rooms, one red dot, and what Duna learned about light." /&gt;
+  &lt;meta property="og:url" content="https://example.com/notes/red-dot/" /&gt;
+  &lt;meta property="og:image" content="https://example.com/notes/red-dot/card.png" /&gt;
+  &lt;meta name="twitter:card" content="summary_large_image" /&gt;
+
+  &lt;link rel="icon" href="/favicon.svg" type="image/svg+xml" /&gt;
+  &lt;meta name="theme-color" media="(prefers-color-scheme: dark)" content="#080b10" /&gt;
+  &lt;meta name="theme-color" media="(prefers-color-scheme: light)" content="#f5f7f9" /&gt;
+
+  &lt;link rel="preload" href="/facet/dist/fonts/geist.woff2" as="font" type="font/woff2" crossorigin /&gt;
+  &lt;link rel="stylesheet" href="/facet/dist/facet.css" /&gt;
+&lt;/head&gt;</pre>
+        <ul>
+          <li
+            data-zh="分享图片 1200×630，PNG 或 JPEG，尽量小于 300 KB；文字放大，手机上的预览很小。"
+          >
+            Share cards are 1200×630 PNG or JPEG, ideally under 300 KB, with large text, since
+            previews on phones are small.
+          </li>
+          <li
+            data-zh="两个 <code>theme-color</code> 用的是 facet 的 <code>--f-bg</code>（深色和浅色），浏览器的地址栏就和页面同色。"
+          >
+            The two <code>theme-color</code> values are facet's <code>--f-bg</code> in dark and
+            light, so the browser's address bar matches the page.
+          </li>
+          <li
+            data-zh="只预加载首屏用到的一两个字体，通常是 Geist（正文）和 Source Serif 4（标题）。预加载太多反而拖慢首屏。"
+          >
+            Preload only the one or two fonts the first screen uses, usually Geist for text and
+            Source Serif 4 for headings. Preloading more slows the first screen down.
+          </li>
+          <li
+            data-zh="跨域加载字体（比如从 jsDelivr）时，<code>preload</code> 一定要带 <code>crossorigin</code>，否则字体会下载两次。"
+          >
+            When the fonts come from another origin, such as jsDelivr, the preload needs
+            <code>crossorigin</code>, or the browser downloads the font twice.
+          </li>
+        </ul>
+      </section>
+
+      <section id="schema">
+        <h2 data-zh="每种版式的结构化数据">Structured data for each layout</h2>
+        <p
+          data-zh="在 <code>&amp;lt;head&amp;gt;</code> 里放一段 JSON-LD，告诉搜索引擎这一页是什么。每种版式通常对应一种 schema.org 类型："
+        >
+          A block of JSON-LD in the <code>&lt;head&gt;</code> tells search engines what a page is.
+          Each layout usually maps to one schema.org type:
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th data-zh="版式">Layout</th>
+              <th data-zh="类型">Type</th>
+              <th data-zh="要点">Notes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-zh="阅读、旁注">Reading, Margin notes</td>
+              <td><code>BlogPosting</code></td>
+              <td
+                data-zh="<code>headline</code>、<code>datePublished</code>、<code>image</code>，作者指向网站的 <code>Person</code>。"
+              >
+                <code>headline</code>, <code>datePublished</code>, <code>image</code>, and an author
+                that points at the site's <code>Person</code>.
+              </td>
+            </tr>
+            <tr>
+              <td data-zh="文档">Docs</td>
+              <td><code>TechArticle</code></td>
+              <td data-zh="再加一个 <code>BreadcrumbList</code>，给出它在文档里的位置。">
+                Plus a <code>BreadcrumbList</code> for its place in the docs.
+              </td>
+            </tr>
+            <tr>
+              <td data-zh="简历">Resume</td>
+              <td><code>ProfilePage</code> + <code>Person</code></td>
+              <td data-zh="<code>sameAs</code> 列出你在其他网站上的主页，把它们和这个网站连起来。">
+                <code>sameAs</code> lists your profiles elsewhere, tying them to this site.
+              </td>
+            </tr>
+            <tr>
+              <td data-zh="列表">List</td>
+              <td><code>CollectionPage</code></td>
+              <td data-zh="可以用 <code>ItemList</code> 列出每一项的链接。">
+                An <code>ItemList</code> can name each entry's URL.
+              </td>
+            </tr>
+            <tr>
+              <td data-zh="分屏">Split</td>
+              <td><code>SoftwareSourceCode</code></td>
+              <td
+                data-zh="项目页：<code>codeRepository</code>、<code>license</code>、<code>version</code>。"
+              >
+                For a project page: <code>codeRepository</code>, <code>license</code>,
+                <code>version</code>.
+              </td>
+            </tr>
+            <tr>
+              <td data-zh="封面、故事、全页面板">Cover, Story, Panels</td>
+              <td><code>VideoObject</code></td>
+              <td
+                data-zh="页面上有视频时：<code>name</code>、<code>thumbnailUrl</code>、<code>uploadDate</code>、<code>contentUrl</code>。"
+              >
+                When the page has a video: <code>name</code>, <code>thumbnailUrl</code>,
+                <code>uploadDate</code>, <code>contentUrl</code>.
+              </td>
+            </tr>
+            <tr>
+              <td data-zh="演示文稿">Deck</td>
+              <td><code>PresentationDigitalDocument</code></td>
+              <td data-zh="可选；大多数演示文稿用 <code>WebPage</code> 就够了。">
+                Optional; <code>WebPage</code> is enough for most decks.
+              </td>
+            </tr>
+            <tr>
+              <td data-zh="应用">App</td>
+              <td><code>WebApplication</code></td>
+              <td data-zh="<code>applicationCategory</code>，比如 <code>GameApplication</code>。">
+                <code>applicationCategory</code>, such as <code>GameApplication</code>.
+              </td>
+            </tr>
+            <tr>
+              <td data-zh="空状态">Empty</td>
+              <td data-zh="不需要">None</td>
+              <td data-zh="用作 404 页时，服务器要真的返回 404。">
+                As a 404 page, the server must really answer 404.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <pre class="f-code">
+&lt;script type="application/ld+json"&gt;
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Chasing the red dot",
+  "datePublished": "2026-10-11T09:00:00-07:00",
+  "image": "https://example.com/notes/red-dot/card.png",
+  "author": { "@id": "https://example.com/#person" }
+}
+&lt;/script&gt;</pre>
+        <p
+          data-zh="用 <code>@id</code> 引用同一个 <code>Person</code>，而不是每页重写一遍：首页定义它，其他页面只写 <code>@id</code>。"
+        >
+          Refer to one <code>Person</code> by its <code>@id</code> instead of repeating it: the home
+          page defines it, and every other page names only the <code>@id</code>.
+        </p>
+      </section>
+
+      <section>
+        <h2 data-zh="版式注意事项">Notes on the layouts</h2>
+        <ul>
+          <li
+            data-zh='封面：标题和导语写在 HTML 里，叠在图片上，不要做进图片。首屏大图不要 <code>loading="lazy"</code>，可以加 <code>fetchpriority="high"</code>。'
+          >
+            Cover: keep the title and intro as HTML over the image, never baked into it. Don't
+            lazy-load the hero image; give it <code>fetchpriority="high"</code> instead.
+          </li>
+          <li
+            data-zh="演示文稿：<code>data-f-slide</code> 里只放位置和颜色，文字一律写在幻灯片的标记里。搜索引擎不读属性里的 JSON。"
+          >
+            Deck: <code>data-f-slide</code> holds only positions and colors; every word belongs in
+            the slide's markup. Crawlers don't read JSON in attributes.
+          </li>
+          <li
+            data-zh="演示文稿、全页面板和应用的画面里没有显眼的大标题时，也给页面一个 <code>h1</code>，可以用 <code>f-visually-hidden</code> 藏起来。"
+          >
+            Deck, panels and app pages still need one <code>h1</code> when the design shows no big
+            title; <code>f-visually-hidden</code> keeps it out of sight.
+          </li>
+          <li
+            data-zh="文档和旁注：标题带稳定的 <code>id</code>，搜索结果可以直接链接到某一节；旁注本来就在 DOM 里。"
+          >
+            Docs and margin notes: give headings stable <code>id</code>s so search results can link
+            straight to a section. Sidenotes are already in the DOM.
+          </li>
+          <li
+            data-zh='图片：内容图写有意义的 <code>alt</code>，装饰图写 <code>alt=""</code>；写上 <code>width</code> 和 <code>height</code>，避免加载时页面跳动；首屏以下的图片用 <code>loading="lazy"</code>。'
+          >
+            Images: meaningful <code>alt</code> text for content, <code>alt=""</code> for
+            decoration; <code>width</code> and <code>height</code> so the page doesn't shift as they
+            load; <code>loading="lazy"</code> below the first screen.
+          </li>
+          <li
+            data-zh="应用：内容很少的工具页，在 HTML 里写一段简短说明；登录后的状态或私人页面用 <code>noindex</code>。"
+          >
+            App: a tool with little text gets a short description in the HTML; signed-in or private
+            states get <code>noindex</code>.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 data-zh="双语网站">Bilingual sites</h2>
+        <p
+          data-zh="搜索引擎只收录一个地址返回的 HTML，在浏览器里替换文字的语言切换，另一种语言永远不会被收录。所以每种语言要有自己的地址，用 <code>lang</code> 标明语言，再用 <code>hreflang</code> 把它们连起来："
+        >
+          Search engines index only the HTML a URL serves, so a language switch that swaps text in
+          the browser leaves the other language unindexed. Give each language its own URL, mark it
+          with <code>lang</code>, and link the two with <code>hreflang</code>:
+        </p>
+        <pre class="f-code">
+&lt;html lang="zh-Hans"&gt;
+&lt;link rel="canonical" href="https://example.com/zh/notes/red-dot/" /&gt;
+&lt;link rel="alternate" hreflang="en" href="https://example.com/notes/red-dot/" /&gt;
+&lt;link rel="alternate" hreflang="zh-Hans" href="https://example.com/zh/notes/red-dot/" /&gt;
+&lt;link rel="alternate" hreflang="x-default" href="https://example.com/notes/red-dot/" /&gt;</pre>
+        <ul>
+          <li
+            data-zh="两种语言的页面都列出全部 <code>hreflang</code>，包括自己；每页的规范链接指向它自己，不要指向另一种语言。"
+          >
+            Both language versions list every <code>hreflang</code>, including themselves, and each
+            page's canonical points at itself, never at the other language.
+          </li>
+          <li
+            data-zh='facet 的中文规则跟着 <code>lang</code> 走：<code>&amp;lt;html lang="zh-Hans"&amp;gt;</code> 让整页用中文行高和断行，页面里的一段 <code>lang="en"</code> 再回到英文的行高。'
+          >
+            facet's Chinese rules follow <code>lang</code>: <code>&lt;html lang="zh-Hans"&gt;</code>
+            gives the whole page Chinese leading and line breaking, and a block with
+            <code>lang="en"</code> inside it goes back to the Latin leading.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 data-zh="站点地图和 robots.txt">Sitemaps and robots.txt</h2>
+        <ul>
+          <li
+            data-zh="<code>sitemap.xml</code> 列出每个规范地址，只列规范地址：不要列跳转页、分页的第一页或 <code>noindex</code> 的页面。"
+          >
+            <code>sitemap.xml</code> lists every canonical URL and nothing else: no redirects, no
+            duplicate first pages of a paginated list, nothing marked <code>noindex</code>.
+          </li>
+          <li
+            data-zh="搜索引擎只在域名根目录读 <code>robots.txt</code>。GitHub Pages 的项目网站（比如 <code>example.com/project/</code>）没法有自己的 robots.txt，要在根网站的 robots.txt 里加一行 <code>Sitemap:</code> 指向它，或者在 Search Console 里提交。"
+          >
+            Crawlers read <code>robots.txt</code> only at the domain root. A GitHub Pages project
+            site (such as <code>example.com/project/</code>) can't have its own, so add a
+            <code>Sitemap:</code> line for it to the root site's robots.txt, or submit it in Search
+            Console.
+          </li>
+          <li
+            data-zh='草稿、设计稿和测试页面加 <code>&amp;lt;meta name="robots" content="noindex"&amp;gt;</code>，并且不放进站点地图。'
+          >
+            Drafts, mockups and test pages get
+            <code>&lt;meta name="robots" content="noindex"&gt;</code> and stay out of the sitemap.
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 data-zh="这个网站是怎么做的">How this site does it</h2>
+        <p
+          data-zh='每个参考页面只写自己的 <code>&amp;lt;title&amp;gt;</code> 和 <code>&amp;lt;meta name="description"&amp;gt;</code>，各带一个中文的 <code>data-zh</code>。<code>just site</code> 组装网站时，<code>scripts/site_meta.py</code> 把每一页在 <code>zh/</code> 下再写一份，中文直接写在 HTML 里，工具栏的 EN / 中文 就在两个地址之间切换（本地 <code>just serve</code> 时仍是原地替换）；然后根据标题和描述补上规范链接、<code>hreflang</code>、图标、<code>theme-color</code>、Open Graph、JSON-LD（首页是 <code>WebSite</code> 和 <code>SoftwareSourceCode</code>，其他页面是带面包屑的 <code>WebPage</code>），写出 <code>sitemap.xml</code>，并给设计稿加上 <code>noindex</code>。分享图片由 <code>scripts/card.py</code> 根据 facet 的令牌和字体画出。'
+        >
+          Each reference page declares only its <code>&lt;title&gt;</code> and
+          <code>&lt;meta name="description"&gt;</code>, each with a Chinese <code>data-zh</code>.
+          When <code>just site</code> assembles the site, <code>scripts/site_meta.py</code> writes
+          every page again under <code>zh/</code> with the Chinese in the HTML, and the toolbar's EN
+          / 中文 moves between the two URLs (under <code>just serve</code> it still swaps in place).
+          It then adds the rest from the title and description: the canonical link,
+          <code>hreflang</code> alternates, icon, <code>theme-color</code>, Open Graph tags and
+          JSON-LD (<code>WebSite</code> and <code>SoftwareSourceCode</code> on the home page, a
+          <code>WebPage</code> with breadcrumbs elsewhere), writes <code>sitemap.xml</code>, and
+          marks the mockups <code>noindex</code>. <code>scripts/card.py</code> draws the share card
+          from facet's own tokens and fonts.
+        </p>
+      </section>
+    </main>
+  </body>
+</html>

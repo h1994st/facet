@@ -4,7 +4,9 @@
 // {theme, lang, accent}; the theme toggle's own "facet-theme" value takes precedence over the
 // theme saved here. URL parameters (?theme=light&lang=zh&accent=rose) override and are remembered.
 // Bilingual text: any element with a data-zh attribute shows that (as HTML) in Chinese and its
-// original content in English.
+// original content in English. On the published site each language has its own URL (the Chinese
+// copy lives under zh/, written by scripts/site_meta.py, which marks <html data-site-lang>); there
+// the language buttons move between the two URLs instead of swapping text in place.
 (function () {
   var KEY = "facet-site";
   var THEME_KEY = "facet-theme";
@@ -19,6 +21,7 @@
     ["components.html", "Components", "组件"],
     ["layouts/index.html", "Layouts", "版式"],
     ["cast.html", "Cast", "角色"],
+    ["seo.html", "SEO", "搜索"],
   ];
   // name, label, hue; near-neutrals and graphite have their own chroma or fixed colors in site.css.
   var ACCENTS = [
@@ -60,6 +63,10 @@
     return allowed.indexOf(value) >= 0 ? value : null;
   }
 
+  // The language a published page is fixed to, or null where text swaps in place.
+  var SITE_LANG = pick(ROOT.dataset.siteLang, LANGS);
+  var PREFIX = SITE_LANG === "zh" ? "zh/" : "";
+
   var saved = {};
   try {
     saved = JSON.parse(get(KEY) || "{}") || {};
@@ -82,6 +89,7 @@
       overridden = true;
     }
   });
+  if (SITE_LANG) state.lang = SITE_LANG;
   if (overridden) save();
 
   function save() {
@@ -98,7 +106,7 @@
 
   function apply() {
     applyRoot();
-    var nodes = document.querySelectorAll("[data-zh]");
+    var nodes = document.querySelectorAll("[data-zh]:not(meta)");
     for (var i = 0; i < nodes.length; i++) {
       var el = nodes[i];
       if (el.dataset.en === undefined) el.dataset.en = el.innerHTML;
@@ -139,6 +147,7 @@
     // The page's path relative to the site root, so "layouts/index.html" is not "index.html".
     var root = BASE ? new URL(BASE).pathname : "/";
     var here = location.pathname.indexOf(root) === 0 ? location.pathname.slice(root.length) : "";
+    if (PREFIX && here.indexOf(PREFIX) === 0) here = here.slice(PREFIX.length);
     if (here === "" || here.slice(-1) === "/") here += "index.html";
     var bar = document.createElement("header");
     bar.className = "site-bar";
@@ -148,7 +157,8 @@
       return (
         '<a href="' +
         BASE +
-        p[0] +
+        PREFIX +
+        p[0].replace(/index\.html$/, "") +
         '"' +
         (current ? ' aria-current="page"' : "") +
         ' data-zh="' +
@@ -174,7 +184,8 @@
     bar.innerHTML =
       '<a class="site-bar__brand" href="' +
       BASE +
-      'index.html">facet</a>' +
+      PREFIX +
+      '">facet</a>' +
       '<nav class="site-bar__nav" aria-label="Reference site">' +
       links +
       "</nav>" +
@@ -197,6 +208,12 @@
       if (!b) return;
       state[b.dataset.k] = b.dataset.v;
       save();
+      if (b.dataset.k === "lang" && SITE_LANG && b.dataset.v !== SITE_LANG) {
+        var page = here.replace(/index\.html$/, "");
+        location.href =
+          BASE + (b.dataset.v === "zh" ? "zh/" : "") + page + location.search + location.hash;
+        return;
+      }
       apply();
     });
     // Fixed navs sit below the bar until it scrolls away.

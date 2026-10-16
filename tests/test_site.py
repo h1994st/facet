@@ -118,6 +118,7 @@ def test_toolbar_marks_one_current_page(page_factory, site_url):
         "type.html",
         "components.html",
         "cast.html",
+        "seo.html",
     }
     for path in PAGES:
         page = page_factory()

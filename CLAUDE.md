@@ -16,6 +16,7 @@ just test          # build, then run the browser tests (pytest + Playwright)
 just fonts         # rebuild the self-hosted fonts (network; cached in fonts/.cache/)
 just serve         # build, then serve the Pages layout (site/ + mockups/) live at http://localhost:8000
 just site          # assemble the GitHub Pages site into _site/ (what CI deploys; no site/tests)
+just card          # redraw the share card and icon (site/card.png, site/favicon.svg)
 ```
 
 ## Repository layout
@@ -28,7 +29,12 @@ just site          # assemble the GitHub Pages site into _site/ (what CI deploys
 - `site/`: the reference site. `site/site.js` is a classic script in each page's `<head>` that
   applies theme, language and accent before paint and renders the toolbar; `site/site.css` holds
   only toolbar and swatch styles. `site/dist` and `site/assets` are symlinks. `site/tests/` are
-  fixtures for the tests, not pages.
+  fixtures for the tests, not pages. Every page declares a `<title>` and a
+  `<meta name="description">`, each with a Chinese `data-zh`; `just site` runs
+  `scripts/site_meta.py`, which writes the Chinese copy of each page under `zh/` and adds the
+  canonical, `hreflang`, Open Graph and JSON-LD tags and `sitemap.xml`, so never hand-write those
+  tags in a page. `scripts/card.py` (`just card`) draws `site/card.png` and `site/favicon.svg` from
+  the tokens; edit the script, not the images.
 - `tests/`: Playwright tests against `site/`. `tests/checks.py` has the contrast helpers.
 - `fonts/`: the font build script and its cache. `mockups/`: design explorations, left as is.
 
