@@ -2272,14 +2272,14 @@
     max-width: var(--f-measure);
   }
 
-  .f-prose :is(h1, h2, h3, h4) {
+  .f-prose :where(h1, h2, h3, h4) {
     font-family: var(--f-font-serif);
     font-weight: 600;
     letter-spacing: -0.015em;
     text-wrap: balance;
   }
 
-  .f-prose :where(h1, h2, h3, h4):lang(zh) {
+  .f-prose :where(h1, h2, h3, h4):where(:lang(zh)) {
     letter-spacing: 0;
   }
 
@@ -2307,7 +2307,7 @@
     line-height: 1.7;
   }
 
-  .f-prose :where(p, li):lang(zh) {
+  .f-prose :where(p, li):where(:lang(zh)) {
     line-height: var(--f-leading-zh);
   }
 

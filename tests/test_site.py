@@ -54,14 +54,19 @@ def test_contrast_helper_composites_translucent_color(page_factory):
 def test_inline_chinese_block_in_english_prose(page_factory, site_url):
     page = page_factory()
     page.goto(f"{site_url}/index.html")
-    page.evaluate(
-        "document.querySelector('main').insertAdjacentHTML("
-        "'beforeend', '<h2 lang=\"zh-Hans\">标题</h2><p lang=\"zh-Hans\">正文</p>')"
+    html = (
+        '<h2 id="zh-h" lang="zh-Hans">标题</h2>'
+        '<p id="zh-p" lang="zh-Hans">正文</p>'
+        '<p id="zh-k" class="f-kicker" lang="zh-Hans">标签</p>'
     )
-    p = page.evaluate(
-        "(() => { const s = getComputedStyle(document.querySelector('p[lang]'));"
-        " return [s.lineHeight, s.fontSize]; })()"
+    page.evaluate("(h) => document.querySelector('main').insertAdjacentHTML('beforeend', h)", html)
+    lh = (
+        "(id) => { const s = getComputedStyle(document.getElementById(id));"
+        " return [s.lineHeight, s.fontSize]; }"
     )
-    assert float(p[0][:-2]) == pytest.approx(float(p[1][:-2]) * 1.8)
-    h = page.evaluate("getComputedStyle(document.querySelector('h2[lang]')).letterSpacing")
+    line, size = page.evaluate(lh, "zh-p")
+    assert float(line[:-2]) == pytest.approx(float(size[:-2]) * 1.8)
+    line, size = page.evaluate(lh, "zh-k")
+    assert float(line[:-2]) == pytest.approx(float(size[:-2]))
+    h = page.evaluate("getComputedStyle(document.getElementById('zh-h')).letterSpacing")
     assert h in ("normal", "0px")
