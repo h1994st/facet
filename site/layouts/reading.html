@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Layout · Reading</title>
+    <script>
+      try {
+        const s = JSON.parse(localStorage.getItem("facet-site") || "{}");
+        // The theme toggle's own saved value wins over the site-wide one.
+        if (s.theme && !localStorage.getItem("facet-theme"))
+          document.documentElement.dataset.theme = s.theme;
+        if (s.lang) document.documentElement.lang = s.lang === "zh" ? "zh-Hans" : "en";
+      } catch {}
+    </script>
+    <link rel="stylesheet" href="../dist/facet.css" />
+    <link rel="stylesheet" href="../dist/cast/cast-layered.css" />
+    <script type="module" src="../dist/js/facet.js"></script>
+    <script type="module" src="../footer-cats.js"></script>
+  </head>
+  <body>
+    <nav class="f-nav f-nav--fixed" aria-label="Site">
+      <span class="f-nav__brand">Duna Feline</span
+      ><a href="#" aria-current="page" data-zh="博客">Blog</a><a href="#" data-zh="项目">Projects</a
+      ><a href="#" data-zh="简历">Resume</a>
+    </nav>
+
+    <main class="f-reading f-page f-prose">
+      <header class="f-reading__title">
+        <p class="f-kicker" data-zh="博客 · 研究">Blog · Research</p>
+        <h1 data-zh="十二个房间，一个红点都没抓到">Twelve Rooms, Zero Dots Caught</h1>
+        <p class="f-meta" data-zh="2026 年 10 月 11 日 · 6 分钟阅读">Oct 11, 2026 · 6 min read</p>
+      </header>
+
+      <p class="f-reading__lead" data-zh="整整两年，我在十二个房间里追一个红点。这是我学到的东西。">
+        For two years I chased one red dot across twelve rooms. Here is what I learned.
+      </p>
+      <p
+        data-zh="正文是单栏，每行大约 65 个英文字符（中文约 36 字），读起来最舒服。图片和图表可以从正文栏“探出去”：宽一点，或者铺满整个页面。"
+      >
+        Text sits in one column, about 65 characters a line (around 36 in Chinese), the comfortable
+        reading width. Figures can break out of it: a little wider, or the full width of the page.
+      </p>
+
+      <figure>
+        <span class="f-reading__col" data-zh="正文宽度">Content width</span>
+        <img src="../assets/board-1.jpg" alt="" />
+        <figcaption data-zh="正文宽度：和文字一样宽。">
+          Content width: as wide as the text.
+        </figcaption>
+      </figure>
+
+      <p
+        data-zh="红点从不乱跑。它沿直线前进，碰到镜子就拐弯，最后总停在一个我够不着的地方。把它的路线画下来，就是上面这张图。"
+      >
+        The dot never wanders. It travels in straight lines, turns at every mirror, and always stops
+        somewhere just out of reach. Draw its paths and you get the board above.
+      </p>
+
+      <figure class="f-wide">
+        <span class="f-reading__col" data-zh="加宽">Wide</span>
+        <img src="../assets/horizon.jpg" alt="" />
+        <figcaption data-zh="加宽：两侧各多出一点，适合图表和截图组。">
+          Wide: reaches past the text on both sides, for diagrams and screenshot sets.
+        </figcaption>
+      </figure>
+
+      <p data-zh="两个房间，两种路线：">Two rooms, two kinds of path:</p>
+      <div class="f-wide f-reading__shots">
+        <img src="../assets/board-1.jpg" alt="" />
+        <img src="../assets/board-2.jpg" alt="" />
+      </div>
+
+      <blockquote data-zh="你抓不到光，但你可以读懂它。">
+        You can't catch light, but you can learn to read it.
+      </blockquote>
+
+      <pre class="f-code"><span class="f-code__prompt">$</span> red-dot track ./living-room
+<span class="f-code__out">→ 412 dots, 0 caught</span></pre>
+
+      <figure class="f-full">
+        <span class="f-reading__col" data-zh="铺满">Full</span>
+        <img src="../assets/board.jpg" alt="" />
+        <figcaption data-zh="铺满：从页面一边到另一边，给真正需要震撼力的图片。">
+          Full: edge to edge, for the images that need the impact.
+        </figcaption>
+      </figure>
+
+      <div class="f-alert f-alert--info">
+        <p class="f-alert__title" data-zh="提示">Note</p>
+        <span data-zh="这是一个虚构的示例网站。">This is a fictional sample site.</span>
+      </div>
+      <p data-zh="如果你家也有一个红点，试试看吧。它可能比你想的更好懂。">
+        If your home has a red dot too, give it a try. It may be easier to read than you expect.
+      </p>
+
+      <h2 data-zh="压力测试">Stress test</h2>
+      <p
+        data-zh="下面是最坏情况：很长的链接、很长的代码行、没有标点的中文，以及六列的表格。页面不能出现横向滚动。"
+      >
+        The worst cases follow: a very long link, a very long code line, Chinese with no
+        punctuation, and a six-column table. The page must not scroll sideways.
+      </p>
+      <p>
+        <a
+          href="https://example.com/hairball/archive/red-dot-room-red-dot-room-red-dot-room-red-dot-room-red-dot-room-red-dot-room-red-dot-room-red-dot-room-red-dot-room-red-dot-room-red-dot-room-index.html"
+          >https://example.com/hairball/archive/red-dot-room-red-dot-room-red-dot-room-red-dot-room-red-dot-room-red-dot-room-red-dot-room-red-dot-room-red-dot-room-red-dot-room-red-dot-room-index.html</a
+        >
+      </p>
+      <pre class="f-code">
+$ red-dot track ./room-01 ./room-02 ./room-03 ./room-04 ./room-05 ./room-06 ./room-07 ./room-08 ./room-09 ./room-10 ./room-11 ./room-12 ./room-13 ./room-14 ./room-15 ./room-16 ./room-17 ./room-18 ./room-19 ./room-20 ./room-21 ./room-22 ./room-23 ./room-24 ./room-25 ./room-26 ./room-27 ./room-28 ./room-29 ./room-30 ./room-31 ./room-32 ./room-33 ./room-34 ./room-35</pre>
+      <p lang="zh-Hans">
+        红点沿着直线前进碰到镜子就拐弯最后总是停在一个我够不着的地方红点沿着直线前进碰到镜子就拐弯最后总是停在一个我够不着的地方红点沿着直线前进碰到镜子就拐弯最后总是停在一个我够不着的地方红点沿着直线前进碰到镜子就拐弯最后总是停在一个我够不着的地方
+      </p>
+      <table>
+        <thead>
+          <tr>
+            <th>Room</th>
+            <th>Dots</th>
+            <th>Pounces</th>
+            <th>Caught</th>
+            <th>Mirrors</th>
+            <th>Windows</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Living room</td>
+            <td>412</td>
+            <td>96</td>
+            <td>0</td>
+            <td>1</td>
+            <td>2</td>
+          </tr>
+          <tr>
+            <td>Hallway</td>
+            <td>238</td>
+            <td>51</td>
+            <td>0</td>
+            <td>3</td>
+            <td>0</td>
+          </tr>
+          <tr>
+            <td>Bedroom</td>
+            <td>171</td>
+            <td>40</td>
+            <td>0</td>
+            <td>2</td>
+            <td>1</td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+    <footer class="f-footer">
+      <div class="f-footer__cats"></div>
+      <span data-zh="© 2026 Duna Feline · example.com">© 2026 Duna Feline · example.com</span>
+    </footer>
+  </body>
+</html>

@@ -3,6 +3,7 @@
 const modules = [];
 modules.push(() => import("./theme.js"));
 modules.push(() => import("./liquid.js"));
+modules.push(() => import("./scrollspy.js"));
 
 export async function init(root = document) {
   for (const load of modules) (await load()).init(root);

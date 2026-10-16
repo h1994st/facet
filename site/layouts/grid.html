@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Layout · Grid</title>
+    <script>
+      try {
+        const s = JSON.parse(localStorage.getItem("facet-site") || "{}");
+        // The theme toggle's own saved value wins over the site-wide one.
+        if (s.theme && !localStorage.getItem("facet-theme"))
+          document.documentElement.dataset.theme = s.theme;
+        if (s.lang) document.documentElement.lang = s.lang === "zh" ? "zh-Hans" : "en";
+      } catch {}
+    </script>
+    <link rel="stylesheet" href="../dist/facet.css" />
+    <link rel="stylesheet" href="../dist/cast/cast-layered.css" />
+    <script type="module" src="../dist/js/facet.js"></script>
+    <script type="module" src="../footer-cats.js"></script>
+  </head>
+  <body>
+    <nav class="f-nav f-nav--fixed" aria-label="Site">
+      <span class="f-nav__brand">Duna Feline</span><a href="#" data-zh="博客">Blog</a
+      ><a href="#" aria-current="page" data-zh="项目">Projects</a
+      ><a href="#" data-zh="简历">Resume</a>
+    </nav>
+
+    <main class="f-wrap f-prose">
+      <header>
+        <p class="f-kicker" data-zh="网格">Grid</p>
+        <h1 data-zh="项目">Projects</h1>
+        <p data-zh="卡片网格：适合项目、照片、博客卡片和标签页。悬停时卡片会出现液态玻璃的光。">
+          A grid of cards: for projects, photos, blog cards and tag pages. Cards pick up the liquid
+          glass light on hover.
+        </p>
+        <div class="f-cluster" id="filter" role="group" aria-label="Filter">
+          <button class="f-chip" type="button" data-f="all" aria-pressed="true" data-zh="全部">
+            All
+          </button>
+          <button class="f-chip" type="button" data-f="games" aria-pressed="false" data-zh="游戏">
+            Play
+          </button>
+          <button class="f-chip" type="button" data-f="tools" aria-pressed="false" data-zh="工具">
+            Tools
+          </button>
+          <button class="f-chip" type="button" data-f="notes" aria-pressed="false" data-zh="笔记">
+            Notes
+          </button>
+        </div>
+      </header>
+
+      <div class="f-grid" data-f-liquid>
+        <article class="f-card f-card--w2 f-card--h2" data-tags="tools">
+          <div class="f-card__media" style="background-image: url(../assets/board.jpg)"></div>
+          <div class="f-card__body">
+            <h3 data-zh="Red Dot Tracker">Red Dot Tracker</h3>
+            <p data-zh="追着红点跑过每一面墙，记下每一次扑击。">
+              Chase the red dot across every wall, and log every pounce.
+            </p>
+          </div>
+        </article>
+        <article class="f-card f-card--text" data-tags="tools">
+          <div class="f-card__body">
+            <h3 data-zh="Purrometheus">Purrometheus</h3>
+            <p data-zh="监控食盆、打盹时长和凌晨三点的跑酷。">
+              Watches food bowls, nap lengths and 3 a.m. zoomies.
+            </p>
+          </div>
+        </article>
+        <article class="f-card f-card--text" data-tags="tools">
+          <div class="f-card__body">
+            <h3 data-zh="Hairball">Hairball</h3>
+            <p data-zh="为每一次惊喜投递规划最贵的那块地毯。">
+              Plans each surprise delivery for the most expensive rug.
+            </p>
+          </div>
+        </article>
+        <article class="f-card" data-tags="games">
+          <div class="f-card__media" style="background-image: url(../assets/board-3.jpg)"></div>
+          <div class="f-card__body"><h3 data-zh="走廊的红点">Hallway dots</h3></div>
+        </article>
+        <article class="f-card f-card--text f-card--w2" data-tags="notes">
+          <div class="f-card__body">
+            <h3 data-zh="案件记录">Case files</h3>
+            <p data-zh="一步一步写下来的家庭悬案：消失的袜子、移动的花瓶。">
+              Household mysteries, written up step by step: the missing sock, the moving vase.
+            </p>
+          </div>
+        </article>
+        <article class="f-card f-card--text" data-tags="notes">
+          <div class="f-card__body">
+            <h3 data-zh="纸箱日志">Box Inspection Log</h3>
+            <p data-zh="1,200 个纸箱，能装下，就能坐。">1,200 boxes. If it fits, I sits.</p>
+          </div>
+        </article>
+      </div>
+    </main>
+    <footer class="f-footer">
+      <div class="f-footer__cats"></div>
+      <span data-zh="© 2026 Duna Feline · example.com">© 2026 Duna Feline · example.com</span>
+    </footer>
+    <script>
+      // Demo filter: hides the cards that do not carry the chosen tag.
+      const chips = [...document.querySelectorAll("#filter .f-chip")];
+      const cards = [...document.querySelectorAll(".f-grid .f-card")];
+      chips.forEach((c) =>
+        c.addEventListener("click", () => {
+          chips.forEach((x) => x.setAttribute("aria-pressed", x === c));
+          cards.forEach(
+            (k) => (k.hidden = c.dataset.f !== "all" && k.dataset.tags !== c.dataset.f),
+          );
+        }),
+      );
+    </script>
+  </body>
+</html>

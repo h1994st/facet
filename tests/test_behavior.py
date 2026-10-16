@@ -79,3 +79,38 @@ def test_sheet_locks_page_scroll_while_open(page_factory, site_url):
     assert page.evaluate(overflow) == "hidden"
     page.click("#demo-close-sheet")
     assert page.evaluate(overflow) != "hidden"
+
+
+def test_scrollspy_tracks_sections(page_factory, site_url):
+    page = page_factory(width=1280)
+    page.goto(f"{site_url}/layouts/docs.html")
+    page.evaluate("document.querySelector('#config').scrollIntoView()")
+    page.wait_for_timeout(200)
+    current = page.evaluate(
+        "document.querySelector('[data-f-scrollspy] [aria-current]').getAttribute('href')"
+    )
+    assert current == "#config"
+
+
+def test_footnote_opens_on_phone(page_factory, site_url):
+    page = page_factory(width=390)
+    page.goto(f"{site_url}/layouts/margin.html")
+    note = page.locator(".f-sidenote").first
+    assert not note.is_visible()
+    page.locator(".f-sidenote-ref").first.click()
+    assert note.is_visible()
+
+
+def test_footnotes_sit_in_the_margin_on_wide_screens(page_factory, site_url):
+    page = page_factory(width=1280)
+    page.goto(f"{site_url}/layouts/margin.html")
+    note = page.locator(".f-sidenote").first
+    assert note.is_visible()
+    box = page.evaluate(
+        """() => {
+            const n = document.querySelector('.f-sidenote').getBoundingClientRect();
+            const a = document.querySelector('.f-margin').getBoundingClientRect();
+            return {noteLeft: n.left, articleRight: a.right};
+        }"""
+    )
+    assert box["noteLeft"] >= box["articleRight"]

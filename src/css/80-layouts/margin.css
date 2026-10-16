@@ -1,0 +1,135 @@
+@layer facet.layouts {
+  /* The reading column sits left of center, leaving a margin column for notes. */
+  .f-margin {
+    width: min(100% - 2 * var(--f-gutter), 40rem);
+    max-width: none;
+    margin-inline: auto;
+    padding-top: 6rem;
+    padding-bottom: var(--f-space-5);
+    counter-reset: f-sidenote;
+  }
+
+  /* Contain the floated notes so the last one never runs into the footer. */
+  .f-margin::after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+
+  .f-margin h1 {
+    margin: 0 0 0.6rem;
+    font-size: var(--f-text-2xl);
+    line-height: 1.1;
+  }
+
+  /* The number in the text. */
+  .f-sidenote-ref {
+    counter-increment: f-sidenote;
+    cursor: pointer;
+  }
+
+  .f-sidenote-ref::after {
+    content: counter(f-sidenote);
+    position: relative;
+    top: -0.5em;
+    margin-left: 0.1rem;
+    color: var(--f-accent);
+    font: 600 0.72em var(--f-font-mono);
+  }
+
+  /* Kept out of sight but focusable, so the keyboard can open a note. */
+  .f-sidenote-toggle {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    opacity: 0;
+  }
+
+  .f-sidenote-ref:has(+ .f-sidenote-toggle:focus-visible)::after {
+    outline: 2px solid var(--f-accent);
+    outline-offset: 2px;
+  }
+
+  .f-sidenote {
+    display: none;
+    margin: 0.6rem 0;
+    padding: 0.6rem 0.8rem;
+    border-left: 2px solid var(--f-accent);
+    background: var(--f-bg-2);
+    color: var(--f-fg-2);
+    font-size: var(--f-text-sm);
+    line-height: 1.55;
+  }
+
+  .f-sidenote::before {
+    content: counter(f-sidenote) ". ";
+    color: var(--f-accent);
+    font: 600 0.8em var(--f-font-mono);
+  }
+
+  .f-sidenote-toggle:checked + .f-sidenote {
+    display: block;
+  }
+
+  /* Below 1100px the number is a small tappable pill, so it reads as something to open. */
+  @media (max-width: 1099px) {
+    .f-sidenote-ref::after {
+      top: -0.15em;
+      display: inline-grid;
+      place-items: center;
+      min-width: 1.35rem;
+      height: 1.35rem;
+      margin-left: 0.25rem;
+      padding: 0 0.3rem;
+      border-radius: var(--f-r-pill);
+      corner-shape: round;
+      background: color-mix(in oklch, var(--f-accent) 22%, transparent);
+      color: var(--f-fg);
+      font-size: 0.72rem;
+    }
+
+    .f-sidenote-toggle:checked + .f-sidenote {
+      animation: f-sidenote-open var(--f-dur-2) ease-out;
+    }
+
+    @keyframes f-sidenote-open {
+      from {
+        opacity: 0;
+        transform: translateY(-4px);
+      }
+    }
+  }
+
+  /* Wide screens: the column shifts left and notes float into the right margin. */
+  @media (min-width: 1100px) {
+    .f-margin {
+      transform: translateX(-7.5rem);
+    }
+
+    .f-sidenote-toggle {
+      display: none;
+    }
+
+    .f-sidenote {
+      display: block;
+      float: right;
+      clear: right;
+      width: 13rem;
+      margin: 0.3rem -15.5rem 0.8rem 0;
+      padding: 0 0 0 0.8rem;
+      border-left: 1px solid var(--f-line-2);
+      background: none;
+    }
+
+    .f-sidenote-ref {
+      cursor: default;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .f-sidenote-toggle:checked + .f-sidenote {
+      animation: none;
+    }
+  }
+}

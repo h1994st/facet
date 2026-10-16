@@ -49,6 +49,8 @@
     --f-leading: 1.6;
     --f-leading-zh: 1.8;
     --f-measure: 40rem;
+    --f-gutter: 1.25rem;
+    --f-breakout: 9rem;
 
     --f-space-1: 0.25rem;
     --f-space-2: 0.5rem;
@@ -3075,6 +3077,972 @@
   @media (prefers-reduced-motion: reduce) {
     .f-toc a {
       transition: none;
+    }
+  }
+}
+
+/* src/css/80-layouts/docs.css */
+@layer facet.layouts {
+  /* Two columns: a sticky table of contents (.f-toc), then the reading column. */
+  .f-docs {
+    display: grid;
+    grid-template-columns: 13rem minmax(0, min(var(--f-measure), 100%));
+    gap: 3.5rem;
+    justify-content: center;
+    width: min(100% - 2 * var(--f-gutter), 64rem);
+    max-width: none;
+    margin-inline: auto;
+    padding-top: 6rem;
+    padding-bottom: var(--f-space-5);
+  }
+
+  .f-docs > article {
+    min-width: 0;
+  }
+
+  .f-docs .f-toc {
+    top: 5rem;
+  }
+
+  .f-docs__label {
+    margin: 0 0 0.6rem -0.9rem;
+    padding-left: 0.9rem;
+    color: var(--f-fg-3);
+    font: 600 0.7rem/1 var(--f-font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .f-docs h1 {
+    margin: 0 0 0.6rem;
+    font-size: var(--f-text-2xl);
+    line-height: 1.1;
+  }
+
+  .f-docs section {
+    scroll-margin-top: 5rem;
+  }
+
+  /* Below 1024px the TOC is a pill bar (see .f-toc) that stays under the nav. A block parent
+     keeps it sticky for the whole page; a grid would pin it to its own row. */
+  @media (max-width: 1023px) {
+    .f-docs {
+      display: block;
+      padding-top: 5rem;
+    }
+
+    .f-docs .f-toc {
+      top: 4.25rem;
+      margin-bottom: var(--f-space-5);
+    }
+
+    .f-docs__label {
+      display: none;
+    }
+
+    .f-docs section {
+      scroll-margin-top: 8rem;
+    }
+  }
+}
+
+/* src/css/80-layouts/empty.css */
+@layer facet.layouts {
+  /* The whole window, with a centered .f-empty message. */
+  .f-empty-page {
+    display: grid;
+    place-items: center;
+    min-height: 100svh;
+    padding-top: 4rem;
+  }
+}
+
+/* src/css/80-layouts/grid.css */
+@layer facet.layouts {
+  /* A bento grid of cards: some span two columns, some two rows. 3, 2 and 1 columns. */
+  .f-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-auto-rows: 15rem;
+    grid-auto-flow: dense;
+    gap: var(--f-space-4);
+    margin-top: 1.25rem;
+  }
+
+  .f-grid > .f-card {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .f-grid > .f-card--w2 {
+    grid-column: span 2;
+  }
+
+  .f-grid > .f-card--h2 {
+    grid-row: span 2;
+  }
+
+  .f-grid .f-card__media {
+    flex: 1;
+    min-height: 0;
+    aspect-ratio: auto;
+  }
+
+  .f-grid .f-card__body {
+    padding: 0.9rem 1.1rem 1rem;
+  }
+
+  .f-grid .f-card h3 {
+    margin: 0 0 0.2rem;
+    font-size: var(--f-text-lg);
+  }
+
+  .f-grid .f-card p {
+    margin: 0;
+    font-size: 0.86rem;
+    line-height: 1.5;
+  }
+
+  .f-grid > .f-card--text {
+    justify-content: flex-end;
+  }
+
+  .f-grid > .f-card--text h3 {
+    font-size: var(--f-text-xl);
+  }
+
+  @media (max-width: 1024px) {
+    .f-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .f-grid {
+      grid-template-columns: minmax(0, 1fr);
+      grid-auto-rows: 14rem;
+    }
+
+    .f-grid > .f-card--w2 {
+      grid-column: auto;
+    }
+
+    .f-grid > .f-card--h2 {
+      grid-row: span 1;
+    }
+  }
+}
+
+/* src/css/80-layouts/list.css */
+@layer facet.layouts {
+  /* A dense list grouped by year: the year sits in a left rail, rows are links. */
+  .f-list__tools {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+    margin: 1.4rem 0 0.5rem;
+  }
+
+  .f-list__year {
+    display: grid;
+    grid-template-columns: 5rem minmax(0, 1fr);
+    gap: var(--f-space-4);
+    padding-top: 1.6rem;
+  }
+
+  .f-list__year > h2 {
+    position: sticky;
+    top: 5rem;
+    align-self: start;
+    margin: 0.35rem 0 0;
+    color: var(--f-fg-3);
+    font-size: var(--f-text-lg);
+  }
+
+  .f-list__year > ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--f-line);
+  }
+
+  .f-list__year li {
+    border-bottom: 1px solid var(--f-line);
+  }
+
+  .f-list__row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: var(--f-space-4);
+    align-items: baseline;
+    margin: 0 -0.6rem;
+    padding: 0.7rem 0.6rem;
+    border-radius: var(--f-r-sm);
+    color: var(--f-fg);
+    text-decoration: none;
+    transition: background var(--f-dur-1);
+  }
+
+  .f-list__row:hover {
+    background: color-mix(in oklch, var(--f-accent) 9%, transparent);
+  }
+
+  .f-list__title {
+    font: 600 1.05rem/1.4 var(--f-font-serif);
+    overflow-wrap: anywhere;
+  }
+
+  .f-list__tag {
+    margin-left: 0.5rem;
+    color: var(--f-fg-3);
+    font: 500 0.75rem var(--f-font-sans);
+  }
+
+  .f-list__row time {
+    color: var(--f-fg-3);
+    font: 0.8rem var(--f-font-mono);
+  }
+
+  .f-list__none {
+    padding: var(--f-space-6) 0;
+    color: var(--f-fg-3);
+  }
+
+  @media (max-width: 640px) {
+    .f-list__year {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.3rem;
+    }
+
+    .f-list__year > h2 {
+      position: static;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .f-list__row {
+      transition: none;
+    }
+  }
+}
+
+/* src/css/80-layouts/margin.css */
+@layer facet.layouts {
+  /* The reading column sits left of center, leaving a margin column for notes. */
+  .f-margin {
+    width: min(100% - 2 * var(--f-gutter), 40rem);
+    max-width: none;
+    margin-inline: auto;
+    padding-top: 6rem;
+    padding-bottom: var(--f-space-5);
+    counter-reset: f-sidenote;
+  }
+
+  /* Contain the floated notes so the last one never runs into the footer. */
+  .f-margin::after {
+    content: "";
+    display: block;
+    clear: both;
+  }
+
+  .f-margin h1 {
+    margin: 0 0 0.6rem;
+    font-size: var(--f-text-2xl);
+    line-height: 1.1;
+  }
+
+  /* The number in the text. */
+  .f-sidenote-ref {
+    counter-increment: f-sidenote;
+    cursor: pointer;
+  }
+
+  .f-sidenote-ref::after {
+    content: counter(f-sidenote);
+    position: relative;
+    top: -0.5em;
+    margin-left: 0.1rem;
+    color: var(--f-accent);
+    font: 600 0.72em var(--f-font-mono);
+  }
+
+  /* Kept out of sight but focusable, so the keyboard can open a note. */
+  .f-sidenote-toggle {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    opacity: 0;
+  }
+
+  .f-sidenote-ref:has(+ .f-sidenote-toggle:focus-visible)::after {
+    outline: 2px solid var(--f-accent);
+    outline-offset: 2px;
+  }
+
+  .f-sidenote {
+    display: none;
+    margin: 0.6rem 0;
+    padding: 0.6rem 0.8rem;
+    border-left: 2px solid var(--f-accent);
+    background: var(--f-bg-2);
+    color: var(--f-fg-2);
+    font-size: var(--f-text-sm);
+    line-height: 1.55;
+  }
+
+  .f-sidenote::before {
+    content: counter(f-sidenote) ". ";
+    color: var(--f-accent);
+    font: 600 0.8em var(--f-font-mono);
+  }
+
+  .f-sidenote-toggle:checked + .f-sidenote {
+    display: block;
+  }
+
+  /* Below 1100px the number is a small tappable pill, so it reads as something to open. */
+  @media (max-width: 1099px) {
+    .f-sidenote-ref::after {
+      top: -0.15em;
+      display: inline-grid;
+      place-items: center;
+      min-width: 1.35rem;
+      height: 1.35rem;
+      margin-left: 0.25rem;
+      padding: 0 0.3rem;
+      border-radius: var(--f-r-pill);
+      corner-shape: round;
+      background: color-mix(in oklch, var(--f-accent) 22%, transparent);
+      color: var(--f-fg);
+      font-size: 0.72rem;
+    }
+
+    .f-sidenote-toggle:checked + .f-sidenote {
+      animation: f-sidenote-open var(--f-dur-2) ease-out;
+    }
+
+    @keyframes f-sidenote-open {
+      from {
+        opacity: 0;
+        transform: translateY(-4px);
+      }
+    }
+  }
+
+  /* Wide screens: the column shifts left and notes float into the right margin. */
+  @media (min-width: 1100px) {
+    .f-margin {
+      transform: translateX(-7.5rem);
+    }
+
+    .f-sidenote-toggle {
+      display: none;
+    }
+
+    .f-sidenote {
+      display: block;
+      float: right;
+      clear: right;
+      width: 13rem;
+      margin: 0.3rem -15.5rem 0.8rem 0;
+      padding: 0 0 0 0.8rem;
+      border-left: 1px solid var(--f-line-2);
+      background: none;
+    }
+
+    .f-sidenote-ref {
+      cursor: default;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .f-sidenote-toggle:checked + .f-sidenote {
+      animation: none;
+    }
+  }
+}
+
+/* src/css/80-layouts/page.css */
+@layer facet.layouts {
+  /* The page grid: named column lines (full, wide, content), so a page is one column of content
+     whose children can break out to wide or full width. */
+  .f-page {
+    display: grid;
+    grid-template-columns:
+      [full-start] minmax(var(--f-gutter), 1fr)
+      [wide-start] minmax(0, var(--f-breakout))
+      [content-start] min(var(--f-measure), 100% - 2 * var(--f-gutter))
+      [content-end] minmax(0, var(--f-breakout))
+      [wide-end] minmax(var(--f-gutter), 1fr)
+      [full-end];
+    max-width: none;
+  }
+
+  .f-page > * {
+    grid-column: content;
+    min-width: 0;
+  }
+
+  .f-page > :where(p, li, h1, h2, h3, figcaption, blockquote) {
+    overflow-wrap: anywhere;
+  }
+
+  .f-page > .f-wide {
+    grid-column: wide;
+  }
+
+  .f-page > .f-full {
+    grid-column: full;
+  }
+
+  .f-page > .f-full img {
+    border-radius: 0;
+  }
+
+  .f-page > .f-full figcaption {
+    width: min(var(--f-measure), 100% - 2 * var(--f-gutter));
+    margin-inline: auto;
+  }
+
+  /* A centered block for pages that are not a reading column. The nav floats above, so the
+     top padding clears it. */
+  .f-wrap {
+    width: min(100% - 2 * var(--f-gutter), 68rem);
+    max-width: none;
+    margin-inline: auto;
+    padding-top: 5.5rem;
+    padding-bottom: var(--f-space-5);
+  }
+
+  .f-wrap--narrow {
+    width: min(100% - 2 * var(--f-gutter), 46rem);
+  }
+
+  .f-wrap > header h1 {
+    margin: 0 0 var(--f-space-2);
+    font-size: var(--f-text-2xl);
+    line-height: 1.1;
+  }
+
+  .f-wrap > header p:not(.f-kicker) {
+    max-width: 36rem;
+  }
+}
+
+/* src/css/80-layouts/reading.css */
+@layer facet.layouts {
+  /* A reading page: a title block, then text in one column on the page grid. */
+  .f-reading {
+    padding-top: 2rem;
+    padding-bottom: var(--f-space-5);
+  }
+
+  .f-reading__title {
+    padding: var(--f-space-8) 0 var(--f-space-4);
+  }
+
+  .f-reading__title h1 {
+    margin: 0 0 0.8rem;
+    font-size: var(--f-text-3xl);
+    line-height: 1.1;
+  }
+
+  .f-reading__lead {
+    color: var(--f-fg);
+    font-size: 1.2rem;
+  }
+
+  .f-reading :where(p).f-reading__lead {
+    color: var(--f-fg);
+  }
+
+  /* Labels that show which column a block sits in. */
+  .f-reading__col {
+    display: block;
+    margin-bottom: 0.4rem;
+    color: var(--f-accent);
+    font: 600 0.68rem/1 var(--f-font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .f-reading__shots {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--f-space-3);
+  }
+
+  .f-reading__shots img {
+    width: 100%;
+    border-radius: var(--f-r-md);
+  }
+
+  @media (max-width: 640px) {
+    .f-reading__shots {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+}
+
+/* src/css/80-layouts/resume.css */
+@layer facet.layouts {
+  /* A header card, then a sticky section index (.f-toc) beside a timeline. Entries carry role
+     metadata and a short summary. Prints as one plain column. */
+  .f-resume {
+    width: min(100% - 2 * var(--f-gutter), 64rem);
+    max-width: none;
+    margin-inline: auto;
+    padding-top: 7rem;
+    padding-bottom: var(--f-space-5);
+  }
+
+  .f-resume__head {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1.5rem 2rem;
+    align-items: end;
+    padding: var(--f-space-6);
+    border: 1px solid var(--f-line);
+    border-radius: 28px;
+    background:
+      radial-gradient(70% 120% at 0% 0%, var(--f-accent-soft), transparent), var(--f-bg-2);
+  }
+
+  .f-resume__head h1 {
+    margin: 0;
+    font-size: var(--f-text-3xl);
+    line-height: 1.05;
+  }
+
+  .f-resume__headline {
+    margin: 0.5rem 0 0;
+    color: var(--f-fg-2);
+    font-size: 1.1rem;
+  }
+
+  .f-resume__contact {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    align-items: flex-end;
+    font: 0.85rem var(--f-font-mono);
+  }
+
+  .f-resume__contact a:not(.f-btn) {
+    color: var(--f-fg-2);
+    text-decoration: none;
+  }
+
+  .f-resume__contact .f-cluster {
+    margin-top: var(--f-space-2);
+  }
+
+  /* Duna sits on the header card's top edge. */
+  .f-resume__cat {
+    position: absolute;
+    right: 2.2rem;
+    bottom: calc(100% - 6px);
+    width: 72px;
+  }
+
+  .f-resume__body {
+    display: grid;
+    grid-template-columns: 11rem minmax(0, 1fr);
+    gap: var(--f-space-7);
+    margin-top: 2.5rem;
+  }
+
+  .f-resume__body > div {
+    min-width: 0;
+  }
+
+  .f-resume .f-toc {
+    top: 5rem;
+  }
+
+  .f-resume section {
+    margin-bottom: 2.5rem;
+    scroll-margin-top: 5rem;
+  }
+
+  .f-resume section > h2 {
+    margin: 0 0 var(--f-space-4);
+    font-size: var(--f-text-xl);
+  }
+
+  .f-resume__summary {
+    margin: 0;
+    font-size: 1.05rem;
+  }
+
+  .f-resume__skills {
+    display: grid;
+    grid-template-columns: 9rem minmax(0, 1fr);
+    gap: 0.6rem var(--f-space-4);
+    margin-top: 1.2rem;
+    font-size: 0.9rem;
+  }
+
+  .f-resume__skills dt {
+    color: var(--f-fg-3);
+  }
+
+  .f-resume__skills dd {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin: 0;
+  }
+
+  /* Timeline: a spine with a node per entry; the current entry's node is filled. */
+  .f-timeline {
+    position: relative;
+    margin: 0;
+    padding: 0 0 0 1.6rem;
+    list-style: none;
+  }
+
+  .f-timeline::before {
+    content: "";
+    position: absolute;
+    left: 0.42rem;
+    top: 0.6rem;
+    bottom: 0.6rem;
+    width: 2px;
+    border-radius: 2px;
+    background: var(--f-line-2);
+  }
+
+  .f-timeline > li {
+    position: relative;
+    padding: 0 0 1.4rem;
+  }
+
+  .f-timeline > li::before {
+    content: "";
+    position: absolute;
+    left: calc(-1.6rem + 0.12rem);
+    top: 0.45rem;
+    width: 0.65rem;
+    height: 0.65rem;
+    border: 2px solid var(--f-accent);
+    border-radius: 50%;
+    corner-shape: round;
+    background: var(--f-bg);
+  }
+
+  .f-timeline > li.is-current::before {
+    background: var(--f-accent);
+    box-shadow: 0 0 0 4px var(--f-accent-soft);
+  }
+
+  .f-resume__entry {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.2rem 0.8rem;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  .f-resume__entry h3 {
+    margin: 0;
+    font-size: var(--f-text-lg);
+  }
+
+  .f-resume__org {
+    color: var(--f-fg-2);
+    font: 500 0.95rem var(--f-font-sans);
+    letter-spacing: 0;
+  }
+
+  .f-resume__date {
+    padding: 0.12rem 0.55rem;
+    border-radius: var(--f-r-pill);
+    corner-shape: round;
+    background: color-mix(in oklch, var(--f-fg) 7%, transparent);
+    color: var(--f-fg-2);
+    font: 600 0.72rem var(--f-font-mono);
+    white-space: nowrap;
+  }
+
+  .f-resume__loc {
+    color: var(--f-fg-3);
+    font-size: 0.82rem;
+  }
+
+  .f-resume__bullets {
+    margin: 0.4rem 0 0;
+    padding-left: 1.1rem;
+  }
+
+  .f-resume__bullets li {
+    margin: 0.2rem 0;
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
+
+  .f-resume__bullets li::marker {
+    color: var(--f-fg-3);
+  }
+
+  .f-lines {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--f-line);
+  }
+
+  .f-lines li {
+    display: flex;
+    gap: var(--f-space-4);
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--f-line);
+    color: var(--f-fg-2);
+    font-size: 0.92rem;
+  }
+
+  .f-pubs {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: f-pub;
+  }
+
+  .f-pubs li {
+    position: relative;
+    padding: 0 0 1.2rem 2.2rem;
+    counter-increment: f-pub;
+  }
+
+  .f-pubs li::before {
+    content: "[" counter(f-pub) "]";
+    position: absolute;
+    left: 0;
+    top: 0.15rem;
+    color: var(--f-fg-3);
+    font: 600 0.75rem var(--f-font-mono);
+  }
+
+  .f-pubs__title {
+    display: block;
+    color: var(--f-fg);
+    font: 600 1.02rem/1.4 var(--f-font-serif);
+  }
+
+  .f-pubs__authors {
+    display: block;
+    margin-top: 0.2rem;
+    color: var(--f-fg-2);
+    font-size: 0.86rem;
+  }
+
+  .f-pubs__authors b {
+    color: var(--f-fg);
+    font-weight: 600;
+  }
+
+  .f-pubs__venue {
+    display: block;
+    color: var(--f-fg-3);
+    font-size: 0.84rem;
+    font-style: italic;
+  }
+
+  .f-pubs .f-cluster {
+    margin-top: 0.4rem;
+    --f-gap: 0.45rem;
+  }
+
+  .f-pubs a.f-chip {
+    text-decoration: none;
+  }
+
+  .f-chip--award {
+    background: var(--f-warning-soft);
+    color: var(--f-fg);
+  }
+
+  /* Below 1024px the index becomes the pill bar under the nav. */
+  @media (max-width: 1023px) {
+    .f-resume {
+      padding-top: 6rem;
+    }
+
+    .f-resume__body {
+      display: block;
+    }
+
+    .f-resume .f-toc {
+      top: 4.25rem;
+      margin-bottom: var(--f-space-5);
+    }
+
+    .f-resume section {
+      scroll-margin-top: 8rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .f-resume__cat {
+      display: none;
+    }
+
+    .f-resume__head {
+      grid-template-columns: minmax(0, 1fr);
+      padding: 1.4rem;
+    }
+
+    .f-resume__contact {
+      align-items: flex-start;
+    }
+
+    .f-resume__skills {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0.3rem;
+    }
+
+    .f-resume__skills dd {
+      margin-bottom: 0.6rem;
+    }
+  }
+
+  /* Print: one plain column, no nav, no colors that waste ink. */
+  @media print {
+    .f-nav,
+    .f-toc,
+    .f-footer,
+    .f-resume__contact .f-cluster,
+    .f-resume__cat {
+      display: none !important;
+    }
+
+    body {
+      background: #fff;
+      color: #000;
+    }
+
+    .f-resume__head {
+      padding: 0;
+      border: 0;
+      background: none;
+    }
+
+    .f-resume__body {
+      display: block;
+    }
+  }
+}
+
+/* src/css/80-layouts/split.css */
+@layer facet.layouts {
+  /* A hero with text on one side and a visual on the other, then alternating feature rows. */
+  .f-split__hero,
+  .f-split__feature {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--f-space-7);
+    align-items: center;
+  }
+
+  .f-split__hero {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    padding: var(--f-space-2) 0 var(--f-space-7);
+  }
+
+  .f-split__hero h1 {
+    margin: 0;
+    font-size: var(--f-text-3xl);
+    line-height: 1.06;
+  }
+
+  .f-split__hero p:not(.f-kicker) {
+    margin: 1rem 0 1.5rem;
+    font-size: 1.1rem;
+  }
+
+  .f-split__install {
+    display: inline-flex;
+    gap: 0.8rem;
+    align-items: center;
+    max-width: 100%;
+    margin-top: var(--f-space-4);
+    padding: 0.55rem 0.6rem 0.55rem 1rem;
+    border: 1px solid var(--f-line-2);
+    border-radius: var(--f-r-md);
+    background: var(--f-bg-2);
+    font: 0.88rem var(--f-font-mono);
+  }
+
+  .f-split__install > code {
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+  }
+
+  .f-split__visual {
+    padding: var(--f-space-4);
+    border: 1px solid var(--f-line);
+    border-radius: var(--f-r-xl);
+    background: var(--f-bg-2);
+  }
+
+  .f-split__visual img {
+    width: 100%;
+    border-radius: 20px;
+  }
+
+  .f-split__feature {
+    padding: 2.5rem 0;
+    border-top: 1px solid var(--f-line);
+  }
+
+  .f-split__feature:nth-of-type(even) > :first-child {
+    order: 2;
+  }
+
+  .f-split__feature h2 {
+    margin: 0 0 0.6rem;
+  }
+
+  .f-split__feature img {
+    width: 100%;
+    border-radius: var(--f-r-lg);
+  }
+
+  .f-split__band {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--f-space-4);
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2.5rem;
+    padding: var(--f-space-6) 2.2rem;
+    border: 1px solid var(--f-line);
+    border-radius: var(--f-r-xl);
+    background:
+      radial-gradient(60% 120% at 0% 0%, var(--f-accent-soft), transparent), var(--f-bg-2);
+  }
+
+  .f-split__band h2 {
+    margin: 0;
+  }
+
+  @media (max-width: 720px) {
+    .f-split__hero,
+    .f-split__feature {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--f-space-5);
+    }
+
+    .f-split__feature:nth-of-type(even) > :first-child {
+      order: 0;
     }
   }
 }

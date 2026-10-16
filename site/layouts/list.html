@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Layout · List</title>
+    <script>
+      try {
+        const s = JSON.parse(localStorage.getItem("facet-site") || "{}");
+        // The theme toggle's own saved value wins over the site-wide one.
+        if (s.theme && !localStorage.getItem("facet-theme"))
+          document.documentElement.dataset.theme = s.theme;
+        if (s.lang) document.documentElement.lang = s.lang === "zh" ? "zh-Hans" : "en";
+      } catch {}
+    </script>
+    <link rel="stylesheet" href="../dist/facet.css" />
+    <link rel="stylesheet" href="../dist/cast/cast-layered.css" />
+    <script type="module" src="../dist/js/facet.js"></script>
+    <script type="module" src="../footer-cats.js"></script>
+  </head>
+  <body>
+    <nav class="f-nav f-nav--fixed" aria-label="Site">
+      <span class="f-nav__brand">Duna Feline</span
+      ><a href="#" aria-current="page" data-zh="博客">Blog</a><a href="#" data-zh="项目">Projects</a
+      ><a href="#" data-zh="简历">Resume</a>
+    </nav>
+
+    <main class="f-wrap f-wrap--narrow f-prose">
+      <header>
+        <p class="f-kicker" data-zh="列表">List</p>
+        <h1 data-zh="全部文章">All posts</h1>
+        <p class="f-meta" data-zh="适合：博客归档、标签页、链接合集、搜索结果">
+          For: the blog archive, tag pages, link collections, search results
+        </p>
+      </header>
+      <div class="f-list__tools">
+        <input
+          class="f-input f-search"
+          id="q"
+          type="search"
+          placeholder="Search…"
+          aria-label="Search posts"
+        />
+        <div class="f-cluster" id="tags" role="group" aria-label="Tags">
+          <button class="f-chip" type="button" data-f="" aria-pressed="true" data-zh="全部">
+            All
+          </button>
+          <button
+            class="f-chip"
+            type="button"
+            data-f="Research"
+            aria-pressed="false"
+            data-zh="研究"
+          >
+            Research
+          </button>
+          <button class="f-chip" type="button" data-f="Cases" aria-pressed="false" data-zh="案件">
+            Cases
+          </button>
+          <button class="f-chip" type="button" data-f="Naps" aria-pressed="false" data-zh="打盹">
+            Naps
+          </button>
+          <button class="f-chip" type="button" data-f="Tools" aria-pressed="false" data-zh="工具">
+            Tools
+          </button>
+        </div>
+      </div>
+      <div class="f-list" id="list">
+        <section class="f-list__year">
+          <h2>2026</h2>
+          <ul>
+            <li data-tag="Research">
+              <a class="f-list__row" href="#"
+                ><span
+                  ><span class="f-list__title">Twelve Rooms, Zero Dots Caught</span
+                  ><span class="f-list__tag">Research</span></span
+                ><time datetime="2026-10-11">10-11</time></a
+              >
+            </li>
+            <li data-tag="Cases">
+              <a class="f-list__row" href="#"
+                ><span
+                  ><span class="f-list__title">The Missing Sock</span
+                  ><span class="f-list__tag">Cases</span></span
+                ><time datetime="2026-09-21">09-21</time></a
+              >
+            </li>
+            <li data-tag="Tools">
+              <a class="f-list__row" href="#"
+                ><span
+                  ><span class="f-list__title">Purrometheus: Watching the Food Bowl</span
+                  ><span class="f-list__tag">Tools</span></span
+                ><time datetime="2026-09-13">09-13</time></a
+              >
+            </li>
+            <li data-tag="Research">
+              <a class="f-list__row" href="#"
+                ><span
+                  ><span class="f-list__title"
+                    >If It Fits, It Sits: Are Boxes Ready for Production?</span
+                  ><span class="f-list__tag">Research</span></span
+                ><time datetime="2026-09-07">09-07</time></a
+              >
+            </li>
+            <li data-tag="Cases">
+              <a class="f-list__row" href="#"
+                ><span
+                  ><span class="f-list__title">The Moving Vase</span
+                  ><span class="f-list__tag">Cases</span></span
+                ><time datetime="2026-04-06">04-06</time></a
+              >
+            </li>
+          </ul>
+        </section>
+        <section class="f-list__year">
+          <h2>2025</h2>
+          <ul>
+            <li data-tag="Naps">
+              <a class="f-list__row" href="#"
+                ><span
+                  ><span class="f-list__title">A Field Guide to Sunbeams</span
+                  ><span class="f-list__tag">Naps</span></span
+                ><time datetime="2025-11-29">11-29</time></a
+              >
+            </li>
+            <li data-tag="Tools">
+              <a class="f-list__row" href="#"
+                ><span
+                  ><span class="f-list__title">Hairball, Archived</span
+                  ><span class="f-list__tag">Tools</span></span
+                ><time datetime="2025-10-05">10-05</time></a
+              >
+            </li>
+            <li data-tag="Naps">
+              <a class="f-list__row" href="#"
+                ><span
+                  ><span class="f-list__title">The 3 a.m. Zoomies, Explained</span
+                  ><span class="f-list__tag">Naps</span></span
+                ><time datetime="2025-08-19">08-19</time></a
+              >
+            </li>
+            <li data-tag="Cases">
+              <a class="f-list__row" href="#"
+                ><span
+                  ><span class="f-list__title">Who Knocked the Glass Off the Table?</span
+                  ><span class="f-list__tag">Cases</span></span
+                ><time datetime="2025-08-15">08-15</time></a
+              >
+            </li>
+            <li data-tag="Naps">
+              <a class="f-list__row" href="#"
+                ><span
+                  ><span class="f-list__title">Counter Surfing for Beginners</span
+                  ><span class="f-list__tag">Naps</span></span
+                ><time datetime="2025-08-15">08-15</time></a
+              >
+            </li>
+            <li data-tag="Cases">
+              <a class="f-list__row" href="#"
+                ><span
+                  ><span class="f-list__title">The Dog Treaty, 1,000 Days In</span
+                  ><span class="f-list__tag">Cases</span></span
+                ><time datetime="2025-08-15">08-15</time></a
+              >
+            </li>
+            <li data-tag="Research">
+              <a class="f-list__row" href="#"
+                ><span
+                  ><span class="f-list__title">Untangling the Yarn</span
+                  ><span class="f-list__tag">Research</span></span
+                ><time datetime="2025-06-08">06-08</time></a
+              >
+            </li>
+            <li data-tag="Naps">
+              <a class="f-list__row" href="#"
+                ><span
+                  ><span class="f-list__title">Bird Watching from the Bay Window</span
+                  ><span class="f-list__tag">Naps</span></span
+                ><time datetime="2025-06-06">06-06</time></a
+              >
+            </li>
+            <li data-tag="Research">
+              <a class="f-list__row" href="#"
+                ><span
+                  ><span class="f-list__title">Landing on Your Feet</span
+                  ><span class="f-list__tag">Research</span></span
+                ><time datetime="2025-06-06">06-06</time></a
+              >
+            </li>
+          </ul>
+        </section>
+      </div>
+      <p class="f-list__none" id="none" data-zh="没有匹配的文章。" hidden>No posts match.</p>
+    </main>
+    <footer class="f-footer">
+      <div class="f-footer__cats"></div>
+      <span data-zh="© 2026 Duna Feline · example.com">© 2026 Duna Feline · example.com</span>
+    </footer>
+    <script>
+      // Demo filter: search by title and narrow by tag; empty year groups disappear.
+      const q = document.getElementById("q");
+      const chips = [...document.querySelectorAll("#tags .f-chip")];
+      let tag = "";
+      function run() {
+        const term = q.value.trim().toLowerCase();
+        let shown = 0;
+        for (const year of document.querySelectorAll(".f-list__year")) {
+          let n = 0;
+          for (const li of year.querySelectorAll("li")) {
+            const hit =
+              (!tag || li.dataset.tag === tag) &&
+              li.querySelector(".f-list__title").textContent.toLowerCase().includes(term);
+            li.hidden = !hit;
+            n += hit;
+          }
+          year.hidden = !n;
+          shown += n;
+        }
+        document.getElementById("none").hidden = shown > 0;
+      }
+      q.addEventListener("input", run);
+      chips.forEach((c) =>
+        c.addEventListener("click", () => {
+          tag = c.dataset.f;
+          chips.forEach((x) => x.setAttribute("aria-pressed", x === c));
+          run();
+        }),
+      );
+    </script>
+  </body>
+</html>

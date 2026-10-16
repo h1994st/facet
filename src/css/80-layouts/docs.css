@@ -1,0 +1,63 @@
+@layer facet.layouts {
+  /* Two columns: a sticky table of contents (.f-toc), then the reading column. */
+  .f-docs {
+    display: grid;
+    grid-template-columns: 13rem minmax(0, min(var(--f-measure), 100%));
+    gap: 3.5rem;
+    justify-content: center;
+    width: min(100% - 2 * var(--f-gutter), 64rem);
+    max-width: none;
+    margin-inline: auto;
+    padding-top: 6rem;
+    padding-bottom: var(--f-space-5);
+  }
+
+  .f-docs > article {
+    min-width: 0;
+  }
+
+  .f-docs .f-toc {
+    top: 5rem;
+  }
+
+  .f-docs__label {
+    margin: 0 0 0.6rem -0.9rem;
+    padding-left: 0.9rem;
+    color: var(--f-fg-3);
+    font: 600 0.7rem/1 var(--f-font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .f-docs h1 {
+    margin: 0 0 0.6rem;
+    font-size: var(--f-text-2xl);
+    line-height: 1.1;
+  }
+
+  .f-docs section {
+    scroll-margin-top: 5rem;
+  }
+
+  /* Below 1024px the TOC is a pill bar (see .f-toc) that stays under the nav. A block parent
+     keeps it sticky for the whole page; a grid would pin it to its own row. */
+  @media (max-width: 1023px) {
+    .f-docs {
+      display: block;
+      padding-top: 5rem;
+    }
+
+    .f-docs .f-toc {
+      top: 4.25rem;
+      margin-bottom: var(--f-space-5);
+    }
+
+    .f-docs__label {
+      display: none;
+    }
+
+    .f-docs section {
+      scroll-margin-top: 8rem;
+    }
+  }
+}

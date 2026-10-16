@@ -1,13 +1,35 @@
+from pathlib import Path
+
 import pytest
 from checks import no_hscroll
 
+SITE = Path(__file__).resolve().parents[1] / "site"
+# Every reference-site page except the test fixtures; the symlinked dist/ and assets/ are skipped.
+PAGES = sorted(
+    p.relative_to(SITE).as_posix()
+    for p in SITE.rglob("*.html")
+    if p.relative_to(SITE).parts[0] not in ("tests", "dist", "assets")
+)
 
+
+@pytest.mark.parametrize("lang", ["en", "zh"])
+@pytest.mark.parametrize("theme", ["dark", "light"])
 @pytest.mark.parametrize("width", [390, 860, 1280])
-def test_index_loads(page_factory, site_url, width):
-    page = page_factory(width=width)
-    page.goto(f"{site_url}/index.html")
+@pytest.mark.parametrize("path", PAGES)
+def test_page_matrix(page_factory, site_url, path, width, theme, lang):
+    page = page_factory(width=width, theme=theme, lang=lang)
+    page.goto(f"{site_url}/{path}")
+    page.wait_for_timeout(100)
     no_hscroll(page)
     assert page.errors == []
+
+
+def test_matrix_covers_the_layouts():
+    layouts = {p for p in PAGES if p.startswith("layouts/")}
+    assert layouts == {
+        f"layouts/{n}.html"
+        for n in ["index", "reading", "docs", "margin", "split", "grid", "list", "resume", "empty"]
+    }
 
 
 def test_fonts_load(page_factory, site_url):
@@ -74,12 +96,9 @@ def test_inline_chinese_block_in_english_prose(page_factory, site_url):
 
 @pytest.mark.parametrize("lang", ["en", "zh"])
 @pytest.mark.parametrize("theme", THEMES)
-@pytest.mark.parametrize("width", [390, 860, 1280])
-def test_components_page(page_factory, site_url, width, theme, lang):
-    page = page_factory(width=width, theme=theme, lang=lang)
+def test_primary_button_contrast(page_factory, site_url, theme, lang):
+    page = page_factory(theme=theme, lang=lang)
     page.goto(f"{site_url}/components.html")
-    no_hscroll(page)
-    assert page.errors == []
     assert contrast_on(page, ".f-btn--primary") >= 4.5
 
 
@@ -87,20 +106,17 @@ def test_components_page(page_factory, site_url, width, theme, lang):
 def test_cats_never_cover_text(page_factory, site_url, width):
     from checks import cat_text_overlaps
 
-    for path in ["cast.html", "components.html"]:
+    for path in PAGES:
         page = page_factory(width=width)
         page.goto(f"{site_url}/{path}")
         page.wait_for_timeout(300)
         assert cat_text_overlaps(page) == 0, path
 
 
-@pytest.mark.parametrize("width", [390, 860, 1280])
-def test_cast_page(page_factory, site_url, width):
-    page = page_factory(width=width)
+def test_cast_page(page_factory, site_url):
+    page = page_factory()
     page.goto(f"{site_url}/cast.html")
     page.wait_for_timeout(300)
-    no_hscroll(page)
-    assert page.errors == []
     assert page.locator("main .cat").count() == 3
     assert page.locator(".f-footer .cat").count() == 3
 

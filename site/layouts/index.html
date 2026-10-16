@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Layout · Layouts</title>
+    <script>
+      try {
+        const s = JSON.parse(localStorage.getItem("facet-site") || "{}");
+        // The theme toggle's own saved value wins over the site-wide one.
+        if (s.theme && !localStorage.getItem("facet-theme"))
+          document.documentElement.dataset.theme = s.theme;
+        if (s.lang) document.documentElement.lang = s.lang === "zh" ? "zh-Hans" : "en";
+      } catch {}
+    </script>
+    <link rel="stylesheet" href="../dist/facet.css" />
+    <link rel="stylesheet" href="../dist/cast/cast-layered.css" />
+    <script type="module" src="../dist/js/facet.js"></script>
+    <script type="module" src="../footer-cats.js"></script>
+    <style>
+      .lx-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(17rem, 100%), 1fr));
+        gap: var(--f-space-4);
+        margin-top: var(--f-space-6);
+      }
+      .lx-item {
+        display: block;
+        padding: 0.9rem;
+        color: inherit;
+        text-decoration: none;
+      }
+      .lx-item h2 {
+        margin: 0.85rem 0.2rem 0.15rem;
+        font: 600 1.2rem/1.3 var(--f-font-serif);
+      }
+      .lx-item p {
+        margin: 0 0.2rem;
+        color: var(--f-fg-2);
+        font-size: 0.84rem;
+        line-height: 1.5;
+      }
+      /* Wireframes: blocks for text, media, a sidebar and the nav pill. */
+      .lx-wf {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        height: 150px;
+        padding: 14px 18px;
+        overflow: hidden;
+        border: 1px solid var(--f-line);
+        border-radius: 16px;
+        background: var(--f-bg);
+      }
+      .lx-wf i {
+        display: block;
+        flex: none;
+        height: 6px;
+        border-radius: 3px;
+        background: color-mix(in oklch, var(--f-fg) 18%, transparent);
+      }
+      .lx-wf i.h {
+        height: 10px;
+        width: 60%;
+        background: color-mix(in oklch, var(--f-fg) 34%, transparent);
+      }
+      .lx-wf i.m {
+        height: 34px;
+        border-radius: 6px;
+        background: color-mix(in oklch, var(--f-accent) 35%, transparent);
+      }
+      .lx-n {
+        align-self: center;
+        width: 34%;
+        height: 9px;
+        margin-bottom: 4px;
+        border-radius: 999px;
+        background: color-mix(in oklch, var(--f-fg) 22%, transparent);
+      }
+      .lx-col {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        min-width: 0;
+      }
+      .lx-two {
+        display: flex;
+        gap: 12px;
+        flex: 1;
+      }
+      .lx-narrow {
+        width: 62%;
+        align-self: center;
+      }
+      .lx-bento {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-auto-rows: 30px;
+        gap: 6px;
+      }
+      .lx-bento b {
+        border-radius: 7px;
+        background: color-mix(in oklch, var(--f-fg) 12%, transparent);
+      }
+      .lx-bento b.big {
+        grid-column: span 2;
+        grid-row: span 2;
+        background: color-mix(in oklch, var(--f-accent) 35%, transparent);
+      }
+      .lx-rule {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+      .lx-rule i:first-child {
+        width: 14%;
+      }
+      .lx-empty {
+        align-items: center;
+        justify-content: center;
+      }
+      .lx-dot {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: color-mix(in oklch, var(--f-fg) 25%, transparent);
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="f-nav f-nav--fixed" aria-label="Site">
+      <span class="f-nav__brand">Duna Feline</span
+      ><a href="#" aria-current="page" data-zh="博客">Blog</a><a href="#" data-zh="项目">Projects</a
+      ><a href="#" data-zh="简历">Resume</a>
+    </nav>
+
+    <main class="f-wrap f-prose">
+      <header>
+        <p class="f-kicker" data-zh="版式">Layout</p>
+        <h1 data-zh="版式">Layout</h1>
+        <p
+          data-zh="页面版式，全部建立在同一个页面网格上：正文、加宽、铺满三条列线，加一个可选的侧栏。点开每一个看实际的例子，用的是生成的示例图片。"
+        >
+          Page layouts, all built on one page grid: content, wide and full column lines, plus an
+          optional sidebar. Open each for a working example, using generated demo images.
+        </p>
+      </header>
+      <div class="lx-grid" data-f-liquid>
+        <a class="f-card lx-item" href="reading.html">
+          <div class="lx-wf" aria-hidden="true">
+            <span class="lx-n"></span>
+            <div class="lx-col lx-narrow"><i class="h"></i><i></i><i></i></div>
+            <i class="m" style="margin: 0 4%"></i>
+            <div class="lx-col lx-narrow"><i></i><i style="width: 70%"></i></div>
+          </div>
+          <h2 data-zh="阅读">Reading</h2>
+          <p data-zh="单栏正文，图片可以加宽或铺满。普通博客文章。">
+            One reading column; figures break out to wide or full. Normal blog posts.
+          </p>
+        </a>
+        <a class="f-card lx-item" href="docs.html">
+          <div class="lx-wf" aria-hidden="true">
+            <span class="lx-n"></span>
+            <div class="lx-two">
+              <div class="lx-col" style="width: 26%">
+                <i style="width: 80%"></i><i style="width: 60%"></i><i style="width: 70%"></i>
+              </div>
+              <div class="lx-col" style="flex: 1">
+                <i class="h"></i><i></i><i></i><i style="width: 80%"></i>
+              </div>
+            </div>
+          </div>
+          <h2 data-zh="文档">Docs</h2>
+          <p data-zh="正文加一个固定的目录。文档、笔记本、长文、简历。">
+            Text with a sticky table of contents. Docs, the notebook, long posts, the resume.
+          </p>
+        </a>
+        <a class="f-card lx-item" href="margin.html">
+          <div class="lx-wf" aria-hidden="true">
+            <span class="lx-n"></span>
+            <div class="lx-two">
+              <div class="lx-col" style="flex: 1">
+                <i class="h"></i><i></i><i></i><i></i><i style="width: 70%"></i>
+              </div>
+              <div class="lx-col" style="width: 26%; padding-top: 16px">
+                <i style="width: 90%; opacity: 0.6"></i><i style="width: 70%; opacity: 0.6"></i>
+              </div>
+            </div>
+          </div>
+          <h2 data-zh="旁注">Margin notes</h2>
+          <p data-zh="脚注放在正文旁边，窄屏时点开。长文、调查记录。">
+            Footnotes beside the text, tap-to-open on phones. Long writeups, investigation notes.
+          </p>
+        </a>
+        <a class="f-card lx-item" href="split.html">
+          <div class="lx-wf" aria-hidden="true">
+            <span class="lx-n"></span>
+            <div class="lx-two" style="align-items: center">
+              <div class="lx-col" style="flex: 1">
+                <i class="h" style="width: 90%"></i><i></i><i style="width: 60%"></i>
+              </div>
+              <i class="m" style="flex: 1; height: 70px"></i>
+            </div>
+          </div>
+          <h2 data-zh="左右分栏">Split</h2>
+          <p data-zh="一边文字，一边画面，下面是左右交替的特性行。项目首页、产品页。">
+            Text on one side, a visual on the other, then alternating feature rows. Project
+            landings.
+          </p>
+        </a>
+        <a class="f-card lx-item" href="grid.html">
+          <div class="lx-wf" aria-hidden="true">
+            <span class="lx-n"></span>
+            <div class="lx-bento"><b class="big"></b><b></b><b></b><b></b><b></b><b></b></div>
+          </div>
+          <h2 data-zh="网格">Grid</h2>
+          <p data-zh="卡片网格，可筛选。项目、照片、博客卡片、标签页。">
+            A filterable grid of cards. Projects, photos, blog cards, tag pages.
+          </p>
+        </a>
+        <a class="f-card lx-item" href="list.html">
+          <div class="lx-wf" aria-hidden="true">
+            <span class="lx-n"></span><i class="h" style="width: 40%"></i>
+            <div class="lx-rule"><i></i><i style="flex: 1"></i></div>
+            <div class="lx-rule"><i></i><i style="flex: 1"></i></div>
+            <div class="lx-rule"><i></i><i style="flex: 1"></i></div>
+            <div class="lx-rule"><i></i><i style="flex: 1"></i></div>
+          </div>
+          <h2 data-zh="列表">List</h2>
+          <p data-zh="按年份分组的紧凑列表，可搜索。博客归档、链接合集、搜索结果。">
+            A dense list grouped by year, searchable. Archives, link collections, search results.
+          </p>
+        </a>
+        <a class="f-card lx-item" href="resume.html">
+          <div class="lx-wf" aria-hidden="true">
+            <span class="lx-n"></span>
+            <div class="lx-two">
+              <div class="lx-col" style="width: 22%">
+                <i style="width: 80%"></i><i style="width: 60%"></i>
+              </div>
+              <div class="lx-col" style="flex: 1">
+                <i class="h"></i><i></i><i style="width: 70%"></i><i></i>
+              </div>
+            </div>
+          </div>
+          <h2 data-zh="简历">Resume</h2>
+          <p data-zh="页头卡片、固定的章节索引和时间线。打印时是单栏。">
+            A header card, a sticky section index and a timeline. Prints as one plain column.
+          </p>
+        </a>
+        <a class="f-card lx-item" href="empty.html">
+          <div class="lx-wf lx-empty" aria-hidden="true">
+            <span class="lx-dot"></span><i class="h" style="width: 30%"></i
+            ><i style="width: 45%"></i>
+          </div>
+          <h2 data-zh="空状态">Empty</h2>
+          <p data-zh="一句话加一只猫。404、无结果、离线。">
+            A short message with a cat. 404, no results, offline.
+          </p>
+        </a>
+      </div>
+    </main>
+    <footer class="f-footer">
+      <div class="f-footer__cats"></div>
+      <span data-zh="© 2026 Duna Feline · example.com">© 2026 Duna Feline · example.com</span>
+    </footer>
+  </body>
+</html>

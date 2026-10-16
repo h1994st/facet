@@ -45,6 +45,8 @@
     --f-leading: 1.6;
     --f-leading-zh: 1.8;
     --f-measure: 40rem;
+    --f-gutter: 1.25rem;
+    --f-breakout: 9rem;
 
     --f-space-1: 0.25rem;
     --f-space-2: 0.5rem;

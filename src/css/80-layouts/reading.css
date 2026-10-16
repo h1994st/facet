@@ -1,0 +1,53 @@
+@layer facet.layouts {
+  /* A reading page: a title block, then text in one column on the page grid. */
+  .f-reading {
+    padding-top: 2rem;
+    padding-bottom: var(--f-space-5);
+  }
+
+  .f-reading__title {
+    padding: var(--f-space-8) 0 var(--f-space-4);
+  }
+
+  .f-reading__title h1 {
+    margin: 0 0 0.8rem;
+    font-size: var(--f-text-3xl);
+    line-height: 1.1;
+  }
+
+  .f-reading__lead {
+    color: var(--f-fg);
+    font-size: 1.2rem;
+  }
+
+  .f-reading :where(p).f-reading__lead {
+    color: var(--f-fg);
+  }
+
+  /* Labels that show which column a block sits in. */
+  .f-reading__col {
+    display: block;
+    margin-bottom: 0.4rem;
+    color: var(--f-accent);
+    font: 600 0.68rem/1 var(--f-font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .f-reading__shots {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--f-space-3);
+  }
+
+  .f-reading__shots img {
+    width: 100%;
+    border-radius: var(--f-r-md);
+  }
+
+  @media (max-width: 640px) {
+    .f-reading__shots {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+}
