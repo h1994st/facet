@@ -24,7 +24,7 @@ def _lum(rgb):
 
 
 def contrast(page, selector, bg_selector="body"):
-    """Contrast of an element's text against bg_selector's background, composited over the body's."""
+    """Contrast of an element's text against bg_selector's background (over the body's)."""
     bg = page.evaluate(
         f"""(() => {{
           const f = ({TO_RGB});

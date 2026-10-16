@@ -59,8 +59,63 @@ Duna Feline (嘟娜·菲琳, gray tabby), Dudu (嘟嘟, solid gray) and Nangnang
 is the fictional owner of every sample in the mockups. Their drawing is copied from the my-resume
 template's site.
 
+## Use it
+
+Reference site (tokens, color, type, components, layouts, the cast): https://shengtuo.me/facet/
+
+Link `facet.css` first and `cast/cast-layered.css` after it (only needed for the mascots). From a
+CDN, pinning a tag:
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.0/dist/facet.css" />
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.0/dist/cast/cast-layered.css"
+/>
+<script
+  type="module"
+  src="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.0/dist/js/facet.js"
+></script>
+```
+
+Or as a git submodule, serving `vendor/facet/dist/` with your site (better for mainland China, where
+jsDelivr is unreliable):
+
+```sh
+git submodule add https://github.com/h1994st/facet vendor/facet
+git -C vendor/facet checkout v0.1.0
+```
+
+A minimal page:
+
+```html
+<html lang="en" data-accent="moss">
+  <head>
+    <link rel="stylesheet" href="/vendor/facet/dist/facet.css" />
+    <script type="module" src="/vendor/facet/dist/js/facet.js"></script>
+  </head>
+  <body>
+    <nav class="f-nav">…</nav>
+    <main class="f-page f-prose">…</main>
+  </body>
+</html>
+```
+
+- `data-accent` picks the accent (see the tables above); `data-theme` is `dark` (default), `light`
+  or `auto`. The theme toggle remembers its choice in `localStorage["facet-theme"]`.
+- A plain `.f-nav` sits in the page flow. Add `.f-nav--fixed` to float it over the page; while one
+  is present, `--f-nav-clear` reserves room for it at the top of the layouts (override it if your
+  nav is taller).
+- Everything is in `@layer facet.*`, so your own unlayered CSS wins without `!important`.
+- Set `lang="zh-Hans"` on any element for Chinese typography.
+
 ## Layout
 
+- `src/`: the source CSS, JS, cast and font slices. `dist/` is generated from it by `just build` and
+  committed; never edit `dist/` by hand.
+- `site/`: the reference site (`just serve`, or `just site` for the GitHub Pages bundle).
+- `tests/`: browser tests (`just test`).
+- `fonts/`: the font build (`just fonts`).
 - `pyproject.toml`: the uv project for the Python tooling (fonts, images, tests).
 - `mockups/`: design explorations (type, color, shape, glass, layout, the cats), viewable with
   `just serve` at http://localhost:8000/mockups/.

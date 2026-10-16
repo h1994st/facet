@@ -4,25 +4,198 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>facet</title>
-    <script>
-      try {
-        const s = JSON.parse(localStorage.getItem("facet-site") || "{}");
-        if (s.theme) document.documentElement.dataset.theme = s.theme;
-        if (s.lang) document.documentElement.lang = s.lang === "zh" ? "zh-Hans" : "en";
-      } catch {}
-    </script>
+    <script src="site.js"></script>
     <link rel="stylesheet" href="dist/facet.css" />
+    <link rel="stylesheet" href="dist/cast/cast-layered.css" />
+    <link rel="stylesheet" href="site.css" />
     <script type="module" src="dist/js/facet.js"></script>
+    <style>
+      main pre {
+        margin: var(--f-space-4) 0;
+        overflow-x: auto;
+      }
+      .site-links {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(14rem, 100%), 1fr));
+        gap: var(--f-space-3);
+        margin: var(--f-space-4) 0 0;
+        padding: 0;
+        list-style: none;
+      }
+      .site-links a {
+        display: block;
+        padding: var(--f-space-4);
+        border: 1px solid var(--f-line);
+        border-radius: var(--f-r-md);
+        background: var(--f-bg-2);
+        text-decoration: none;
+      }
+      .site-links span {
+        display: block;
+        color: var(--f-fg-2);
+        font-size: var(--f-text-sm);
+      }
+    </style>
   </head>
   <body>
-    <main class="f-prose">
-      <p class="f-kicker">Red Dot Tracker</p>
-      <h1>facet</h1>
-      <p>
-        Duna Feline keeps her notes on the Purrometheus dashboard, and the
-        <a href="https://example.com/hairball">Hairball</a> post explains why the red dot always
-        moves.
-      </p>
+    <main class="site-page f-prose">
+      <header>
+        <p class="f-kicker">Red Dot Tracker</p>
+        <h1>facet</h1>
+        <p
+          data-zh="facet 是一套为一组网站共用的设计语言：用纯 CSS 和少量原生 JavaScript 写成的设计令牌、组件和版式，不需要构建步骤。每个网站只挑选自己的强调色，其余完全一致。"
+        >
+          facet is a shared design language for a family of websites: design tokens, components and
+          layouts in plain CSS and a little vanilla JavaScript, with no build step. Each site picks
+          its own accent; everything else is the same.
+        </p>
+        <p class="f-meta" data-zh="版本 0.1.0 · MIT 许可证">Version 0.1.0 · MIT license</p>
+      </header>
+
+      <section>
+        <h2 data-zh="这里有什么">What is here</h2>
+        <ul class="site-links">
+          <li>
+            <a href="tokens.html"
+              >Tokens<span data-zh="中性色阶、间距、圆角、阴影和动效。"
+                >Neutral ramp, spacing, radii, shadows and motion.</span
+              ></a
+            >
+          </li>
+          <li>
+            <a href="color.html"
+              >Color<span data-zh="十三种强调色、近中性色和状态色。"
+                >Thirteen accents, near-neutrals and status colors.</span
+              ></a
+            >
+          </li>
+          <li>
+            <a href="type.html"
+              >Type<span data-zh="Source Serif 4、Geist 和 Geist Mono，附中文。"
+                >Source Serif 4, Geist and Geist Mono, with Chinese.</span
+              ></a
+            >
+          </li>
+          <li>
+            <a href="components.html"
+              >Components<span data-zh="导航、按钮、标签、输入框、提示和卡片。"
+                >Nav, buttons, chips, inputs, alerts and cards.</span
+              ></a
+            >
+          </li>
+          <li>
+            <a href="layouts/index.html"
+              >Layouts<span data-zh="十三种页面版式，从阅读页到演示文稿。"
+                >Thirteen page layouts, from reading pages to decks.</span
+              ></a
+            >
+          </li>
+          <li>
+            <a href="cast.html"
+              >Cast<span data-zh="嘟娜、嘟嘟和囔囔，三只吉祥物。"
+                >Duna, Dudu and Nangnang, the three mascots.</span
+              ></a
+            >
+          </li>
+          <li>
+            <a href="mockups/index.html"
+              >Mockups<span data-zh="设计探索：字体、色彩、形状、玻璃和版式。"
+                >Design explorations: type, color, shape, glass and layout.</span
+              ></a
+            >
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 data-zh="安装：CDN">Install: from a CDN</h2>
+        <p
+          data-zh="把样式表和脚本链接到页面里。先加载 <code>facet.css</code>，再加载 <code>cast/cast-layered.css</code>（只有用到吉祥物时才需要）。固定一个标签，网站就不会随主分支变化。"
+        >
+          Link the stylesheet and the script. Link <code>facet.css</code> first and
+          <code>cast/cast-layered.css</code> after it (only needed if you use the mascots). Pin a
+          tag so the site does not move with the main branch.
+        </p>
+        <pre class="f-code">
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.0/dist/facet.css" /&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.0/dist/cast/cast-layered.css" /&gt;
+&lt;script type="module" src="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.0/dist/js/facet.js"&gt;&lt;/script&gt;</pre>
+        <p
+          data-zh="jsDelivr 在中国大陆可能不稳定，字体也是相对 <code>facet.css</code> 加载的。面向中国大陆的网站，请改用下面的 submodule，把文件和网站放在一起。"
+        >
+          jsDelivr can be unreliable in mainland China, and the fonts load relative to
+          <code>facet.css</code>. For sites aimed there, use the submodule below and serve the files
+          with the site.
+        </p>
+      </section>
+
+      <section>
+        <h2 data-zh="安装：Git submodule">Install: as a git submodule</h2>
+        <pre class="f-code">
+git submodule add https://github.com/h1994st/facet vendor/facet
+git -C vendor/facet checkout v0.1.0</pre>
+        <p
+          data-zh="把 <code>vendor/facet/dist/</code> 作为静态文件和网站一起发布，然后用相对路径链接。"
+        >
+          Serve <code>vendor/facet/dist/</code> as static files with your site, then link it by a
+          relative path.
+        </p>
+        <pre class="f-code">
+&lt;link rel="stylesheet" href="/vendor/facet/dist/facet.css" /&gt;
+&lt;link rel="stylesheet" href="/vendor/facet/dist/cast/cast-layered.css" /&gt;
+&lt;script type="module" src="/vendor/facet/dist/js/facet.js"&gt;&lt;/script&gt;</pre>
+      </section>
+
+      <section>
+        <h2 data-zh="最小示例">A minimal page</h2>
+        <pre class="f-code">
+&lt;html lang="en" data-accent="moss"&gt;
+  &lt;head&gt;
+    &lt;link rel="stylesheet" href="…/dist/facet.css" /&gt;
+    &lt;script type="module" src="…/dist/js/facet.js"&gt;&lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;nav class="f-nav"&gt;
+      &lt;span class="f-nav__brand"&gt;Duna Feline&lt;/span&gt;
+      &lt;a href="/" aria-current="page"&gt;Blog&lt;/a&gt;
+    &lt;/nav&gt;
+    &lt;main class="f-page f-prose"&gt;
+      &lt;h1&gt;Hairball&lt;/h1&gt;
+      &lt;p&gt;Why the red dot always moves.&lt;/p&gt;
+    &lt;/main&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+        <ul>
+          <li
+            data-zh="<code>data-accent</code> 选择强调色（十三种，见色彩页）；<code>data-theme</code> 取 <code>dark</code>（默认）、<code>light</code> 或 <code>auto</code>。"
+          >
+            <code>data-accent</code> picks the accent (thirteen, on the Color page);
+            <code>data-theme</code> is <code>dark</code> (the default), <code>light</code> or
+            <code>auto</code>. The theme toggle remembers its choice in
+            <code>localStorage["facet-theme"]</code>.
+          </li>
+          <li
+            data-zh="默认的 <code>.f-nav</code> 在页面流中。要让它浮在页面上，请加 <code>.f-nav--fixed</code>：页面里只要有它，<code>--f-nav-clear</code> 就会自动为内容预留位置。"
+          >
+            A plain <code>.f-nav</code> sits in the page flow. Add <code>.f-nav--fixed</code> to
+            float it over the page: while one is present, <code>--f-nav-clear</code> reserves room
+            for it at the top of the layouts. Override <code>--f-nav-clear</code> if your nav is
+            taller.
+          </li>
+          <li
+            data-zh="所有样式都在 <code>@layer facet.*</code> 里，所以你自己的、没有分层的 CSS 总能直接覆盖，不需要 <code>!important</code>。"
+          >
+            Everything sits in <code>@layer facet.*</code>, so your own unlayered CSS always wins
+            without <code>!important</code>.
+          </li>
+          <li
+            data-zh='每个元素都可以写中文：给它或页面设置 <code>lang="zh-Hans"</code>，字距、换行和行高会自动调整。'
+          >
+            Any element can be Chinese: set <code>lang="zh-Hans"</code> on it or on the page, and
+            letter spacing, line breaking and line height adjust.
+          </li>
+        </ul>
+      </section>
     </main>
   </body>
 </html>

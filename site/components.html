@@ -4,17 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>facet · Components</title>
-    <script>
-      try {
-        const s = JSON.parse(localStorage.getItem("facet-site") || "{}");
-        // The theme toggle's own saved value wins over the site-wide one.
-        if (s.theme && !localStorage.getItem("facet-theme"))
-          document.documentElement.dataset.theme = s.theme;
-        if (s.lang) document.documentElement.lang = s.lang === "zh" ? "zh-Hans" : "en";
-      } catch {}
-    </script>
+    <script src="site.js"></script>
     <link rel="stylesheet" href="dist/facet.css" />
     <link rel="stylesheet" href="dist/cast/cast-layered.css" />
+    <link rel="stylesheet" href="site.css" />
     <script type="module" src="dist/js/facet.js"></script>
     <script type="module" src="footer-cats.js"></script>
     <style>

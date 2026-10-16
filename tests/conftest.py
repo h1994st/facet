@@ -32,13 +32,13 @@ def browser():
 def page_factory(browser):
     contexts = []
 
-    def make(width=1280, theme="dark", lang="en", js=True, reduced_motion=False):
+    def make(width=1280, theme="dark", lang="en", js=True, reduced_motion=False, accent=None):
         ctx = browser.new_context(
             viewport={"width": width, "height": 900},
             java_script_enabled=js,
             reduced_motion="reduce" if reduced_motion else "no-preference",
         )
-        state = json.dumps({"theme": theme, "lang": lang})
+        state = json.dumps({"theme": theme, "lang": lang, **({"accent": accent} if accent else {})})
         ctx.add_init_script(
             f"try{{localStorage.setItem('facet-site', {json.dumps(state)})}}catch{{}}"
         )

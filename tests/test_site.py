@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import pytest
-from checks import no_hscroll
+from checks import contrast, contrast_on, no_hscroll
 
 SITE = Path(__file__).resolve().parents[1] / "site"
 # Every reference-site page except the test fixtures; the symlinked dist/ and assets/ are skipped.
@@ -22,6 +22,99 @@ def test_page_matrix(page_factory, site_url, path, width, theme, lang):
     page.wait_for_timeout(100)
     no_hscroll(page)
     assert page.errors == []
+
+
+ACCENTS = [
+    "rose",
+    "clay",
+    "ochre",
+    "moss",
+    "sage",
+    "teal",
+    "slate",
+    "lavender",
+    "stone",
+    "lichen",
+    "steel",
+    "heather",
+    "graphite",
+]
+
+
+@pytest.mark.parametrize("theme", ["dark", "light"])
+@pytest.mark.parametrize("accent", ACCENTS)
+def test_every_accent_is_readable(page_factory, site_url, accent, theme):
+    page = page_factory(theme=theme, accent=accent)
+    page.goto(f"{site_url}/color.html")
+    assert page.evaluate("document.documentElement.dataset.accent") == accent
+    assert contrast_on(page, ".f-btn--primary") >= 4.5
+    assert contrast(page, "main a") >= 4.5
+
+
+@pytest.mark.parametrize("theme", ["dark", "light"])
+def test_meta_text_is_readable(page_factory, site_url, theme):
+    page = page_factory(theme=theme)
+    page.goto(f"{site_url}/index.html")
+    assert contrast(page, ".f-meta") >= 4.5
+
+
+@pytest.mark.parametrize("path", PAGES)
+def test_every_page_has_toolbar(page_factory, site_url, path):
+    page = page_factory()
+    page.goto(f"{site_url}/{path}")
+    assert page.locator("header.site-bar").count() == 1
+    assert page.locator(".site-bar .site-dot").count() == len(ACCENTS)
+
+
+def test_toolbar_sets_and_saves_choices(page_factory, site_url):
+    page = page_factory()
+    page.goto(f"{site_url}/index.html")
+    page.click('.site-bar button[data-k="theme"][data-v="light"]')
+    page.click('.site-bar button[data-k="lang"][data-v="zh"]')
+    page.click('.site-bar button[data-v="rose"]')
+    root = "document.documentElement"
+    assert page.evaluate(f"[{root}.dataset.theme, {root}.lang, {root}.dataset.accent]") == [
+        "light",
+        "zh-Hans",
+        "rose",
+    ]
+    saved = page.evaluate("JSON.parse(localStorage.getItem('facet-site'))")
+    assert saved == {"theme": "light", "lang": "zh", "accent": "rose"}
+    assert page.evaluate("localStorage.getItem('facet-theme')") == "light"
+
+
+def test_url_parameters_override_and_swap_text(page_factory, site_url):
+    page = page_factory()
+    page.goto(f"{site_url}/color.html?lang=zh&accent=teal&theme=light")
+    root = "document.documentElement"
+    assert page.evaluate(f"[{root}.dataset.theme, {root}.lang, {root}.dataset.accent]") == [
+        "light",
+        "zh-Hans",
+        "teal",
+    ]
+    assert page.locator("h1").inner_text() == "色彩"
+
+
+def test_saved_theme_applies_before_first_paint(page_factory, site_url):
+    page = page_factory(theme="light")
+    page.add_init_script("localStorage.setItem('facet-theme', 'auto')")
+    page.add_init_script(
+        "document.addEventListener('readystatechange', () => {"
+        " if (!window.__first) window.__first = document.documentElement.dataset.theme })"
+    )
+    page.goto(f"{site_url}/index.html")
+    # facet-theme wins over facet-site.theme, and is set before the body is parsed.
+    assert page.evaluate("window.__first") == "auto"
+
+
+@pytest.mark.parametrize("theme", ["dark", "light"])
+def test_status_alerts_and_primary_button_are_readable(page_factory, site_url, theme):
+    page = page_factory(theme=theme)
+    page.goto(f"{site_url}/components.html")
+    for kind in ["success", "warning", "danger", "info"]:
+        ratio = contrast(page, f".f-alert--{kind} .f-alert__title", f".f-alert--{kind}")
+        assert ratio >= 4.5, (kind, ratio)
+    assert contrast_on(page, ".f-btn--primary") >= 4.5
 
 
 def test_matrix_covers_the_layouts():
@@ -59,8 +152,6 @@ def test_fonts_load(page_factory, site_url):
     )
     assert all(n > 0 for n in loaded), loaded
 
-
-from checks import contrast, contrast_on  # noqa: E402
 
 THEMES = ["dark", "light"]
 
