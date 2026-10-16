@@ -24,13 +24,16 @@ ACCENTS = [
 
 
 @pytest.mark.parametrize("theme", ["dark", "light"])
-@pytest.mark.parametrize("accent", ACCENTS)
-def test_card_text_is_readable_for_every_accent(page_factory, site_url, accent, theme):
-    page = page_factory(theme=theme, accent=accent)
+def test_card_text_is_readable_for_every_accent(page_factory, site_url, theme):
+    page = page_factory(theme=theme)
     page.goto(f"{site_url}/{PAGE}")
-    for sel in (".f-hero__title", ".f-hero__lead", ".f-hero__body", ".f-hero__kicker"):
-        assert contrast(page, sel, ".f-hero") >= 4.5, sel
-    assert contrast_on(page, ".f-hero .f-btn--primary") >= 4.5
+    for accent in ACCENTS:
+        # The toolbar switches the accent in place.
+        page.evaluate(f"document.querySelector('.site-bar button[data-v=\"{accent}\"]').click()")
+        assert page.evaluate("document.documentElement.dataset.accent") == accent
+        for sel in (".f-hero__title", ".f-hero__lead", ".f-hero__body", ".f-hero__kicker"):
+            assert contrast(page, sel, ".f-hero") >= 4.5, (accent, sel)
+        assert contrast_on(page, ".f-hero .f-btn--primary") >= 4.5, accent
 
 
 def test_card_is_deep_on_both_themes(page_factory, site_url):
