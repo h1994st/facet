@@ -51,11 +51,11 @@ nothing unlayered can beat; keep it to those two.
 - **No build step for consumers.** Ship plain CSS (custom properties and classes) and small,
   optional vanilla JS. No framework, no preprocessor output that a consumer must compile: every
   consuming site has a different stack.
-- **Every token has a dark and a light value.** Dark is the default. A themed token is one
-  declaration on the theme switch in `10-tokens.css`,
-  `var(--f-unless-light, <dark>) var(--f-unless-dark, <light>)`; the light theme, `auto` on a light
-  system and print flip the switch, so never copy token values into a per-theme block. Never add a
-  color, shadow or glass token for one theme only.
+- **Every token has a dark and a light value.** Dark is designed first; with no `data-theme` a page
+  follows the system (`auto`). A themed token is one declaration on the theme switch in
+  `10-tokens.css`, `var(--f-unless-light, <dark>) var(--f-unless-dark, <light>)`; the light theme,
+  `auto` on a light system and print flip the switch, so never copy token values into a per-theme
+  block. Never add a color, shadow or glass token for one theme only.
 - **Low saturation.** Every color is muted: in OKLCH, keep accents at chroma 0.08 or below and
   neutrals at 0.02 or below. No saturated brand hues, including in illustrations and semantic
   colors.
