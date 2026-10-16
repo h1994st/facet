@@ -10,6 +10,8 @@
     border-radius: var(--f-r-xl);
     background: var(--f-accent-deep);
     color: var(--f-on-accent-deep);
+    /* Print the fill and its light text rather than dropping the background. */
+    print-color-adjust: exact;
   }
 
   .f-hero > :only-child {
@@ -80,6 +82,11 @@
   .f-hero .f-btn:not(.f-btn--primary) {
     border-color: currentColor;
     color: inherit;
+  }
+
+  /* The page's --f-fg barely shows on the deep fill; tint with the card's own light text. */
+  .f-hero .f-btn:not(.f-btn--primary):hover {
+    background: color-mix(in oklch, currentColor 14%, transparent);
   }
 
   .f-hero__media {

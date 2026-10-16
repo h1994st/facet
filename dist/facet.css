@@ -68,13 +68,11 @@
       var(--f-unless-dark, oklch(0.52 0.07 255));
     --f-accent-contrast: var(--f-unless-light, oklch(0.15 0.012 260)) var(--f-unless-dark, #fff);
     --f-accent-soft: color-mix(in oklch, var(--f-accent) 16%, transparent);
-    /* A deep shade of the accent for filled cards (.f-hero), the same in both themes. The first
-       line of each pair is the fallback (Slate) for browsers without relative colors. min() keeps
-       near-neutral accents and Graphite near-neutral, and 0.06 is the chroma both themes share. */
+    /* A deep shade of the accent for filled cards (.f-hero), the same in both themes. These are
+       Slate, for browsers without relative colors; the @supports block below derives them from
+       the accent. */
     --f-accent-deep: oklch(0.42 0.06 255);
-    --f-accent-deep: oklch(from var(--f-accent) 0.42 min(c, 0.06) h);
     --f-on-accent-deep: oklch(0.97 0.008 255);
-    --f-on-accent-deep: oklch(from var(--f-accent) 0.97 min(c, 0.008) h);
     --f-success: var(--f-unless-light, oklch(0.76 0.06 130))
       var(--f-unless-dark, oklch(0.52 0.07 130));
     --f-warning: var(--f-unless-light, oklch(0.76 0.06 85))
@@ -135,6 +133,19 @@
     --f-dur-1: 150ms;
     --f-dur-2: 250ms;
     --f-dur-3: 600ms;
+  }
+
+  /* The deep pair, derived from the accent where relative colors work. A custom property is never
+     validated, so a second declaration after the Slate one would always win and leave an invalid
+     color where relative colors do not work; @supports keeps the Slate values there. min() keeps
+     near-neutral accents and Graphite near-neutral, and 0.06 is the chroma both themes share.
+     .f-hero computes its own pair, so it follows an --f-accent set on any ancestor. */
+  @supports (color: oklch(from red 0.42 min(c, 0.06) h)) {
+    :root,
+    .f-hero {
+      --f-accent-deep: oklch(from var(--f-accent) 0.42 min(c, 0.06) h);
+      --f-on-accent-deep: oklch(from var(--f-accent) 0.97 min(c, 0.008) h);
+    }
   }
 
   /* A fixed .f-nav floats over the page: layouts reserve room for it. Flow navs need none. */
@@ -2743,6 +2754,8 @@
     border-radius: var(--f-r-xl);
     background: var(--f-accent-deep);
     color: var(--f-on-accent-deep);
+    /* Print the fill and its light text rather than dropping the background. */
+    print-color-adjust: exact;
   }
 
   .f-hero > :only-child {
@@ -2813,6 +2826,11 @@
   .f-hero .f-btn:not(.f-btn--primary) {
     border-color: currentColor;
     color: inherit;
+  }
+
+  /* The page's --f-fg barely shows on the deep fill; tint with the card's own light text. */
+  .f-hero .f-btn:not(.f-btn--primary):hover {
+    background: color-mix(in oklch, currentColor 14%, transparent);
   }
 
   .f-hero__media {

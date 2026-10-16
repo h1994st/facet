@@ -197,14 +197,17 @@ git -C vendor/facet checkout v0.1.1</pre>
 &lt;/html&gt;</pre>
         <ul>
           <li
-            data-zh='<code>data-accent</code> 选择强调色（十三种，见色彩页）；<code>data-theme</code> 取 <code>dark</code>（默认）、<code>light</code> 或 <code>auto</code>，主题按钮把选择记在 <code>localStorage["facet-theme"]</code> 里。两者都只在 <code>&lt;html&gt;</code> 上生效（<code>:root[data-accent]</code>）；要让页面的某一部分换一种强调色，在它上面设置 <code>--f-accent</code> 和 <code>--f-accent-contrast</code>。'
+            data-zh='<code>data-accent</code> 选择强调色（十三种，见色彩页）；<code>data-theme</code> 取 <code>dark</code>（默认）、<code>light</code> 或 <code>auto</code>，主题按钮把选择记在 <code>localStorage["facet-theme"]</code> 里。两者都只在 <code>&lt;html&gt;</code> 上生效（<code>:root[data-accent]</code>）；要让页面的某一部分换一种强调色，在它上面设置 <code>--f-accent</code> 和 <code>--f-accent-contrast</code>。主卡片（<code>.f-hero</code>）的深色会随之改变；<code>--f-accent-soft</code>（浅色底）在 <code>:root</code> 上算好，不会跟着变，所以也在这一部分上把它设为 <code>color-mix(in oklch, var(--f-accent) 16%, transparent)</code>。'
           >
             <code>data-accent</code> picks the accent (thirteen, on the Color page);
             <code>data-theme</code> is <code>dark</code> (the default), <code>light</code> or
             <code>auto</code>. The theme toggle remembers its choice in
             <code>localStorage["facet-theme"]</code>. Both work on <code>&lt;html&gt;</code> only
             (<code>:root[data-accent]</code>); to give one part of a page its own accent, set
-            <code>--f-accent</code> and <code>--f-accent-contrast</code> on it.
+            <code>--f-accent</code> and <code>--f-accent-contrast</code> on it. The deep shade of
+            the hero card (<code>.f-hero</code>) follows; <code>--f-accent-soft</code> (the tinted
+            backgrounds) is computed on <code>:root</code> and does not, so set it on that part too,
+            to <code>color-mix(in oklch, var(--f-accent) 16%, transparent)</code>.
           </li>
           <li
             data-zh="默认的 <code>.f-nav</code> 在页面流中。要让它浮在页面上，请加 <code>.f-nav--fixed</code>：页面里只要有它，<code>--f-nav-clear</code> 就会自动为内容预留位置。"
