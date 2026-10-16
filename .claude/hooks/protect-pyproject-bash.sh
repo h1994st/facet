@@ -9,7 +9,9 @@ cmd=$(jq -r '.tool_input.command // empty')
 grep -Eq 'pyproject\.toml|uv\.lock' <<<"$cmd" || exit 0
 
 # A single `uv add|remove|lock|sync ...` command (no chaining or redirection): allow.
-if grep -Eq '^[[:space:]]*uv[[:space:]]+(add|remove|lock|sync)([[:space:]][^;&|<>]*)?$' <<<"$cmd"; then
+# Newlines and command substitution can smuggle a second command past the per-line regex.
+if [[ $cmd != *$'\n'* && $cmd != *'$('* && $cmd != *'`'* ]] &&
+    grep -Eq '^[[:space:]]*uv[[:space:]]+(add|remove|lock|sync)([[:space:]][^;&|<>]*)?$' <<<"$cmd"; then
     exit 0
 fi
 

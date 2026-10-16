@@ -5,10 +5,12 @@
 set -euo pipefail
 
 input=$(cat)
-file=$(jq -r '.tool_input.file_path // empty' <<<"$input")
+# Fail closed: unreadable input or a crashing guard denies instead of letting the edit through.
+file=$(jq -r '.tool_input.file_path // empty' <<<"$input") || file=pyproject.toml
 [[ $(basename "$file") == pyproject.toml ]] || exit 0
 
-reason=$(python3 -I "$(dirname "$0")/pyproject_guard.py" <<<"$input")
+reason=$(python3 -I "$(dirname "$0")/pyproject_guard.py" <<<"$input" 2>/dev/null) ||
+    reason="pyproject guard failed; change dependencies with \`uv add\` / \`uv remove\`."
 [[ -n $reason ]] || exit 0
 
 jq -n --arg reason "$reason" '{hookSpecificOutput: {
