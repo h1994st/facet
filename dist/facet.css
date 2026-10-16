@@ -2729,6 +2729,53 @@
   }
 }
 
+/* src/css/70-components/figure.css */
+@layer facet.components {
+  .f-figure {
+    margin: var(--f-space-6) 0;
+  }
+
+  .f-figure :where(img, svg, picture, video) {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin-inline: auto;
+  }
+
+  /* The prose image look: rounded squircle corners and a soft shadow. */
+  .f-figure:not(.f-figure--bare) :where(img, video) {
+    border-radius: var(--f-r-md);
+    corner-shape: squircle;
+    box-shadow: var(--f-shadow);
+  }
+
+  .f-figure--bare :where(img, svg, picture, video) {
+    border-radius: 0;
+    box-shadow: none;
+    background: none;
+  }
+
+  .f-figure__kicker {
+    margin: 0 0 var(--f-space-2);
+    color: var(--f-fg-3);
+    font: 500 var(--f-text-xs) / 1.4 var(--f-font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .f-figure figcaption {
+    margin-top: var(--f-space-2);
+    color: var(--f-fg-2);
+    font-size: var(--f-text-sm);
+    line-height: 1.5;
+  }
+
+  .f-figure figcaption > b:first-child {
+    color: var(--f-fg);
+    font-weight: 600;
+  }
+}
+
 /* src/css/70-components/footer.css */
 @layer facet.components {
   .f-footer {
@@ -2758,6 +2805,40 @@
 
   .f-footer__cats .cat:nth-of-type(3) {
     right: max(var(--f-space-4), 50% - 30rem);
+  }
+}
+
+/* src/css/70-components/gallery.css */
+@layer facet.components {
+  /* A grid of screenshots; --f-gallery-min tunes the column size. */
+  .f-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(var(--f-gallery-min, 16rem), 100%), 1fr));
+    gap: var(--f-space-4);
+    margin: var(--f-space-5) 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .f-gallery > li {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  .f-gallery img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--f-r-md);
+    corner-shape: squircle;
+  }
+
+  .f-gallery__label {
+    display: block;
+    margin-top: var(--f-space-2);
+    color: var(--f-fg-2);
+    font: var(--f-text-xs) / 1.4 var(--f-font-mono);
   }
 }
 

@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Test · Variants</title>
+    <link rel="stylesheet" href="../dist/facet.css" />
+    <script type="module" src="../dist/js/facet.js"></script>
+  </head>
+  <body>
+    <div id="a">
+      <div class="f-segmented" role="group" aria-label="Look" data-f-variants="look" hidden>
+        <button type="button" data-variant="modern" aria-pressed="true">Modern</button>
+        <button type="button" data-variant="classic" aria-pressed="false">Classic</button>
+      </div>
+      <ul class="f-gallery">
+        <li>
+          <img
+            id="a-modern"
+            data-f-variant="look:modern"
+            src="../assets/board-1.jpg"
+            alt="Modern"
+            width="1280"
+            height="800"
+          />
+          <img
+            id="a-classic"
+            data-f-variant="look:classic"
+            hidden
+            src="../assets/board-2.jpg"
+            alt="Classic"
+            width="1280"
+            height="800"
+          />
+          <span class="f-gallery__label">Board</span>
+        </li>
+      </ul>
+    </div>
+    <div id="b">
+      <div class="f-segmented" role="group" aria-label="Size" data-f-variants="size" hidden>
+        <button type="button" data-variant="small" aria-pressed="false">Small</button>
+        <button type="button" data-variant="large" aria-pressed="false">Large</button>
+      </div>
+      <p id="b-small" data-f-variant="size:small">Small</p>
+      <p id="b-large" data-f-variant="size:large" hidden>Large</p>
+      <p id="b-look" data-f-variant="look:modern">Other group</p>
+    </div>
+    <div id="c">
+      <div class="f-segmented" role="group" data-f-variants="a" hidden>
+        <button type="button" data-variant="x" aria-pressed="true">X</button>
+        <button type="button" data-variant="y" aria-pressed="false">Y</button>
+      </div>
+      <div class="f-segmented" role="group" data-f-variants="a:b" hidden>
+        <button type="button" data-variant="p" aria-pressed="true">P</button>
+        <button type="button" data-variant="q" aria-pressed="false">Q</button>
+      </div>
+      <p id="c-ax" data-f-variant="a:x">ax</p>
+      <p id="c-ay" data-f-variant="a:y" hidden>ay</p>
+      <p id="c-abp" data-f-variant="a:b:p">abp</p>
+      <p id="c-abq" data-f-variant="a:b:q" hidden>abq</p>
+      <p id="c-orphan" data-f-variant="a:zzz" hidden>no button</p>
+    </div>
+    <div id="d">
+      <div class="f-segmented" role="group" data-f-variants="empty" hidden></div>
+    </div>
+  </body>
+</html>

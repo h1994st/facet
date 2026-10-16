@@ -1,0 +1,32 @@
+@layer facet.components {
+  /* A grid of screenshots; --f-gallery-min tunes the column size. */
+  .f-gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(var(--f-gallery-min, 16rem), 100%), 1fr));
+    gap: var(--f-space-4);
+    margin: var(--f-space-5) 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .f-gallery > li {
+    min-width: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  .f-gallery img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--f-r-md);
+    corner-shape: squircle;
+  }
+
+  .f-gallery__label {
+    display: block;
+    margin-top: var(--f-space-2);
+    color: var(--f-fg-2);
+    font: var(--f-text-xs) / 1.4 var(--f-font-mono);
+  }
+}
