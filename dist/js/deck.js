@@ -1,11 +1,8 @@
 // Deck: <main class="f-deck" data-f-deck> holding a .f-deck__stage (caps, a board of
-// [data-f-piece] elements, a bar) and .f-deck__slide sections. Each slide's data-f-slide JSON
-// lists the state of every piece it shows; a piece left out is hidden (beams retract to their
-// start, so they grow again when they come back). States, in percent of the board:
-//   tiles {"at": [left, top], "c": color, "lit": true}, beams {"beam": [left, top, length]},
-//   boxes {"box": [left, top, width, height], "fade": true}.
-// A piece starts where it first appears, or at its data-f-from ([left, top] or a box).
-// Each slide is a full-page scroll stop; ←/→, Space and the bar's buttons move one slide.
+// [data-f-piece] elements, a bar) and .f-deck__slide sections, each with data-f-slide JSON. The
+// data format is documented on the reference site (index.html, "Behavior").
+// Each slide is a full-page scroll stop; ←/→, Space and the bar's buttons move one slide. Only the
+// current caption is reachable: the others are inert.
 // All data is read and checked before the page is touched: a deck with bad data is left in its
 // no-JS form (stacked slides with their captions) and a warning names the problem.
 const nums = (v, n) => Array.isArray(v) && v.length >= n && v.every(Number.isFinite);
@@ -33,10 +30,13 @@ function readData(slides, pieceEls) {
   return { states, froms };
 }
 
+const done = new WeakSet();
+
 export function init(root = document) {
   const off = [];
   const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
   for (const deck of root.querySelectorAll("[data-f-deck]")) {
+    if (done.has(deck)) continue;
     const slides = [...deck.querySelectorAll(".f-deck__slide")];
     const caps = deck.querySelector(".f-deck__caps");
     if (!slides.length || !caps) continue;
@@ -48,6 +48,7 @@ export function init(root = document) {
       console.warn("facet deck: bad slide data, showing the slides as plain sections.", err);
       continue;
     }
+    done.add(deck);
     const { states, froms } = data;
     const fromOf = new Map(pieceEls.map((p, i) => [p, froms[i]]));
     const pieces = Object.fromEntries(pieceEls.map((p) => [p.dataset.fPiece, p]));
@@ -119,7 +120,7 @@ export function init(root = document) {
       }
       moved.forEach(({ cap }, j) => {
         cap.classList.toggle("is-on", j === i);
-        cap.toggleAttribute("aria-hidden", j !== i);
+        cap.inert = j !== i;
       });
       if (count) count.textContent = `${i + 1} / ${slides.length}`;
       progress?.style.setProperty("--p", `${((i + 1) / slides.length) * 100}%`);
@@ -175,6 +176,7 @@ export function init(root = document) {
       });
       caps.removeAttribute("aria-live");
       deck.classList.remove("is-ready");
+      done.delete(deck);
     });
   }
   return () => off.forEach((f) => f());

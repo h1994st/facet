@@ -157,6 +157,14 @@
     margin: 0;
   }
 
+  /* Where a panel's .f-media-toggle sits (panels.js shows it). */
+  .f-panel__toggle {
+    position: absolute;
+    right: var(--f-gutter);
+    bottom: 1.25rem;
+    z-index: 2;
+  }
+
   /* Text arrives when its panel settles; only once panels.js is running. */
   .f-panels.is-ready .f-reveal {
     opacity: 0;

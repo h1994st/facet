@@ -4,15 +4,19 @@
 // the area under the band. Checked on every scroll, so a fast scroll never skips a step.
 const PHONE = "(max-width: 720px)";
 
+const done = new WeakSet();
+
 export function init(root = document) {
   const off = [];
   const phone = matchMedia(PHONE);
   for (const story of root.querySelectorAll("[data-f-story]")) {
+    if (done.has(story)) continue;
     const pin = story.querySelector(".f-story__pin");
     const steps = [...story.querySelectorAll(".f-story__step")];
     const imgs = [...story.querySelectorAll(".f-story__stage img[data-step]")];
     const count = story.querySelector(".f-story__count");
     if (!pin || !steps.length) continue;
+    done.add(story);
     story.classList.add("is-ready");
     let current = -1;
     const show = (i) => {
@@ -36,6 +40,7 @@ export function init(root = document) {
       removeEventListener("scroll", update);
       removeEventListener("resize", update);
       story.classList.remove("is-ready");
+      done.delete(story);
     });
   }
   return () => off.forEach((f) => f());

@@ -3,15 +3,19 @@
 // An optional <button data-f-autoplay-toggle aria-controls="video-id" hidden> is shown while the
 // video is on screen as a pause/play control (labels from data-f-pause / data-f-play); a user's
 // pause sticks.
+const done = new WeakSet();
+
 export function init(root = document) {
   const off = [];
   const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
   for (const video of root.querySelectorAll("video[data-f-autoplay]")) {
+    if (done.has(video)) continue;
     video.muted = true;
     if (still) {
       video.pause();
       continue;
     }
+    done.add(video);
     const btn = video.id
       ? document.querySelector(`[data-f-autoplay-toggle][aria-controls="${video.id}"]`)
       : null;
@@ -47,6 +51,7 @@ export function init(root = document) {
         btn.removeEventListener("click", toggle);
         btn.hidden = true;
       }
+      done.delete(video);
     });
   }
   return () => off.forEach((f) => f());

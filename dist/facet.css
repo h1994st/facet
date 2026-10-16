@@ -2136,6 +2136,7 @@
     .f-search,
     .f-theme-toggle,
     .f-code-copy,
+    .f-media-toggle,
     .f-toc,
     .f-toc a,
     .f-avatar,
@@ -2671,6 +2672,24 @@
   }
 }
 
+/* src/css/70-components/media-toggle.css */
+@layer facet.components {
+  /* Pause/play control over looping media (cover and panel videos). Their scripts show it and
+     swap its label; layouts place it. Light on dark, since it always sits on media. */
+  .f-media-toggle {
+    padding: 0.4rem 0.75rem;
+    border: 1px solid rgb(255 255 255 / 0.3);
+    border-radius: var(--f-r-pill);
+    corner-shape: round;
+    background: rgb(0 0 0 / 0.35);
+    color: #fff;
+    font: 600 0.75rem var(--f-font-mono);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    cursor: pointer;
+  }
+}
+
 /* src/css/70-components/nav.css */
 @layer facet.components {
   /* Floating glass pill. */
@@ -3166,22 +3185,12 @@
     }
   }
 
-  /* Pause control for a playing cover video (autoplay.js shows it while the video plays). */
+  /* Where the cover's .f-media-toggle sits (autoplay.js shows it while the video plays). */
   .f-cover__toggle {
     position: absolute;
     right: var(--f-gutter);
     bottom: 1.25rem;
     z-index: 2;
-    padding: 0.4rem 0.75rem;
-    border: 1px solid rgb(255 255 255 / 0.3);
-    border-radius: var(--f-r-pill);
-    corner-shape: round;
-    background: rgb(0 0 0 / 0.35);
-    color: #fff;
-    font: 600 0.75rem var(--f-font-mono);
-    -webkit-backdrop-filter: blur(8px);
-    backdrop-filter: blur(8px);
-    cursor: pointer;
   }
 
   /* The page after a cover starts with a little air, not the nav clearance. */
@@ -4079,6 +4088,14 @@
 
   .f-panel--end .f-footer {
     margin: 0;
+  }
+
+  /* Where a panel's .f-media-toggle sits (panels.js shows it). */
+  .f-panel__toggle {
+    position: absolute;
+    right: var(--f-gutter);
+    bottom: 1.25rem;
+    z-index: 2;
   }
 
   /* Text arrives when its panel settles; only once panels.js is running. */

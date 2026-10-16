@@ -1,5 +1,6 @@
-// facet's optional behavior. Import once: <script type="module" src=".../dist/js/facet.js">.
-// Each module initializes the elements that opt in with a data-f-* attribute and returns a
+// facet's optional behavior. Importing this file initializes every module once the page has
+// parsed: <script type="module" src=".../dist/js/facet.js">. Each module initializes the elements
+// that opt in with a data-f-* attribute, skips elements it has already initialized, and returns a
 // cleanup function. Imported statically, so the whole graph loads with the page and every module
 // is running by the time the load event fires (a chain of dynamic imports finished later, so
 // early input, such as a deck's arrow keys, was lost).
@@ -12,15 +13,27 @@ import * as story from "./story.js";
 import * as panels from "./panels.js";
 import * as deck from "./deck.js";
 
-const modules = [theme, liquid, scrollspy, nav, autoplay, story, panels, deck];
+const modules = { theme, liquid, scrollspy, nav, autoplay, story, panels, deck };
 
+// Initializes every module under root. One module that throws is reported and skipped, so the
+// others still run. Returns a function that undoes this call.
 export function init(root = document) {
-  const cleanups = modules.map((m) => m.init(root));
+  const cleanups = [];
+  for (const [name, m] of Object.entries(modules)) {
+    try {
+      cleanups.push(m.init(root));
+    } catch (err) {
+      console.error(`facet: the ${name} module failed to initialize.`, err);
+    }
+  }
   return () => cleanups.forEach((f) => typeof f === "function" && f());
 }
 
+// Undoes the initialization that importing this file ran.
+export let cleanup = () => {};
+
 if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", () => init());
+  document.addEventListener("DOMContentLoaded", () => (cleanup = init()), { once: true });
 } else {
-  init();
+  cleanup = init();
 }

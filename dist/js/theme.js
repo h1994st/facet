@@ -1,34 +1,48 @@
-// Theme toggle: dark → light → auto. Persists to localStorage; dark is the default.
+// Theme toggle: dark → light → auto. Persists to localStorage["facet-theme"]; dark is the default.
+// This module runs after first paint, so a page that wants the saved theme without a flash puts
+// the one-line snippet from the README in its <head>; init() then only labels the toggles.
 const KEY = "facet-theme";
 const ORDER = ["dark", "light", "auto"];
 const LABEL = { dark: "Dark", light: "Light", auto: "Auto" };
+const done = new WeakSet();
+const valid = (value) => (ORDER.includes(value) ? value : null);
 
-export function setTheme(value) {
+function show(value) {
   document.documentElement.dataset.theme = value;
-  try {
-    localStorage.setItem(KEY, value);
-  } catch {}
   for (const b of document.querySelectorAll("[data-f-theme-toggle]")) {
     b.textContent = LABEL[value];
     b.setAttribute("aria-label", `Theme: ${LABEL[value]}`);
   }
 }
 
-export function init(root = document) {
-  let saved = "dark";
+export function setTheme(value) {
+  const theme = valid(value) || "dark";
+  show(theme);
   try {
-    saved = localStorage.getItem(KEY) || "dark";
+    localStorage.setItem(KEY, theme);
   } catch {}
-  if (!document.documentElement.dataset.theme) setTheme(saved);
-  const handlers = [];
+}
+
+export function init(root = document) {
+  let saved = null;
+  try {
+    saved = valid(localStorage.getItem(KEY));
+  } catch {}
+  // A bogus saved value is ignored: the page's own data-theme, then dark.
+  show(saved || valid(document.documentElement.dataset.theme) || "dark");
+  const off = [];
   for (const b of root.querySelectorAll("[data-f-theme-toggle]")) {
+    if (done.has(b)) continue;
+    done.add(b);
     const on = () => {
-      const cur = document.documentElement.dataset.theme || "dark";
+      const cur = valid(document.documentElement.dataset.theme) || "dark";
       setTheme(ORDER[(ORDER.indexOf(cur) + 1) % ORDER.length]);
     };
     b.addEventListener("click", on);
-    handlers.push(() => b.removeEventListener("click", on));
-    b.textContent = LABEL[document.documentElement.dataset.theme || "dark"];
+    off.push(() => {
+      b.removeEventListener("click", on);
+      done.delete(b);
+    });
   }
-  return () => handlers.forEach((h) => h());
+  return () => off.forEach((f) => f());
 }
