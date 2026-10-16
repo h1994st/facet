@@ -20,6 +20,11 @@
     min-width: 0;
   }
 
+  /* The sidebar grid has no wide or full lines, so those children span the whole row. */
+  .f-page.f-page--sidebar > :is(.f-wide, .f-full) {
+    grid-column: 1 / -1;
+  }
+
   .f-docs .f-toc,
   .f-page--sidebar .f-toc {
     top: calc(var(--f-nav-clear) + 0.5rem);

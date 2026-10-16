@@ -307,3 +307,13 @@ def test_page_sidebar_shares_the_docs_grid(page_factory, site_url, width):
         assert box["display"] == "block"
         assert box["art"]["top"] >= box["toc"]["bottom"]
         assert box["art"]["width"] > 300
+
+
+def test_a_wide_child_of_the_sidebar_page_spans_the_row(page_factory, site_url):
+    page = page_factory(width=1280)
+    page.goto(f"{site_url}/tests/page-sidebar.html")
+    wide, toc, art = page.evaluate("""() => ['#wide', '.f-toc', 'article']
+      .map((s) => { const r = document.querySelector(s).getBoundingClientRect();
+                    return [r.left, r.right]; })""")
+    assert wide[0] == pytest.approx(toc[0], abs=1)
+    assert wide[1] == pytest.approx(art[1], abs=1)

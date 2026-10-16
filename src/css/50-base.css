@@ -32,16 +32,62 @@
     background: var(--f-accent-soft);
   }
 
-  /* An English block inside a Chinese page goes back to the Latin leading. */
-  :where([lang]:not(:lang(zh))) {
-    line-height: var(--f-leading);
-  }
-
   :where([lang]:lang(zh)) {
     letter-spacing: 0;
     word-break: keep-all;
     overflow-wrap: anywhere;
+  }
+
+  /* Leading switches only on the root and on block containers that carry lang, so a lang-tagged
+     inline span keeps the leading of the heading or button it sits in. An English block inside
+     a Chinese page goes back to the Latin leading. */
+  :where(html:lang(zh)),
+  :where(
+    :is(
+        body,
+        main,
+        article,
+        section,
+        aside,
+        header,
+        footer,
+        nav,
+        div,
+        p,
+        li,
+        dd,
+        blockquote,
+        figure,
+        figcaption,
+        td,
+        th
+      )[lang]:lang(zh)
+  ) {
     line-height: var(--f-leading-zh);
+  }
+
+  :where(
+    :is(
+        body,
+        main,
+        article,
+        section,
+        aside,
+        header,
+        footer,
+        nav,
+        div,
+        p,
+        li,
+        dd,
+        blockquote,
+        figure,
+        figcaption,
+        td,
+        th
+      )[lang]:not(:lang(zh))
+  ) {
+    line-height: var(--f-leading);
   }
 
   /* Squircle facet's own containers; pills and circles keep a plain round corner. */

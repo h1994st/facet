@@ -378,6 +378,26 @@ def test_english_text_keeps_its_leading(page_factory, site_url):
     assert _leading(page, ".f-alert p") == pytest.approx(1.6)
 
 
+@pytest.mark.parametrize("lang", ["en", "zh"])
+def test_a_lang_tagged_span_keeps_its_parents_leading(page_factory, site_url, lang):
+    page = page_factory(lang=lang)
+    page.goto(f"{site_url}/components.html")
+    other = "fr" if lang == "en" else "en"
+    heights = page.evaluate(f"""() => {{
+      const btn = document.querySelector('.f-btn');
+      const before = btn.getBoundingClientRect().height;
+      btn.insertAdjacentHTML('beforeend', ' <span lang="{other}">x</span>');
+      const zh = document.createElement('span');
+      zh.lang = 'zh-Hans'; zh.textContent = '猫';
+      const h = document.querySelector('h1, h2');
+      const hb = h.getBoundingClientRect().height;
+      h.append(zh);
+      return [before, btn.getBoundingClientRect().height, hb, h.getBoundingClientRect().height];
+    }}""")
+    assert heights[1] == pytest.approx(heights[0], abs=0.5)
+    assert heights[3] == pytest.approx(heights[2], abs=0.5)
+
+
 MARKUP_PAGES = ["components.html"] + [
     p for p in PAGES if p.startswith("layouts/") and p != "layouts/index.html"
 ]
