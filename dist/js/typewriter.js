@@ -40,6 +40,7 @@ export function init(root = document) {
     let i = chars.length;
     let timer = 0;
     let visible = false;
+    let stopped = false;
     const running = () => visible && !document.hidden;
     const schedule = () => {
       timer = setTimeout(step, i < chars.length ? speed : hold);
@@ -59,9 +60,11 @@ export function init(root = document) {
       schedule();
     }
     const resume = () => {
-      if (running() && !timer) schedule();
+      if (!stopped && running() && !timer) schedule();
     };
-    const io = new IntersectionObserver(([entry]) => {
+    const io = new IntersectionObserver((entries) => {
+      if (stopped) return;
+      const entry = entries[entries.length - 1];
       visible = entry.isIntersecting;
       // "1" while on screen, "0" off it: the tests wait on this before moving the clock.
       el.dataset.fTypeOn = visible ? "1" : "0";
@@ -70,6 +73,7 @@ export function init(root = document) {
     io.observe(el);
     document.addEventListener("visibilitychange", resume);
     off.push(() => {
+      stopped = true;
       clearTimeout(timer);
       io.disconnect();
       document.removeEventListener("visibilitychange", resume);
