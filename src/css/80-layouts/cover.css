@@ -122,6 +122,7 @@
     background: rgb(0 0 0 / 0.35);
     color: #fff;
     font: 600 0.75rem var(--f-font-mono);
+    -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
     cursor: pointer;
   }

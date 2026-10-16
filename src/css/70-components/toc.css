@@ -50,6 +50,7 @@
       border: 1px solid var(--f-line);
       border-radius: var(--f-r-pill);
       background: var(--f-glass-bg);
+      -webkit-backdrop-filter: blur(var(--f-glass-blur));
       backdrop-filter: blur(var(--f-glass-blur));
     }
 

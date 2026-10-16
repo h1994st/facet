@@ -1,33 +1,88 @@
 /* Design tokens. Dark is the default; light overrides it. Every color has both values. */
 @layer facet.tokens {
+  /* The theme switch. Each color token is written once, as
+       var(--f-unless-light, <dark value>) var(--f-unless-dark, <light value>)
+     and the switch keeps exactly one of the two: a switch set to the empty value drops its
+     fallback, one set to initial (invalid) lets it through. Dark is the default; the light theme,
+     auto on a light system, and print flip it. */
   :root {
+    --f-unless-light: initial;
+    --f-unless-dark: ;
     color-scheme: dark;
-    --f-bg: oklch(0.15 0.012 260);
-    --f-bg-2: oklch(0.18 0.012 260);
-    --f-surface: oklch(0.21 0.012 260);
-    --f-fg: oklch(0.95 0.01 260);
-    --f-fg-2: oklch(0.95 0.01 260 / 0.7);
-    --f-fg-3: oklch(0.95 0.01 260 / 0.5);
-    --f-line: rgb(255 255 255 / 0.08);
-    --f-line-2: rgb(255 255 255 / 0.14);
-    --f-shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px -12px rgb(0 0 0 / 0.7);
-    --f-shadow-hi: 0 2px 4px rgb(0 0 0 / 0.45), 0 22px 48px -14px rgb(0 0 0 / 0.8);
-    --f-accent: oklch(0.76 0.06 255);
-    --f-accent-contrast: oklch(0.15 0.012 260);
+  }
+
+  :root[data-theme="light"] {
+    --f-unless-light: ;
+    --f-unless-dark: initial;
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root[data-theme="auto"] {
+      --f-unless-light: ;
+      --f-unless-dark: initial;
+      color-scheme: light;
+    }
+  }
+
+  /* Paper is white: print in the light colors whatever the theme. */
+  @media print {
+    :root {
+      --f-unless-light: ;
+      --f-unless-dark: initial;
+      color-scheme: light;
+    }
+  }
+
+  :root {
+    --f-bg: var(--f-unless-light, oklch(0.15 0.012 260))
+      var(--f-unless-dark, oklch(0.975 0.004 260));
+    --f-bg-2: var(--f-unless-light, oklch(0.18 0.012 260))
+      var(--f-unless-dark, oklch(0.955 0.006 260));
+    --f-surface: var(--f-unless-light, oklch(0.21 0.012 260))
+      var(--f-unless-dark, oklch(0.995 0.002 260));
+    --f-fg: var(--f-unless-light, oklch(0.95 0.01 260)) var(--f-unless-dark, oklch(0.2 0.015 260));
+    --f-fg-2: var(--f-unless-light, oklch(0.95 0.01 260 / 0.7))
+      var(--f-unless-dark, oklch(0.2 0.015 260 / 0.72));
+    --f-fg-3: var(--f-unless-light, oklch(0.95 0.01 260 / 0.5))
+      var(--f-unless-dark, oklch(0.2 0.015 260 / 0.65));
+    --f-line: var(--f-unless-light, rgb(255 255 255 / 0.08)) var(--f-unless-dark, rgb(0 0 0 / 0.08));
+    --f-line-2: var(--f-unless-light, rgb(255 255 255 / 0.14))
+      var(--f-unless-dark, rgb(0 0 0 / 0.14));
+    --f-shadow: var(
+        --f-unless-light,
+        0 1px 2px rgb(0 0 0 / 0.4),
+        0 12px 32px -12px rgb(0 0 0 / 0.7)
+      )
+      var(--f-unless-dark, 0 1px 2px rgb(0 0 0 / 0.05), 0 12px 32px -14px rgb(0 0 0 / 0.18));
+    --f-shadow-hi: var(
+        --f-unless-light,
+        0 2px 4px rgb(0 0 0 / 0.45),
+        0 22px 48px -14px rgb(0 0 0 / 0.8)
+      )
+      var(--f-unless-dark, 0 2px 4px rgb(0 0 0 / 0.06), 0 22px 48px -16px rgb(0 0 0 / 0.26));
+    --f-accent: var(--f-unless-light, oklch(0.76 0.06 255))
+      var(--f-unless-dark, oklch(0.52 0.07 255));
+    --f-accent-contrast: var(--f-unless-light, oklch(0.15 0.012 260)) var(--f-unless-dark, #fff);
     --f-accent-soft: color-mix(in oklch, var(--f-accent) 16%, transparent);
-    --f-success: oklch(0.76 0.06 130);
-    --f-warning: oklch(0.76 0.06 85);
-    --f-danger: oklch(0.76 0.06 15);
-    --f-info: oklch(0.76 0.06 255);
+    --f-success: var(--f-unless-light, oklch(0.76 0.06 130))
+      var(--f-unless-dark, oklch(0.52 0.07 130));
+    --f-warning: var(--f-unless-light, oklch(0.76 0.06 85))
+      var(--f-unless-dark, oklch(0.52 0.07 85));
+    --f-danger: var(--f-unless-light, oklch(0.76 0.06 15)) var(--f-unless-dark, oklch(0.52 0.07 15));
+    --f-info: var(--f-unless-light, oklch(0.76 0.06 255)) var(--f-unless-dark, oklch(0.52 0.07 255));
     --f-success-soft: color-mix(in oklch, var(--f-success) 16%, transparent);
     --f-warning-soft: color-mix(in oklch, var(--f-warning) 16%, transparent);
     --f-danger-soft: color-mix(in oklch, var(--f-danger) 16%, transparent);
     --f-info-soft: color-mix(in oklch, var(--f-info) 16%, transparent);
-    --f-glass-bg: color-mix(in oklch, var(--f-bg) 62%, transparent);
+    --f-glass-bg: var(--f-unless-light, color-mix(in oklch, var(--f-bg) 62%, transparent))
+      var(--f-unless-dark, color-mix(in oklch, var(--f-bg) 72%, transparent));
     --f-glass-blur: 16px;
-    --f-glass-edge: rgb(255 255 255 / 0.12);
-    --cat-edge: rgb(255 255 255 / 0.2);
-    --cat-shadow: rgb(0 0 0 / 0.35);
+    --f-glass-edge: var(--f-unless-light, rgb(255 255 255 / 0.12))
+      var(--f-unless-dark, rgb(255 255 255 / 0.7));
+    --cat-edge: var(--f-unless-light, rgb(255 255 255 / 0.2)) var(--f-unless-dark, transparent);
+    --cat-shadow: var(--f-unless-light, rgb(0 0 0 / 0.35))
+      var(--f-unless-dark, rgb(29 35 43 / 0.13));
 
     --f-font-sans:
       "Geist", system-ui, -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
@@ -79,66 +134,6 @@
 
   :root:lang(zh) {
     --f-measure: 36rem;
-  }
-
-  :root[data-theme="light"] {
-    color-scheme: light;
-    --f-bg: oklch(0.975 0.004 260);
-    --f-bg-2: oklch(0.955 0.006 260);
-    --f-surface: oklch(0.995 0.002 260);
-    --f-fg: oklch(0.2 0.015 260);
-    --f-fg-2: oklch(0.2 0.015 260 / 0.72);
-    --f-fg-3: oklch(0.2 0.015 260 / 0.65);
-    --f-line: rgb(0 0 0 / 0.08);
-    --f-line-2: rgb(0 0 0 / 0.14);
-    --f-shadow: 0 1px 2px rgb(0 0 0 / 0.05), 0 12px 32px -14px rgb(0 0 0 / 0.18);
-    --f-shadow-hi: 0 2px 4px rgb(0 0 0 / 0.06), 0 22px 48px -16px rgb(0 0 0 / 0.26);
-    --f-accent: oklch(0.52 0.07 255);
-    --f-accent-contrast: #fff;
-    --f-success: oklch(0.52 0.07 130);
-    --f-warning: oklch(0.52 0.07 85);
-    --f-danger: oklch(0.52 0.07 15);
-    --f-info: oklch(0.52 0.07 255);
-    --f-glass-bg: color-mix(in oklch, var(--f-bg) 72%, transparent);
-    --f-glass-edge: rgb(255 255 255 / 0.7);
-    --cat-edge: transparent;
-    --cat-shadow: rgb(29 35 43 / 0.13);
-    --f-accent-soft: color-mix(in oklch, var(--f-accent) 16%, transparent);
-    --f-success-soft: color-mix(in oklch, var(--f-success) 16%, transparent);
-    --f-warning-soft: color-mix(in oklch, var(--f-warning) 16%, transparent);
-    --f-danger-soft: color-mix(in oklch, var(--f-danger) 16%, transparent);
-    --f-info-soft: color-mix(in oklch, var(--f-info) 16%, transparent);
-  }
-
-  @media (prefers-color-scheme: light) {
-    :root[data-theme="auto"] {
-      color-scheme: light;
-      --f-bg: oklch(0.975 0.004 260);
-      --f-bg-2: oklch(0.955 0.006 260);
-      --f-surface: oklch(0.995 0.002 260);
-      --f-fg: oklch(0.2 0.015 260);
-      --f-fg-2: oklch(0.2 0.015 260 / 0.72);
-      --f-fg-3: oklch(0.2 0.015 260 / 0.65);
-      --f-line: rgb(0 0 0 / 0.08);
-      --f-line-2: rgb(0 0 0 / 0.14);
-      --f-shadow: 0 1px 2px rgb(0 0 0 / 0.05), 0 12px 32px -14px rgb(0 0 0 / 0.18);
-      --f-shadow-hi: 0 2px 4px rgb(0 0 0 / 0.06), 0 22px 48px -16px rgb(0 0 0 / 0.26);
-      --f-accent: oklch(0.52 0.07 255);
-      --f-accent-contrast: #fff;
-      --f-success: oklch(0.52 0.07 130);
-      --f-warning: oklch(0.52 0.07 85);
-      --f-danger: oklch(0.52 0.07 15);
-      --f-info: oklch(0.52 0.07 255);
-      --f-glass-bg: color-mix(in oklch, var(--f-bg) 72%, transparent);
-      --f-glass-edge: rgb(255 255 255 / 0.7);
-      --cat-edge: transparent;
-      --cat-shadow: rgb(29 35 43 / 0.13);
-      --f-accent-soft: color-mix(in oklch, var(--f-accent) 16%, transparent);
-      --f-success-soft: color-mix(in oklch, var(--f-success) 16%, transparent);
-      --f-warning-soft: color-mix(in oklch, var(--f-warning) 16%, transparent);
-      --f-danger-soft: color-mix(in oklch, var(--f-danger) 16%, transparent);
-      --f-info-soft: color-mix(in oklch, var(--f-info) 16%, transparent);
-    }
   }
 
   @media (prefers-reduced-motion: reduce) {

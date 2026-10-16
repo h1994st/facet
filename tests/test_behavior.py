@@ -266,3 +266,19 @@ def test_deck_with_bad_data_stays_readable(page_factory, site_url):
         assert shown, deck
         assert page.locator(f"{deck} .f-deck__slide h2").count() == 1
     assert "is-ready" in page.locator("#good").get_attribute("class")
+
+
+def test_resume_prints_in_light_colors_from_the_dark_theme(page_factory, site_url):
+    from checks import contrast, contrast_on
+
+    page = page_factory(theme="dark")
+    page.goto(f"{site_url}/layouts/resume.html")
+    page.emulate_media(media="print")
+    for sel in [".f-resume li", ".f-resume dt", ".f-resume__summary", ".f-resume h2"]:
+        assert contrast(page, sel) >= 4.5, sel
+    assert contrast_on(page, ".f-chip") >= 4.5
+    assert page.evaluate("getComputedStyle(document.documentElement).colorScheme") == "light"
+    actions = "getComputedStyle(document.querySelector('.f-resume__actions')).display"
+    assert page.evaluate(actions) == "none"
+    page.emulate_media(media="screen")
+    assert page.evaluate(actions) == "flex"

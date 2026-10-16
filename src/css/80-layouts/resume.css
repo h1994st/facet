@@ -47,7 +47,12 @@
     text-decoration: none;
   }
 
-  .f-resume__contact .f-cluster {
+  /* The download and print buttons: a layout-owned row, so the print rule below can hide it. */
+  .f-resume__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--f-space-3);
+    align-items: center;
     margin-top: var(--f-space-2);
   }
 
@@ -322,10 +327,10 @@
     }
   }
 
-  /* Print: one plain column, no nav, no colors that waste ink. */
+  /* Print: one plain column, no nav, no colors that waste ink. The tokens switch to their light
+     values in print (10-tokens.css), so text stays dark on the white page from any theme. */
   @media print {
-    :root:has(.f-resume)
-      :is(.f-nav, .f-toc, .f-footer, .f-resume__contact .f-cluster, .f-resume__cat) {
+    :root:has(.f-resume) :is(.f-nav, .f-toc, .f-footer, .f-resume__actions, .f-resume__cat) {
       display: none;
     }
 

@@ -33,6 +33,7 @@
     border-radius: var(--f-r-pill);
     corner-shape: round;
     background: var(--f-glass-bg);
+    -webkit-backdrop-filter: blur(var(--f-glass-blur)) saturate(140%);
     backdrop-filter: blur(var(--f-glass-blur)) saturate(140%);
     box-shadow: var(--f-shadow);
     color: var(--f-fg);

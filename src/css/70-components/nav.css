@@ -12,6 +12,7 @@
     border: 1px solid var(--f-glass-edge);
     border-radius: var(--f-r-pill);
     background: var(--f-glass-bg);
+    -webkit-backdrop-filter: blur(var(--f-glass-blur)) saturate(140%);
     backdrop-filter: blur(var(--f-glass-blur)) saturate(140%);
     box-shadow: var(--f-shadow);
     font-size: var(--f-text-sm);
@@ -59,6 +60,7 @@
   .f-nav--over.is-ready:not(.is-scrolled) {
     border-color: transparent;
     background: transparent;
+    -webkit-backdrop-filter: none;
     backdrop-filter: none;
     box-shadow: none;
   }

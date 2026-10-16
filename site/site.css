@@ -317,3 +317,10 @@
 .site-tile__link {
   color: var(--sw);
 }
+
+/* The toolbar is reference-site chrome: keep it off paper. */
+@media print {
+  .site-bar {
+    display: none;
+  }
+}

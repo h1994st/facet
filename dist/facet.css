@@ -4,34 +4,89 @@
 /* src/css/10-tokens.css */
 /* Design tokens. Dark is the default; light overrides it. Every color has both values. */
 @layer facet.tokens {
+  /* The theme switch. Each color token is written once, as
+       var(--f-unless-light, <dark value>) var(--f-unless-dark, <light value>)
+     and the switch keeps exactly one of the two: a switch set to the empty value drops its
+     fallback, one set to initial (invalid) lets it through. Dark is the default; the light theme,
+     auto on a light system, and print flip it. */
   :root {
+    --f-unless-light: initial;
+    --f-unless-dark: ;
     color-scheme: dark;
-    --f-bg: oklch(0.15 0.012 260);
-    --f-bg-2: oklch(0.18 0.012 260);
-    --f-surface: oklch(0.21 0.012 260);
-    --f-fg: oklch(0.95 0.01 260);
-    --f-fg-2: oklch(0.95 0.01 260 / 0.7);
-    --f-fg-3: oklch(0.95 0.01 260 / 0.5);
-    --f-line: rgb(255 255 255 / 0.08);
-    --f-line-2: rgb(255 255 255 / 0.14);
-    --f-shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px -12px rgb(0 0 0 / 0.7);
-    --f-shadow-hi: 0 2px 4px rgb(0 0 0 / 0.45), 0 22px 48px -14px rgb(0 0 0 / 0.8);
-    --f-accent: oklch(0.76 0.06 255);
-    --f-accent-contrast: oklch(0.15 0.012 260);
+  }
+
+  :root[data-theme="light"] {
+    --f-unless-light: ;
+    --f-unless-dark: initial;
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: light) {
+    :root[data-theme="auto"] {
+      --f-unless-light: ;
+      --f-unless-dark: initial;
+      color-scheme: light;
+    }
+  }
+
+  /* Paper is white: print in the light colors whatever the theme. */
+  @media print {
+    :root {
+      --f-unless-light: ;
+      --f-unless-dark: initial;
+      color-scheme: light;
+    }
+  }
+
+  :root {
+    --f-bg: var(--f-unless-light, oklch(0.15 0.012 260))
+      var(--f-unless-dark, oklch(0.975 0.004 260));
+    --f-bg-2: var(--f-unless-light, oklch(0.18 0.012 260))
+      var(--f-unless-dark, oklch(0.955 0.006 260));
+    --f-surface: var(--f-unless-light, oklch(0.21 0.012 260))
+      var(--f-unless-dark, oklch(0.995 0.002 260));
+    --f-fg: var(--f-unless-light, oklch(0.95 0.01 260)) var(--f-unless-dark, oklch(0.2 0.015 260));
+    --f-fg-2: var(--f-unless-light, oklch(0.95 0.01 260 / 0.7))
+      var(--f-unless-dark, oklch(0.2 0.015 260 / 0.72));
+    --f-fg-3: var(--f-unless-light, oklch(0.95 0.01 260 / 0.5))
+      var(--f-unless-dark, oklch(0.2 0.015 260 / 0.65));
+    --f-line: var(--f-unless-light, rgb(255 255 255 / 0.08)) var(--f-unless-dark, rgb(0 0 0 / 0.08));
+    --f-line-2: var(--f-unless-light, rgb(255 255 255 / 0.14))
+      var(--f-unless-dark, rgb(0 0 0 / 0.14));
+    --f-shadow: var(
+        --f-unless-light,
+        0 1px 2px rgb(0 0 0 / 0.4),
+        0 12px 32px -12px rgb(0 0 0 / 0.7)
+      )
+      var(--f-unless-dark, 0 1px 2px rgb(0 0 0 / 0.05), 0 12px 32px -14px rgb(0 0 0 / 0.18));
+    --f-shadow-hi: var(
+        --f-unless-light,
+        0 2px 4px rgb(0 0 0 / 0.45),
+        0 22px 48px -14px rgb(0 0 0 / 0.8)
+      )
+      var(--f-unless-dark, 0 2px 4px rgb(0 0 0 / 0.06), 0 22px 48px -16px rgb(0 0 0 / 0.26));
+    --f-accent: var(--f-unless-light, oklch(0.76 0.06 255))
+      var(--f-unless-dark, oklch(0.52 0.07 255));
+    --f-accent-contrast: var(--f-unless-light, oklch(0.15 0.012 260)) var(--f-unless-dark, #fff);
     --f-accent-soft: color-mix(in oklch, var(--f-accent) 16%, transparent);
-    --f-success: oklch(0.76 0.06 130);
-    --f-warning: oklch(0.76 0.06 85);
-    --f-danger: oklch(0.76 0.06 15);
-    --f-info: oklch(0.76 0.06 255);
+    --f-success: var(--f-unless-light, oklch(0.76 0.06 130))
+      var(--f-unless-dark, oklch(0.52 0.07 130));
+    --f-warning: var(--f-unless-light, oklch(0.76 0.06 85))
+      var(--f-unless-dark, oklch(0.52 0.07 85));
+    --f-danger: var(--f-unless-light, oklch(0.76 0.06 15)) var(--f-unless-dark, oklch(0.52 0.07 15));
+    --f-info: var(--f-unless-light, oklch(0.76 0.06 255)) var(--f-unless-dark, oklch(0.52 0.07 255));
     --f-success-soft: color-mix(in oklch, var(--f-success) 16%, transparent);
     --f-warning-soft: color-mix(in oklch, var(--f-warning) 16%, transparent);
     --f-danger-soft: color-mix(in oklch, var(--f-danger) 16%, transparent);
     --f-info-soft: color-mix(in oklch, var(--f-info) 16%, transparent);
-    --f-glass-bg: color-mix(in oklch, var(--f-bg) 62%, transparent);
+    --f-glass-bg: var(--f-unless-light, color-mix(in oklch, var(--f-bg) 62%, transparent))
+      var(--f-unless-dark, color-mix(in oklch, var(--f-bg) 72%, transparent));
     --f-glass-blur: 16px;
-    --f-glass-edge: rgb(255 255 255 / 0.12);
-    --cat-edge: rgb(255 255 255 / 0.2);
-    --cat-shadow: rgb(0 0 0 / 0.35);
+    --f-glass-edge: var(--f-unless-light, rgb(255 255 255 / 0.12))
+      var(--f-unless-dark, rgb(255 255 255 / 0.7));
+    --cat-edge: var(--f-unless-light, rgb(255 255 255 / 0.2)) var(--f-unless-dark, transparent);
+    --cat-shadow: var(--f-unless-light, rgb(0 0 0 / 0.35))
+      var(--f-unless-dark, rgb(29 35 43 / 0.13));
 
     --f-font-sans:
       "Geist", system-ui, -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
@@ -85,66 +140,6 @@
     --f-measure: 36rem;
   }
 
-  :root[data-theme="light"] {
-    color-scheme: light;
-    --f-bg: oklch(0.975 0.004 260);
-    --f-bg-2: oklch(0.955 0.006 260);
-    --f-surface: oklch(0.995 0.002 260);
-    --f-fg: oklch(0.2 0.015 260);
-    --f-fg-2: oklch(0.2 0.015 260 / 0.72);
-    --f-fg-3: oklch(0.2 0.015 260 / 0.65);
-    --f-line: rgb(0 0 0 / 0.08);
-    --f-line-2: rgb(0 0 0 / 0.14);
-    --f-shadow: 0 1px 2px rgb(0 0 0 / 0.05), 0 12px 32px -14px rgb(0 0 0 / 0.18);
-    --f-shadow-hi: 0 2px 4px rgb(0 0 0 / 0.06), 0 22px 48px -16px rgb(0 0 0 / 0.26);
-    --f-accent: oklch(0.52 0.07 255);
-    --f-accent-contrast: #fff;
-    --f-success: oklch(0.52 0.07 130);
-    --f-warning: oklch(0.52 0.07 85);
-    --f-danger: oklch(0.52 0.07 15);
-    --f-info: oklch(0.52 0.07 255);
-    --f-glass-bg: color-mix(in oklch, var(--f-bg) 72%, transparent);
-    --f-glass-edge: rgb(255 255 255 / 0.7);
-    --cat-edge: transparent;
-    --cat-shadow: rgb(29 35 43 / 0.13);
-    --f-accent-soft: color-mix(in oklch, var(--f-accent) 16%, transparent);
-    --f-success-soft: color-mix(in oklch, var(--f-success) 16%, transparent);
-    --f-warning-soft: color-mix(in oklch, var(--f-warning) 16%, transparent);
-    --f-danger-soft: color-mix(in oklch, var(--f-danger) 16%, transparent);
-    --f-info-soft: color-mix(in oklch, var(--f-info) 16%, transparent);
-  }
-
-  @media (prefers-color-scheme: light) {
-    :root[data-theme="auto"] {
-      color-scheme: light;
-      --f-bg: oklch(0.975 0.004 260);
-      --f-bg-2: oklch(0.955 0.006 260);
-      --f-surface: oklch(0.995 0.002 260);
-      --f-fg: oklch(0.2 0.015 260);
-      --f-fg-2: oklch(0.2 0.015 260 / 0.72);
-      --f-fg-3: oklch(0.2 0.015 260 / 0.65);
-      --f-line: rgb(0 0 0 / 0.08);
-      --f-line-2: rgb(0 0 0 / 0.14);
-      --f-shadow: 0 1px 2px rgb(0 0 0 / 0.05), 0 12px 32px -14px rgb(0 0 0 / 0.18);
-      --f-shadow-hi: 0 2px 4px rgb(0 0 0 / 0.06), 0 22px 48px -16px rgb(0 0 0 / 0.26);
-      --f-accent: oklch(0.52 0.07 255);
-      --f-accent-contrast: #fff;
-      --f-success: oklch(0.52 0.07 130);
-      --f-warning: oklch(0.52 0.07 85);
-      --f-danger: oklch(0.52 0.07 15);
-      --f-info: oklch(0.52 0.07 255);
-      --f-glass-bg: color-mix(in oklch, var(--f-bg) 72%, transparent);
-      --f-glass-edge: rgb(255 255 255 / 0.7);
-      --cat-edge: transparent;
-      --cat-shadow: rgb(29 35 43 / 0.13);
-      --f-accent-soft: color-mix(in oklch, var(--f-accent) 16%, transparent);
-      --f-success-soft: color-mix(in oklch, var(--f-success) 16%, transparent);
-      --f-warning-soft: color-mix(in oklch, var(--f-warning) 16%, transparent);
-      --f-danger-soft: color-mix(in oklch, var(--f-danger) 16%, transparent);
-      --f-info-soft: color-mix(in oklch, var(--f-info) 16%, transparent);
-    }
-  }
-
   @media (prefers-reduced-motion: reduce) {
     :root {
       --f-dur-1: 0ms;
@@ -155,201 +150,81 @@
 }
 
 /* src/css/20-accents.css */
-/* Per-site accents: set data-accent on <html>. Hue changes only; lightness and chroma stay fixed. */
+/* Per-site accents: set data-accent on <html>. Hue changes only; lightness and chroma stay fixed.
+   Each value is a dark/light pair on the theme switch (see 10-tokens.css). */
 @layer facet.tokens {
   :root[data-accent="rose"] {
-    --f-accent: oklch(0.76 0.06 15);
-    --f-accent-contrast: oklch(0.15 0.012 260);
-  }
-  :root[data-accent="rose"][data-theme="light"] {
-    --f-accent: oklch(0.52 0.07 15);
-    --f-accent-contrast: #fff;
-  }
-  @media (prefers-color-scheme: light) {
-    :root[data-accent="rose"][data-theme="auto"] {
-      --f-accent: oklch(0.52 0.07 15);
-      --f-accent-contrast: #fff;
-    }
+    --f-accent: var(--f-unless-light, oklch(0.76 0.06 15)) var(--f-unless-dark, oklch(0.52 0.07 15));
+    --f-accent-contrast: var(--f-unless-light, oklch(0.15 0.012 260)) var(--f-unless-dark, #fff);
   }
 
   :root[data-accent="clay"] {
-    --f-accent: oklch(0.76 0.06 55);
-    --f-accent-contrast: oklch(0.15 0.012 260);
-  }
-  :root[data-accent="clay"][data-theme="light"] {
-    --f-accent: oklch(0.52 0.07 55);
-    --f-accent-contrast: #fff;
-  }
-  @media (prefers-color-scheme: light) {
-    :root[data-accent="clay"][data-theme="auto"] {
-      --f-accent: oklch(0.52 0.07 55);
-      --f-accent-contrast: #fff;
-    }
+    --f-accent: var(--f-unless-light, oklch(0.76 0.06 55)) var(--f-unless-dark, oklch(0.52 0.07 55));
+    --f-accent-contrast: var(--f-unless-light, oklch(0.15 0.012 260)) var(--f-unless-dark, #fff);
   }
 
   :root[data-accent="ochre"] {
-    --f-accent: oklch(0.76 0.06 85);
-    --f-accent-contrast: oklch(0.15 0.012 260);
-  }
-  :root[data-accent="ochre"][data-theme="light"] {
-    --f-accent: oklch(0.52 0.07 85);
-    --f-accent-contrast: #fff;
-  }
-  @media (prefers-color-scheme: light) {
-    :root[data-accent="ochre"][data-theme="auto"] {
-      --f-accent: oklch(0.52 0.07 85);
-      --f-accent-contrast: #fff;
-    }
+    --f-accent: var(--f-unless-light, oklch(0.76 0.06 85)) var(--f-unless-dark, oklch(0.52 0.07 85));
+    --f-accent-contrast: var(--f-unless-light, oklch(0.15 0.012 260)) var(--f-unless-dark, #fff);
   }
 
   :root[data-accent="moss"] {
-    --f-accent: oklch(0.76 0.06 130);
-    --f-accent-contrast: oklch(0.15 0.012 260);
-  }
-  :root[data-accent="moss"][data-theme="light"] {
-    --f-accent: oklch(0.52 0.07 130);
-    --f-accent-contrast: #fff;
-  }
-  @media (prefers-color-scheme: light) {
-    :root[data-accent="moss"][data-theme="auto"] {
-      --f-accent: oklch(0.52 0.07 130);
-      --f-accent-contrast: #fff;
-    }
+    --f-accent: var(--f-unless-light, oklch(0.76 0.06 130))
+      var(--f-unless-dark, oklch(0.52 0.07 130));
+    --f-accent-contrast: var(--f-unless-light, oklch(0.15 0.012 260)) var(--f-unless-dark, #fff);
   }
 
   :root[data-accent="sage"] {
-    --f-accent: oklch(0.76 0.06 165);
-    --f-accent-contrast: oklch(0.15 0.012 260);
-  }
-  :root[data-accent="sage"][data-theme="light"] {
-    --f-accent: oklch(0.52 0.07 165);
-    --f-accent-contrast: #fff;
-  }
-  @media (prefers-color-scheme: light) {
-    :root[data-accent="sage"][data-theme="auto"] {
-      --f-accent: oklch(0.52 0.07 165);
-      --f-accent-contrast: #fff;
-    }
+    --f-accent: var(--f-unless-light, oklch(0.76 0.06 165))
+      var(--f-unless-dark, oklch(0.52 0.07 165));
+    --f-accent-contrast: var(--f-unless-light, oklch(0.15 0.012 260)) var(--f-unless-dark, #fff);
   }
 
   :root[data-accent="teal"] {
-    --f-accent: oklch(0.76 0.06 205);
-    --f-accent-contrast: oklch(0.15 0.012 260);
-  }
-  :root[data-accent="teal"][data-theme="light"] {
-    --f-accent: oklch(0.52 0.07 205);
-    --f-accent-contrast: #fff;
-  }
-  @media (prefers-color-scheme: light) {
-    :root[data-accent="teal"][data-theme="auto"] {
-      --f-accent: oklch(0.52 0.07 205);
-      --f-accent-contrast: #fff;
-    }
+    --f-accent: var(--f-unless-light, oklch(0.76 0.06 205))
+      var(--f-unless-dark, oklch(0.52 0.07 205));
+    --f-accent-contrast: var(--f-unless-light, oklch(0.15 0.012 260)) var(--f-unless-dark, #fff);
   }
 
   :root[data-accent="slate"] {
-    --f-accent: oklch(0.76 0.06 255);
-    --f-accent-contrast: oklch(0.15 0.012 260);
-  }
-  :root[data-accent="slate"][data-theme="light"] {
-    --f-accent: oklch(0.52 0.07 255);
-    --f-accent-contrast: #fff;
-  }
-  @media (prefers-color-scheme: light) {
-    :root[data-accent="slate"][data-theme="auto"] {
-      --f-accent: oklch(0.52 0.07 255);
-      --f-accent-contrast: #fff;
-    }
+    --f-accent: var(--f-unless-light, oklch(0.76 0.06 255))
+      var(--f-unless-dark, oklch(0.52 0.07 255));
+    --f-accent-contrast: var(--f-unless-light, oklch(0.15 0.012 260)) var(--f-unless-dark, #fff);
   }
 
   :root[data-accent="lavender"] {
-    --f-accent: oklch(0.76 0.06 295);
-    --f-accent-contrast: oklch(0.15 0.012 260);
-  }
-  :root[data-accent="lavender"][data-theme="light"] {
-    --f-accent: oklch(0.52 0.07 295);
-    --f-accent-contrast: #fff;
-  }
-  @media (prefers-color-scheme: light) {
-    :root[data-accent="lavender"][data-theme="auto"] {
-      --f-accent: oklch(0.52 0.07 295);
-      --f-accent-contrast: #fff;
-    }
+    --f-accent: var(--f-unless-light, oklch(0.76 0.06 295))
+      var(--f-unless-dark, oklch(0.52 0.07 295));
+    --f-accent-contrast: var(--f-unless-light, oklch(0.15 0.012 260)) var(--f-unless-dark, #fff);
   }
 
   :root[data-accent="stone"] {
-    --f-accent: oklch(0.76 0.02 70);
-    --f-accent-contrast: oklch(0.15 0.012 260);
-  }
-  :root[data-accent="stone"][data-theme="light"] {
-    --f-accent: oklch(0.52 0.025 70);
-    --f-accent-contrast: #fff;
-  }
-  @media (prefers-color-scheme: light) {
-    :root[data-accent="stone"][data-theme="auto"] {
-      --f-accent: oklch(0.52 0.025 70);
-      --f-accent-contrast: #fff;
-    }
+    --f-accent: var(--f-unless-light, oklch(0.76 0.02 70))
+      var(--f-unless-dark, oklch(0.52 0.025 70));
+    --f-accent-contrast: var(--f-unless-light, oklch(0.15 0.012 260)) var(--f-unless-dark, #fff);
   }
 
   :root[data-accent="lichen"] {
-    --f-accent: oklch(0.76 0.02 150);
-    --f-accent-contrast: oklch(0.15 0.012 260);
-  }
-  :root[data-accent="lichen"][data-theme="light"] {
-    --f-accent: oklch(0.52 0.025 150);
-    --f-accent-contrast: #fff;
-  }
-  @media (prefers-color-scheme: light) {
-    :root[data-accent="lichen"][data-theme="auto"] {
-      --f-accent: oklch(0.52 0.025 150);
-      --f-accent-contrast: #fff;
-    }
+    --f-accent: var(--f-unless-light, oklch(0.76 0.02 150))
+      var(--f-unless-dark, oklch(0.52 0.025 150));
+    --f-accent-contrast: var(--f-unless-light, oklch(0.15 0.012 260)) var(--f-unless-dark, #fff);
   }
 
   :root[data-accent="steel"] {
-    --f-accent: oklch(0.76 0.02 250);
-    --f-accent-contrast: oklch(0.15 0.012 260);
-  }
-  :root[data-accent="steel"][data-theme="light"] {
-    --f-accent: oklch(0.52 0.025 250);
-    --f-accent-contrast: #fff;
-  }
-  @media (prefers-color-scheme: light) {
-    :root[data-accent="steel"][data-theme="auto"] {
-      --f-accent: oklch(0.52 0.025 250);
-      --f-accent-contrast: #fff;
-    }
+    --f-accent: var(--f-unless-light, oklch(0.76 0.02 250))
+      var(--f-unless-dark, oklch(0.52 0.025 250));
+    --f-accent-contrast: var(--f-unless-light, oklch(0.15 0.012 260)) var(--f-unless-dark, #fff);
   }
 
   :root[data-accent="heather"] {
-    --f-accent: oklch(0.76 0.02 320);
-    --f-accent-contrast: oklch(0.15 0.012 260);
-  }
-  :root[data-accent="heather"][data-theme="light"] {
-    --f-accent: oklch(0.52 0.025 320);
-    --f-accent-contrast: #fff;
-  }
-  @media (prefers-color-scheme: light) {
-    :root[data-accent="heather"][data-theme="auto"] {
-      --f-accent: oklch(0.52 0.025 320);
-      --f-accent-contrast: #fff;
-    }
+    --f-accent: var(--f-unless-light, oklch(0.76 0.02 320))
+      var(--f-unless-dark, oklch(0.52 0.025 320));
+    --f-accent-contrast: var(--f-unless-light, oklch(0.15 0.012 260)) var(--f-unless-dark, #fff);
   }
 
   :root[data-accent="graphite"] {
-    --f-accent: #d5dbe3;
-    --f-accent-contrast: #0b0d12;
-  }
-  :root[data-accent="graphite"][data-theme="light"] {
-    --f-accent: #374151;
-    --f-accent-contrast: #fff;
-  }
-  @media (prefers-color-scheme: light) {
-    :root[data-accent="graphite"][data-theme="auto"] {
-      --f-accent: #374151;
-      --f-accent-contrast: #fff;
-    }
+    --f-accent: var(--f-unless-light, #d5dbe3) var(--f-unless-dark, #374151);
+    --f-accent-contrast: var(--f-unless-light, #0b0d12) var(--f-unless-dark, #fff);
   }
 }
 
@@ -2209,20 +2084,10 @@
 
 /* src/css/50-base.css */
 @layer facet.base {
+  /* color-scheme follows the theme switch in facet.tokens. */
   html {
-    color-scheme: dark;
     background: var(--f-bg);
     -webkit-text-size-adjust: 100%;
-  }
-
-  html[data-theme="light"] {
-    color-scheme: light;
-  }
-
-  @media (prefers-color-scheme: light) {
-    html[data-theme="auto"] {
-      color-scheme: light;
-    }
   }
 
   body {
@@ -2821,6 +2686,7 @@
     border: 1px solid var(--f-glass-edge);
     border-radius: var(--f-r-pill);
     background: var(--f-glass-bg);
+    -webkit-backdrop-filter: blur(var(--f-glass-blur)) saturate(140%);
     backdrop-filter: blur(var(--f-glass-blur)) saturate(140%);
     box-shadow: var(--f-shadow);
     font-size: var(--f-text-sm);
@@ -2868,6 +2734,7 @@
   .f-nav--over.is-ready:not(.is-scrolled) {
     border-color: transparent;
     background: transparent;
+    -webkit-backdrop-filter: none;
     backdrop-filter: none;
     box-shadow: none;
   }
@@ -2937,6 +2804,7 @@
     border: 1px solid var(--f-glass-edge);
     border-radius: var(--f-r-xl);
     background: var(--f-glass-bg);
+    -webkit-backdrop-filter: blur(var(--f-glass-blur)) saturate(1.2);
     backdrop-filter: blur(var(--f-glass-blur)) saturate(1.2);
     box-shadow: var(--f-shadow-hi);
     color: var(--f-fg);
@@ -2953,6 +2821,7 @@
 
   .f-sheet::backdrop {
     background: color-mix(in oklch, var(--f-bg) 55%, transparent);
+    -webkit-backdrop-filter: blur(4px);
     backdrop-filter: blur(4px);
   }
 
@@ -3063,6 +2932,7 @@
       border: 1px solid var(--f-line);
       border-radius: var(--f-r-pill);
       background: var(--f-glass-bg);
+      -webkit-backdrop-filter: blur(var(--f-glass-blur));
       backdrop-filter: blur(var(--f-glass-blur));
     }
 
@@ -3125,6 +2995,7 @@
     border-radius: var(--f-r-pill);
     corner-shape: round;
     background: var(--f-glass-bg);
+    -webkit-backdrop-filter: blur(var(--f-glass-blur)) saturate(140%);
     backdrop-filter: blur(var(--f-glass-blur)) saturate(140%);
     box-shadow: var(--f-shadow);
     color: var(--f-fg);
@@ -3308,6 +3179,7 @@
     background: rgb(0 0 0 / 0.35);
     color: #fff;
     font: 600 0.75rem var(--f-font-mono);
+    -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
     cursor: pointer;
   }
@@ -3458,6 +3330,7 @@
     border-radius: 22%;
     background: rgb(255 255 255 / 0.07);
     background: light-dark(rgb(255 255 255 / 0.6), rgb(255 255 255 / 0.07));
+    -webkit-backdrop-filter: blur(6px);
     backdrop-filter: blur(6px);
     translate: -50% -50%;
   }
@@ -4426,7 +4299,12 @@
     text-decoration: none;
   }
 
-  .f-resume__contact .f-cluster {
+  /* The download and print buttons: a layout-owned row, so the print rule below can hide it. */
+  .f-resume__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--f-space-3);
+    align-items: center;
     margin-top: var(--f-space-2);
   }
 
@@ -4701,10 +4579,10 @@
     }
   }
 
-  /* Print: one plain column, no nav, no colors that waste ink. */
+  /* Print: one plain column, no nav, no colors that waste ink. The tokens switch to their light
+     values in print (10-tokens.css), so text stays dark on the white page from any theme. */
   @media print {
-    :root:has(.f-resume)
-      :is(.f-nav, .f-toc, .f-footer, .f-resume__contact .f-cluster, .f-resume__cat) {
+    :root:has(.f-resume) :is(.f-nav, .f-toc, .f-footer, .f-resume__actions, .f-resume__cat) {
       display: none;
     }
 

@@ -320,3 +320,29 @@ def test_site_css_can_resize_footer_cats(page_factory, site_url):
     page.goto(f"{site_url}/tests/cat-override.html")
     page.wait_for_timeout(200)
     assert page.evaluate("getComputedStyle(document.querySelector('.cat')).width") == "90px"
+
+
+@pytest.mark.parametrize("accent", [None, "rose"])
+def test_theme_switch_picks_one_value_per_mode(browser, site_url, accent):
+    # Every mode resolves to exactly the dark or the light values: auto follows the system and
+    # print is always light.
+    def colors(theme, scheme="dark", media="screen"):
+        ctx = browser.new_context(color_scheme=scheme)
+        try:
+            page = ctx.new_page()
+            page.emulate_media(media=media)
+            query = f"theme={theme}" + (f"&accent={accent}" if accent else "")
+            page.goto(f"{site_url}/components.html?{query}")
+            return page.evaluate(
+                "[document.body, document.querySelector('.f-btn--primary')]"
+                ".map(e => [getComputedStyle(e).backgroundColor, getComputedStyle(e).color])"
+            )
+        finally:
+            ctx.close()
+
+    dark, light = colors("dark"), colors("light")
+    assert dark != light
+    assert colors("auto", "dark") == dark
+    assert colors("auto", "light") == light
+    assert colors("dark", media="print") == light
+    assert colors("auto", "dark", media="print") == light

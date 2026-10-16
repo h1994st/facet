@@ -44,3 +44,16 @@ def test_every_url_is_relative_and_resolves():
 def test_js_entry_is_copied():
     build()
     assert (DIST / "js" / "facet.js").exists()
+
+
+def test_backdrop_filter_has_the_webkit_prefix():
+    # Safari before 18 only knows -webkit-backdrop-filter; without it the glass goes flat.
+    build()
+    sources = [DIST / "facet.css", *(ROOT / "site").rglob("*.html")]
+    for path in sources:
+        if "dist" in path.relative_to(ROOT).parts[1:]:
+            continue
+        text = path.read_text()
+        plain = re.findall(r"(?<![-\w])backdrop-filter:\s*([^;]+);", text)
+        prefixed = re.findall(r"-webkit-backdrop-filter:\s*([^;]+);", text)
+        assert sorted(plain) == sorted(prefixed), path
