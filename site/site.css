@@ -89,6 +89,25 @@
   top: calc(var(--site-bar-offset, 0px) + var(--f-space-3));
 }
 
+/* The app layout is fixed to the window and cannot scroll the bar away, so it starts below it. */
+.f-app {
+  top: var(--site-bar-offset, 0px);
+}
+
+.f-app__bar {
+  top: calc(var(--site-bar-offset, 0px) + var(--f-space-3));
+}
+
+@media (max-width: 640px) {
+  .f-app {
+    top: calc(var(--site-bar-offset, 0px) + var(--f-app-bar));
+  }
+
+  .f-app__bar {
+    top: var(--site-bar-offset, 0px);
+  }
+}
+
 /* ---------- hues: accent swatch colors, shared by the toolbar dots and the color page ---------- */
 
 [data-hue] {
@@ -287,6 +306,12 @@
 
 :root[data-theme="light"] .site-tile__btn {
   color: #fff;
+}
+
+@media (prefers-color-scheme: light) {
+  :root[data-theme="auto"] .site-tile__btn {
+    color: #fff;
+  }
 }
 
 .site-tile__link {

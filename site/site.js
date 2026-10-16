@@ -50,20 +50,39 @@
     } catch (e) {}
   }
 
+  var THEMES = ["dark", "light", "auto"];
+  var LANGS = ["en", "zh"];
+  var ACCENT_NAMES = ACCENTS.map(function (a) {
+    return a[0];
+  });
+  // A value outside the allowed set is ignored, so a bogus one is never applied or saved.
+  function pick(value, allowed) {
+    return allowed.indexOf(value) >= 0 ? value : null;
+  }
+
   var saved = {};
   try {
     saved = JSON.parse(get(KEY) || "{}") || {};
   } catch (e) {}
   var state = {
-    theme: get(THEME_KEY) || saved.theme || "dark",
-    lang: saved.lang || "en",
-    accent: saved.accent || "",
+    theme: pick(get(THEME_KEY), THEMES) || pick(saved.theme, THEMES) || "dark",
+    lang: pick(saved.lang, LANGS) || "en",
+    accent: pick(saved.accent, ACCENT_NAMES) || "",
   };
   var params = new URLSearchParams(location.search);
-  ["theme", "lang", "accent"].forEach(function (k) {
-    if (params.has(k)) state[k] = params.get(k);
+  var fromUrl = {
+    theme: pick(params.get("theme"), THEMES),
+    lang: pick(params.get("lang"), LANGS),
+    accent: pick(params.get("accent"), ACCENT_NAMES),
+  };
+  var overridden = false;
+  Object.keys(fromUrl).forEach(function (k) {
+    if (fromUrl[k]) {
+      state[k] = fromUrl[k];
+      overridden = true;
+    }
   });
-  if (params.has("theme") || params.has("lang") || params.has("accent")) save();
+  if (overridden) save();
 
   function save() {
     set(KEY, JSON.stringify(state));
@@ -117,13 +136,15 @@
   }
 
   function build() {
-    var here = location.pathname.replace(/\/$/, "/index.html");
+    // The page's path relative to the site root, so "layouts/index.html" is not "index.html".
+    var root = BASE ? new URL(BASE).pathname : "/";
+    var here = location.pathname.indexOf(root) === 0 ? location.pathname.slice(root.length) : "";
+    if (here === "" || here.slice(-1) === "/") here += "index.html";
     var bar = document.createElement("header");
     bar.className = "site-bar";
     var links = PAGES.map(function (p) {
       var current =
-        here.slice(-p[0].length) === p[0] ||
-        (p[0] === "layouts/index.html" && /\/layouts\//.test(here));
+        here === p[0] || (p[0] === "layouts/index.html" && here.indexOf("layouts/") === 0);
       return (
         '<a href="' +
         BASE +
@@ -161,6 +182,7 @@
       segment("theme", [
         ["dark", "Dark"],
         ["light", "Light"],
+        ["auto", "Auto"],
       ]) +
       segment("lang", [
         ["en", "EN"],

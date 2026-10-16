@@ -98,13 +98,101 @@ def test_url_parameters_override_and_swap_text(page_factory, site_url):
 def test_saved_theme_applies_before_first_paint(page_factory, site_url):
     page = page_factory(theme="light")
     page.add_init_script("localStorage.setItem('facet-theme', 'auto')")
+    # Record the theme at the moment <body> is first inserted: only a script that ran
+    # synchronously in <head> can have set it by then (not a deferred or end-of-body one).
     page.add_init_script(
-        "document.addEventListener('readystatechange', () => {"
-        " if (!window.__first) window.__first = document.documentElement.dataset.theme })"
+        "new MutationObserver((_, obs) => { if (document.body) {"
+        " window.__atBody = document.documentElement.dataset.theme; obs.disconnect() } })"
+        ".observe(document, { childList: true, subtree: true })"
     )
     page.goto(f"{site_url}/index.html")
-    # facet-theme wins over facet-site.theme, and is set before the body is parsed.
-    assert page.evaluate("window.__first") == "auto"
+    # facet-theme wins over facet-site.theme.
+    assert page.evaluate("window.__atBody") == "auto"
+
+
+def test_toolbar_marks_one_current_page(page_factory, site_url):
+    linked = {
+        "index.html",
+        "tokens.html",
+        "color.html",
+        "type.html",
+        "components.html",
+        "cast.html",
+    }
+    for path in PAGES:
+        page = page_factory()
+        page.goto(f"{site_url}/{path}")
+        count = page.locator('.site-bar a[aria-current="page"]').count()
+        expected = 1 if path in linked or path.startswith("layouts/") else 0
+        assert count == expected, (path, count)
+        if path == "layouts/index.html":
+            label = page.locator('.site-bar a[aria-current="page"]').inner_text()
+            assert label == "Layouts"
+
+
+def test_bogus_choices_are_ignored(page_factory, site_url):
+    page = page_factory()
+    page.goto(f"{site_url}/index.html?theme=bogus&accent=zzz&lang=xx")
+    root = "document.documentElement"
+    assert page.evaluate(f"[{root}.dataset.theme, {root}.lang, {root}.dataset.accent]") == [
+        "dark",
+        "en",
+        None,
+    ]
+    stored = page.evaluate(
+        "[localStorage.getItem('facet-site'), localStorage.getItem('facet-theme')].join('|')"
+    )
+    assert "bogus" not in stored and "zzz" not in stored and "xx" not in stored.replace("xxx", "")
+
+
+def test_bogus_saved_values_are_ignored(page_factory, site_url):
+    page = page_factory()
+    page.add_init_script(
+        "localStorage.setItem('facet-site', JSON.stringify({theme:'x', lang:'y', accent:'z'}));"
+        "localStorage.setItem('facet-theme', 'nope')"
+    )
+    page.goto(f"{site_url}/index.html")
+    root = "document.documentElement"
+    assert page.evaluate(f"[{root}.dataset.theme, {root}.lang, {root}.dataset.accent]") == [
+        "dark",
+        "en",
+        None,
+    ]
+
+
+def test_auto_theme_shows_pressed(page_factory, site_url):
+    page = page_factory()
+    page.goto(f"{site_url}/index.html?theme=auto")
+    assert page.get_attribute(
+        '.site-bar button[data-k="theme"][data-v="auto"]', "aria-pressed"
+    ) == ("true")
+
+
+@pytest.mark.parametrize("scheme", ["dark", "light"])
+@pytest.mark.parametrize("theme", ["dark", "light", "auto"])
+def test_color_tile_button_text_is_readable(browser, site_url, theme, scheme):
+    ctx = browser.new_context(color_scheme=scheme)
+    try:
+        page = ctx.new_page()
+        page.goto(f"{site_url}/color.html?theme={theme}")
+        for hue in ACCENTS:
+            sel = f'.site-tile[data-hue="{hue}"] .site-tile__btn'
+            assert contrast_on(page, sel) >= 4.5, (hue, theme, scheme)
+    finally:
+        ctx.close()
+
+
+def test_app_layout_fills_the_window_below_the_bar(page_factory, site_url):
+    page = page_factory(width=1280)
+    page.set_viewport_size({"width": 1280, "height": 800})
+    page.goto(f"{site_url}/layouts/app.html")
+    page.wait_for_timeout(200)
+    # The fixed app cannot scroll the bar away, so it must start below the bar and never
+    # let the body scroll.
+    assert page.evaluate("document.scrollingElement.scrollHeight <= innerHeight + 1")
+    bar = page.evaluate("document.querySelector('.site-bar').getBoundingClientRect().bottom")
+    top = page.evaluate("document.querySelector('.f-app').getBoundingClientRect().top")
+    assert top >= bar - 1
 
 
 @pytest.mark.parametrize("theme", ["dark", "light"])

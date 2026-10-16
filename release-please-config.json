@@ -5,6 +5,10 @@
       "release-type": "simple",
       "package-name": "facet",
       "initial-version": "0.1.0",
+      "extra-files": [
+        { "type": "generic", "path": "README.md" },
+        { "type": "generic", "path": "site/index.html" }
+      ],
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": false,
       "changelog-sections": [

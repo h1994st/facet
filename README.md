@@ -66,6 +66,8 @@ Reference site (tokens, color, type, components, layouts, the cast): https://she
 Link `facet.css` first and `cast/cast-layered.css` after it (only needed for the mascots). From a
 CDN, pinning a tag:
 
+<!-- x-release-please-start-version -->
+
 ```html
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.0/dist/facet.css" />
 <link
@@ -78,13 +80,19 @@ CDN, pinning a tag:
 ></script>
 ```
 
+<!-- x-release-please-end -->
+
 Or as a git submodule, serving `vendor/facet/dist/` with your site (better for mainland China, where
 jsDelivr is unreliable):
+
+<!-- x-release-please-start-version -->
 
 ```sh
 git submodule add https://github.com/h1994st/facet vendor/facet
 git -C vendor/facet checkout v0.1.0
 ```
+
+<!-- x-release-please-end -->
 
 A minimal page:
 
