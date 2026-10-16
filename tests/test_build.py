@@ -57,3 +57,12 @@ def test_backdrop_filter_has_the_webkit_prefix():
         plain = re.findall(r"(?<![-\w])backdrop-filter:\s*([^;]+);", text)
         prefixed = re.findall(r"-webkit-backdrop-filter:\s*([^;]+);", text)
         assert sorted(plain) == sorted(prefixed), path
+
+
+def test_pages_site_leaves_out_the_test_fixtures():
+    subprocess.run(["just", "site"], cwd=ROOT, check=True, capture_output=True)
+    out = ROOT / "_site"
+    assert (out / "index.html").exists()
+    assert (out / "mockups" / "index.html").exists()
+    assert (out / "dist" / "facet.css").exists()
+    assert not (out / "tests").exists()

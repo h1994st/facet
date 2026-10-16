@@ -51,14 +51,19 @@ fonts:
 test: build
     uv run pytest -q
 
-# Serve the reference site at http://localhost:8000 (mockups at /assets via the symlink)
-serve port="8000":
-    python3 -m http.server {{ port }} -d site
+# Serve the Pages layout (what `just site` assembles) at http://localhost:8000, live from site/
+serve port="8000": build
+    rm -rf _serve
+    mkdir _serve
+    for f in site/*; do [[ $f == site/tests ]] || ln -s "../$f" _serve/; done
+    ln -s ../mockups _serve/mockups
+    python3 -m http.server {{ port }} -d _serve
 
-# Assemble the GitHub Pages site into _site/
+# Assemble the GitHub Pages site into _site/ (the test fixtures in site/tests stay out)
 site: build
     rm -rf _site
     mkdir -p _site
     cp -RL site/. _site/
+    rm -rf _site/tests
     cp -R mockups _site/mockups
     touch _site/.nojekyll

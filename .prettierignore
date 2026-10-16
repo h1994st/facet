@@ -3,4 +3,5 @@ mockups/cast/
 dist/
 site/dist
 site/assets
-src/cast/
+src/cast/cast.css
+src/cast/cast.js
