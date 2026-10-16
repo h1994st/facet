@@ -47,7 +47,7 @@
     --f-fg: var(--f-unless-light, oklch(0.95 0.01 260)) var(--f-unless-dark, oklch(0.2 0.015 260));
     --f-fg-2: var(--f-unless-light, oklch(0.95 0.01 260 / 0.7))
       var(--f-unless-dark, oklch(0.2 0.015 260 / 0.72));
-    --f-fg-3: var(--f-unless-light, oklch(0.95 0.01 260 / 0.5))
+    --f-fg-3: var(--f-unless-light, oklch(0.95 0.01 260 / 0.51))
       var(--f-unless-dark, oklch(0.2 0.015 260 / 0.65));
     --f-line: var(--f-unless-light, rgb(255 255 255 / 0.08)) var(--f-unless-dark, rgb(0 0 0 / 0.08));
     --f-line-2: var(--f-unless-light, rgb(255 255 255 / 0.14))

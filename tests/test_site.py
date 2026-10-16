@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import pytest
-from checks import cat_text_overlaps, contrast, contrast_on, no_hscroll
+from checks import TO_RGB, _lum, cat_text_overlaps, contrast, contrast_on, no_hscroll
 
 SITE = Path(__file__).resolve().parents[1] / "site"
 # Every reference-site page except the test fixtures; the symlinked dist/ and assets/ are skipped.
@@ -498,3 +498,33 @@ def test_neutral_surfaces(page_factory, site_url, theme, expected):
         })"""
     )
     assert got == expected
+
+
+@pytest.mark.parametrize("theme", ["dark", "light"])
+def test_secondary_text_tokens_are_readable_on_every_neutral(page_factory, site_url, theme):
+    page = page_factory(theme=theme)
+    page.goto(f"{site_url}/components.html")
+    rgb = page.evaluate(
+        f"""(() => {{
+          const f = ({TO_RGB});
+          const resolve = (v, prop) => {{
+            const p = document.createElement('i');
+            p.style[prop] = `var(${{v}})`;
+            document.body.append(p);
+            const c = getComputedStyle(p)[prop];
+            p.remove();
+            return c;
+          }};
+          const out = {{}};
+          for (const bg of ['--f-bg', '--f-bg-2', '--f-surface']) {{
+            const back = f(resolve(bg, 'backgroundColor'));
+            const over = `rgb(${{back.join(' ')}})`;
+            for (const fg of ['--f-fg-2', '--f-fg-3'])
+              out[`${{fg}} on ${{bg}}`] = [f(resolve(fg, 'color'), over), back];
+          }}
+          return out;
+        }})()"""
+    )
+    for pair, (fg, bg) in rgb.items():
+        a, b = sorted([_lum(fg), _lum(bg)], reverse=True)
+        assert (a + 0.05) / (b + 0.05) >= 4.5, (pair, round((a + 0.05) / (b + 0.05), 2))
