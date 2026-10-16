@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Type</title>
+    <script src="site.js"></script>
+    <link rel="stylesheet" href="dist/facet.css" />
+    <link rel="stylesheet" href="site.css" />
+    <script type="module" src="dist/js/facet.js"></script>
+    <style>
+      .ty-roles {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(15rem, 100%), 1fr));
+        gap: var(--f-space-4);
+        margin: var(--f-space-4) 0 0;
+      }
+      .ty-roles > div {
+        min-width: 0;
+        padding: var(--f-space-4);
+        border: 1px solid var(--f-line);
+        border-radius: var(--f-r-lg);
+        background: var(--f-bg-2);
+      }
+      .ty-roles dt {
+        color: var(--f-fg-3);
+        font: 600 var(--f-text-xs) var(--f-font-mono);
+        text-transform: uppercase;
+      }
+      .ty-roles dd {
+        margin: var(--f-space-1) 0 0;
+        color: var(--f-fg);
+      }
+      .ty-roles small {
+        display: block;
+        margin-top: var(--f-space-2);
+        color: var(--f-fg-2);
+        font-size: var(--f-text-sm);
+      }
+      .ty-scale {
+        display: grid;
+        gap: var(--f-space-3);
+        margin: var(--f-space-4) 0 0;
+        padding: 0;
+        list-style: none;
+      }
+      .ty-scale li {
+        display: grid;
+        grid-template-columns: 6.5rem minmax(0, 1fr);
+        gap: var(--f-space-4);
+        align-items: baseline;
+        padding-bottom: var(--f-space-3);
+        border-bottom: 1px solid var(--f-line);
+      }
+      .ty-scale code {
+        color: var(--f-fg-3);
+        font: 0.75rem/1.4 var(--f-font-mono);
+      }
+      .ty-scale span {
+        min-width: 0;
+        overflow-wrap: anywhere;
+      }
+      .ty-scale span:lang(zh) {
+        line-height: var(--f-leading-zh);
+      }
+      .ty-specimen {
+        padding: var(--f-space-6);
+        border: 1px solid var(--f-line);
+        border-radius: var(--f-r-xl);
+        background: var(--f-surface);
+        box-shadow: var(--f-shadow);
+      }
+      .ty-specimen > :first-child {
+        margin-top: 0;
+      }
+      .ty-specimen > :last-child {
+        margin-bottom: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="site-page">
+      <header>
+        <p class="f-kicker">Red Dot Tracker</p>
+        <h1 data-zh="字体">Type</h1>
+        <p
+          data-zh="Source Serif 4 与 Noto Serif SC 用于标题，Geist 用于正文和界面，Geist Mono 用于代码。中文正文不下载任何字体，直接使用系统内置字体。所有字体都和网站一起自托管。切换工具栏里的 EN / 中文 查看两种语言。"
+        >
+          Source Serif 4 with Noto Serif SC for headings, Geist for text and UI, Geist Mono for
+          code. Chinese body text downloads no font and uses the system's built-in ones. Every font
+          is self-hosted with the site. Switch EN / 中文 in the toolbar to see both languages.
+        </p>
+      </header>
+
+      <section>
+        <h2 data-zh="三个角色">Three roles</h2>
+        <dl class="ty-roles">
+          <div>
+            <dt data-zh="标题">Headings</dt>
+            <dd style="font: 600 var(--f-text-xl) var(--f-font-serif)">Source Serif 4</dd>
+            <small data-zh="中文标题：Noto Serif SC，分片按需加载。"
+              >Chinese headings: Noto Serif SC, loaded in slices on demand.</small
+            >
+          </div>
+          <div>
+            <dt data-zh="正文与界面">Text and UI</dt>
+            <dd style="font: 500 var(--f-text-xl) var(--f-font-sans)">Geist</dd>
+            <small data-zh="中文正文：苹方、微软雅黑等系统字体，无需下载。"
+              >Chinese body: PingFang, Microsoft YaHei and friends, nothing to download.</small
+            >
+          </div>
+          <div>
+            <dt data-zh="代码">Code</dt>
+            <dd style="font: 500 var(--f-text-xl) var(--f-font-mono)">Geist Mono</dd>
+            <small data-zh="终端、命令和行内代码。">Terminals, commands and inline code.</small>
+          </div>
+        </dl>
+      </section>
+
+      <section>
+        <h2 data-zh="字号">Scale</h2>
+        <p data-zh="七级字号，随屏幕宽度平滑变化。中文行高为 1.8，字距为 0，按词断行。">
+          Seven sizes that scale smoothly with the viewport. Chinese gets a 1.8 line height, no
+          letter spacing, and breaks between words.
+        </p>
+        <ul class="ty-scale">
+          <li>
+            <code>--f-text-3xl</code
+            ><span
+              style="font: 600 var(--f-text-3xl) / 1.15 var(--f-font-serif)"
+              data-zh="追着红点跑"
+              >Chase the dot</span
+            >
+          </li>
+          <li>
+            <code>--f-text-2xl</code
+            ><span
+              style="font: 600 var(--f-text-2xl) / 1.2 var(--f-font-serif)"
+              data-zh="十二个房间，一个红点"
+              >Twelve rooms, one dot</span
+            >
+          </li>
+          <li>
+            <code>--f-text-xl</code
+            ><span style="font: 600 var(--f-text-xl) / 1.3 var(--f-font-serif)" data-zh="毛球的来历"
+              >Where Hairball came from</span
+            >
+          </li>
+          <li>
+            <code>--f-text-lg</code
+            ><span style="font-size: var(--f-text-lg)" data-zh="整整两年，我在追一个红点。"
+              >For two years I chased one red dot.</span
+            >
+          </li>
+          <li>
+            <code>--f-text-md</code
+            ><span
+              style="font-size: var(--f-text-md)"
+              data-zh="整整两年，我在十二个房间里追一个红点。"
+              >For two years I chased one red dot across twelve rooms.</span
+            >
+          </li>
+          <li>
+            <code>--f-text-sm</code
+            ><span style="font-size: var(--f-text-sm)" data-zh="2026 年 10 月 11 日 · 6 分钟阅读"
+              >Oct 11, 2026 · 6 min read</span
+            >
+          </li>
+          <li>
+            <code>--f-text-xs</code
+            ><span style="font-size: var(--f-text-xs)" data-zh="项目 · 开源"
+              >Projects · Open source</span
+            >
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 data-zh="排版样张">Specimen</h2>
+        <div class="ty-specimen f-prose">
+          <p class="f-kicker" data-zh="项目 · 开源">Projects · Open source</p>
+          <h2 data-zh="追着红点跑过每一面墙，记下每一次扑击。">
+            Chase the red dot across every wall, and log every pounce.
+          </h2>
+          <p
+            data-zh="把 Red Dot Tracker 放在窗台上，照常打盹，醒来时每一个红点的轨迹都在一份 <code>dots.json</code> 里。"
+          >
+            Put Red Dot Tracker on the windowsill, nap as usual, and wake up to every red dot's path
+            in a single <code>dots.json</code>.
+          </p>
+          <pre class="f-code"><span class="f-code__prompt">$ </span>red-dot track ./living-room
+<span class="f-code__out">→ dots.json</span></pre>
+          <h3 data-zh="十二个房间，一个红点都没抓到">Twelve rooms, zero dots caught</h3>
+          <p class="f-meta" data-zh="2026 年 10 月 11 日 · 6 分钟阅读">Oct 11, 2026 · 6 min read</p>
+          <p
+            data-zh="整整两年，我在十二个房间里追那个红点。一次都没抓到，却因此学到了很多关于光的事：它会反射、会拐弯，还总比我快一步。"
+          >
+            For two years I chased the red dot across twelve rooms. I never caught it, but I learned
+            a lot about light: it bounces, it bends, and it is always one step ahead of me.
+          </p>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

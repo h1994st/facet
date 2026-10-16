@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Layout · Split</title>
+    <script src="../site.js"></script>
+    <link rel="stylesheet" href="../dist/facet.css" />
+    <link rel="stylesheet" href="../dist/cast/cast-layered.css" />
+    <link rel="stylesheet" href="../site.css" />
+    <script type="module" src="../dist/js/facet.js"></script>
+    <script type="module" src="../footer-cats.js"></script>
+  </head>
+  <body>
+    <nav class="f-nav f-nav--fixed" aria-label="Site">
+      <span class="f-nav__brand">Red Dot Tracker</span
+      ><a href="#" aria-current="page" data-zh="首页">Home</a><a href="#" data-zh="文档">Docs</a
+      ><a href="#" data-zh="下载">Releases</a>
+    </nav>
+
+    <main class="f-split f-prose">
+      <header class="f-split__hero">
+        <div>
+          <p class="f-kicker" data-zh="项目 · 开源">Project · Open source</p>
+          <h1 data-zh="每一个红点，都有迹可循。">Every red dot, on the record.</h1>
+          <p
+            data-zh="Red Dot Tracker 追着红点跑过每一面墙，记下每一次扑击。适合：项目首页、产品页。"
+          >
+            Red Dot Tracker chases the dot across every wall and logs every pounce. For: project
+            landing pages and product pages.
+          </p>
+          <div class="f-cluster">
+            <a class="f-btn f-btn--primary" href="#" data-zh="开始追踪 ↗">Start tracking ↗</a>
+            <a class="f-btn" href="#" data-zh="文档">Docs</a>
+          </div>
+          <div class="f-split__install">
+            <code>install red-dot</code
+            ><button class="f-btn" type="button" data-zh="复制">Copy</button>
+          </div>
+        </div>
+        <div class="f-split__visual"><img src="../assets/board-1.jpg" alt="" /></div>
+      </header>
+
+      <section class="f-split__feature">
+        <div>
+          <h2 data-zh="十二个房间，一份记录">Twelve rooms, one record</h2>
+          <p
+            data-zh="客厅、走廊、卧室：每个房间的红点路线都写进同一个文件，按房间分组，随时可以回看。"
+          >
+            Living room, hallway, bedroom: every room's dot paths land in the same file, grouped by
+            room, ready to replay.
+          </p>
+        </div>
+        <img src="../assets/board-2.jpg" alt="" />
+      </section>
+      <section class="f-split__feature">
+        <div>
+          <h2 data-zh="读懂光的规律">Learn how light moves</h2>
+          <p data-zh="红点沿直线前进，碰到镜子就拐弯。看得多了，你就知道它下一步会去哪儿。">
+            The dot travels in straight lines and turns at every mirror. Watch long enough, and you
+            know where it goes next.
+          </p>
+        </div>
+        <img src="../assets/horizon.jpg" alt="" />
+      </section>
+
+      <section class="f-split__band">
+        <h2 data-zh="一个都没抓到，也没关系。">Zero dots caught, and that's fine.</h2>
+        <a class="f-btn f-btn--primary" href="#" data-zh="开始追踪 ↗">Start tracking ↗</a>
+      </section>
+    </main>
+    <details class="site-markup">
+      <summary data-zh="标记">Markup</summary>
+      <pre class="f-code">
+&lt;main class="f-split f-prose"&gt;
+  &lt;header class="f-split__hero"&gt;
+    &lt;div&gt;
+      &lt;h1&gt;Every red dot, on the record.&lt;/h1&gt;
+      &lt;div class="f-cluster"&gt;&lt;a class="f-btn f-btn--primary" href="#"&gt;Start tracking&lt;/a&gt;&lt;/div&gt;
+      &lt;div class="f-split__install"&gt;
+        &lt;code&gt;install red-dot&lt;/code&gt;&lt;button class="f-btn" type="button"&gt;Copy&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="f-split__visual"&gt;&lt;img src="board.jpg" alt="" /&gt;&lt;/div&gt;
+  &lt;/header&gt;
+  &lt;section class="f-split__feature"&gt;
+    &lt;div&gt;&lt;h2&gt;Twelve rooms, one record&lt;/h2&gt;&lt;p&gt;…&lt;/p&gt;&lt;/div&gt;
+    &lt;img src="board-2.jpg" alt="" /&gt;
+  &lt;/section&gt;
+  &lt;section class="f-split__band"&gt;
+    &lt;h2&gt;Zero dots caught, and that's fine.&lt;/h2&gt;
+    &lt;a class="f-btn f-btn--primary" href="#"&gt;Start tracking&lt;/a&gt;
+  &lt;/section&gt;
+&lt;/main&gt;</pre>
+    </details>
+    <footer class="f-footer">
+      <div class="f-footer__cats"></div>
+      <span data-zh="© 2026 Duna Feline · example.com">© 2026 Duna Feline · example.com</span>
+    </footer>
+  </body>
+</html>

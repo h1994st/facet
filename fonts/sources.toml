@@ -1,0 +1,16 @@
+[geist]
+url = "https://github.com/vercel/geist-font/releases/download/v1.7.2/geist-font-v1.7.2.zip"
+sha256 = "7fc800d2ac6b92844895196e5041aca55d814c15db70c44f79b3b83ab82b04e2"
+members = { "Geist" = "geist-font/Geist/variable/Geist[wght].ttf", "Geist Mono" = "geist-font/GeistMono/variable/GeistMono[wght].ttf" }
+license = "geist-font/OFL.txt"
+
+[source-serif]
+url = "https://github.com/adobe-fonts/source-serif/releases/download/4.005R/source-serif-4.005_Desktop.zip"
+sha256 = "549fdb8f9a682bd06944298621404969f6de77c2e422ff3b8244a1dcd6a0c425"
+members = { "Source Serif 4" = "source-serif-4.005_Desktop/VAR/SourceSerif4Variable-Roman.ttf" }
+license = "source-serif-4.005_Desktop/LICENSE.md"
+
+[noto-serif-sc]
+url = "https://raw.githubusercontent.com/notofonts/noto-cjk/Serif2.003/Serif/SubsetOTF/SC/NotoSerifSC-SemiBold.otf"
+sha256 = "517d9736136b3b4e9aea742a7e1acda1922aea91a4425bd8db79281934055bf5"
+license_url = "https://raw.githubusercontent.com/notofonts/noto-cjk/Serif2.003/Serif/LICENSE"

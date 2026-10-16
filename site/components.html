@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Components</title>
+    <script src="site.js"></script>
+    <link rel="stylesheet" href="dist/facet.css" />
+    <link rel="stylesheet" href="dist/cast/cast-layered.css" />
+    <link rel="stylesheet" href="site.css" />
+    <script type="module" src="dist/js/facet.js"></script>
+    <script type="module" src="footer-cats.js"></script>
+    <style>
+      .demo {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--f-space-7);
+        width: min(60rem, 100% - 2rem);
+        margin: var(--f-space-6) auto;
+        /* Room for the footer cats above the last section's markup. */
+        padding-bottom: var(--f-space-6);
+      }
+      .demo > section {
+        display: flex;
+        flex-direction: column;
+        gap: var(--f-space-4);
+      }
+      .demo h2 {
+        margin: 0;
+        font: 600 var(--f-text-lg) var(--f-font-serif);
+      }
+      .demo .f-nav {
+        margin-inline: 0;
+      }
+      .demo .f-segmented,
+      .demo .f-toc {
+        align-self: flex-start;
+      }
+      .demo .f-toc {
+        position: static;
+      }
+      .demo-media {
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-end;
+        height: 8rem;
+        padding: var(--f-space-4);
+        border-radius: var(--f-r-lg);
+        background: url(assets/board-1.jpg) center / cover;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="demo">
+      <section>
+        <p class="f-kicker">Red Dot Tracker</p>
+        <h2 data-zh="导航">Nav</h2>
+        <nav class="f-nav" aria-label="Demo">
+          <span class="f-nav__brand">Duna Feline</span>
+          <a href="#nav" aria-current="page" data-zh="博客">Blog</a>
+          <a href="#nav" data-zh="项目">Projects</a>
+          <a href="#nav" data-zh="简历">Resume</a>
+        </nav>
+        <div class="f-cluster">
+          <button class="f-theme-toggle" data-f-theme-toggle type="button">Dark</button>
+        </div>
+        <details class="site-markup">
+          <summary data-zh="标记">Markup</summary>
+          <pre class="f-code">
+&lt;nav class="f-nav" aria-label="Site"&gt;
+  &lt;span class="f-nav__brand"&gt;Duna Feline&lt;/span&gt;
+  &lt;a href="/" aria-current="page"&gt;Blog&lt;/a&gt;
+  &lt;a href="/projects/"&gt;Projects&lt;/a&gt;
+&lt;/nav&gt;
+&lt;!-- Floating over the page: class="f-nav f-nav--fixed" --&gt;
+
+&lt;button class="f-theme-toggle" type="button" data-f-theme-toggle&gt;Dark&lt;/button&gt;</pre>
+        </details>
+      </section>
+
+      <section>
+        <h2 data-zh="按钮">Buttons</h2>
+        <div class="f-cluster">
+          <button class="f-btn" id="demo-btn" type="button" data-zh="默认">Default</button>
+          <button class="f-btn f-btn--primary" type="button" data-zh="主要">Primary</button>
+          <button class="f-btn f-btn--quiet" type="button" data-zh="安静">Quiet</button>
+        </div>
+        <details class="site-markup">
+          <summary data-zh="标记">Markup</summary>
+          <pre class="f-code">
+&lt;button class="f-btn" type="button"&gt;Default&lt;/button&gt;
+&lt;button class="f-btn f-btn--primary" type="button"&gt;Primary&lt;/button&gt;
+&lt;a class="f-btn f-btn--quiet" href="/hairball/"&gt;Quiet&lt;/a&gt;</pre>
+        </details>
+      </section>
+
+      <section>
+        <h2 data-zh="标签与分段控件">Chips and segmented</h2>
+        <div class="f-cluster">
+          <span class="f-chip">Purrometheus</span>
+          <button class="f-chip" id="demo-chip" type="button" aria-pressed="true">Hairball</button>
+          <button class="f-chip" type="button" aria-pressed="false">Red Dot</button>
+        </div>
+        <div class="f-segmented" id="demo-segmented" role="group" aria-label="View">
+          <button type="button" aria-pressed="true" data-zh="列表">List</button>
+          <button type="button" aria-pressed="false" data-zh="网格">Grid</button>
+        </div>
+        <details class="site-markup">
+          <summary data-zh="标记">Markup</summary>
+          <pre class="f-code">
+&lt;span class="f-chip"&gt;Purrometheus&lt;/span&gt;
+&lt;button class="f-chip" type="button" aria-pressed="true"&gt;Hairball&lt;/button&gt;
+
+&lt;div class="f-segmented" role="group" aria-label="View"&gt;
+  &lt;button type="button" aria-pressed="true"&gt;List&lt;/button&gt;
+  &lt;button type="button" aria-pressed="false"&gt;Grid&lt;/button&gt;
+&lt;/div&gt;</pre>
+        </details>
+      </section>
+
+      <section>
+        <h2 data-zh="输入框">Inputs</h2>
+        <div class="f-cluster">
+          <input
+            class="f-input"
+            id="demo-input"
+            type="text"
+            placeholder="Name your cat"
+            aria-label="Name your cat"
+          />
+          <input
+            class="f-input f-search"
+            type="search"
+            placeholder="Search Purrometheus"
+            aria-label="Search"
+          />
+        </div>
+        <details class="site-markup">
+          <summary data-zh="标记">Markup</summary>
+          <pre class="f-code">
+&lt;input class="f-input" type="text" aria-label="Name your cat" /&gt;
+&lt;input class="f-input f-search" type="search" aria-label="Search" /&gt;</pre>
+        </details>
+      </section>
+
+      <section>
+        <h2 data-zh="代码">Code</h2>
+        <pre class="f-code"><span class="f-code__prompt">$ </span>curl https://example.com/hairball
+<span class="f-code__out">200 OK  red dot found</span></pre>
+        <details class="site-markup">
+          <summary data-zh="标记">Markup</summary>
+          <pre class="f-code">
+&lt;pre class="f-code"&gt;&lt;span class="f-code__prompt"&gt;$ &lt;/span&gt;curl https://example.com/hairball
+&lt;span class="f-code__out"&gt;200 OK&lt;/span&gt;&lt;/pre&gt;
+
+&lt;!-- Inline code inside .f-prose is plain &lt;code&gt;. --&gt;</pre>
+        </details>
+      </section>
+
+      <section>
+        <h2 data-zh="提示">Alerts</h2>
+        <div class="f-alert f-alert--info">
+          <p class="f-alert__title">Info</p>
+          Purrometheus refreshes every five minutes.
+        </div>
+        <div class="f-alert f-alert--success">
+          <p class="f-alert__title">Success</p>
+          The red dot was caught.
+        </div>
+        <div class="f-alert f-alert--warning">
+          <p class="f-alert__title">Warning</p>
+          The Hairball queue is getting long.
+        </div>
+        <div class="f-alert f-alert--danger">
+          <p class="f-alert__title">Danger</p>
+          The red dot escaped the tracker.
+        </div>
+        <details class="site-markup">
+          <summary data-zh="标记">Markup</summary>
+          <pre class="f-code">
+&lt;div class="f-alert f-alert--warning"&gt;
+  &lt;p class="f-alert__title"&gt;Warning&lt;/p&gt;
+  The Hairball queue is getting long.
+&lt;/div&gt;
+&lt;!-- Kinds: f-alert--info, --success, --warning, --danger. --&gt;</pre>
+        </details>
+      </section>
+
+      <section>
+        <h2 data-zh="卡片">Cards</h2>
+        <div class="f-cluster" data-f-liquid>
+          <article class="f-card" id="demo-card" style="flex: 1 1 14rem">
+            <div class="f-card__media" style="background-image: url(assets/board-1.jpg)"></div>
+            <div class="f-card__body">
+              <h3 data-zh="红点追踪器">Red Dot Tracker</h3>
+              <p data-zh="追踪红点的每一次出没。">Follows the red dot wherever it hides.</p>
+            </div>
+          </article>
+          <article class="f-card f-card--text" style="flex: 1 1 14rem">
+            <div class="f-card__body">
+              <h3 data-zh="毛球">Hairball</h3>
+              <p data-zh="一个收集毛球的小工具。">A small tool that collects hairballs.</p>
+            </div>
+          </article>
+        </div>
+        <details class="site-markup">
+          <summary data-zh="标记">Markup</summary>
+          <pre class="f-code">
+&lt;div class="f-cluster" data-f-liquid&gt;
+  &lt;article class="f-card"&gt;
+    &lt;div class="f-card__media" style="background-image: url(board.jpg)"&gt;&lt;/div&gt;
+    &lt;div class="f-card__body"&gt;
+      &lt;h3&gt;Red Dot Tracker&lt;/h3&gt;
+      &lt;p&gt;Follows the red dot wherever it hides.&lt;/p&gt;
+    &lt;/div&gt;
+  &lt;/article&gt;
+  &lt;article class="f-card f-card--text"&gt;
+    &lt;div class="f-card__body"&gt;…&lt;/div&gt;
+  &lt;/article&gt;
+&lt;/div&gt;</pre>
+        </details>
+      </section>
+
+      <section>
+        <h2 data-zh="面板">Sheet</h2>
+        <button class="f-btn" id="demo-open-sheet" data-zh="打开面板">Open sheet</button>
+        <dialog class="f-sheet" id="demo-sheet" aria-labelledby="demo-sheet-title">
+          <div class="f-sheet__panel">
+            <h3 id="demo-sheet-title" data-zh="新建追踪">New tracker</h3>
+            <p data-zh="Purrometheus 会在红点出现时通知你。">
+              Purrometheus will tell you when the red dot shows up.
+            </p>
+            <button class="f-btn" id="demo-close-sheet" data-zh="关闭">Close</button>
+          </div>
+        </dialog>
+        <script>
+          const sheet = document.getElementById("demo-sheet");
+          document
+            .getElementById("demo-open-sheet")
+            .addEventListener("click", () => sheet.showModal());
+          document
+            .getElementById("demo-close-sheet")
+            .addEventListener("click", () => sheet.close());
+          sheet.addEventListener("click", (e) => e.target === sheet && sheet.close());
+        </script>
+        <details class="site-markup">
+          <summary data-zh="标记">Markup</summary>
+          <pre class="f-code">
+&lt;dialog class="f-sheet" aria-labelledby="sheet-title"&gt;
+  &lt;div class="f-sheet__panel"&gt;
+    &lt;h3 id="sheet-title"&gt;New tracker&lt;/h3&gt;
+    &lt;p&gt;Purrometheus will tell you when the red dot shows up.&lt;/p&gt;
+    &lt;button class="f-btn" type="button"&gt;Close&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/dialog&gt;
+&lt;!-- Open it with dialog.showModal(). --&gt;</pre>
+        </details>
+      </section>
+
+      <section>
+        <h2 data-zh="媒体开关">Media toggle</h2>
+        <div class="demo-media">
+          <button class="f-media-toggle" type="button" data-zh="暂停">Pause</button>
+        </div>
+        <details class="site-markup">
+          <summary data-zh="标记">Markup</summary>
+          <pre class="f-code">
+&lt;button class="f-media-toggle" type="button"&gt;Pause&lt;/button&gt;
+&lt;!-- Over a cover or panel video; see the Cover and Panels layouts. --&gt;</pre>
+        </details>
+      </section>
+
+      <section>
+        <h2 data-zh="目录">Table of contents</h2>
+        <nav class="f-toc" aria-label="On this page">
+          <a href="#toc" aria-current="true" data-zh="概览">Overview</a>
+          <a href="#toc" data-zh="安装">Install</a>
+          <a href="#toc" data-zh="用法">Usage</a>
+        </nav>
+        <details class="site-markup">
+          <summary data-zh="标记">Markup</summary>
+          <pre class="f-code">
+&lt;nav class="f-toc" aria-label="On this page" data-f-scrollspy&gt;
+  &lt;a href="#overview"&gt;Overview&lt;/a&gt;
+  &lt;a href="#install"&gt;Install&lt;/a&gt;
+  &lt;a href="#usage"&gt;Usage&lt;/a&gt;
+&lt;/nav&gt;</pre>
+        </details>
+      </section>
+
+      <section>
+        <h2 data-zh="空状态">Empty state</h2>
+        <div class="f-empty">
+          <div>
+            <div class="f-empty__cat" aria-hidden="true"></div>
+            <p class="f-empty__code">404</p>
+            <h1 data-zh="没有找到这只猫">This cat wandered off</h1>
+            <p data-zh="这个页面不存在，也许红点把它带走了。">
+              The page you want is not here. Maybe the red dot took it.
+            </p>
+            <div class="f-cluster">
+              <a class="f-btn f-btn--primary" href="#empty" data-zh="回到首页">Back to home</a>
+              <a class="f-btn" href="#empty" data-zh="看看博客">Browse the blog</a>
+            </div>
+          </div>
+        </div>
+        <details class="site-markup">
+          <summary data-zh="标记">Markup</summary>
+          <pre class="f-code">
+&lt;div class="f-empty"&gt;
+  &lt;div&gt;
+    &lt;div class="f-empty__cat" aria-hidden="true"&gt;&lt;/div&gt;
+    &lt;p class="f-empty__code"&gt;404&lt;/p&gt;
+    &lt;h1&gt;This cat wandered off&lt;/h1&gt;
+    &lt;p&gt;The page you want is not here.&lt;/p&gt;
+    &lt;a class="f-btn f-btn--primary" href="/"&gt;Back to home&lt;/a&gt;
+  &lt;/div&gt;
+&lt;/div&gt;</pre>
+        </details>
+      </section>
+    </main>
+
+    <footer class="f-footer">
+      <div class="f-footer__cats"></div>
+      <span data-zh="© Duna Feline · example.com">© Duna Feline · example.com</span>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,30 @@
+@layer facet.components {
+  .f-segmented {
+    display: inline-flex;
+    gap: var(--f-space-1);
+    padding: var(--f-space-1);
+    border: 1px solid var(--f-line);
+    border-radius: var(--f-r-pill);
+    background: var(--f-bg-2);
+  }
+
+  .f-segmented button {
+    padding: 0.4rem 0.8rem;
+    border: 1px solid transparent;
+    border-radius: var(--f-r-pill);
+    background: none;
+    color: var(--f-fg-2);
+    font: 600 var(--f-text-sm) var(--f-font-sans);
+    cursor: pointer;
+  }
+
+  .f-segmented button:hover {
+    color: var(--f-fg);
+  }
+
+  .f-segmented button[aria-pressed="true"] {
+    border-color: var(--f-line-2);
+    background: var(--f-surface);
+    color: var(--f-fg);
+  }
+}

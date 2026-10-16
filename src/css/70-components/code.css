@@ -1,0 +1,36 @@
+@layer facet.components {
+  pre.f-code {
+    position: relative;
+    margin: var(--f-space-5) 0;
+    padding: 0.95rem 1.1rem;
+    overflow: auto;
+    border: 1px solid var(--f-line);
+    border-radius: var(--f-r-md);
+    background: var(--f-bg-2);
+    color: var(--f-fg);
+    font: 0.86rem/1.65 var(--f-font-mono);
+  }
+
+  .f-code__prompt {
+    color: var(--f-fg-3);
+    user-select: none;
+  }
+
+  .f-code__out {
+    color: var(--f-accent);
+  }
+
+  /* Styling only; v0.1 ships no copy script. */
+  .f-code-copy {
+    position: absolute;
+    top: var(--f-space-2);
+    right: var(--f-space-2);
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--f-line-2);
+    border-radius: var(--f-r-pill);
+    background: var(--f-surface);
+    color: var(--f-fg-2);
+    font: 600 var(--f-text-xs) var(--f-font-sans);
+    cursor: pointer;
+  }
+}

@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet</title>
+    <script src="site.js"></script>
+    <link rel="stylesheet" href="dist/facet.css" />
+    <link rel="stylesheet" href="dist/cast/cast-layered.css" />
+    <link rel="stylesheet" href="site.css" />
+    <script type="module" src="dist/js/facet.js"></script>
+    <style>
+      main pre {
+        margin: var(--f-space-4) 0;
+        overflow-x: auto;
+      }
+      .site-links {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(14rem, 100%), 1fr));
+        gap: var(--f-space-3);
+        margin: var(--f-space-4) 0 0;
+        padding: 0;
+        list-style: none;
+      }
+      .site-links a {
+        display: block;
+        padding: var(--f-space-4);
+        border: 1px solid var(--f-line);
+        border-radius: var(--f-r-md);
+        background: var(--f-bg-2);
+        text-decoration: none;
+      }
+      /* Module names stay whole; a narrow table scrolls inside itself instead. */
+      #behavior td:nth-child(2) code {
+        white-space: nowrap;
+      }
+      #behavior td:last-child {
+        min-width: 15rem;
+      }
+      .site-links span {
+        display: block;
+        color: var(--f-fg-2);
+        font-size: var(--f-text-sm);
+      }
+    </style>
+  </head>
+  <body>
+    <main class="site-page f-prose">
+      <header>
+        <p class="f-kicker">Red Dot Tracker</p>
+        <h1>facet</h1>
+        <p
+          data-zh="facet 是一套为一组网站共用的设计语言：用纯 CSS 和少量原生 JavaScript 写成的设计令牌、组件和版式，不需要构建步骤。每个网站只挑选自己的强调色，其余完全一致。"
+        >
+          facet is a shared design language for a family of websites: design tokens, components and
+          layouts in plain CSS and a little vanilla JavaScript, with no build step. Each site picks
+          its own accent; everything else is the same.
+        </p>
+        <!-- x-release-please-start-version -->
+        <p class="f-meta" data-zh="版本 0.1.0 · MIT 许可证">Version 0.1.0 · MIT license</p>
+        <!-- x-release-please-end -->
+      </header>
+
+      <section>
+        <h2 data-zh="这里有什么">What is here</h2>
+        <ul class="site-links">
+          <li>
+            <a href="tokens.html"
+              >Tokens<span data-zh="中性色阶、间距、圆角、阴影和动效。"
+                >Neutral ramp, spacing, radii, shadows and motion.</span
+              ></a
+            >
+          </li>
+          <li>
+            <a href="color.html"
+              >Color<span data-zh="十三种强调色、近中性色和状态色。"
+                >Thirteen accents, near-neutrals and status colors.</span
+              ></a
+            >
+          </li>
+          <li>
+            <a href="type.html"
+              >Type<span data-zh="Source Serif 4、Geist 和 Geist Mono，附中文。"
+                >Source Serif 4, Geist and Geist Mono, with Chinese.</span
+              ></a
+            >
+          </li>
+          <li>
+            <a href="components.html"
+              >Components<span data-zh="导航、按钮、标签、输入框、提示和卡片。"
+                >Nav, buttons, chips, inputs, alerts and cards.</span
+              ></a
+            >
+          </li>
+          <li>
+            <a href="layouts/index.html"
+              >Layouts<span data-zh="十三种页面版式，从阅读页到演示文稿。"
+                >Thirteen page layouts, from reading pages to decks.</span
+              ></a
+            >
+          </li>
+          <li>
+            <a href="cast.html"
+              >Cast<span data-zh="嘟娜、嘟嘟和囔囔，三只吉祥物。"
+                >Duna, Dudu and Nangnang, the three mascots.</span
+              ></a
+            >
+          </li>
+          <li>
+            <a href="mockups/index.html"
+              >Mockups<span data-zh="设计探索：字体、色彩、形状、玻璃和版式。"
+                >Design explorations: type, color, shape, glass and layout.</span
+              ></a
+            >
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 data-zh="安装：CDN">Install: from a CDN</h2>
+        <p
+          data-zh="把样式表和脚本链接到页面里。先加载 <code>facet.css</code>，再加载 <code>cast/cast-layered.css</code>（只有用到吉祥物时才需要）。固定一个标签，网站就不会随主分支变化。"
+        >
+          Link the stylesheet and the script. Link <code>facet.css</code> first and
+          <code>cast/cast-layered.css</code> after it (only needed if you use the mascots). Pin a
+          tag so the site does not move with the main branch.
+        </p>
+        <!-- x-release-please-start-version -->
+        <pre class="f-code">
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.0/dist/facet.css" /&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.0/dist/cast/cast-layered.css" /&gt;
+&lt;script type="module" src="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.0/dist/js/facet.js"&gt;&lt;/script&gt;</pre>
+        <!-- x-release-please-end -->
+        <p
+          data-zh="jsDelivr 在中国大陆可能不稳定，字体也是相对 <code>facet.css</code> 加载的。面向中国大陆的网站，请改用下面的 submodule，把文件和网站放在一起。"
+        >
+          jsDelivr can be unreliable in mainland China, and the fonts load relative to
+          <code>facet.css</code>. For sites aimed there, use the submodule below and serve the files
+          with the site.
+        </p>
+      </section>
+
+      <section>
+        <h2 data-zh="安装：Git submodule">Install: as a git submodule</h2>
+        <!-- x-release-please-start-version -->
+        <pre class="f-code">
+git submodule add https://github.com/h1994st/facet vendor/facet
+git -C vendor/facet checkout v0.1.0</pre>
+        <!-- x-release-please-end -->
+        <p
+          data-zh="把 <code>vendor/facet/dist/</code> 作为静态文件和网站一起发布，然后用相对路径链接。"
+        >
+          Serve <code>vendor/facet/dist/</code> as static files with your site, then link it by a
+          relative path.
+        </p>
+        <pre class="f-code">
+&lt;link rel="stylesheet" href="/vendor/facet/dist/facet.css" /&gt;
+&lt;link rel="stylesheet" href="/vendor/facet/dist/cast/cast-layered.css" /&gt;
+&lt;script type="module" src="/vendor/facet/dist/js/facet.js"&gt;&lt;/script&gt;</pre>
+      </section>
+
+      <section>
+        <h2 data-zh="最小示例">A minimal page</h2>
+        <pre class="f-code">
+&lt;html lang="en" data-accent="moss"&gt;
+  &lt;head&gt;
+    &lt;link rel="stylesheet" href="…/dist/facet.css" /&gt;
+    &lt;script type="module" src="…/dist/js/facet.js"&gt;&lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;nav class="f-nav"&gt;
+      &lt;span class="f-nav__brand"&gt;Duna Feline&lt;/span&gt;
+      &lt;a href="/" aria-current="page"&gt;Blog&lt;/a&gt;
+    &lt;/nav&gt;
+    &lt;main class="f-page f-prose"&gt;
+      &lt;h1&gt;Hairball&lt;/h1&gt;
+      &lt;p&gt;Why the red dot always moves.&lt;/p&gt;
+    &lt;/main&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+        <ul>
+          <li
+            data-zh='<code>data-accent</code> 选择强调色（十三种，见色彩页）；<code>data-theme</code> 取 <code>dark</code>（默认）、<code>light</code> 或 <code>auto</code>，主题按钮把选择记在 <code>localStorage["facet-theme"]</code> 里。两者都只在 <code>&lt;html&gt;</code> 上生效（<code>:root[data-accent]</code>）；要让页面的某一部分换一种强调色，在它上面设置 <code>--f-accent</code> 和 <code>--f-accent-contrast</code>。'
+          >
+            <code>data-accent</code> picks the accent (thirteen, on the Color page);
+            <code>data-theme</code> is <code>dark</code> (the default), <code>light</code> or
+            <code>auto</code>. The theme toggle remembers its choice in
+            <code>localStorage["facet-theme"]</code>. Both work on <code>&lt;html&gt;</code> only
+            (<code>:root[data-accent]</code>); to give one part of a page its own accent, set
+            <code>--f-accent</code> and <code>--f-accent-contrast</code> on it.
+          </li>
+          <li
+            data-zh="默认的 <code>.f-nav</code> 在页面流中。要让它浮在页面上，请加 <code>.f-nav--fixed</code>：页面里只要有它，<code>--f-nav-clear</code> 就会自动为内容预留位置。"
+          >
+            A plain <code>.f-nav</code> sits in the page flow. Add <code>.f-nav--fixed</code> to
+            float it over the page: while one is present, <code>--f-nav-clear</code> reserves room
+            for it at the top of the layouts. Override <code>--f-nav-clear</code> if your nav is
+            taller.
+          </li>
+          <li
+            data-zh="所有样式都在 <code>@layer facet.*</code> 里，所以你自己的、没有分层的 CSS 不需要 <code>!important</code> 就能覆盖它。只有两处例外：<code>[hidden]</code> 的 <code>display: none !important</code>，以及访客要求减少动效时停掉页面上所有动画和过渡的那条规则（也包括你自己的）。分层的 <code>!important</code> 比没有分层的 CSS 优先，哪怕后者也写了 <code>!important</code>，所以这两条无法覆盖。"
+          >
+            Everything sits in <code>@layer facet.*</code>, so your own unlayered CSS wins without
+            <code>!important</code>, with two exceptions: <code>[hidden]</code> is
+            <code>display: none !important</code>, and when a visitor asks for reduced motion one
+            rule stops every animation and transition on the page, your own included. A layered
+            <code>!important</code> beats unlayered CSS, even unlayered <code>!important</code>, so
+            neither can be overridden.
+          </li>
+          <li
+            data-zh='每个元素都可以写中文：给它或页面设置 <code>lang="zh-Hans"</code>，字距、换行和行高会自动调整。'
+          >
+            Any element can be Chinese: set <code>lang="zh-Hans"</code> on it or on the page, and
+            letter spacing, line breaking and line height adjust.
+          </li>
+        </ul>
+      </section>
+
+      <section id="behavior">
+        <h2 data-zh="行为">Behavior</h2>
+        <p
+          data-zh="facet 的 JavaScript 是可选的。引入 <code>dist/js/facet.js</code> 就会自动初始化：页面解析完后，每个模块找到用 <code>data-f-*</code> 属性声明的元素并接管它们。再次调用 <code>init()</code> 是安全的：已经初始化过的元素会被跳过；某个模块出错只会在控制台报告，不会挡住其他模块。"
+        >
+          facet's JavaScript is optional. Importing <code>dist/js/facet.js</code> initializes
+          itself: once the page has parsed, each module takes over the elements that opt in with a
+          <code>data-f-*</code> attribute. Calling <code>init()</code> again is safe, since elements
+          already set up are skipped, and a module that fails is reported in the console without
+          stopping the others.
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th data-zh="属性">Hook</th>
+              <th data-zh="模块">Module</th>
+              <th data-zh="作用">What it does</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>data-f-theme-toggle</code></td>
+              <td><code>theme.js</code></td>
+              <td
+                data-zh='放在按钮上：在深色、浅色和自动之间切换，把选择存进 <code>localStorage["facet-theme"]</code>，并更新按钮的文字和标签。'
+              >
+                On a button: cycles dark, light and auto, saves the choice in
+                <code>localStorage["facet-theme"]</code> and labels the button.
+              </td>
+            </tr>
+            <tr>
+              <td><code>data-f-liquid</code></td>
+              <td><code>liquid.js</code></td>
+              <td
+                data-zh="放在 <code>.f-card</code> 或装着卡片的容器上：一道跟着鼠标在卡片上移动的光，只对鼠标生效。"
+              >
+                On a <code>.f-card</code> or a container of cards: a light that follows the mouse
+                across each card. Mouse only.
+              </td>
+            </tr>
+            <tr>
+              <td><code>data-f-scrollspy</code></td>
+              <td><code>scrollspy.js</code></td>
+              <td
+                data-zh='放在 <code>.f-toc</code> 上：给正在阅读的那一节的链接加上 <code>aria-current="location"</code>。'
+              >
+                On a <code>.f-toc</code>: marks the link of the section being read with
+                <code>aria-current="location"</code>.
+              </td>
+            </tr>
+            <tr>
+              <td><code>data-f-nav-cover="#cover"</code></td>
+              <td><code>nav.js</code></td>
+              <td
+                data-zh="放在 <code>.f-nav--over</code> 上：封面在屏幕上时导航保持透明，封面滚走后变成玻璃。"
+              >
+                On a <code>.f-nav--over</code>: keeps the nav clear over the cover and turns it to
+                glass once the cover has scrolled away.
+              </td>
+            </tr>
+            <tr>
+              <td><code>data-f-autoplay</code>, <code>data-f-autoplay-toggle</code></td>
+              <td><code>autoplay.js</code></td>
+              <td
+                data-zh="放在静音循环的 <code>video</code> 上：视频在屏幕上时播放。带 <code>data-f-autoplay-toggle</code> 和 <code>aria-controls</code> 的按钮成为它的暂停按钮（文字取自 <code>data-f-pause</code> 和 <code>data-f-play</code>）。"
+              >
+                On a muted looping <code>video</code>: plays it while it is on screen. A button with
+                <code>data-f-autoplay-toggle</code> and <code>aria-controls</code> becomes its pause
+                control (labels from <code>data-f-pause</code> and <code>data-f-play</code>).
+              </td>
+            </tr>
+            <tr>
+              <td><code>data-f-story</code></td>
+              <td><code>story.js</code></td>
+              <td
+                data-zh="放在 <code>.f-story</code> 上：固定画面，并显示正在阅读的那一步对应的图片（<code>img[data-step]</code>）。"
+              >
+                On a <code>.f-story</code>: pins the stage and shows the image
+                (<code>img[data-step]</code>) of the step being read.
+              </td>
+            </tr>
+            <tr>
+              <td><code>data-f-panels</code>, <code>data-f-panel-toggle</code></td>
+              <td><code>panels.js</code></td>
+              <td
+                data-zh="放在 <code>.f-panels</code> 上：标出停稳的面板，只播放它的视频，并填充空的 <code>nav.f-dots</code>。面板里带 <code>data-f-panel-toggle</code> 的按钮成为视频的暂停按钮。"
+              >
+                On a <code>.f-panels</code>: marks the settled panel, plays only its video and fills
+                an empty <code>nav.f-dots</code>. A panel's <code>data-f-panel-toggle</code> button
+                becomes its video's pause control.
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <code>data-f-deck</code>, <code>data-f-piece</code>, <code>data-f-slide</code>,
+                <code>data-f-from</code>, <code>data-f-deck-prev</code>,
+                <code>data-f-deck-next</code>
+              </td>
+              <td><code>deck.js</code></td>
+              <td
+                data-zh="放在 <code>.f-deck</code> 上：把幻灯片变成一个画面，画面里的元素在幻灯片之间移动（数据格式见下文）。"
+              >
+                On a <code>.f-deck</code>: turns the slides into one stage whose pieces move between
+                slides (the data format is below).
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3 data-zh="单独使用一个模块">Use one module</h3>
+        <p
+          data-zh="每个模块都可以单独引入，导出 <code>init(root = document)</code>，返回一个清理函数，用来移除它加上的监听器和元素。<code>facet.js</code> 也导出 <code>init</code>，以及撤销它自动初始化的 <code>cleanup</code>。"
+        >
+          Each module can be imported on its own. It exports <code>init(root = document)</code>,
+          which returns a cleanup function that removes the listeners and elements it added.
+          <code>facet.js</code> exports <code>init</code> too, plus <code>cleanup</code>, which
+          undoes its own initialization.
+        </p>
+        <pre class="f-code">
+import { init } from "…/dist/js/deck.js";
+
+const stop = init(document.querySelector("#talk"));
+// Later, before the deck leaves the page:
+stop();</pre>
+
+        <h3 data-zh="避免主题闪烁">Avoid a theme flash</h3>
+        <p
+          data-zh='<code>facet.js</code> 在首次绘制之后才运行，保存的主题会晚到一步。把下面这一行放进 <code>&lt;head&gt;</code>，放在样式表之前：它在页面绘制前应用 <code>localStorage["facet-theme"]</code>（只接受 <code>dark</code>、<code>light</code> 和 <code>auto</code>），之后主题按钮只负责显示当前主题。'
+        >
+          <code>facet.js</code> runs after first paint, so a saved theme would arrive late. Put this
+          line in <code>&lt;head&gt;</code>, before the stylesheet: it applies
+          <code>localStorage["facet-theme"]</code> (only <code>dark</code>, <code>light</code> or
+          <code>auto</code>) before the page paints, and the toggle then just shows it.
+        </p>
+        <pre class="f-code">
+&lt;script&gt;try{var t=localStorage.getItem("facet-theme");if(/^(dark|light|auto)$/.test(t))document.documentElement.dataset.theme=t}catch(e){}&lt;/script&gt;</pre>
+
+        <h3 data-zh="演示文稿的数据">Deck data</h3>
+        <p
+          data-zh="每个 <code>.f-deck__slide</code> 的 <code>data-f-slide</code> 是一段 JSON，列出这张幻灯片上每个元素（按 <code>data-f-piece</code> 的名字）的状态；没有列出的元素会隐藏（光束缩回起点，再出现时重新长出来）。位置和尺寸都是画板的百分比。"
+        >
+          Each <code>.f-deck__slide</code>'s <code>data-f-slide</code> is JSON that lists the state
+          of every piece (by its <code>data-f-piece</code> name) the slide shows; a piece left out
+          is hidden (a beam retracts to its start, so it grows again when it comes back). Positions
+          and sizes are percentages of the board.
+        </p>
+        <table>
+          <thead>
+            <tr>
+              <th data-zh="元素">Piece</th>
+              <th data-zh="状态">State</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td data-zh="方块 <code>.f-deck__tile</code>">Tile <code>.f-deck__tile</code></td>
+              <td
+                data-zh='<code>{"at": [left, top], "c": color, "lit": true}</code>：<code>lit</code> 用它的颜色填满它。'
+              >
+                <code>{"at": [left, top], "c": color, "lit": true}</code>: <code>lit</code> fills it
+                with its color.
+              </td>
+            </tr>
+            <tr>
+              <td data-zh="光束 <code>.f-deck__beam</code>">Beam <code>.f-deck__beam</code></td>
+              <td
+                data-zh='<code>{"beam": [left, top, length]}</code>：加 <code>.f-deck__beam--v</code> 变成竖直方向。'
+              >
+                <code>{"beam": [left, top, length]}</code>: <code>.f-deck__beam--v</code> runs
+                vertically.
+              </td>
+            </tr>
+            <tr>
+              <td data-zh="方框 <code>.f-deck__shot</code>">Box <code>.f-deck__shot</code></td>
+              <td
+                data-zh='<code>{"box": [left, top, width, height], "fade": true}</code>：<code>fade</code> 让它淡出。'
+              >
+                <code>{"box": [left, top, width, height], "fade": true}</code>:
+                <code>fade</code> fades it out.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p
+          data-zh="元素从它第一次出现的位置开始，或者从它的 <code>data-f-from</code>（<code>[left, top]</code> 或一个方框）开始。数据有错（不是 JSON，或某个字段的数字不够）时，演示文稿保持没有 JavaScript 时的样子，并在控制台里指出是哪一张。"
+        >
+          A piece starts where it first appears, or at its <code>data-f-from</code> (<code
+            >[left, top]</code
+          >
+          or a box). Bad data (not JSON, or a field without enough numbers) leaves the deck in its
+          no-JS form, with a console warning that names the slide.
+        </p>
+        <pre class="f-code">
+&lt;section
+  class="f-deck__slide"
+  data-f-slide='{"laser": {"at": [20, 50], "c": "var(--f-deck-ink)"},
+                 "b1": {"beam": [20, 50, 60]},
+                 "target": {"at": [80, 50], "c": "var(--f-accent)", "lit": true}}'
+&gt;
+  &lt;h2&gt;In straight lines.&lt;/h2&gt;
+&lt;/section&gt;</pre>
+
+        <h3 data-zh="减少动效与没有 JavaScript">Reduced motion and no JavaScript</h3>
+        <ul>
+          <li
+            data-zh="没有 JavaScript 时，内容照样可读，链接照样可用：故事页把每一步的图片放在文字旁边，全页面板和演示文稿变成上下排列的普通段落，旁注点编号就能展开，封面上的导航是普通的玻璃。"
+          >
+            Without JavaScript, content stays readable and links work: a story shows each step's
+            image inline, panels and decks become plain stacked sections, footnotes open from their
+            number, and the nav over a cover is plain glass.
+          </li>
+          <li
+            data-zh="访客开启 <code>prefers-reduced-motion: reduce</code> 时，动画和过渡全部停下（这条规则覆盖整个页面，见上文），视频停在封面图上，也不显示暂停按钮，全页面板不再吸附，翻页和跳转都是直接到位，没有平滑滚动。"
+          >
+            Under <code>prefers-reduced-motion: reduce</code>, animations and transitions stop (on
+            the whole page, as noted above), videos stay paused on their posters with no pause
+            control, panels stop snapping, and moving between slides or panels jumps instead of
+            scrolling smoothly.
+          </li>
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>

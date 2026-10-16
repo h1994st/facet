@@ -16,25 +16,54 @@ fmt *files:
     #!/usr/bin/env bash
     set -euo pipefail
     if [[ -n "{{ files }}" ]]; then
-        prettier --write --ignore-unknown {{ files }}
+        py=(); other=()
+        for f in {{ files }}; do [[ $f == *.py ]] && py+=("$f") || other+=("$f"); done
+        if (( ${#py[@]} )); then
+            uv run ruff format "${py[@]}"
+            uv run ruff check --fix "${py[@]}"
+        fi
+        if (( ${#other[@]} )); then
+            prettier --write --ignore-unknown "${other[@]}"
+        fi
     else
         prettier --write {{ prettier_globs }}
+        uv run ruff format .
+        uv run ruff check --fix .
         just --fmt --unstable
     fi
 
-# Check formatting without changing files
+# Check formatting and lint without changing files
 check:
     prettier --check {{ prettier_globs }}
+    uv run ruff format --check .
+    uv run ruff check .
     just --fmt --check --unstable
 
-# Assemble the GitHub Pages site into _site/
-site:
+# Build dist/ from src/
+build:
+    uv run scripts/build.py
+
+# Rebuild the self-hosted fonts (downloads pinned releases)
+fonts:
+    uv run fonts/build.py
+
+# Run the test suite (builds first)
+test: build
+    uv run pytest -q
+
+# Serve the Pages layout (what `just site` assembles) at http://localhost:8000, live from site/
+serve port="8000": build
+    rm -rf _serve
+    mkdir _serve
+    for f in site/*; do [[ $f == site/tests ]] || ln -s "../$f" _serve/; done
+    ln -s ../mockups _serve/mockups
+    python3 -m http.server {{ port }} -d _serve
+
+# Assemble the GitHub Pages site into _site/ (the test fixtures in site/tests stay out)
+site: build
     rm -rf _site
     mkdir -p _site
+    cp -RL site/. _site/
+    rm -rf _site/tests
     cp -R mockups _site/mockups
-    cp pages/index.html _site/index.html
     touch _site/.nojekyll
-
-# Serve the repo to view mockups and demos
-serve port="8000":
-    python3 -m http.server {{ port }}

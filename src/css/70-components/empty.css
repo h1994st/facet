@@ -1,0 +1,39 @@
+@layer facet.components {
+  /* A centered message with a cat: 404s, empty search results, offline. */
+  .f-empty {
+    display: grid;
+    place-items: center;
+    min-height: 60svh;
+    padding: var(--f-space-6) var(--f-space-4);
+    text-align: center;
+  }
+
+  .f-empty__cat {
+    width: 120px;
+    margin: 0 auto var(--f-space-2);
+  }
+
+  .f-empty__code {
+    margin: 0;
+    color: var(--f-fg-3);
+    font: 600 0.85rem var(--f-font-mono);
+    letter-spacing: 0.1em;
+  }
+
+  .f-empty h1 {
+    margin: 0.4rem 0 0.6rem;
+    font-family: var(--f-font-serif);
+    font-size: var(--f-text-2xl);
+    line-height: 1.15;
+  }
+
+  .f-empty p:not(.f-empty__code) {
+    max-width: 26rem;
+    margin: 0 auto var(--f-space-5);
+    color: var(--f-fg-2);
+  }
+
+  .f-empty .f-cluster {
+    justify-content: center;
+  }
+}

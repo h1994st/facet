@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Color</title>
+    <script src="site.js"></script>
+    <link rel="stylesheet" href="dist/facet.css" />
+    <link rel="stylesheet" href="site.css" />
+    <script type="module" src="dist/js/facet.js"></script>
+  </head>
+  <body>
+    <main class="site-page">
+      <header>
+        <p class="f-kicker">Red Dot Tracker</p>
+        <h1 data-zh="色彩">Color</h1>
+        <p
+          data-zh="色板很小，而且都是低饱和度。强调色是每个网站唯一“有颜色”的地方，其余都是冷灰。用工具栏里的圆点切换整个站点的强调色。"
+        >
+          The palette is small and every color is muted. The accent is the only colorful thing on a
+          site; everything else is a cool gray. Use the dots in the toolbar to change the accent of
+          the whole reference site.
+        </p>
+        <div class="f-cluster">
+          <button class="f-btn f-btn--primary" type="button" data-zh="主要按钮">
+            Primary button
+          </button>
+          <a href="#status" data-zh="链接">A link</a>
+        </div>
+      </header>
+
+      <section id="accents">
+        <h2 data-zh="强调色">Accents</h2>
+        <p
+          data-zh="八个色相，深色主题 L 0.76 / C 0.06，浅色主题 L 0.52 / C 0.07（OKLCH）。亮度相同，所以无论哪个网站，按钮和链接的对比度都一样（深色约 9:1，浅色约 5:1）。另有一个接近中性的石墨色。数字是对页面背景的对比度。"
+        >
+          Eight hues at OKLCH L 0.76 / C 0.06 on dark and L 0.52 / C 0.07 on light. Equal lightness
+          means buttons and links have the same contrast on every site (about 9:1 on dark and 5:1 on
+          light). Graphite is a near-neutral extra. The ratios are against the page background.
+        </p>
+        <div class="site-grid">
+          <div class="site-tile" data-hue="rose">
+            <div class="site-tile__sw"><span>dark</span><span>light</span></div>
+            <div class="site-tile__meta">
+              <b>Rose</b> <span class="f-meta">玫瑰</span>
+              <code>data-accent="rose" · hue 15</code>
+              <div class="f-cluster">
+                <span class="site-tile__btn">Button</span><span class="site-tile__link">Link</span>
+              </div>
+            </div>
+          </div>
+          <div class="site-tile" data-hue="clay">
+            <div class="site-tile__sw"><span>dark</span><span>light</span></div>
+            <div class="site-tile__meta">
+              <b>Clay</b> <span class="f-meta">陶土</span>
+              <code>data-accent="clay" · hue 55</code>
+              <div class="f-cluster">
+                <span class="site-tile__btn">Button</span><span class="site-tile__link">Link</span>
+              </div>
+            </div>
+          </div>
+          <div class="site-tile" data-hue="ochre">
+            <div class="site-tile__sw"><span>dark</span><span>light</span></div>
+            <div class="site-tile__meta">
+              <b>Ochre</b> <span class="f-meta">赭黄</span>
+              <code>data-accent="ochre" · hue 85</code>
+              <div class="f-cluster">
+                <span class="site-tile__btn">Button</span><span class="site-tile__link">Link</span>
+              </div>
+            </div>
+          </div>
+          <div class="site-tile" data-hue="moss">
+            <div class="site-tile__sw"><span>dark</span><span>light</span></div>
+            <div class="site-tile__meta">
+              <b>Moss</b> <span class="f-meta">苔绿</span>
+              <code>data-accent="moss" · hue 130</code>
+              <div class="f-cluster">
+                <span class="site-tile__btn">Button</span><span class="site-tile__link">Link</span>
+              </div>
+            </div>
+          </div>
+          <div class="site-tile" data-hue="sage">
+            <div class="site-tile__sw"><span>dark</span><span>light</span></div>
+            <div class="site-tile__meta">
+              <b>Sage</b> <span class="f-meta">鼠尾草</span>
+              <code>data-accent="sage" · hue 165</code>
+              <div class="f-cluster">
+                <span class="site-tile__btn">Button</span><span class="site-tile__link">Link</span>
+              </div>
+            </div>
+          </div>
+          <div class="site-tile" data-hue="teal">
+            <div class="site-tile__sw"><span>dark</span><span>light</span></div>
+            <div class="site-tile__meta">
+              <b>Teal</b> <span class="f-meta">青</span>
+              <code>data-accent="teal" · hue 205</code>
+              <div class="f-cluster">
+                <span class="site-tile__btn">Button</span><span class="site-tile__link">Link</span>
+              </div>
+            </div>
+          </div>
+          <div class="site-tile" data-hue="slate">
+            <div class="site-tile__sw"><span>dark</span><span>light</span></div>
+            <div class="site-tile__meta">
+              <b>Slate</b> <span class="f-meta">石板</span>
+              <code>data-accent="slate" · hue 255</code>
+              <div class="f-cluster">
+                <span class="site-tile__btn">Button</span><span class="site-tile__link">Link</span>
+              </div>
+            </div>
+          </div>
+          <div class="site-tile" data-hue="lavender">
+            <div class="site-tile__sw"><span>dark</span><span>light</span></div>
+            <div class="site-tile__meta">
+              <b>Lavender</b> <span class="f-meta">薰衣草</span>
+              <code>data-accent="lavender" · hue 295</code>
+              <div class="f-cluster">
+                <span class="site-tile__btn">Button</span><span class="site-tile__link">Link</span>
+              </div>
+            </div>
+          </div>
+          <div class="site-tile" data-hue="graphite">
+            <div class="site-tile__sw"><span>dark</span><span>light</span></div>
+            <div class="site-tile__meta">
+              <b>Graphite</b> <span class="f-meta">石墨</span>
+              <code>data-accent="graphite" · #d5dbe3 / #374151</code>
+              <div class="f-cluster">
+                <span class="site-tile__btn">Button</span><span class="site-tile__link">Link</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 data-zh="近中性强调色">Near-neutral accents</h2>
+        <p
+          data-zh="当八个色相用完时，再加近中性色：亮度相同（所以对比度一样），饱和度只有 C 0.02（浅色 0.025），几乎是灰色。色相之间至少隔 70°，否则会分不清。"
+        >
+          When the hues run out, add near-neutrals: the same lightness (so the same contrast) at C
+          0.02 (0.025 on light), nearly gray. Keep them at least 70° apart or they become hard to
+          tell apart.
+        </p>
+        <div class="site-grid">
+          <div class="site-tile" data-hue="stone">
+            <div class="site-tile__sw"><span>dark</span><span>light</span></div>
+            <div class="site-tile__meta">
+              <b>Stone</b> <span class="f-meta">石</span>
+              <code>data-accent="stone" · hue 70 · C 0.02</code>
+              <div class="f-cluster">
+                <span class="site-tile__btn">Button</span><span class="site-tile__link">Link</span>
+              </div>
+            </div>
+          </div>
+          <div class="site-tile" data-hue="lichen">
+            <div class="site-tile__sw"><span>dark</span><span>light</span></div>
+            <div class="site-tile__meta">
+              <b>Lichen</b> <span class="f-meta">地衣</span>
+              <code>data-accent="lichen" · hue 150 · C 0.02</code>
+              <div class="f-cluster">
+                <span class="site-tile__btn">Button</span><span class="site-tile__link">Link</span>
+              </div>
+            </div>
+          </div>
+          <div class="site-tile" data-hue="steel">
+            <div class="site-tile__sw"><span>dark</span><span>light</span></div>
+            <div class="site-tile__meta">
+              <b>Steel</b> <span class="f-meta">钢</span>
+              <code>data-accent="steel" · hue 250 · C 0.02</code>
+              <div class="f-cluster">
+                <span class="site-tile__btn">Button</span><span class="site-tile__link">Link</span>
+              </div>
+            </div>
+          </div>
+          <div class="site-tile" data-hue="heather">
+            <div class="site-tile__sw"><span>dark</span><span>light</span></div>
+            <div class="site-tile__meta">
+              <b>Heather</b> <span class="f-meta">石南</span>
+              <code>data-accent="heather" · hue 320 · C 0.02</code>
+              <div class="f-cluster">
+                <span class="site-tile__btn">Button</span><span class="site-tile__link">Link</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="status">
+        <h2 data-zh="状态色">Status</h2>
+        <p
+          data-zh="状态色直接复用苔绿、赭黄、玫瑰和石板蓝。提示框总是带图标和文字标签，绝不只靠颜色表达。"
+        >
+          Status colors reuse Moss, Ochre, Rose and Slate. An alert always carries an icon and a
+          label, never color alone.
+        </p>
+        <div class="f-alert f-alert--success">
+          <p class="f-alert__title" data-zh="成功">Success</p>
+          <span data-zh="已部署，网站已上线。">Deployed. The site is live.</span>
+        </div>
+        <div class="f-alert f-alert--warning">
+          <p class="f-alert__title" data-zh="警告">Warning</p>
+          <span data-zh="食盆只剩一半了。">The food bowl is half empty.</span>
+        </div>
+        <div class="f-alert f-alert--danger">
+          <p class="f-alert__title" data-zh="错误">Danger</p>
+          <span data-zh="构建失败：有一个失效的内部链接。"
+            >The build failed: a broken internal link.</span
+          >
+        </div>
+        <div class="f-alert f-alert--info">
+          <p class="f-alert__title" data-zh="提示">Info</p>
+          <span data-zh="这是一个虚构的示例网站。">This is a fictional sample site.</span>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      // Contrast of each swatch against the page background, in the dark and the light theme.
+      const ctx = document.createElement("canvas").getContext("2d", { willReadFrequently: true });
+      function rgb(color) {
+        ctx.clearRect(0, 0, 1, 1);
+        ctx.fillStyle = "#000";
+        ctx.fillStyle = color;
+        ctx.fillRect(0, 0, 1, 1);
+        return [...ctx.getImageData(0, 0, 1, 1).data].slice(0, 3);
+      }
+      const lum = (c) => {
+        const [r, g, b] = c.map((v) => {
+          v /= 255;
+          return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+        });
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      };
+      const ratio = (a, b) => {
+        const [hi, lo] = [lum(a), lum(b)].sort((x, y) => y - x);
+        return (hi + 0.05) / (lo + 0.05);
+      };
+      const BG = [rgb("oklch(0.15 0.012 260)"), rgb("oklch(0.975 0.004 260)")];
+      for (const tile of document.querySelectorAll(".site-tile")) {
+        const spans = tile.querySelectorAll(".site-tile__sw span");
+        spans.forEach((s, i) => {
+          const r = ratio(rgb(getComputedStyle(s).backgroundColor), BG[i]);
+          s.textContent = `${i ? "light" : "dark"} ${r.toFixed(1)}:1`;
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Layout · Docs</title>
+    <script src="../site.js"></script>
+    <link rel="stylesheet" href="../dist/facet.css" />
+    <link rel="stylesheet" href="../dist/cast/cast-layered.css" />
+    <link rel="stylesheet" href="../site.css" />
+    <script type="module" src="../dist/js/facet.js"></script>
+    <script type="module" src="../footer-cats.js"></script>
+  </head>
+  <body>
+    <nav class="f-nav f-nav--fixed" aria-label="Site">
+      <span class="f-nav__brand">Red Dot Tracker</span><a href="#" data-zh="首页">Home</a
+      ><a href="#" aria-current="page" data-zh="文档">Docs</a
+      ><a href="#" data-zh="下载">Releases</a>
+    </nav>
+
+    <div class="f-docs f-prose">
+      <nav class="f-toc" aria-label="On this page" data-f-scrollspy>
+        <p class="f-docs__label" data-zh="本页内容">On this page</p>
+        <a href="#start" data-zh="快速开始">Quick start</a>
+        <a href="#how" data-zh="工作原理">How it works</a>
+        <a href="#commands" data-zh="命令">Commands</a>
+        <a href="#config" data-zh="配置">Configuration</a>
+        <a href="#faq" data-zh="常见问题">FAQ</a>
+      </nav>
+      <article>
+        <p class="f-kicker" data-zh="文档">Documentation</p>
+        <h1 data-zh="追踪家里的每一个红点">Track every red dot in the house</h1>
+        <p class="f-meta" data-zh="适合：文档、笔记本、长文章、简历">
+          For: docs, the notebook, long posts, the resume
+        </p>
+
+        <section id="start">
+          <h2 data-zh="快速开始">Quick start</h2>
+          <p
+            data-zh="把 Red Dot Tracker 放在窗台上，照常打盹，醒来时每一个红点的轨迹都在一份 <code>dots.json</code> 里。"
+          >
+            Put Red Dot Tracker on the windowsill, nap as usual, and wake up to every red dot's path
+            in a single <code>dots.json</code>.
+          </p>
+          <pre class="f-code"><span class="f-code__prompt">$</span> install red-dot
+<span class="f-code__prompt">$</span> red-dot watch ./living-room
+<span class="f-code__prompt">$</span> red-dot track ./living-room <span class="f-code__out">→ dots.json</span></pre>
+        </section>
+
+        <section id="how">
+          <h2 data-zh="工作原理">How it works</h2>
+          <p
+            data-zh="追踪器每秒看墙面三十次。每看到一个红点，就记下它的位置；红点在镜子上反射或在门框边拐弯时，就开始一段新的路线。"
+          >
+            The tracker looks at the walls thirty times a second. Each time it sees the dot, it
+            notes where; whenever the dot bounces off a mirror or turns at a door frame, a new
+            segment of its path begins.
+          </p>
+          <p data-zh="<code>red-dot track</code> 把这些路线拼在一起，写成一个文件，按房间分组。">
+            <code>red-dot track</code> joins those segments into one file, grouped by room.
+          </p>
+        </section>
+
+        <section id="commands">
+          <h2 data-zh="命令">Commands</h2>
+          <ul>
+            <li>
+              <code>red-dot watch</code>:
+              <span data-zh="开始盯着墙面">start watching the walls</span>
+            </li>
+            <li>
+              <code>red-dot track</code>:
+              <span data-zh="把所有路线写进一个文件">write every path to one file</span>
+            </li>
+            <li>
+              <code>red-dot stats</code>:
+              <span data-zh="统计红点、扑击和成功次数（通常是零）"
+                >count dots, pounces and catches (usually zero)</span
+              >
+            </li>
+          </ul>
+        </section>
+
+        <section id="config">
+          <h2 data-zh="配置">Configuration</h2>
+          <p data-zh="第一次运行时，房间会自动检测，并写进 <code>~/.red-dot/config.toml</code>。">
+            On first run, rooms are detected and written to <code>~/.red-dot/config.toml</code>.
+          </p>
+          <pre class="f-code">
+[rooms]
+living-room = { windows = 2, mirrors = 1 }
+hallway = { windows = 0, mirrors = 3 }</pre>
+          <p
+            data-zh="每个房间可以设置窗户和镜子的数量。镜子越多，红点拐弯的次数就越多，路线也就越长。"
+          >
+            Each room takes a count of windows and mirrors. The more mirrors, the more turns the dot
+            makes, and the longer its path.
+          </p>
+          <p
+            data-zh="如果某个房间的红点太多，可以把它的采样率调低，追踪器会把省下来的精力留给更有意思的墙面。"
+          >
+            If a room has too many dots, lower its sampling rate and the tracker will save its
+            attention for the more interesting walls.
+          </p>
+          <ul>
+            <li data-zh="<code>windows</code>：窗户数量，决定红点从哪里进来。">
+              <code>windows</code>: how many windows, which decides where the dot comes in.
+            </li>
+            <li data-zh="<code>mirrors</code>：镜子数量，决定红点会拐几次弯。">
+              <code>mirrors</code>: how many mirrors, which decides how often the dot turns.
+            </li>
+            <li data-zh="<code>rate</code>：每秒采样次数，默认是三十。">
+              <code>rate</code>: samples per second, thirty by default.
+            </li>
+          </ul>
+        </section>
+
+        <section id="faq">
+          <h2 data-zh="常见问题">FAQ</h2>
+          <h3 data-zh="能帮我抓到红点吗？">Will it help me catch the dot?</h3>
+          <p data-zh="不能。但它会告诉你红点下一次会去哪儿。">
+            No. But it will tell you where the dot goes next.
+          </p>
+          <div class="f-alert f-alert--info">
+            <p class="f-alert__title" data-zh="提示">Note</p>
+            <span data-zh="侧边目录在窄屏上会变成导航下方可以横向滚动的一条。"
+              >On narrow screens the table of contents becomes a scrollable bar under the nav.</span
+            >
+          </div>
+        </section>
+      </article>
+    </div>
+    <details class="site-markup">
+      <summary data-zh="标记">Markup</summary>
+      <pre class="f-code">
+&lt;div class="f-docs f-prose"&gt;
+  &lt;nav class="f-toc" aria-label="On this page" data-f-scrollspy&gt;
+    &lt;p class="f-docs__label"&gt;On this page&lt;/p&gt;
+    &lt;a href="#start"&gt;Quick start&lt;/a&gt;
+    &lt;a href="#config"&gt;Configuration&lt;/a&gt;
+  &lt;/nav&gt;
+  &lt;article&gt;
+    &lt;h1&gt;Track every red dot in the house&lt;/h1&gt;
+    &lt;section id="start"&gt;&lt;h2&gt;Quick start&lt;/h2&gt;…&lt;/section&gt;
+    &lt;section id="config"&gt;&lt;h2&gt;Configuration&lt;/h2&gt;…&lt;/section&gt;
+  &lt;/article&gt;
+&lt;/div&gt;
+&lt;!-- The same grid on the page grid: &lt;main class="f-page f-page--sidebar f-prose"&gt; --&gt;</pre>
+    </details>
+    <footer class="f-footer">
+      <div class="f-footer__cats"></div>
+      <span data-zh="© 2026 Duna Feline · example.com">© 2026 Duna Feline · example.com</span>
+    </footer>
+  </body>
+</html>

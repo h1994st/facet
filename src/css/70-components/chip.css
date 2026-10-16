@@ -1,0 +1,24 @@
+@layer facet.components {
+  .f-chip {
+    display: inline-block;
+    padding: 0.16rem 0.6rem;
+    border: 1px solid transparent;
+    border-radius: var(--f-r-pill);
+    background: color-mix(in oklch, var(--f-fg) 8%, transparent);
+    color: var(--f-fg-2);
+    font: 600 0.75rem/1.4 var(--f-font-sans);
+  }
+
+  button.f-chip {
+    cursor: pointer;
+  }
+
+  button.f-chip:hover {
+    color: var(--f-fg);
+  }
+
+  button.f-chip[aria-pressed="true"] {
+    border-color: var(--f-accent);
+    color: var(--f-fg);
+  }
+}

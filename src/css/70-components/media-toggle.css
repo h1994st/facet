@@ -1,0 +1,16 @@
+@layer facet.components {
+  /* Pause/play control over looping media (cover and panel videos). Their scripts show it and
+     swap its label; layouts place it. Light on dark, since it always sits on media. */
+  .f-media-toggle {
+    padding: 0.4rem 0.75rem;
+    border: 1px solid rgb(255 255 255 / 0.3);
+    border-radius: var(--f-r-pill);
+    corner-shape: round;
+    background: rgb(0 0 0 / 0.35);
+    color: #fff;
+    font: 600 0.75rem var(--f-font-mono);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    cursor: pointer;
+  }
+}

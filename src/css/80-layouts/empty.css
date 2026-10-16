@@ -1,0 +1,9 @@
+@layer facet.layouts {
+  /* The whole window, with a centered .f-empty message. */
+  .f-empty-page {
+    display: grid;
+    place-items: center;
+    min-height: 100svh;
+    padding-top: var(--f-nav-clear);
+  }
+}

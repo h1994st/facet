@@ -15,9 +15,10 @@ as one family. The name: each site is one facet of the same identity, cut from t
 ## Design choices
 
 - **Type:** Source Serif 4 and Noto Serif SC for headings, Geist for text and UI, Geist Mono for
-  code. Chinese body text uses the system's built-in fonts; LXGW WenKai (霞鹜文楷) is available as
-  an opt-in. All fonts are self-hosted alongside the sites, so they load wherever the sites do,
-  including mainland China.
+  code. Chinese body text uses the system's built-in fonts. An opt-in LXGW WenKai (霞鹜文楷) is
+  planned but not shipped yet. All fonts are self-hosted alongside the sites, so they load wherever
+  the sites do, including mainland China (`just fonts` rebuilds them from the pinned official
+  releases).
 - **Color:** low saturation throughout, on cool (slightly blue) neutral grays. Accents share one
   lightness and chroma in OKLCH, so every site's buttons and links have the same contrast.
 - **Glass:** solid surfaces at rest, with frosted glass only on things that float (nav, sheets).
@@ -59,12 +60,106 @@ Duna Feline (嘟娜·菲琳, gray tabby), Dudu (嘟嘟, solid gray) and Nangnang
 is the fictional owner of every sample in the mockups. Their drawing is copied from the my-resume
 template's site.
 
+## Use it
+
+Reference site (tokens, color, type, components, layouts, the cast): https://shengtuo.me/facet/
+
+Link `facet.css` first and `cast/cast-layered.css` after it (only needed for the mascots). From a
+CDN, pinning a tag:
+
+<!-- x-release-please-start-version -->
+
+```html
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.0/dist/facet.css" />
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.0/dist/cast/cast-layered.css"
+/>
+<script
+  type="module"
+  src="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.0/dist/js/facet.js"
+></script>
+```
+
+<!-- x-release-please-end -->
+
+Or as a git submodule, serving `vendor/facet/dist/` with your site (better for mainland China, where
+jsDelivr is unreliable):
+
+<!-- x-release-please-start-version -->
+
+```sh
+git submodule add https://github.com/h1994st/facet vendor/facet
+git -C vendor/facet checkout v0.1.0
+```
+
+<!-- x-release-please-end -->
+
+To apply a saved theme before first paint (`facet.js` runs after it, so the page would flash), put
+this line in `<head>`, before the stylesheet. It accepts only `dark`, `light` or `auto`:
+
+<!-- prettier-ignore -->
+```html
+<script>try{var t=localStorage.getItem("facet-theme");if(/^(dark|light|auto)$/.test(t))document.documentElement.dataset.theme=t}catch(e){}</script>
+```
+
+A minimal page:
+
+```html
+<html lang="en" data-accent="moss">
+  <head>
+    <link rel="stylesheet" href="/vendor/facet/dist/facet.css" />
+    <script type="module" src="/vendor/facet/dist/js/facet.js"></script>
+  </head>
+  <body>
+    <nav class="f-nav">…</nav>
+    <main class="f-page f-prose">…</main>
+  </body>
+</html>
+```
+
+- `data-accent` picks the accent (see the tables above); `data-theme` is `dark` (default), `light`
+  or `auto`. The theme toggle remembers its choice in `localStorage["facet-theme"]`. Both work on
+  `<html>` only (`:root[data-accent]`); to give part of a page its own accent, set `--f-accent` and
+  `--f-accent-contrast` on it.
+- A plain `.f-nav` sits in the page flow. Add `.f-nav--fixed` to float it over the page; while one
+  is present, `--f-nav-clear` reserves room for it at the top of the layouts (override it if your
+  nav is taller).
+- Everything is in `@layer facet.*`, so your own unlayered CSS wins without `!important`, with two
+  exceptions: `[hidden]` is `display: none !important`, and under reduced motion one rule stops
+  every animation and transition on the page, yours included. A layered `!important` beats unlayered
+  CSS, even unlayered `!important`, so neither can be overridden.
+- Set `lang="zh-Hans"` on any element for Chinese typography.
+
+### Behavior
+
+The JavaScript is optional. Importing `dist/js/facet.js` initializes itself: each module takes over
+the elements that opt in with a `data-f-*` attribute (`data-f-theme-toggle`, `data-f-liquid`,
+`data-f-scrollspy`, `data-f-nav-cover`, `data-f-autoplay`, `data-f-story`, `data-f-panels`,
+`data-f-deck`), and calling `init()` again skips what is already set up. To use one module, import
+it and keep the cleanup it returns:
+
+```js
+import { init } from "./vendor/facet/dist/js/deck.js";
+const stop = init(document.querySelector("#talk"));
+```
+
+Every hook, the deck's slide data, and the reduced-motion and no-JS behavior are documented on the
+reference site's overview page, under "Behavior".
+
 ## Layout
 
-- `mockups/`: design explorations (type, color, shape, glass, layout, the cats), viewable with
-  `just serve` at http://localhost:8000/mockups/.
+- `src/`: the source CSS, JS, cast and font slices. `dist/` is generated from it by `just build` and
+  committed; never edit `dist/` by hand.
+- `site/`: the reference site. `just serve` serves it at http://localhost:8000 in the published
+  layout (with the mockups); `just site` assembles the GitHub Pages bundle into `_site/`.
+- `tests/`: browser tests (`just test`).
+- `fonts/`: the font build (`just fonts`).
+- `pyproject.toml`: the uv project for the Python tooling (fonts, images, tests).
+- `mockups/`: design explorations (type, color, shape, glass, layout, the cats), at
+  http://localhost:8000/mockups/ under `just serve`.
 - `mockups/assets/craft.py`: draws the demo images and video loop the mockups use
-  (`uv run --with pillow mockups/assets/craft.py`; the loop needs ffmpeg).
+  (`uv run mockups/assets/craft.py`; the loop needs ffmpeg).
 
 ## License
 

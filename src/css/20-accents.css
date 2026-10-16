@@ -1,0 +1,77 @@
+/* Per-site accents: set data-accent on <html>. Hue changes only; lightness and chroma stay fixed.
+   Each value is a dark/light pair on the theme switch (see 10-tokens.css). */
+@layer facet.tokens {
+  :root[data-accent="rose"] {
+    --f-accent: var(--f-unless-light, oklch(0.76 0.06 15)) var(--f-unless-dark, oklch(0.52 0.07 15));
+    --f-accent-contrast: var(--f-unless-light, oklch(0.15 0.012 260)) var(--f-unless-dark, #fff);
+  }
+
+  :root[data-accent="clay"] {
+    --f-accent: var(--f-unless-light, oklch(0.76 0.06 55)) var(--f-unless-dark, oklch(0.52 0.07 55));
+    --f-accent-contrast: var(--f-unless-light, oklch(0.15 0.012 260)) var(--f-unless-dark, #fff);
+  }
+
+  :root[data-accent="ochre"] {
+    --f-accent: var(--f-unless-light, oklch(0.76 0.06 85)) var(--f-unless-dark, oklch(0.52 0.07 85));
+    --f-accent-contrast: var(--f-unless-light, oklch(0.15 0.012 260)) var(--f-unless-dark, #fff);
+  }
+
+  :root[data-accent="moss"] {
+    --f-accent: var(--f-unless-light, oklch(0.76 0.06 130))
+      var(--f-unless-dark, oklch(0.52 0.07 130));
+    --f-accent-contrast: var(--f-unless-light, oklch(0.15 0.012 260)) var(--f-unless-dark, #fff);
+  }
+
+  :root[data-accent="sage"] {
+    --f-accent: var(--f-unless-light, oklch(0.76 0.06 165))
+      var(--f-unless-dark, oklch(0.52 0.07 165));
+    --f-accent-contrast: var(--f-unless-light, oklch(0.15 0.012 260)) var(--f-unless-dark, #fff);
+  }
+
+  :root[data-accent="teal"] {
+    --f-accent: var(--f-unless-light, oklch(0.76 0.06 205))
+      var(--f-unless-dark, oklch(0.52 0.07 205));
+    --f-accent-contrast: var(--f-unless-light, oklch(0.15 0.012 260)) var(--f-unless-dark, #fff);
+  }
+
+  :root[data-accent="slate"] {
+    --f-accent: var(--f-unless-light, oklch(0.76 0.06 255))
+      var(--f-unless-dark, oklch(0.52 0.07 255));
+    --f-accent-contrast: var(--f-unless-light, oklch(0.15 0.012 260)) var(--f-unless-dark, #fff);
+  }
+
+  :root[data-accent="lavender"] {
+    --f-accent: var(--f-unless-light, oklch(0.76 0.06 295))
+      var(--f-unless-dark, oklch(0.52 0.07 295));
+    --f-accent-contrast: var(--f-unless-light, oklch(0.15 0.012 260)) var(--f-unless-dark, #fff);
+  }
+
+  :root[data-accent="stone"] {
+    --f-accent: var(--f-unless-light, oklch(0.76 0.02 70))
+      var(--f-unless-dark, oklch(0.52 0.025 70));
+    --f-accent-contrast: var(--f-unless-light, oklch(0.15 0.012 260)) var(--f-unless-dark, #fff);
+  }
+
+  :root[data-accent="lichen"] {
+    --f-accent: var(--f-unless-light, oklch(0.76 0.02 150))
+      var(--f-unless-dark, oklch(0.52 0.025 150));
+    --f-accent-contrast: var(--f-unless-light, oklch(0.15 0.012 260)) var(--f-unless-dark, #fff);
+  }
+
+  :root[data-accent="steel"] {
+    --f-accent: var(--f-unless-light, oklch(0.76 0.02 250))
+      var(--f-unless-dark, oklch(0.52 0.025 250));
+    --f-accent-contrast: var(--f-unless-light, oklch(0.15 0.012 260)) var(--f-unless-dark, #fff);
+  }
+
+  :root[data-accent="heather"] {
+    --f-accent: var(--f-unless-light, oklch(0.76 0.02 320))
+      var(--f-unless-dark, oklch(0.52 0.025 320));
+    --f-accent-contrast: var(--f-unless-light, oklch(0.15 0.012 260)) var(--f-unless-dark, #fff);
+  }
+
+  :root[data-accent="graphite"] {
+    --f-accent: var(--f-unless-light, #d5dbe3) var(--f-unless-dark, #374151);
+    --f-accent-contrast: var(--f-unless-light, #0b0d12) var(--f-unless-dark, #fff);
+  }
+}

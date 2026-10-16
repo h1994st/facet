@@ -1,0 +1,107 @@
+@layer facet.layouts {
+  /* A hero with text on one side and a visual on the other, then alternating feature rows. */
+  .f-split__hero,
+  .f-split__feature {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--f-space-7);
+    align-items: center;
+  }
+
+  .f-split__hero {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    padding: var(--f-space-2) 0 var(--f-space-7);
+  }
+
+  .f-split__hero h1 {
+    margin: 0;
+    font-size: var(--f-text-3xl);
+    line-height: 1.06;
+  }
+
+  .f-split__hero p:not(.f-kicker) {
+    margin: 1rem 0 1.5rem;
+    font-size: 1.1rem;
+  }
+
+  .f-split__install {
+    display: inline-flex;
+    gap: 0.8rem;
+    align-items: center;
+    max-width: 100%;
+    margin-top: var(--f-space-4);
+    padding: 0.55rem 0.6rem 0.55rem 1rem;
+    border: 1px solid var(--f-line-2);
+    border-radius: var(--f-r-md);
+    background: var(--f-bg-2);
+    font: 0.88rem var(--f-font-mono);
+  }
+
+  .f-split__install > code {
+    flex: 1;
+    min-width: 0;
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+  }
+
+  .f-split__visual {
+    padding: var(--f-space-4);
+    border: 1px solid var(--f-line);
+    border-radius: var(--f-r-xl);
+    background: var(--f-bg-2);
+  }
+
+  .f-split__visual img {
+    width: 100%;
+    border-radius: 20px;
+  }
+
+  .f-split__feature {
+    padding: 2.5rem 0;
+    border-top: 1px solid var(--f-line);
+  }
+
+  .f-split__feature:nth-of-type(even) > :first-child {
+    order: 2;
+  }
+
+  .f-split__feature h2 {
+    margin: 0 0 0.6rem;
+  }
+
+  .f-split__feature img {
+    width: 100%;
+    border-radius: var(--f-r-lg);
+  }
+
+  .f-split__band {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--f-space-4);
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 2.5rem;
+    padding: var(--f-space-6) 2.2rem;
+    border: 1px solid var(--f-line);
+    border-radius: var(--f-r-xl);
+    background:
+      radial-gradient(60% 120% at 0% 0%, var(--f-accent-soft), transparent), var(--f-bg-2);
+  }
+
+  .f-split__band h2 {
+    margin: 0;
+  }
+
+  @media (max-width: 720px) {
+    .f-split__hero,
+    .f-split__feature {
+      grid-template-columns: minmax(0, 1fr);
+      gap: var(--f-space-5);
+    }
+
+    .f-split__feature:nth-of-type(even) > :first-child {
+      order: 0;
+    }
+  }
+}

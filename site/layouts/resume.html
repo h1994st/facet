@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Layout · Resume</title>
+    <script src="../site.js"></script>
+    <link rel="stylesheet" href="../dist/facet.css" />
+    <link rel="stylesheet" href="../dist/cast/cast-layered.css" />
+    <link rel="stylesheet" href="../site.css" />
+    <script type="module" src="../dist/js/facet.js"></script>
+    <script type="module" src="../footer-cats.js"></script>
+  </head>
+  <body>
+    <nav class="f-nav f-nav--fixed" aria-label="Site">
+      <span class="f-nav__brand">Duna Feline</span><a href="#" data-zh="博客">Blog</a
+      ><a href="#" data-zh="项目">Projects</a
+      ><a href="#" aria-current="page" data-zh="简历">Resume</a>
+    </nav>
+
+    <main class="f-resume f-prose">
+      <header class="f-resume__head">
+        <div>
+          <p class="f-kicker" data-zh="简历">Resume</p>
+          <h1>Duna Feline</h1>
+          <p class="f-resume__headline">Senior Mischief Engineer, Ph.C., Certified Box Inspector</p>
+        </div>
+        <div class="f-resume__contact">
+          <a href="#">duna.feline@example.com</a>
+          <a href="#">example.com</a>
+          <a href="#">+1 (555) 010-0199</a>
+          <div class="f-resume__actions">
+            <a class="f-btn f-btn--primary" href="#" data-zh="下载 PDF">Download PDF</a>
+            <button class="f-btn" type="button" onclick="print()" data-zh="打印">Print</button>
+          </div>
+        </div>
+      </header>
+
+      <div class="f-resume__body">
+        <nav class="f-toc" aria-label="Resume sections" data-f-scrollspy>
+          <a href="#summary" data-zh="概要">Summary</a>
+          <a href="#experience" data-zh="经历">Experience</a>
+          <a href="#projects" data-zh="项目">Projects</a>
+          <a href="#education" data-zh="教育">Education</a>
+          <a href="#publications" data-zh="论文">Publications</a>
+          <a href="#service" data-zh="服务">Service</a>
+          <a href="#honors" data-zh="荣誉">Honors</a>
+        </nav>
+        <div>
+          <section id="summary">
+            <h2 data-zh="概要">Summary</h2>
+            <p class="f-resume__summary">
+              Curious-by-nature cat with a Ph.C. (Doctor of Philosophy in Cat) and 5+ years of
+              cat-tree scratching experience. Always lands on her feet: takes ambiguous cardboard
+              boxes from first sniff to full occupancy, and ships naps, purrs, and head boops that
+              humans rely on daily (rarely knocking things over).
+            </p>
+            <dl class="f-resume__skills">
+              <dt>Languages/Tools</dt>
+              <dd>
+                <span class="f-chip">Meow</span><span class="f-chip">Purr</span
+                ><span class="f-chip">Chirp</span><span class="f-chip">Slow Blink</span
+                ><span class="f-chip">Hiss (deprecated)</span
+                ><span class="f-chip">Scratching Post</span><span class="f-chip">Laser Pointer</span
+                ><span class="f-chip">Yarn</span>
+              </dd>
+              <dt>Skills</dt>
+              <dd>
+                <span class="f-chip">Box Inspection</span><span class="f-chip">Napping</span
+                ><span class="f-chip">Bird Watching</span><span class="f-chip">Counter Surfing</span
+                ><span class="f-chip">Zoomies</span><span class="f-chip">Lap Acquisition</span>
+              </dd>
+            </dl>
+          </section>
+          <section id="experience">
+            <h2 data-zh="经历">Experience</h2>
+            <ol class="f-timeline">
+              <li class="is-current">
+                <div class="f-resume__entry">
+                  <h3>
+                    Head of Windowsill Operations
+                    <span class="f-resume__org">· Sunbeam Estates</span>
+                  </h3>
+                  <span class="f-resume__date">Apr 2023 – Present</span>
+                </div>
+                <span class="f-resume__loc">Living Room</span>
+                <ul class="f-resume__bullets">
+                  <li>
+                    Initiated and led “Operation Red Dot”, a household-wide laser-pointer pursuit
+                    program spanning 12 rooms, with a perfectly consistent record of zero dots
+                    caught
+                  </li>
+                  <li>
+                    Monitored 400+ birds and 37 squirrels a day from the bay window, chirping alerts
+                    in under 2 seconds
+                  </li>
+                  <li>
+                    Cut 5 a.m. breakfast latency by 60% with a new wake-up protocol: paw tap, face
+                    sit, vase nudge
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <div class="f-resume__entry">
+                  <h3>
+                    Senior Box Inspector <span class="f-resume__org">· Cardboard Box Co.</span>
+                  </h3>
+                  <span class="f-resume__date">Feb 2020 – Mar 2023</span>
+                </div>
+                <span class="f-resume__loc">Garage</span>
+                <ul class="f-resume__bullets">
+                  <li>
+                    Inspected 1,200 boxes of every size, confirming “if it fits, I sits” across 98%
+                    of form factors
+                  </li>
+                  <li>
+                    Shipped “Hairball Express”, a chirp that warns humans 30 seconds before delivery
+                    (on the rug)
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <div class="f-resume__entry">
+                  <h3>Professional Napper <span class="f-resume__org">· Catnip Farms</span></h3>
+                  <span class="f-resume__date">Jul 2017 – Jan 2020</span>
+                </div>
+                <span class="f-resume__loc">Any Warm Laundry</span>
+                <ul class="f-resume__bullets">
+                  <li>
+                    Logged 2M sunbeam-minutes of napping across a multi-room portfolio of beds,
+                    boxes, and baskets
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <div class="f-resume__entry">
+                  <h3>Kitten Intern <span class="f-resume__org">· Happy Paws Shelter</span></h3>
+                  <span class="f-resume__date">Jun 2016 – Sep 2016</span>
+                </div>
+                <span class="f-resume__loc">Cage 3B</span>
+                <ul class="f-resume__bullets">
+                  <li>
+                    Delivered three toy mice per day to the volunteers’ shoes, establishing a
+                    reputation for reliable gifting
+                  </li>
+                </ul>
+              </li>
+            </ol>
+          </section>
+          <section id="projects">
+            <h2 data-zh="项目">Projects</h2>
+            <ol class="f-timeline">
+              <li class="is-current">
+                <div class="f-resume__entry">
+                  <h3>
+                    Red Dot Tracker
+                    <span class="f-resume__org">· Open source · 1.2k+ stars, 0 dots caught</span>
+                  </h3>
+                  <span class="f-resume__date">May 2021 – Present</span>
+                </div>
+                <ul class="f-resume__bullets">
+                  <li>
+                    Created an open-source tracker that chases the red dot across walls and pounces
+                    on every outlier
+                  </li>
+                </ul>
+              </li>
+              <li class="is-current">
+                <div class="f-resume__entry">
+                  <h3>Purrometheus <span class="f-resume__org">· Weekend project</span></h3>
+                  <span class="f-resume__date">Jan 2022 – Present</span>
+                </div>
+                <ul class="f-resume__bullets">
+                  <li>
+                    Charts food-bowl levels, nap durations, and 3 a.m. zoomies, with alerts routed
+                    to the nearest human
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <div class="f-resume__entry">
+                  <h3>Hairball <span class="f-resume__org">· Surprise-delivery planner</span></h3>
+                  <span class="f-resume__date">Mar 2019 – Aug 2020</span>
+                </div>
+              </li>
+            </ol>
+          </section>
+          <section id="education">
+            <h2 data-zh="教育">Education</h2>
+            <ol class="f-timeline">
+              <li>
+                <div class="f-resume__entry">
+                  <h3>
+                    Ph.C. in Feline Philosophy
+                    <span class="f-resume__org">· Calico University</span>
+                  </h3>
+                  <span class="f-resume__date">Sep 2012 – Jun 2017</span>
+                </div>
+                <span class="f-resume__loc">Catnip Valley</span>
+                <ul class="f-resume__bullets">
+                  <li>Dissertation: Landing on Your Feet: A Unified Theory of Self-Righting</li>
+                </ul>
+              </li>
+              <li>
+                <div class="f-resume__entry">
+                  <h3>
+                    B.S. in Box Science
+                    <span class="f-resume__org">· Tabby Institute of Technology</span>
+                  </h3>
+                  <span class="f-resume__date">Sep 2008 – May 2012</span>
+                </div>
+              </li>
+            </ol>
+          </section>
+          <section id="publications">
+            <h2 data-zh="论文">Publications</h2>
+            <ol class="f-pubs">
+              <li>
+                <span class="f-pubs__title"
+                  >Curiosity Killed the Rat: A Field Study of Indoor Rodent Detection</span
+                ><span class="f-pubs__authors"
+                  ><b>Duna Feline</b>, Dudu Whiskers, and Nangnang Mittens</span
+                ><span class="f-pubs__venue"
+                  >Annual Conference on Whisker Sciences (ACWS 2019)</span
+                >
+                <div class="f-cluster">
+                  <span class="f-chip f-chip--award">Best Paper Award</span
+                  ><a class="f-chip" href="#">Paper</a><a class="f-chip" href="#">Slides</a>
+                </div>
+              </li>
+              <li>
+                <span class="f-pubs__title"
+                  >If It Fits, It Sits: Are Cardboard Boxes Ready for Production?</span
+                ><span class="f-pubs__authors"
+                  >Dudu Whiskers, <b>Duna Feline</b>, and Mochi Paws</span
+                ><span class="f-pubs__venue">Workshop on Boxes and Containers (WBC 2017)</span>
+                <div class="f-cluster"><a class="f-chip" href="#">Paper</a></div>
+              </li>
+              <li>
+                <span class="f-pubs__title"
+                  >Untangling the Yarn: An Incremental Approach to Knot Resolution</span
+                ><span class="f-pubs__authors"><b>Duna Feline</b> and Nangnang Mittens</span
+                ><span class="f-pubs__venue">Journal of Feline Engineering, vol. 9</span>
+                <div class="f-cluster">
+                  <a class="f-chip" href="#">Paper</a><a class="f-chip" href="#">Code</a>
+                </div>
+              </li>
+              <li>
+                <span class="f-pubs__title"
+                  >Schrödinger’s Cat Flap: Doors That Are Both Open and Closed</span
+                ><span class="f-pubs__authors"
+                  ><b>Duna Feline</b>, Mochi Paws, and Dudu Whiskers</span
+                ><span class="f-pubs__venue">Workshop on Hot Topics in Doors (HotDoors 2015)</span>
+                <div class="f-cluster"><a class="f-chip" href="#">Paper</a></div>
+              </li>
+            </ol>
+          </section>
+          <section id="service">
+            <h2 data-zh="服务">Service</h2>
+            <ul class="f-lines">
+              <li>
+                <span>Annual Conference on Whisker Sciences (ACWS) Program Committee</span
+                ><span class="f-resume__date">2022–2025</span>
+              </li>
+              <li>
+                <span>Journal of Feline Engineering Reviewer</span
+                ><span class="f-resume__date">2020–2025</span>
+              </li>
+              <li>
+                <span>Kitten Socialization Program Mentor</span
+                ><span class="f-resume__date">2021</span>
+              </li>
+              <li>
+                <span>Cat Café Nap Review Club Organizer (monthly, treats provided)</span
+                ><span class="f-resume__date">2019–2025</span>
+              </li>
+            </ul>
+          </section>
+          <section id="honors">
+            <h2 data-zh="荣誉">Honors &amp; Awards</h2>
+            <ul class="f-lines">
+              <li>
+                <span>The Cat’s Whiskers Award for Excellence in Mischief, Sunbeam Estates</span
+                ><span class="f-resume__date">2024</span>
+              </li>
+              <li><span>ACWS Best Paper Award</span><span class="f-resume__date">2019</span></li>
+              <li>
+                <span>Golden Whisker Fellowship, Calico University (Top 5% of the litter)</span
+                ><span class="f-resume__date">2013, 2014</span>
+              </li>
+              <li>
+                <span>Dean’s List (“Top Cat”), Tabby Institute of Technology</span
+                ><span class="f-resume__date">2009–2012</span>
+              </li>
+            </ul>
+          </section>
+        </div>
+      </div>
+    </main>
+    <details class="site-markup">
+      <summary data-zh="标记">Markup</summary>
+      <pre class="f-code">
+&lt;main class="f-resume f-prose"&gt;
+  &lt;header class="f-resume__head"&gt;
+    &lt;div&gt;
+      &lt;h1&gt;Duna Feline&lt;/h1&gt;
+      &lt;p class="f-resume__headline"&gt;Senior Mischief Engineer&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div class="f-resume__contact"&gt;
+      &lt;a href="mailto:duna.feline@example.com"&gt;duna.feline@example.com&lt;/a&gt;
+      &lt;div class="f-resume__actions"&gt;
+        &lt;button class="f-btn" type="button" onclick="print()"&gt;Print&lt;/button&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/header&gt;
+  &lt;div class="f-resume__body"&gt;
+    &lt;nav class="f-toc" aria-label="Resume sections" data-f-scrollspy&gt;
+      &lt;a href="#experience"&gt;Experience&lt;/a&gt;
+    &lt;/nav&gt;
+    &lt;div&gt;
+      &lt;section id="experience"&gt;
+        &lt;h2&gt;Experience&lt;/h2&gt;
+        &lt;div class="f-resume__entry"&gt;
+          &lt;h3&gt;Head of Windowsill Operations &lt;span class="f-resume__org"&gt;· Sunbeam Estates&lt;/span&gt;&lt;/h3&gt;
+          &lt;span class="f-resume__date"&gt;Apr 2023 – Present&lt;/span&gt;
+        &lt;/div&gt;
+        &lt;span class="f-resume__loc"&gt;Living Room&lt;/span&gt;
+        &lt;ul class="f-resume__bullets"&gt;&lt;li&gt;…&lt;/li&gt;&lt;/ul&gt;
+      &lt;/section&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/main&gt;
+&lt;!-- Prints as one plain column in light colors; the actions row is left off paper. --&gt;</pre>
+    </details>
+    <footer class="f-footer">
+      <div class="f-footer__cats"></div>
+      <span data-zh="© 2026 Duna Feline · example.com">© 2026 Duna Feline · example.com</span>
+    </footer>
+    <script type="module">
+      import { createCat } from "../dist/cast/cast.js";
+      // Duna herself, sitting on the header card's top edge.
+      const duna = createCat("duna", { pose: "wave", label: "" });
+      duna.classList.add("f-resume__cat");
+      document.querySelector(".f-resume__head").append(duna);
+    </script>
+  </body>
+</html>

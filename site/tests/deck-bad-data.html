@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Test · Deck with bad data</title>
+    <link rel="stylesheet" href="../dist/facet.css" />
+    <script type="module" src="../dist/js/facet.js"></script>
+  </head>
+  <body>
+    <main>
+      <div class="f-deck" id="bad-from" data-f-deck>
+        <div class="f-deck__stage">
+          <div class="f-deck__caps"></div>
+          <div class="f-deck__frame">
+            <div class="f-deck__board" aria-hidden="true">
+              <i class="f-deck__piece f-deck__shot" data-f-piece="s1" data-f-from="[40,35,"></i>
+            </div>
+          </div>
+          <div class="f-deck__bar"><span class="f-deck__count">1 / 1</span></div>
+        </div>
+        <section class="f-deck__slide" data-f-slide='{"s1":{"box":[6,4,42,44]}}'>
+          <h2>Bad start position</h2>
+          <p>This slide stays readable.</p>
+        </section>
+      </div>
+      <div class="f-deck" id="bad-slide" data-f-deck>
+        <div class="f-deck__stage">
+          <div class="f-deck__caps"></div>
+          <div class="f-deck__frame"><div class="f-deck__board" aria-hidden="true"></div></div>
+          <div class="f-deck__bar"><span class="f-deck__count">1 / 1</span></div>
+        </div>
+        <section class="f-deck__slide" data-f-slide="{not json">
+          <h2>Bad slide data</h2>
+          <p>This slide stays readable too.</p>
+        </section>
+      </div>
+      <div class="f-deck" id="good" data-f-deck>
+        <div class="f-deck__stage">
+          <div class="f-deck__caps"></div>
+          <div class="f-deck__frame">
+            <div class="f-deck__board" aria-hidden="true">
+              <i class="f-deck__piece f-deck__tile" data-f-piece="laser"></i>
+            </div>
+          </div>
+          <div class="f-deck__bar"><span class="f-deck__count">1 / 1</span></div>
+        </div>
+        <section class="f-deck__slide" data-f-slide='{"laser":{"at":[50,50]}}'>
+          <h2>Good deck</h2>
+          <p>A later deck still starts.</p>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>

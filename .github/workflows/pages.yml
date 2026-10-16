@@ -25,6 +25,8 @@ jobs:
       - uses: taiki-e/install-action@v2
         with:
           tool: just
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --frozen
       - run: just site
       - uses: actions/upload-pages-artifact@v3
         with:

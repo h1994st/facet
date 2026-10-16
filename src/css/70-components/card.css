@@ -1,0 +1,93 @@
+@layer facet.components {
+  .f-card {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--f-line);
+    border-radius: var(--f-r-lg);
+    background: var(--f-bg-2);
+    color: var(--f-fg);
+    transition:
+      transform var(--f-dur-2),
+      box-shadow var(--f-dur-2);
+  }
+
+  .f-card__media {
+    aspect-ratio: 16 / 9;
+    background-color: var(--f-surface);
+    background-position: center;
+    background-size: cover;
+  }
+
+  .f-card__body {
+    padding: var(--f-space-4) var(--f-space-5) var(--f-space-5);
+  }
+
+  .f-card__body > :first-child {
+    margin-top: 0;
+  }
+
+  .f-card__body > :last-child {
+    margin-bottom: 0;
+  }
+
+  .f-card--text {
+    background: linear-gradient(160deg, var(--f-accent-soft), transparent 70%), var(--f-bg-2);
+  }
+
+  /* Liquid hover: opt in with data-f-liquid on a card or its container. */
+  .f-card.is-hot {
+    transform: translateY(-3px);
+    box-shadow: var(--f-shadow);
+  }
+
+  .f-card::before,
+  .f-card::after {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    z-index: 1;
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+  }
+
+  .f-card::before {
+    background: radial-gradient(
+      300px circle at var(--f-lx, 50%) var(--f-ly, 0%),
+      color-mix(in oklch, var(--f-accent) 16%, transparent),
+      transparent 55%
+    );
+  }
+
+  .f-card::after {
+    padding: 1px;
+    background:
+      radial-gradient(
+        220px circle at var(--f-lx, 50%) var(--f-ly, 0%),
+        var(--f-accent),
+        transparent 70%
+      ),
+      linear-gradient(rgb(255 255 255 / 0.16), transparent 40%);
+    mask:
+      linear-gradient(#000 0 0) content-box exclude,
+      linear-gradient(#000 0 0);
+  }
+
+  .f-card.is-hot::before,
+  .f-card.is-hot::after {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .f-card,
+    .f-card::before,
+    .f-card::after {
+      transition: none;
+    }
+
+    .f-card.is-hot {
+      transform: none;
+    }
+  }
+}

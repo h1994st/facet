@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 """Draw the text-free demo images for the layout mockups, in facet's muted palette.
 
-    uv run --with pillow mockups/assets/craft.py
+    uv run mockups/assets/craft.py
 
 Writes aurora.jpg, prism.jpg, horizon.jpg and mist.jpg (1920x1080), board.jpg (a laser-puzzle
 board, 1920x1080), board-1..4.jpg (smaller boards, 1280x800) and, when ffmpeg is installed, loop.mp4
 and loop-poster.jpg (an 8-second muted video loop) next to this script. Output is deterministic
 (seeded), so rerunning reproduces the same files.
 """
+
 import math
 import random
 import shutil
@@ -150,7 +151,10 @@ def board(seed, size=(W, H), cols=12, rows=7):
     for r in range(rows + 1):
         d.line([(ox, oy + r * cell), (ox + cols * cell, oy + r * cell)], fill=(24, 30, 46), width=1)
     img = ImageChops.add(img, lines)
-    center = lambda c, r: (ox + (c + 0.5) * cell, oy + (r + 0.5) * cell)
+
+    def center(c, r):
+        return (ox + (c + 0.5) * cell, oy + (r + 0.5) * cell)
+
     tiles = Image.new("RGB", size, (0, 0, 0))
     t = ImageDraw.Draw(tiles)
     beams = Image.new("RGB", size, (0, 0, 0))
@@ -160,7 +164,9 @@ def board(seed, size=(W, H), cols=12, rows=7):
     def tile(c, r, fill=(30, 36, 52), edge=(70, 80, 108)):
         x, y = center(c, r)
         q = cell * 0.4
-        t.rounded_rectangle([x - q, y - q, x + q, y + q], radius=cell * 0.14, fill=fill, outline=edge, width=2)
+        t.rounded_rectangle(
+            [x - q, y - q, x + q, y + q], radius=cell * 0.14, fill=fill, outline=edge, width=2
+        )
         used.add((c, r))
 
     for color in rnd.sample([ROSE, MOSS, SLATE, OCHRE, LAVENDER, SAGE], 3):
@@ -202,15 +208,49 @@ def loop():
     frames = 240
     zoom = f"1.12-0.12*cos(2*PI*on/{frames})"
     subprocess.run(
-        ["ffmpeg", "-v", "error", "-y", "-loop", "1", "-i", str(OUT / "board.jpg"), "-vf",
-         f"scale=2560:-2,zoompan=z='{zoom}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'"
-         f":d={frames}:s=1280x720:fps=30,format=yuv420p",
-         "-frames:v", str(frames), "-an", "-c:v", "libx264", "-crf", "26", "-preset", "slow",
-         "-movflags", "+faststart", str(OUT / "loop.mp4")],
+        [
+            "ffmpeg",
+            "-v",
+            "error",
+            "-y",
+            "-loop",
+            "1",
+            "-i",
+            str(OUT / "board.jpg"),
+            "-vf",
+            f"scale=2560:-2,zoompan=z='{zoom}':x='iw/2-(iw/zoom/2)':y='ih/2-(ih/zoom/2)'"
+            f":d={frames}:s=1280x720:fps=30,format=yuv420p",
+            "-frames:v",
+            str(frames),
+            "-an",
+            "-c:v",
+            "libx264",
+            "-crf",
+            "26",
+            "-preset",
+            "slow",
+            "-movflags",
+            "+faststart",
+            str(OUT / "loop.mp4"),
+        ],
         check=True,
     )
-    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(OUT / "loop.mp4"), "-frames:v", "1",
-                    "-q:v", "3", str(OUT / "loop-poster.jpg")], check=True)
+    subprocess.run(
+        [
+            "ffmpeg",
+            "-v",
+            "error",
+            "-y",
+            "-i",
+            str(OUT / "loop.mp4"),
+            "-frames:v",
+            "1",
+            "-q:v",
+            "3",
+            str(OUT / "loop-poster.jpg"),
+        ],
+        check=True,
+    )
     print("wrote loop.mp4, loop-poster.jpg")
 
 

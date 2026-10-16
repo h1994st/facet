@@ -1,0 +1,16 @@
+@layer facet.components {
+  .f-theme-toggle {
+    padding: 0.35rem 0.8rem;
+    border: 1px solid var(--f-line-2);
+    border-radius: var(--f-r-pill);
+    background: none;
+    color: var(--f-fg-2);
+    font: 600 var(--f-text-xs) var(--f-font-mono);
+    cursor: pointer;
+  }
+
+  .f-theme-toggle:hover {
+    color: var(--f-fg);
+    background: color-mix(in oklch, var(--f-fg) 8%, transparent);
+  }
+}

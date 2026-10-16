@@ -1,0 +1,70 @@
+@layer facet.layouts {
+  /* The page grid: named column lines (full, wide, content), so a page is one column of content
+     whose children can break out to wide or full width. */
+  .f-page {
+    display: grid;
+    grid-template-columns:
+      [full-start] minmax(var(--f-gutter), 1fr)
+      [wide-start] minmax(0, var(--f-breakout))
+      [content-start] min(var(--f-measure), 100% - 2 * var(--f-gutter))
+      [content-end] minmax(0, var(--f-breakout))
+      [wide-end] minmax(var(--f-gutter), 1fr)
+      [full-end];
+    max-width: none;
+  }
+
+  .f-page > * {
+    grid-column: content;
+    min-width: 0;
+  }
+
+  .f-page > :where(p, li, h1, h2, h3, figcaption, blockquote) {
+    overflow-wrap: anywhere;
+  }
+
+  .f-page > .f-wide {
+    grid-column: wide;
+  }
+
+  .f-page > .f-full {
+    grid-column: full;
+  }
+
+  .f-page > .f-full img {
+    border-radius: 0;
+  }
+
+  .f-page > .f-full figcaption {
+    width: min(var(--f-measure), 100% - 2 * var(--f-gutter));
+    margin-inline: auto;
+  }
+
+  /* A centered block for pages that are not a reading column. The nav floats above, so the
+     top padding clears it. */
+  .f-wrap,
+  .f-split,
+  .f-list {
+    width: min(100% - 2 * var(--f-gutter), 68rem);
+    max-width: none;
+    margin-inline: auto;
+    padding-top: calc(var(--f-nav-clear) + 1rem);
+    padding-bottom: var(--f-space-5);
+  }
+
+  .f-wrap--narrow,
+  .f-list {
+    width: min(100% - 2 * var(--f-gutter), 46rem);
+  }
+
+  .f-wrap > header h1,
+  .f-list > header h1 {
+    margin: 0 0 var(--f-space-2);
+    font-size: var(--f-text-2xl);
+    line-height: 1.1;
+  }
+
+  .f-wrap > header p:not(.f-kicker),
+  .f-list > header p:not(.f-kicker) {
+    max-width: 36rem;
+  }
+}

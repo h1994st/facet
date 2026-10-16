@@ -1,0 +1,374 @@
+/* Reference-site chrome only (toolbar and swatch grids). facet's own classes do everything else. */
+
+/* ---------- toolbar ---------- */
+
+.site-bar {
+  position: relative;
+  z-index: 60;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--f-space-2) var(--f-space-4);
+  align-items: center;
+  padding: var(--f-space-2) var(--f-gutter);
+  border-bottom: 1px solid var(--f-line);
+  background: var(--f-bg);
+  font-size: var(--f-text-sm);
+}
+
+.site-bar__brand {
+  color: var(--f-fg);
+  font: 600 1rem var(--f-font-serif);
+  text-decoration: none;
+}
+
+.site-bar__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--f-space-1);
+}
+
+.site-bar__nav a {
+  padding: 0.35rem 0.7rem;
+  border-radius: var(--f-r-pill);
+  corner-shape: round;
+  color: var(--f-fg-2);
+  text-decoration: none;
+}
+
+.site-bar__nav a:hover {
+  color: var(--f-fg);
+}
+
+.site-bar__nav a[aria-current] {
+  background: color-mix(in oklch, var(--f-fg) 10%, transparent);
+  color: var(--f-fg);
+}
+
+.site-bar__tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--f-space-2) var(--f-space-3);
+  align-items: center;
+  margin-left: auto;
+}
+
+.site-dots {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+}
+
+.site-dot {
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  corner-shape: round;
+  background: none;
+  cursor: pointer;
+}
+
+.site-dot::before {
+  content: "";
+  width: 0.9rem;
+  height: 0.9rem;
+  border-radius: 50%;
+  corner-shape: round;
+  background: var(--sw);
+}
+
+.site-dot[aria-pressed="true"] {
+  box-shadow: 0 0 0 1.5px var(--f-fg-2);
+}
+
+/* Fixed navs start below the toolbar and settle at the top once it scrolls away. */
+.f-nav--fixed {
+  top: calc(var(--site-bar-offset, 0px) + var(--f-space-3));
+}
+
+/* The app layout is fixed to the window and cannot scroll the bar away, so it starts below it. */
+.f-app {
+  top: var(--site-bar-offset, 0px);
+}
+
+.f-app__bar {
+  top: calc(var(--site-bar-offset, 0px) + var(--f-space-3));
+}
+
+@media (max-width: 640px) {
+  .f-app {
+    top: calc(var(--site-bar-offset, 0px) + var(--f-app-bar));
+  }
+
+  .f-app__bar {
+    top: var(--site-bar-offset, 0px);
+  }
+}
+
+/* ---------- hues: accent swatch colors, shared by the toolbar dots and the color page ---------- */
+
+[data-hue] {
+  --sw-d: oklch(0.76 var(--cd, 0.06) var(--h));
+  --sw-l: oklch(0.52 var(--cl, 0.07) var(--h));
+  --sw: var(--sw-d);
+}
+
+:root[data-theme="light"] [data-hue] {
+  --sw: var(--sw-l);
+}
+
+@media (prefers-color-scheme: light) {
+  :root[data-theme="auto"] [data-hue] {
+    --sw: var(--sw-l);
+  }
+}
+
+[data-hue="rose"] {
+  --h: 15;
+}
+[data-hue="clay"] {
+  --h: 55;
+}
+[data-hue="ochre"] {
+  --h: 85;
+}
+[data-hue="moss"] {
+  --h: 130;
+}
+[data-hue="sage"] {
+  --h: 165;
+}
+[data-hue="teal"] {
+  --h: 205;
+}
+[data-hue="slate"] {
+  --h: 255;
+}
+[data-hue="lavender"] {
+  --h: 295;
+}
+[data-hue="stone"] {
+  --h: 70;
+  --cd: 0.02;
+  --cl: 0.025;
+}
+[data-hue="lichen"] {
+  --h: 150;
+  --cd: 0.02;
+  --cl: 0.025;
+}
+[data-hue="steel"] {
+  --h: 250;
+  --cd: 0.02;
+  --cl: 0.025;
+}
+[data-hue="heather"] {
+  --h: 320;
+  --cd: 0.02;
+  --cl: 0.025;
+}
+[data-hue="graphite"] {
+  --sw-d: #d5dbe3;
+  --sw-l: #374151;
+}
+
+/* ---------- page frame and swatch grids ---------- */
+
+.site-page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--f-space-7);
+  width: min(64rem, 100% - 2 * var(--f-gutter));
+  margin: var(--f-space-7) auto;
+}
+
+.site-page > section,
+.site-page > header {
+  min-width: 0;
+}
+
+.site-page h1,
+.site-page h2 {
+  margin: 0 0 var(--f-space-2);
+  font-family: var(--f-font-serif);
+}
+
+.site-page h2 {
+  font-size: var(--f-text-xl);
+}
+
+.site-page > header > p,
+.site-page > section > p {
+  max-width: 46rem;
+  color: var(--f-fg-2);
+}
+
+.site-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(13rem, 100%), 1fr));
+  gap: var(--f-space-4);
+  margin-top: var(--f-space-4);
+}
+
+.site-tile {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--f-line);
+  border-radius: var(--f-r-lg);
+  background: var(--f-bg-2);
+}
+
+.site-tile__sw {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  height: 5rem;
+}
+
+.site-tile__sw span {
+  display: flex;
+  align-items: flex-end;
+  padding: 0.4rem 0.55rem;
+  font: 600 0.7rem/1 var(--f-font-mono);
+}
+
+.site-tile__sw span:first-child {
+  background: var(--sw-d);
+  color: oklch(0.15 0.012 260);
+}
+
+.site-tile__sw span:last-child {
+  background: var(--sw-l);
+  color: #fff;
+}
+
+.site-tile__meta {
+  padding: var(--f-space-3) var(--f-space-4) var(--f-space-4);
+  font-size: var(--f-text-sm);
+}
+
+.site-tile__meta b {
+  color: var(--f-fg);
+}
+
+.site-tile__meta code {
+  display: block;
+  margin-top: 0.2rem;
+  color: var(--f-fg-3);
+  font: 0.72rem/1.5 var(--f-font-mono);
+  overflow-wrap: anywhere;
+}
+
+.site-tile__meta .f-cluster {
+  margin-top: var(--f-space-3);
+}
+
+.site-steps {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  overflow: hidden;
+  border: 1px solid var(--f-line);
+  border-radius: var(--f-r-md);
+}
+
+.site-steps span {
+  height: 3.5rem;
+  padding: 0.3rem;
+  font: 600 0.62rem/1 var(--f-font-mono);
+  color: var(--f-fg-3);
+}
+
+.site-note {
+  font: 0.75rem/1.5 var(--f-font-mono);
+  color: var(--f-fg-3);
+}
+
+@media (max-width: 640px) {
+  .site-steps {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+.site-tile__btn,
+.site-tile__link {
+  font: 600 0.78rem/1 var(--f-font-sans);
+}
+
+.site-tile__btn {
+  padding: 0.4rem 0.8rem;
+  border-radius: var(--f-r-pill);
+  corner-shape: round;
+  background: var(--sw);
+  color: oklch(0.15 0.012 260);
+}
+
+:root[data-theme="light"] .site-tile__btn {
+  color: #fff;
+}
+
+@media (prefers-color-scheme: light) {
+  :root[data-theme="auto"] .site-tile__btn {
+    color: #fff;
+  }
+}
+
+.site-tile__link {
+  color: var(--sw);
+}
+
+/* The toolbar and markup disclosures are reference-site chrome: keep them off paper. */
+@media print {
+  .site-bar,
+  .site-markup {
+    display: none;
+  }
+}
+
+/* ---------- "Markup" disclosures: a component's or layout's minimal markup ---------- */
+
+/* Padding, not margin, so the room for the footer cats does not collapse into the footer's. */
+.site-markup {
+  width: min(100% - 2 * var(--f-gutter), 64rem);
+  margin: var(--f-space-6) auto 0;
+  padding-bottom: var(--f-space-6);
+  text-align: start;
+  /* A long snippet line must not widen the block's container (a grid track, a centered copy). */
+  contain: inline-size;
+}
+
+.demo .site-markup,
+.f-panel .site-markup,
+.f-deck .site-markup,
+.demo-hint .site-markup {
+  width: auto;
+  margin: 0;
+  padding: 0;
+}
+
+.site-markup > summary {
+  width: fit-content;
+  color: inherit;
+  font: 600 var(--f-text-sm) var(--f-font-sans);
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+.site-markup > summary:hover {
+  opacity: 1;
+}
+
+/* Long lines scroll inside the block, never the page. Inside full-screen layouts, tall snippets
+   scroll too. */
+.site-markup pre.f-code {
+  margin: var(--f-space-3) 0 0;
+  font-size: 0.8rem;
+  text-align: start;
+}
+
+.f-panel .site-markup pre.f-code,
+.f-deck .site-markup pre.f-code,
+.demo-hint .site-markup pre.f-code {
+  max-height: 40svh;
+}

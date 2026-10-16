@@ -4,7 +4,13 @@
     ".": {
       "release-type": "simple",
       "package-name": "facet",
+      "include-component-in-tag": false,
       "initial-version": "0.1.0",
+      "extra-files": [
+        { "type": "generic", "path": "README.md" },
+        { "type": "generic", "path": "site/index.html" },
+        { "type": "generic", "path": "pyproject.toml" }
+      ],
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": false,
       "changelog-sections": [

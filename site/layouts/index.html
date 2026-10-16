@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Layout · Layouts</title>
+    <script src="../site.js"></script>
+    <link rel="stylesheet" href="../dist/facet.css" />
+    <link rel="stylesheet" href="../dist/cast/cast-layered.css" />
+    <link rel="stylesheet" href="../site.css" />
+    <script type="module" src="../dist/js/facet.js"></script>
+    <script type="module" src="../footer-cats.js"></script>
+    <style>
+      .lx-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(17rem, 100%), 1fr));
+        gap: var(--f-space-4);
+        margin-top: var(--f-space-6);
+      }
+      .lx-item {
+        display: block;
+        padding: 0.9rem;
+        color: inherit;
+        text-decoration: none;
+      }
+      .lx-item h2 {
+        margin: 0.85rem 0.2rem 0.15rem;
+        font: 600 1.2rem/1.3 var(--f-font-serif);
+      }
+      .lx-item p {
+        margin: 0 0.2rem;
+        color: var(--f-fg-2);
+        font-size: 0.84rem;
+        line-height: 1.5;
+      }
+      /* Wireframes: blocks for text, media, a sidebar and the nav pill. */
+      .lx-wf {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        height: 150px;
+        padding: 14px 18px;
+        overflow: hidden;
+        border: 1px solid var(--f-line);
+        border-radius: 16px;
+        background: var(--f-bg);
+      }
+      .lx-wf i {
+        display: block;
+        flex: none;
+        height: 6px;
+        border-radius: 3px;
+        background: color-mix(in oklch, var(--f-fg) 18%, transparent);
+      }
+      .lx-wf i.h {
+        height: 10px;
+        width: 60%;
+        background: color-mix(in oklch, var(--f-fg) 34%, transparent);
+      }
+      .lx-wf i.m {
+        height: 34px;
+        border-radius: 6px;
+        background: color-mix(in oklch, var(--f-accent) 35%, transparent);
+      }
+      .lx-n {
+        align-self: center;
+        width: 34%;
+        height: 9px;
+        margin-bottom: 4px;
+        border-radius: 999px;
+        background: color-mix(in oklch, var(--f-fg) 22%, transparent);
+      }
+      .lx-col {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        min-width: 0;
+      }
+      .lx-two {
+        display: flex;
+        gap: 12px;
+        flex: 1;
+      }
+      .lx-narrow {
+        width: 62%;
+        align-self: center;
+      }
+      .lx-bento {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-auto-rows: 30px;
+        gap: 6px;
+      }
+      .lx-bento b {
+        border-radius: 7px;
+        background: color-mix(in oklch, var(--f-fg) 12%, transparent);
+      }
+      .lx-bento b.big {
+        grid-column: span 2;
+        grid-row: span 2;
+        background: color-mix(in oklch, var(--f-accent) 35%, transparent);
+      }
+      .lx-rule {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+      .lx-rule i:first-child {
+        width: 14%;
+      }
+      .lx-empty {
+        align-items: center;
+        justify-content: center;
+      }
+      .lx-dot {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: color-mix(in oklch, var(--f-fg) 25%, transparent);
+      }
+      .lx-media {
+        background:
+          linear-gradient(to top, rgb(6 8 14 / 0.7), transparent 70%),
+          url(../assets/board.jpg) center / cover;
+      }
+      .lx-media i.lx-on {
+        background: rgb(255 255 255 / 0.75);
+      }
+      .lx-n--clear {
+        background: rgb(255 255 255 / 0.35);
+      }
+      .lx-dots {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        translate: 0 -50%;
+      }
+      .lx-dots b {
+        width: 4px;
+        height: 4px;
+        border-radius: 2px;
+        background: rgb(255 255 255 / 0.5);
+      }
+      .lx-dots b.on {
+        height: 10px;
+        background: #fff;
+      }
+      .lx-media {
+        position: relative;
+      }
+      .lx-board {
+        display: flex;
+        flex: 1;
+        gap: 10%;
+        align-items: center;
+        justify-content: center;
+        margin: 4px 18%;
+        border-radius: 8px;
+        background: color-mix(in oklch, var(--f-fg) 8%, transparent);
+      }
+      .lx-board b {
+        width: 14px;
+        height: 14px;
+        border-radius: 4px;
+        background: color-mix(in oklch, var(--f-fg) 30%, transparent);
+      }
+      .lx-board i {
+        flex: none;
+        width: 22%;
+        height: 3px;
+        border-radius: 2px;
+        background: var(--f-accent);
+      }
+      .lx-pill {
+        width: 34%;
+        height: 12px;
+        border-radius: 999px;
+        background: rgb(255 255 255 / 0.4);
+      }
+      .lx-app {
+        justify-content: space-between;
+      }
+      .lx-dot--red {
+        width: 12px;
+        height: 12px;
+        margin: 0 auto 30px;
+        background: oklch(0.72 0.08 15);
+        box-shadow: 0 0 12px oklch(0.72 0.08 15);
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="f-nav f-nav--fixed" aria-label="Site">
+      <span class="f-nav__brand">Duna Feline</span
+      ><a href="#" aria-current="page" data-zh="博客">Blog</a><a href="#" data-zh="项目">Projects</a
+      ><a href="#" data-zh="简历">Resume</a>
+    </nav>
+
+    <main class="f-wrap f-prose">
+      <header>
+        <p class="f-kicker" data-zh="版式">Layout</p>
+        <h1 data-zh="版式">Layout</h1>
+        <p
+          data-zh="页面版式，全部建立在同一个页面网格上：正文、加宽、铺满三条列线，加一个可选的侧栏。点开每一个看实际的例子，用的是生成的示例图片。"
+        >
+          Page layouts, all built on one page grid: content, wide and full column lines, plus an
+          optional sidebar. Open each for a working example, using generated demo images.
+        </p>
+      </header>
+      <div class="lx-grid" data-f-liquid>
+        <a class="f-card lx-item" href="reading.html">
+          <div class="lx-wf" aria-hidden="true">
+            <span class="lx-n"></span>
+            <div class="lx-col lx-narrow"><i class="h"></i><i></i><i></i></div>
+            <i class="m" style="margin: 0 4%"></i>
+            <div class="lx-col lx-narrow"><i></i><i style="width: 70%"></i></div>
+          </div>
+          <h2 data-zh="阅读">Reading</h2>
+          <p data-zh="单栏正文，图片可以加宽或铺满。普通博客文章。">
+            One reading column; figures break out to wide or full. Normal blog posts.
+          </p>
+        </a>
+        <a class="f-card lx-item" href="docs.html">
+          <div class="lx-wf" aria-hidden="true">
+            <span class="lx-n"></span>
+            <div class="lx-two">
+              <div class="lx-col" style="width: 26%">
+                <i style="width: 80%"></i><i style="width: 60%"></i><i style="width: 70%"></i>
+              </div>
+              <div class="lx-col" style="flex: 1">
+                <i class="h"></i><i></i><i></i><i style="width: 80%"></i>
+              </div>
+            </div>
+          </div>
+          <h2 data-zh="文档">Docs</h2>
+          <p data-zh="正文加一个固定的目录。文档、笔记本、长文、简历。">
+            Text with a sticky table of contents. Docs, the notebook, long posts, the resume.
+          </p>
+        </a>
+        <a class="f-card lx-item" href="margin.html">
+          <div class="lx-wf" aria-hidden="true">
+            <span class="lx-n"></span>
+            <div class="lx-two">
+              <div class="lx-col" style="flex: 1">
+                <i class="h"></i><i></i><i></i><i></i><i style="width: 70%"></i>
+              </div>
+              <div class="lx-col" style="width: 26%; padding-top: 16px">
+                <i style="width: 90%; opacity: 0.6"></i><i style="width: 70%; opacity: 0.6"></i>
+              </div>
+            </div>
+          </div>
+          <h2 data-zh="旁注">Margin notes</h2>
+          <p data-zh="脚注放在正文旁边，窄屏时点开。长文、调查记录。">
+            Footnotes beside the text, tap-to-open on phones. Long writeups, investigation notes.
+          </p>
+        </a>
+        <a class="f-card lx-item" href="split.html">
+          <div class="lx-wf" aria-hidden="true">
+            <span class="lx-n"></span>
+            <div class="lx-two" style="align-items: center">
+              <div class="lx-col" style="flex: 1">
+                <i class="h" style="width: 90%"></i><i></i><i style="width: 60%"></i>
+              </div>
+              <i class="m" style="flex: 1; height: 70px"></i>
+            </div>
+          </div>
+          <h2 data-zh="左右分栏">Split</h2>
+          <p data-zh="一边文字，一边画面，下面是左右交替的特性行。项目首页、产品页。">
+            Text on one side, a visual on the other, then alternating feature rows. Project
+            landings.
+          </p>
+        </a>
+        <a class="f-card lx-item" href="grid.html">
+          <div class="lx-wf" aria-hidden="true">
+            <span class="lx-n"></span>
+            <div class="lx-bento"><b class="big"></b><b></b><b></b><b></b><b></b><b></b></div>
+          </div>
+          <h2 data-zh="网格">Grid</h2>
+          <p data-zh="卡片网格，可筛选。项目、照片、博客卡片、标签页。">
+            A filterable grid of cards. Projects, photos, blog cards, tag pages.
+          </p>
+        </a>
+        <a class="f-card lx-item" href="list.html">
+          <div class="lx-wf" aria-hidden="true">
+            <span class="lx-n"></span><i class="h" style="width: 40%"></i>
+            <div class="lx-rule"><i></i><i style="flex: 1"></i></div>
+            <div class="lx-rule"><i></i><i style="flex: 1"></i></div>
+            <div class="lx-rule"><i></i><i style="flex: 1"></i></div>
+            <div class="lx-rule"><i></i><i style="flex: 1"></i></div>
+          </div>
+          <h2 data-zh="列表">List</h2>
+          <p data-zh="按年份分组的紧凑列表，可搜索。博客归档、链接合集、搜索结果。">
+            A dense list grouped by year, searchable. Archives, link collections, search results.
+          </p>
+        </a>
+        <a class="f-card lx-item" href="resume.html">
+          <div class="lx-wf" aria-hidden="true">
+            <span class="lx-n"></span>
+            <div class="lx-two">
+              <div class="lx-col" style="width: 22%">
+                <i style="width: 80%"></i><i style="width: 60%"></i>
+              </div>
+              <div class="lx-col" style="flex: 1">
+                <i class="h"></i><i></i><i style="width: 70%"></i><i></i>
+              </div>
+            </div>
+          </div>
+          <h2 data-zh="简历">Resume</h2>
+          <p data-zh="页头卡片、固定的章节索引和时间线。打印时是单栏。">
+            A header card, a sticky section index and a timeline. Prints as one plain column.
+          </p>
+        </a>
+        <a class="f-card lx-item" href="cover.html">
+          <div class="lx-wf lx-media" aria-hidden="true">
+            <span class="lx-n lx-n--clear"></span>
+            <div class="lx-col" style="margin-top: auto; width: 55%">
+              <i class="h lx-on"></i><i class="lx-on" style="width: 80%"></i>
+            </div>
+          </div>
+          <h2 data-zh="封面">Cover</h2>
+          <p data-zh="图片或视频铺满第一屏，导航先透明、滚动后变成玻璃。首页、精选文章。">
+            An image or video fills the first screen; the nav is clear, then glass. Homepages,
+            feature posts.
+          </p>
+        </a>
+        <a class="f-card lx-item" href="story.html">
+          <div class="lx-wf" aria-hidden="true">
+            <span class="lx-n"></span>
+            <div class="lx-two">
+              <i class="m" style="flex: 1.25; height: auto"></i>
+              <div class="lx-col" style="flex: 1; padding-top: 18px">
+                <i class="h"></i><i></i><i style="width: 70%; opacity: 0.4"></i>
+              </div>
+            </div>
+          </div>
+          <h2 data-zh="滚动叙事">Story</h2>
+          <p data-zh="画面固定，文字一步步滚过去，画面跟着换。讲解型文章、项目介绍。">
+            A pinned visual that changes as the steps scroll past. Explainers, project tours.
+          </p>
+        </a>
+        <a class="f-card lx-item" href="panels.html">
+          <div class="lx-wf lx-media" aria-hidden="true">
+            <span class="lx-n lx-n--clear"></span>
+            <div class="lx-col" style="margin-top: auto; align-items: center">
+              <i class="h lx-on" style="width: 50%"></i><i class="lx-on" style="width: 36%"></i>
+            </div>
+            <span class="lx-dots"><b></b><b class="on"></b><b></b></span>
+          </div>
+          <h2 data-zh="全页面板">Panels</h2>
+          <p data-zh="每次滚动翻一整页，文字随之出现。项目发布页、作品展示。">
+            Each scroll snaps to the next full page and its text arrives. Launches, showcases.
+          </p>
+        </a>
+        <a class="f-card lx-item" href="deck.html">
+          <div class="lx-wf" aria-hidden="true">
+            <span class="lx-n"></span><i class="h" style="width: 40%; align-self: center"></i>
+            <div class="lx-board"><b></b><i></i><b></b></div>
+            <i style="width: 30%; align-self: center"></i>
+          </div>
+          <h2 data-zh="演示文稿">Deck</h2>
+          <p data-zh="画面不动，每次滚动或按方向键是下一张幻灯片。演讲、讲解。">
+            One stage; every scroll or arrow key is the next slide, and the pieces glide. Talks.
+          </p>
+        </a>
+        <a class="f-card lx-item" href="app.html">
+          <div class="lx-wf lx-media lx-app" aria-hidden="true">
+            <span class="lx-pill"></span><span class="lx-dot lx-dot--red"></span>
+          </div>
+          <h2 data-zh="应用">App</h2>
+          <p data-zh="内容占满窗口，导航缩成角落里的胶囊。游戏、交互演示、工具。">
+            The content fills the window; the nav shrinks to a corner pill. Games, demos, tools.
+          </p>
+        </a>
+        <a class="f-card lx-item" href="empty.html">
+          <div class="lx-wf lx-empty" aria-hidden="true">
+            <span class="lx-dot"></span><i class="h" style="width: 30%"></i
+            ><i style="width: 45%"></i>
+          </div>
+          <h2 data-zh="空状态">Empty</h2>
+          <p data-zh="一句话加一只猫。404、无结果、离线。">
+            A short message with a cat. 404, no results, offline.
+          </p>
+        </a>
+      </div>
+    </main>
+    <footer class="f-footer">
+      <div class="f-footer__cats"></div>
+      <span data-zh="© 2026 Duna Feline · example.com">© 2026 Duna Feline · example.com</span>
+    </footer>
+  </body>
+</html>

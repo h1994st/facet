@@ -1,0 +1,131 @@
+@layer facet.base {
+  /* color-scheme follows the theme switch in facet.tokens. */
+  html {
+    background: var(--f-bg);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  /* The body leading comes from the tokens and is set on the root, not on body, so the Chinese
+     rule below can switch it whether lang sits on <html> or on any subtree. */
+  :where(html) {
+    line-height: var(--f-leading);
+  }
+
+  body {
+    background: var(--f-bg);
+    color: var(--f-fg);
+    font-family: var(--f-font-sans);
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a {
+    color: var(--f-accent);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--f-accent);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: var(--f-accent-soft);
+  }
+
+  :where([lang]:lang(zh)) {
+    letter-spacing: 0;
+    word-break: keep-all;
+    overflow-wrap: anywhere;
+  }
+
+  /* Leading switches only on the root and on block containers that carry lang, so a lang-tagged
+     inline span keeps the leading of the heading or button it sits in. An English block inside
+     a Chinese page goes back to the Latin leading. */
+  :where(html:lang(zh)),
+  :where(
+    :is(
+        body,
+        main,
+        article,
+        section,
+        aside,
+        header,
+        footer,
+        nav,
+        div,
+        p,
+        li,
+        dd,
+        blockquote,
+        figure,
+        figcaption,
+        td,
+        th
+      )[lang]:lang(zh)
+  ) {
+    line-height: var(--f-leading-zh);
+  }
+
+  :where(
+    :is(
+        body,
+        main,
+        article,
+        section,
+        aside,
+        header,
+        footer,
+        nav,
+        div,
+        p,
+        li,
+        dd,
+        blockquote,
+        figure,
+        figcaption,
+        td,
+        th
+      )[lang]:not(:lang(zh))
+  ) {
+    line-height: var(--f-leading);
+  }
+
+  /* Squircle facet's own containers; pills and circles keep a plain round corner. */
+  :where([class^="f-"], [class*=" f-"]),
+  .f-prose :where(pre, img, video, figure, table) {
+    corner-shape: squircle;
+  }
+
+  :where(
+    .f-pill,
+    .f-btn,
+    .f-chip,
+    .f-nav,
+    .f-nav a,
+    input,
+    .f-segmented,
+    .f-segmented button,
+    .f-input,
+    .f-search,
+    .f-theme-toggle,
+    .f-code-copy,
+    .f-media-toggle,
+    .f-toc,
+    .f-toc a,
+    .f-avatar,
+    .f-dot
+  ) {
+    corner-shape: round;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

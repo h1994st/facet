@@ -20,4 +20,14 @@ jobs:
       - uses: taiki-e/install-action@v2
         with:
           tool: just
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --frozen
       - run: just check
+      - run: |
+          just build
+          if [ -n "$(git status --porcelain -- dist)" ]; then
+            git status --porcelain -- dist
+            exit 1
+          fi
+      - run: uv run playwright install --with-deps chromium
+      - run: just test

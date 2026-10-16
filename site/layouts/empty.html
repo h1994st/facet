@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Layout · Empty</title>
+    <script src="../site.js"></script>
+    <link rel="stylesheet" href="../dist/facet.css" />
+    <link rel="stylesheet" href="../dist/cast/cast-layered.css" />
+    <link rel="stylesheet" href="../site.css" />
+    <script type="module" src="../dist/js/facet.js"></script>
+  </head>
+  <body>
+    <nav class="f-nav f-nav--fixed" aria-label="Site">
+      <span class="f-nav__brand">Duna Feline</span
+      ><a href="#" aria-current="page" data-zh="博客">Blog</a><a href="#" data-zh="项目">Projects</a
+      ><a href="#" data-zh="简历">Resume</a>
+    </nav>
+
+    <main class="f-empty-page">
+      <div class="f-empty">
+        <div>
+          <div class="f-empty__cat" aria-hidden="true"></div>
+          <p class="f-empty__code">404</p>
+          <h1 data-zh="这一页从桌上掉下去了。">This page fell off the table.</h1>
+          <p data-zh="嘟嘟把它推下去了。它可能搬家了，也可能从来没存在过。">
+            Dudu knocked it off. It may have moved, or never existed.
+          </p>
+          <div class="f-cluster">
+            <a class="f-btn f-btn--primary" href="#" data-zh="回到首页">Back to home</a>
+            <a class="f-btn" href="#" data-zh="看看博客">Browse the blog</a>
+          </div>
+        </div>
+      </div>
+    </main>
+    <details class="site-markup">
+      <summary data-zh="标记">Markup</summary>
+      <pre class="f-code">
+&lt;main class="f-empty-page"&gt;
+  &lt;div class="f-empty"&gt;
+    &lt;div&gt;
+      &lt;div class="f-empty__cat" aria-hidden="true"&gt;&lt;/div&gt;
+      &lt;p class="f-empty__code"&gt;404&lt;/p&gt;
+      &lt;h1&gt;This page fell off the table.&lt;/h1&gt;
+      &lt;p&gt;Dudu knocked it off.&lt;/p&gt;
+      &lt;a class="f-btn f-btn--primary" href="/"&gt;Back to home&lt;/a&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/main&gt;</pre>
+    </details>
+    <script type="module">
+      import { createCat } from "../dist/cast/cast.js";
+      document
+        .querySelector(".f-empty__cat")
+        .append(createCat("dudu", { pose: "jump", label: "" }));
+    </script>
+  </body>
+</html>

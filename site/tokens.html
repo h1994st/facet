@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Tokens</title>
+    <script src="site.js"></script>
+    <link rel="stylesheet" href="dist/facet.css" />
+    <link rel="stylesheet" href="site.css" />
+    <script type="module" src="dist/js/facet.js"></script>
+    <style>
+      .tok-list {
+        display: grid;
+        gap: var(--f-space-3);
+        margin: var(--f-space-4) 0 0;
+        padding: 0;
+        list-style: none;
+      }
+      .tok-list li {
+        display: grid;
+        grid-template-columns: 7rem minmax(0, 1fr);
+        gap: var(--f-space-4);
+        align-items: center;
+      }
+      .tok-list code,
+      .tok-name {
+        color: var(--f-fg-2);
+        font: 0.78rem/1.4 var(--f-font-mono);
+        overflow-wrap: anywhere;
+      }
+      .tok-bar {
+        height: 0.9rem;
+        border-radius: var(--f-r-pill);
+        corner-shape: round;
+        background: var(--f-accent);
+      }
+      .tok-boxes {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(min(8rem, 100%), 1fr));
+        gap: var(--f-space-5);
+        margin-top: var(--f-space-4);
+      }
+      .tok-box {
+        display: grid;
+        gap: var(--f-space-2);
+        min-width: 0;
+      }
+      .tok-box > div {
+        height: 5rem;
+        border: 1px solid var(--f-line-2);
+        background: var(--f-surface);
+      }
+      .tok-radius > div {
+        background: var(--f-accent-soft);
+      }
+      .tok-shadow {
+        padding: var(--f-space-3);
+        border-radius: var(--f-r-lg);
+        background: var(--f-bg-2);
+      }
+      .tok-shadow > div {
+        border: 0;
+        border-radius: var(--f-r-md);
+      }
+      .tok-motion {
+        display: grid;
+        gap: var(--f-space-3);
+        margin-top: var(--f-space-4);
+      }
+      .tok-track {
+        position: relative;
+        height: 2.5rem;
+        border: 1px solid var(--f-line);
+        border-radius: var(--f-r-pill);
+        corner-shape: round;
+        background: var(--f-bg-2);
+      }
+      .tok-dot {
+        position: absolute;
+        top: 0.4rem;
+        left: 0.4rem;
+        width: 1.6rem;
+        height: 1.6rem;
+        border-radius: 50%;
+        corner-shape: round;
+        background: var(--f-accent);
+        transition: transform var(--dur, var(--f-dur-2)) var(--ease, var(--f-ease));
+      }
+      .tok-motion[data-run="true"] .tok-dot {
+        transform: translateX(calc(var(--run, 10rem)));
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .tok-dot {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="site-page">
+      <header>
+        <p class="f-kicker">Red Dot Tracker</p>
+        <h1 data-zh="令牌">Tokens</h1>
+        <p
+          data-zh="令牌是以 <code>--f-</code> 开头的 CSS 自定义属性。每个颜色都有深色和浅色两个值；换主题时，下面所有色块都会跟着变。"
+        >
+          Tokens are CSS custom properties that start with <code>--f-</code>. Every color has a dark
+          and a light value; switch the theme in the toolbar and every swatch below follows.
+        </p>
+      </header>
+
+      <section>
+        <h2 data-zh="中性色阶">Neutral ramp</h2>
+        <p
+          data-zh="冷灰（C 0.012，色相 260），12 级。深色主题从第 1 级（最暗）开始当背景，浅色主题从第 1 级（最亮）开始。"
+        >
+          A cool gray (C 0.012, hue 260) in 12 steps. Dark pages start from step 1 (darkest) as the
+          background; light pages from step 1 (lightest).
+        </p>
+        <div class="site-steps" id="ramp" aria-label="Neutral ramp"></div>
+        <div class="site-grid">
+          <div class="tok-box">
+            <div style="background: var(--f-bg)"></div>
+            <span class="tok-name">--f-bg</span>
+          </div>
+          <div class="tok-box">
+            <div style="background: var(--f-bg-2)"></div>
+            <span class="tok-name">--f-bg-2</span>
+          </div>
+          <div class="tok-box">
+            <div style="background: var(--f-surface)"></div>
+            <span class="tok-name">--f-surface</span>
+          </div>
+          <div class="tok-box">
+            <div style="background: var(--f-fg)"></div>
+            <span class="tok-name">--f-fg</span>
+          </div>
+          <div class="tok-box">
+            <div style="background: var(--f-fg-2)"></div>
+            <span class="tok-name">--f-fg-2</span>
+          </div>
+          <div class="tok-box">
+            <div style="background: var(--f-fg-3)"></div>
+            <span class="tok-name">--f-fg-3</span>
+          </div>
+          <div class="tok-box">
+            <div style="background: var(--f-line)"></div>
+            <span class="tok-name">--f-line</span>
+          </div>
+          <div class="tok-box">
+            <div style="background: var(--f-line-2)"></div>
+            <span class="tok-name">--f-line-2</span>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 data-zh="间距">Spacing</h2>
+        <p data-zh="八级间距，从 0.25rem 到 4rem。">Eight steps, from 0.25rem to 4rem.</p>
+        <ul class="tok-list">
+          <li>
+            <code>--f-space-1 · 0.25rem</code
+            ><span class="tok-bar" style="width: var(--f-space-1)"></span>
+          </li>
+          <li>
+            <code>--f-space-2 · 0.5rem</code
+            ><span class="tok-bar" style="width: var(--f-space-2)"></span>
+          </li>
+          <li>
+            <code>--f-space-3 · 0.75rem</code
+            ><span class="tok-bar" style="width: var(--f-space-3)"></span>
+          </li>
+          <li>
+            <code>--f-space-4 · 1rem</code
+            ><span class="tok-bar" style="width: var(--f-space-4)"></span>
+          </li>
+          <li>
+            <code>--f-space-5 · 1.5rem</code
+            ><span class="tok-bar" style="width: var(--f-space-5)"></span>
+          </li>
+          <li>
+            <code>--f-space-6 · 2rem</code
+            ><span class="tok-bar" style="width: var(--f-space-6)"></span>
+          </li>
+          <li>
+            <code>--f-space-7 · 3rem</code
+            ><span class="tok-bar" style="width: var(--f-space-7)"></span>
+          </li>
+          <li>
+            <code>--f-space-8 · 4rem</code
+            ><span class="tok-bar" style="width: var(--f-space-8)"></span>
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 data-zh="圆角">Radii</h2>
+        <p
+          data-zh="容器和卡片用连续曲率（squircle）圆角；胶囊和圆形保持普通圆角。Safari 和 Firefox 退回普通圆弧。"
+        >
+          Containers and tiles use continuous-curvature (squircle) corners; pills and circles keep a
+          plain round corner. Safari and Firefox fall back to a plain arc.
+        </p>
+        <div class="tok-boxes tok-radius">
+          <div class="tok-box">
+            <div style="border-radius: var(--f-r-xs); corner-shape: squircle"></div>
+            <span class="tok-name">--f-r-xs · 6px</span>
+          </div>
+          <div class="tok-box">
+            <div style="border-radius: var(--f-r-sm); corner-shape: squircle"></div>
+            <span class="tok-name">--f-r-sm · 10px</span>
+          </div>
+          <div class="tok-box">
+            <div style="border-radius: var(--f-r-md); corner-shape: squircle"></div>
+            <span class="tok-name">--f-r-md · 14px</span>
+          </div>
+          <div class="tok-box">
+            <div style="border-radius: var(--f-r-lg); corner-shape: squircle"></div>
+            <span class="tok-name">--f-r-lg · 22px</span>
+          </div>
+          <div class="tok-box">
+            <div style="border-radius: var(--f-r-xl); corner-shape: squircle"></div>
+            <span class="tok-name">--f-r-xl · 30px</span>
+          </div>
+          <div class="tok-box">
+            <div style="border-radius: var(--f-r-pill); corner-shape: round"></div>
+            <span class="tok-name">--f-r-pill</span>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 data-zh="阴影">Shadows</h2>
+        <p data-zh="两级阴影：静止的表面和浮起的表面。">
+          Two levels: a surface at rest and a surface that floats.
+        </p>
+        <div class="tok-boxes tok-shadow">
+          <div class="tok-box">
+            <div style="box-shadow: var(--f-shadow)"></div>
+            <span class="tok-name">--f-shadow</span>
+          </div>
+          <div class="tok-box">
+            <div style="box-shadow: var(--f-shadow-hi)"></div>
+            <span class="tok-name">--f-shadow-hi</span>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2 data-zh="动效">Motion</h2>
+        <p data-zh="三档时长和两条缓动曲线。开启“减少动态效果”时，时长变为 0，圆点直接跳到终点。">
+          Three durations and two easing curves. With reduced motion on, the durations become 0 and
+          the dot jumps straight to the end.
+        </p>
+        <button class="f-btn" id="tok-run" type="button" data-zh="播放">Play</button>
+        <div class="tok-motion" id="tok-motion">
+          <div>
+            <span class="tok-name">--f-dur-1 · 150ms</span>
+            <div class="tok-track"><span class="tok-dot" style="--dur: var(--f-dur-1)"></span></div>
+          </div>
+          <div>
+            <span class="tok-name">--f-dur-2 · 250ms</span>
+            <div class="tok-track"><span class="tok-dot" style="--dur: var(--f-dur-2)"></span></div>
+          </div>
+          <div>
+            <span class="tok-name">--f-dur-3 · 600ms · --f-ease</span>
+            <div class="tok-track"><span class="tok-dot" style="--dur: var(--f-dur-3)"></span></div>
+          </div>
+          <div>
+            <span class="tok-name">--f-dur-3 · 600ms · --f-ease-spring</span>
+            <div class="tok-track">
+              <span
+                class="tok-dot"
+                style="--dur: var(--f-dur-3); --ease: var(--f-ease-spring)"
+              ></span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      // The 12-step ramp in both themes (lightness values from the design notes).
+      const DARK = [0.15, 0.18, 0.21, 0.24, 0.27, 0.31, 0.37, 0.45, 0.56, 0.7, 0.83, 0.95];
+      const LIGHT = [0.99, 0.975, 0.955, 0.93, 0.9, 0.86, 0.8, 0.72, 0.6, 0.48, 0.36, 0.2];
+      const ramp = document.getElementById("ramp");
+      function drawRamp() {
+        const light = document.documentElement.dataset.theme === "light";
+        ramp.innerHTML = (light ? LIGHT : DARK)
+          .map(
+            (l, i) =>
+              `<span style="background: oklch(${l} 0.012 260); color: ${l > 0.6 ? "rgb(0 0 0 / 0.55)" : "rgb(255 255 255 / 0.6)"}">${i + 1}</span>`,
+          )
+          .join("");
+      }
+      drawRamp();
+      document.addEventListener("site:change", drawRamp);
+
+      const motion = document.getElementById("tok-motion");
+      document.getElementById("tok-run").addEventListener("click", () => {
+        const track = motion.querySelector(".tok-track");
+        motion.style.setProperty("--run", `${track.clientWidth - 2.4 * 16}px`);
+        motion.dataset.run = motion.dataset.run === "true" ? "false" : "true";
+      });
+    </script>
+  </body>
+</html>

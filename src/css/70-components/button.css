@@ -1,0 +1,61 @@
+@layer facet.components {
+  .f-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--f-line-2);
+    border-radius: var(--f-r-pill);
+    background: none;
+    color: var(--f-fg);
+    font: 600 0.88rem/1.2 var(--f-font-sans);
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background var(--f-dur-1),
+      border-color var(--f-dur-1),
+      transform var(--f-dur-1) var(--f-ease);
+  }
+
+  .f-btn:hover {
+    background: color-mix(in oklch, var(--f-fg) 8%, transparent);
+  }
+
+  .f-btn:active {
+    transform: translateY(1px);
+  }
+
+  .f-btn--primary {
+    border-color: var(--f-accent);
+    background: var(--f-accent);
+    color: var(--f-accent-contrast);
+  }
+
+  .f-btn--primary:hover {
+    background: color-mix(in oklch, var(--f-accent) 88%, var(--f-fg));
+  }
+
+  .f-btn--quiet {
+    border-color: transparent;
+    color: var(--f-fg-2);
+  }
+
+  .f-btn--on-media {
+    border-color: rgb(255 255 255 / 0.35);
+    color: #fff;
+  }
+
+  .f-btn--on-media:hover {
+    background: rgb(255 255 255 / 0.14);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .f-btn {
+      transition: none;
+    }
+
+    .f-btn:active {
+      transform: none;
+    }
+  }
+}

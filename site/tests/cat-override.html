@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>cat override</title>
+    <link rel="stylesheet" href="../dist/facet.css" />
+    <link rel="stylesheet" href="../dist/cast/cast-layered.css" />
+    <style>
+      .f-footer__cats .cat {
+        width: 90px;
+      }
+    </style>
+  </head>
+  <body>
+    <footer class="f-footer">
+      <div class="f-footer__cats"></div>
+    </footer>
+    <script type="module">
+      import { createCat } from "../dist/cast/cast.js";
+      document.querySelector(".f-footer__cats").append(createCat("duna", { label: "" }));
+    </script>
+  </body>
+</html>
