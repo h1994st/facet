@@ -157,7 +157,21 @@ const stop = init(document.querySelector("#talk"));
 ```
 
 Analytics is off unless `<html>` carries a GA4 measurement ID, and stays off under Global Privacy
-Control.
+Control. A consent banner is out of scope. To use GA4 consent mode, define `window.dataLayer` and
+`gtag` and push the default consent in a classic `<head>` script before `facet.js`; `analytics.js`
+reuses an existing `gtag`:
+
+```html
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag("consent", "default", { analytics_storage: "denied" });
+</script>
+```
+
+Do not also keep your own `gtag("config", …)` snippet, or every view is counted twice.
 
 Every hook, the deck's slide data, and the reduced-motion and no-JS behavior are documented on the
 reference site's overview page, under "Behavior".

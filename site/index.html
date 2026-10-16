@@ -263,15 +263,19 @@ git -C vendor/facet checkout v0.1.1</pre>
               </td>
               <td><code>analytics.js</code></td>
               <td
-                data-zh='可选的 Google Analytics 4：<code>&amp;lt;html data-f-ga4="G-…"&amp;gt;</code> 加载一次 gtag 并发送一次 <code>config</code>（即一次页面浏览）。浏览器发送全局隐私控制（GPC）时什么都不加载。<code>data-f-event="name"</code> 在点击时发送这个事件（链接带 <code>link_url</code>，<code>data-f-label</code> 作为 <code>label</code>）；切换主题时发送 <code>theme_change</code>。不提供 Cookie 同意横幅：需要的网站自行接入 GA4 的同意模式。'
+                data-zh='可选的 Google Analytics 4：<code>&amp;lt;html data-f-ga4="G-…"&amp;gt;</code> 加载一次 gtag 并发送一次 <code>config</code>（即一次页面浏览）。浏览器发送全局隐私控制（GPC）时什么都不加载。<code>data-f-event="name"</code> 在点击时发送这个事件（链接带 <code>link_url</code>，<code>data-f-label</code> 作为 <code>label</code>）；切换主题时发送 <code>theme_change</code>。不提供 Cookie 同意横幅。要用 GA4 的同意模式，请在 <code>facet.js</code> 之前用一个普通（非模块）的 <code>&amp;lt;head&amp;gt;</code> 脚本定义 <code>window.dataLayer</code> 和 <code>gtag</code>，并调用 <code>gtag("consent", "default", …)</code>：<code>analytics.js</code> 会沿用已有的 <code>gtag</code>。不要再保留自己的 <code>gtag("config", …)</code> 代码，否则每次浏览都会被计两次。'
               >
                 Optional Google Analytics 4: <code>&lt;html data-f-ga4="G-…"&gt;</code> loads gtag
                 once and sends one <code>config</code> (one page view). Nothing loads when the
                 browser sends Global Privacy Control. <code>data-f-event="name"</code> sends that
                 event on click (with <code>link_url</code> for links and
                 <code>data-f-label</code> as <code>label</code>); theme switches send
-                <code>theme_change</code>. There is no consent banner: sites that need one wire GA4
-                consent mode themselves.
+                <code>theme_change</code>. A consent banner is out of scope. For GA4 consent mode,
+                define <code>window.dataLayer</code> and <code>gtag</code> and push
+                <code>gtag("consent", "default", …)</code> in a classic
+                <code>&lt;head&gt;</code> script before <code>facet.js</code>:
+                <code>analytics.js</code> reuses an existing <code>gtag</code>. Do not also keep
+                your own <code>gtag("config", …)</code> snippet, or every view is counted twice.
               </td>
             </tr>
             <tr>
