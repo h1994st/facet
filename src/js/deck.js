@@ -1,0 +1,147 @@
+// Deck: <main class="f-deck" data-f-deck> holding a .f-deck__stage (caps, a board of
+// [data-f-piece] elements, a bar) and .f-deck__slide sections. Each slide's data-f-slide JSON
+// lists the state of every piece it shows; a piece left out is hidden (beams retract to their
+// start, so they grow again when they come back). States, in percent of the board:
+//   tiles {"at": [left, top], "c": color, "lit": true}, beams {"beam": [left, top, length]},
+//   boxes {"box": [left, top, width, height], "fade": true}.
+// A piece starts where it first appears, or at its data-f-from ([left, top] or a box).
+// Each slide is a full-page scroll stop; ←/→, Space and the bar's buttons move one slide.
+export function init(root = document) {
+  const off = [];
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  for (const deck of root.querySelectorAll("[data-f-deck]")) {
+    const slides = [...deck.querySelectorAll(".f-deck__slide")];
+    const caps = deck.querySelector(".f-deck__caps");
+    if (!slides.length || !caps) continue;
+    const states = slides.map((s) => JSON.parse(s.dataset.fSlide || "{}"));
+    const pieces = Object.fromEntries(
+      [...deck.querySelectorAll("[data-f-piece]")].map((p) => [p.dataset.fPiece, p]),
+    );
+    const count = deck.querySelector(".f-deck__count");
+    const progress = deck.querySelector(".f-deck__progress");
+
+    // Move each caption into the stage, keeping the nodes so cleanup can put them back.
+    const moved = slides.map((s) => {
+      const cap = document.createElement("div");
+      cap.className = "f-deck__cap";
+      const nodes = [...s.childNodes];
+      cap.append(...nodes);
+      caps.append(cap);
+      return { cap, nodes };
+    });
+    caps.setAttribute("aria-live", "polite");
+
+    const place = (p, [l, t, w, h]) => {
+      p.style.left = `${l}%`;
+      p.style.top = `${t}%`;
+      if (w !== undefined) p.style.width = `${w}%`;
+      if (h !== undefined) p.style.height = `${h}%`;
+    };
+    const vertical = (p) => p.classList.contains("f-deck__beam--v");
+    const grow = (p, len) => (vertical(p) ? (p.style.height = len) : (p.style.width = len));
+    const start = {};
+    for (const [id, p] of Object.entries(pieces)) {
+      const first = states.find((s) => s[id])?.[id] || {};
+      const from = p.dataset.fFrom ? JSON.parse(p.dataset.fFrom) : null;
+      if (first.beam) start[id] = first.beam.slice(0, 2);
+      if (from) place(p, from);
+      else if (first.at) place(p, first.at);
+      else if (first.box) place(p, first.box);
+      if (first.beam) {
+        place(p, start[id]);
+        grow(p, "0%");
+      }
+    }
+
+    const apply = (i) => {
+      const s = states[i];
+      for (const [id, p] of Object.entries(pieces)) {
+        const st = s[id];
+        if (!st) {
+          p.style.opacity = 0;
+          if (start[id]) {
+            place(p, start[id]);
+            grow(p, "0%");
+          }
+          continue;
+        }
+        p.style.opacity = st.fade ? 0 : 1;
+        if (st.c) p.style.setProperty("--c", st.c);
+        if (st.at) place(p, st.at);
+        if (st.box) place(p, st.box);
+        if (st.beam) {
+          start[id] = st.beam.slice(0, 2);
+          place(p, start[id]);
+          grow(p, `${st.beam[2]}%`);
+        }
+        // A lit piece (the target) fills with its color.
+        if (st.lit) {
+          p.style.setProperty("--fill", st.c);
+          p.style.setProperty("--ring", st.c);
+        } else {
+          p.style.removeProperty("--fill");
+          p.style.removeProperty("--ring");
+        }
+      }
+      moved.forEach(({ cap }, j) => {
+        cap.classList.toggle("is-on", j === i);
+        cap.toggleAttribute("aria-hidden", j !== i);
+      });
+      if (count) count.textContent = `${i + 1} / ${slides.length}`;
+      progress?.style.setProperty("--p", `${((i + 1) / slides.length) * 100}%`);
+    };
+
+    deck.classList.add("is-ready");
+    let current = -1;
+    const top0 = () => slides[0].getBoundingClientRect().top + scrollY;
+    const height = () => slides[0].offsetHeight || innerHeight;
+    const update = () => {
+      const i = Math.round((scrollY - top0()) / height());
+      const clamped = Math.max(0, Math.min(slides.length - 1, i));
+      if (clamped !== current) apply((current = clamped));
+    };
+    const go = (d) => {
+      const i = Math.max(0, Math.min(slides.length - 1, current + d));
+      scrollTo({ top: top0() + i * height(), behavior: still ? "auto" : "smooth" });
+    };
+    const key = (e) => {
+      if (e.defaultPrevented || e.altKey || e.ctrlKey || e.metaKey) return;
+      if (e.target.closest?.("input, textarea, select, [contenteditable]")) return;
+      const d =
+        e.key === "ArrowRight" || (e.key === " " && !e.shiftKey)
+          ? 1
+          : e.key === "ArrowLeft" || (e.key === " " && e.shiftKey)
+            ? -1
+            : 0;
+      if (!d) return;
+      if (e.key === " " && e.target.closest?.("button, a")) return;
+      e.preventDefault();
+      go(d);
+    };
+    const prev = deck.querySelector("[data-f-deck-prev]");
+    const next = deck.querySelector("[data-f-deck-next]");
+    const back = () => go(-1);
+    const fwd = () => go(1);
+    prev?.addEventListener("click", back);
+    next?.addEventListener("click", fwd);
+    addEventListener("keydown", key);
+    addEventListener("scroll", update, { passive: true });
+    addEventListener("resize", update);
+    update();
+
+    off.push(() => {
+      prev?.removeEventListener("click", back);
+      next?.removeEventListener("click", fwd);
+      removeEventListener("keydown", key);
+      removeEventListener("scroll", update);
+      removeEventListener("resize", update);
+      moved.forEach(({ cap, nodes }, j) => {
+        slides[j].append(...nodes);
+        cap.remove();
+      });
+      caps.removeAttribute("aria-live");
+      deck.classList.remove("is-ready");
+    });
+  }
+  return () => off.forEach((f) => f());
+}

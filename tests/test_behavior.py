@@ -158,3 +158,68 @@ def test_resume_print_rules_are_scoped(page_factory, site_url):
     page.goto(f"{site_url}/layouts/resume.html")
     page.emulate_media(media="print")
     assert page.evaluate("getComputedStyle(document.querySelector('.f-nav')).display") == "none"
+
+
+import pytest  # noqa: E402
+
+
+def test_nav_turns_glass_after_cover(page_factory, site_url):
+    page = page_factory()
+    page.goto(f"{site_url}/layouts/cover.html")
+    nav = page.locator("[data-f-nav-cover]")
+    assert "is-scrolled" not in (nav.get_attribute("class") or "")
+    page.evaluate("window.scrollTo(0, innerHeight * 1.2)")
+    page.wait_for_timeout(300)
+    assert "is-scrolled" in nav.get_attribute("class")
+
+
+@pytest.mark.parametrize("width", [440, 1280])
+def test_story_step_matches_image(page_factory, site_url, width):
+    page = page_factory(width=width)
+    page.goto(f"{site_url}/layouts/story.html")
+    steps = page.locator(".f-story__step").count()
+    assert steps >= 3
+    for i in range(steps):
+        page.evaluate(
+            f"document.querySelectorAll('.f-story__step')[{i}].scrollIntoView({{block:'center'}})"
+        )
+        page.wait_for_timeout(250)
+        on_step = page.evaluate(
+            "[...document.querySelectorAll('.f-story__step')]"
+            ".findIndex(s => s.classList.contains('is-on'))"
+        )
+        on_img = page.evaluate("+document.querySelector('.f-story__stage img.is-on').dataset.step")
+        assert on_step == on_img
+
+
+def test_deck_keys_advance(page_factory, site_url):
+    page = page_factory()
+    page.goto(f"{site_url}/layouts/deck.html")
+    page.keyboard.press("ArrowRight")
+    page.wait_for_timeout(900)
+    assert page.locator(".f-deck__count").inner_text().startswith("2 /")
+
+
+@pytest.mark.parametrize("path", ["story", "panels", "deck", "margin"])
+def test_readable_without_js(page_factory, site_url, path):
+    from checks import no_hscroll
+
+    page = page_factory(width=390, js=False)
+    assert page.goto(f"{site_url}/layouts/{path}.html").ok
+    no_hscroll(page)
+    hidden = page.evaluate("""[...document.querySelectorAll('main h2, main p')]
+      .filter(e => e.textContent.trim() && getComputedStyle(e).visibility === 'hidden'
+        || +getComputedStyle(e).opacity === 0).length""")
+    assert hidden == 0
+
+
+@pytest.mark.parametrize("path", ["cover", "story", "panels", "deck", "grid"])
+def test_reduced_motion_is_still(page_factory, site_url, path):
+    from checks import running_animations
+
+    page = page_factory(reduced_motion=True)
+    assert page.goto(f"{site_url}/layouts/{path}.html").ok
+    page.wait_for_timeout(500)
+    assert running_animations(page) == 0
+    if path in ("cover", "panels"):
+        assert page.evaluate("[...document.querySelectorAll('video')].every(v => v.paused)")

@@ -125,6 +125,78 @@
         border-radius: 50%;
         background: color-mix(in oklch, var(--f-fg) 25%, transparent);
       }
+      .lx-media {
+        background:
+          linear-gradient(to top, rgb(6 8 14 / 0.7), transparent 70%),
+          url(../assets/board.jpg) center / cover;
+      }
+      .lx-media i.lx-on {
+        background: rgb(255 255 255 / 0.75);
+      }
+      .lx-n--clear {
+        background: rgb(255 255 255 / 0.35);
+      }
+      .lx-dots {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        translate: 0 -50%;
+      }
+      .lx-dots b {
+        width: 4px;
+        height: 4px;
+        border-radius: 2px;
+        background: rgb(255 255 255 / 0.5);
+      }
+      .lx-dots b.on {
+        height: 10px;
+        background: #fff;
+      }
+      .lx-media {
+        position: relative;
+      }
+      .lx-board {
+        display: flex;
+        flex: 1;
+        gap: 10%;
+        align-items: center;
+        justify-content: center;
+        margin: 4px 18%;
+        border-radius: 8px;
+        background: color-mix(in oklch, var(--f-fg) 8%, transparent);
+      }
+      .lx-board b {
+        width: 14px;
+        height: 14px;
+        border-radius: 4px;
+        background: color-mix(in oklch, var(--f-fg) 30%, transparent);
+      }
+      .lx-board i {
+        flex: none;
+        width: 22%;
+        height: 3px;
+        border-radius: 2px;
+        background: var(--f-accent);
+      }
+      .lx-pill {
+        width: 34%;
+        height: 12px;
+        border-radius: 999px;
+        background: rgb(255 255 255 / 0.4);
+      }
+      .lx-app {
+        justify-content: space-between;
+      }
+      .lx-dot--red {
+        width: 12px;
+        height: 12px;
+        margin: 0 auto 30px;
+        background: oklch(0.72 0.08 15);
+        box-shadow: 0 0 12px oklch(0.72 0.08 15);
+      }
     </style>
   </head>
   <body>
@@ -246,6 +318,67 @@
           <h2 data-zh="简历">Resume</h2>
           <p data-zh="页头卡片、固定的章节索引和时间线。打印时是单栏。">
             A header card, a sticky section index and a timeline. Prints as one plain column.
+          </p>
+        </a>
+        <a class="f-card lx-item" href="cover.html">
+          <div class="lx-wf lx-media" aria-hidden="true">
+            <span class="lx-n lx-n--clear"></span>
+            <div class="lx-col" style="margin-top: auto; width: 55%">
+              <i class="h lx-on"></i><i class="lx-on" style="width: 80%"></i>
+            </div>
+          </div>
+          <h2 data-zh="封面">Cover</h2>
+          <p data-zh="图片或视频铺满第一屏，导航先透明、滚动后变成玻璃。首页、精选文章。">
+            An image or video fills the first screen; the nav is clear, then glass. Homepages,
+            feature posts.
+          </p>
+        </a>
+        <a class="f-card lx-item" href="story.html">
+          <div class="lx-wf" aria-hidden="true">
+            <span class="lx-n"></span>
+            <div class="lx-two">
+              <i class="m" style="flex: 1.25; height: auto"></i>
+              <div class="lx-col" style="flex: 1; padding-top: 18px">
+                <i class="h"></i><i></i><i style="width: 70%; opacity: 0.4"></i>
+              </div>
+            </div>
+          </div>
+          <h2 data-zh="滚动叙事">Story</h2>
+          <p data-zh="画面固定，文字一步步滚过去，画面跟着换。讲解型文章、项目介绍。">
+            A pinned visual that changes as the steps scroll past. Explainers, project tours.
+          </p>
+        </a>
+        <a class="f-card lx-item" href="panels.html">
+          <div class="lx-wf lx-media" aria-hidden="true">
+            <span class="lx-n lx-n--clear"></span>
+            <div class="lx-col" style="margin-top: auto; align-items: center">
+              <i class="h lx-on" style="width: 50%"></i><i class="lx-on" style="width: 36%"></i>
+            </div>
+            <span class="lx-dots"><b></b><b class="on"></b><b></b></span>
+          </div>
+          <h2 data-zh="全页面板">Panels</h2>
+          <p data-zh="每次滚动翻一整页，文字随之出现。项目发布页、作品展示。">
+            Each scroll snaps to the next full page and its text arrives. Launches, showcases.
+          </p>
+        </a>
+        <a class="f-card lx-item" href="deck.html">
+          <div class="lx-wf" aria-hidden="true">
+            <span class="lx-n"></span><i class="h" style="width: 40%; align-self: center"></i>
+            <div class="lx-board"><b></b><i></i><b></b></div>
+            <i style="width: 30%; align-self: center"></i>
+          </div>
+          <h2 data-zh="演示文稿">Deck</h2>
+          <p data-zh="画面不动，每次滚动或按方向键是下一张幻灯片。演讲、讲解。">
+            One stage; every scroll or arrow key is the next slide, and the pieces glide. Talks.
+          </p>
+        </a>
+        <a class="f-card lx-item" href="app.html">
+          <div class="lx-wf lx-media lx-app" aria-hidden="true">
+            <span class="lx-pill"></span><span class="lx-dot lx-dot--red"></span>
+          </div>
+          <h2 data-zh="应用">App</h2>
+          <p data-zh="内容占满窗口，导航缩成角落里的胶囊。游戏、交互演示、工具。">
+            The content fills the window; the nav shrinks to a corner pill. Games, demos, tools.
           </p>
         </a>
         <a class="f-card lx-item" href="empty.html">

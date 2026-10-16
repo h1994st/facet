@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Layout · Cover</title>
+    <script>
+      try {
+        const s = JSON.parse(localStorage.getItem("facet-site") || "{}");
+        // The theme toggle's own saved value wins over the site-wide one.
+        if (s.theme && !localStorage.getItem("facet-theme"))
+          document.documentElement.dataset.theme = s.theme;
+        if (s.lang) document.documentElement.lang = s.lang === "zh" ? "zh-Hans" : "en";
+      } catch {}
+    </script>
+    <link rel="stylesheet" href="../dist/facet.css" />
+    <link rel="stylesheet" href="../dist/cast/cast-layered.css" />
+    <script type="module" src="../dist/js/facet.js"></script>
+    <script type="module" src="../footer-cats.js"></script>
+  </head>
+  <body>
+    <nav class="f-nav f-nav--fixed f-nav--over" aria-label="Site" data-f-nav-cover="#cover">
+      <span class="f-nav__brand">Duna Feline</span
+      ><a href="#" aria-current="page" data-zh="博客">Blog</a><a href="#" data-zh="项目">Projects</a
+      ><a href="#" data-zh="简历">Resume</a>
+    </nav>
+
+    <header class="f-cover" id="cover">
+      <img class="f-cover__media" id="cover-img" src="../assets/board.jpg" alt="" />
+      <video
+        class="f-cover__media"
+        id="cover-video"
+        src="../assets/loop.mp4"
+        poster="../assets/loop-poster.jpg"
+        muted
+        loop
+        playsinline
+        preload="none"
+        data-f-autoplay
+        hidden
+      ></video>
+      <div class="f-cover__inner">
+        <p class="f-kicker" data-zh="博客 · 研究">Blog · Research</p>
+        <h1 data-zh="十二个房间，一个红点都没抓到">Twelve Rooms, Zero Dots Caught</h1>
+        <p data-zh="两年的“红点行动”：十二个房间，零次捕获，以及我从中学到的关于光的一切。">
+          Two years of Operation Red Dot: twelve rooms, zero catches, and everything it taught me
+          about light.
+        </p>
+        <div class="f-cluster">
+          <a class="f-btn f-btn--primary" href="#" data-zh="看看追踪器 ↗">See the tracker ↗</a>
+          <a class="f-btn f-btn--on-media" href="#read" data-zh="阅读文章">Read the post</a>
+          <span class="f-meta" data-zh="2026 年 10 月 11 日 · 6 分钟阅读"
+            >Oct 11, 2026 · 6 min read</span
+          >
+        </div>
+      </div>
+      <span class="f-cover__cue" aria-hidden="true"></span>
+      <button
+        class="f-cover__toggle"
+        type="button"
+        data-f-autoplay-toggle
+        aria-controls="cover-video"
+        hidden
+      >
+        Pause
+      </button>
+    </header>
+
+    <main class="f-page f-prose" id="read">
+      <p
+        data-zh="一切从客厅墙上的一个红点开始。它出现，它移动，它在我扑上去的那一刻消失。整整两年，我在十二个房间里追它。"
+      >
+        It started with a red dot on the living-room wall. It appeared, it moved, and it vanished
+        the moment I pounced. For two years I chased it across twelve rooms.
+      </p>
+      <p
+        data-zh="我一次也没抓到它。但我学会了它的规律：它会在镜子上反射，会在门框边拐弯，而且总比我快一步。"
+      >
+        I never caught it once. But I learned its habits: it bounces off mirrors, turns at door
+        frames, and is always one step ahead of me.
+      </p>
+      <figure>
+        <img src="../assets/board-1.jpg" alt="" />
+        <figcaption data-zh="客厅里的红点路线，一个下午。">
+          The dot's paths in the living room, one afternoon.
+        </figcaption>
+      </figure>
+      <p
+        data-zh="所以我不再扑了，开始记录。每一个房间、每一面镜子、每一次它停下来的地方。两年以后，这些记录变成了一个追踪器。"
+      >
+        So I stopped pouncing and started writing things down: every room, every mirror, every place
+        it paused. Two years later, the notes became a tracker.
+      </p>
+      <h2 data-zh="这个版式适合">When to use this layout</h2>
+      <ul>
+        <li data-zh="首页、精选文章、项目首页：图片或视频本身就在讲故事的时候。">
+          The homepage, feature posts and project landings: where the image carries the story.
+        </li>
+        <li data-zh="一页只用一次；导航在封面上是透明的，滚动后变成玻璃。">
+          Once per page. The nav is clear over the cover and turns to glass once you scroll.
+        </li>
+        <li data-zh="视频：静音、循环、先显示海报帧；用户减少动态效果时只显示海报。">
+          Video: muted, looping, poster frame first; only the poster when motion is reduced.
+        </li>
+      </ul>
+      <p data-zh="试试换一种封面：">Try the other kind of cover:</p>
+      <div class="f-segmented" id="cover-kind" role="group" aria-label="Cover">
+        <button type="button" aria-pressed="true" data-kind="image" data-zh="图片">Image</button>
+        <button type="button" aria-pressed="false" data-kind="video" data-zh="视频">Video</button>
+      </div>
+    </main>
+    <footer class="f-footer">
+      <div class="f-footer__cats"></div>
+      <span data-zh="© 2026 Duna Feline · example.com">© 2026 Duna Feline · example.com</span>
+    </footer>
+
+    <script type="module">
+      // Page-only demo: switch the cover between the image and the video.
+      const img = document.getElementById("cover-img");
+      const video = document.getElementById("cover-video");
+      const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const kind = document.getElementById("cover-kind");
+      kind.addEventListener("click", (e) => {
+        const b = e.target.closest("button");
+        if (!b) return;
+        for (const x of kind.querySelectorAll("button"))
+          x.setAttribute("aria-pressed", String(x === b));
+        const isVideo = b.dataset.kind === "video";
+        img.hidden = isVideo;
+        video.hidden = !isVideo;
+        document.getElementById("cover").scrollIntoView({ behavior: still ? "auto" : "smooth" });
+      });
+    </script>
+  </body>
+</html>

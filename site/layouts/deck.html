@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Layout · Deck</title>
+    <script>
+      try {
+        const s = JSON.parse(localStorage.getItem("facet-site") || "{}");
+        // The theme toggle's own saved value wins over the site-wide one.
+        if (s.theme && !localStorage.getItem("facet-theme"))
+          document.documentElement.dataset.theme = s.theme;
+        if (s.lang) document.documentElement.lang = s.lang === "zh" ? "zh-Hans" : "en";
+      } catch {}
+    </script>
+    <link rel="stylesheet" href="../dist/facet.css" />
+    <link rel="stylesheet" href="../dist/cast/cast-layered.css" />
+    <script type="module" src="../dist/js/facet.js"></script>
+    <script type="module" src="../footer-cats.js"></script>
+    <style>
+      /* The stage's backdrop follows the theme. */
+      .f-deck {
+        --f-deck-image: url(../assets/aurora.jpg);
+      }
+      :root[data-theme="light"] .f-deck {
+        --f-deck-image: url(../assets/mist.jpg);
+      }
+      @media (prefers-color-scheme: light) {
+        :root[data-theme="auto"] .f-deck {
+          --f-deck-image: url(../assets/mist.jpg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="f-nav f-nav--fixed" aria-label="Site">
+      <span class="f-nav__brand">Duna Feline</span
+      ><a href="#" aria-current="page" data-zh="博客">Blog</a><a href="#" data-zh="项目">Projects</a
+      ><a href="#" data-zh="简历">Resume</a>
+    </nav>
+
+    <main class="f-deck" data-f-deck>
+      <div class="f-deck__stage">
+        <div class="f-deck__caps"></div>
+        <div class="f-deck__frame">
+          <div class="f-deck__board" aria-hidden="true">
+            <i class="f-deck__piece f-deck__beam" data-f-piece="b1"></i>
+            <i class="f-deck__piece f-deck__beam" data-f-piece="b2"></i>
+            <i class="f-deck__piece f-deck__beam f-deck__beam--v" data-f-piece="b3"></i>
+            <i class="f-deck__piece f-deck__beam" data-f-piece="b4"></i>
+            <i class="f-deck__piece f-deck__tile" data-f-piece="laser"></i>
+            <i class="f-deck__piece f-deck__tile" data-f-piece="laser2"></i>
+            <i class="f-deck__piece f-deck__tile f-deck__tile--filter" data-f-piece="filter"></i>
+            <i class="f-deck__piece f-deck__tile f-deck__tile--mirror" data-f-piece="mirror"></i>
+            <i class="f-deck__piece f-deck__tile f-deck__tile--target" data-f-piece="target"></i>
+            <i
+              class="f-deck__piece f-deck__shot"
+              data-f-piece="s1"
+              data-f-from="[40,35,20,30]"
+              style="background-image: url(../assets/board-1.jpg)"
+            ></i>
+            <i
+              class="f-deck__piece f-deck__shot"
+              data-f-piece="s2"
+              data-f-from="[40,35,20,30]"
+              style="background-image: url(../assets/board-2.jpg)"
+            ></i>
+            <i
+              class="f-deck__piece f-deck__shot"
+              data-f-piece="s3"
+              data-f-from="[40,35,20,30]"
+              style="background-image: url(../assets/board-3.jpg)"
+            ></i>
+            <i
+              class="f-deck__piece f-deck__shot"
+              data-f-piece="s4"
+              data-f-from="[40,35,20,30]"
+              style="background-image: url(../assets/board-4.jpg)"
+            ></i>
+          </div>
+        </div>
+        <div class="f-deck__bar">
+          <button type="button" data-f-deck-prev aria-label="Previous slide">↑</button>
+          <span class="f-deck__count">1 / 7</span>
+          <span class="f-deck__progress"></span>
+          <button type="button" data-f-deck-next aria-label="Next slide">↓</button>
+          <span class="f-deck__keys" data-zh="← → 或滚动">← → or scroll</span>
+        </div>
+      </div>
+      <section
+        class="f-deck__slide"
+        data-f-slide='{"laser":{"at":[50,50],"c":"var(--f-deck-ink)"}}'
+      >
+        <h2 data-zh="光是怎么走的。">How light moves.</h2>
+        <p data-zh="演示文稿：画面不动，每次滚动是下一张幻灯片。">
+          A deck: one stage, and every scroll is the next slide.
+        </p>
+      </section>
+      <section
+        class="f-deck__slide"
+        data-f-slide='{"laser":{"at":[12,30],"c":"var(--f-deck-ink)"},"b1":{"beam":[15.5,30,70],"c":"var(--f-deck-ink)"}}'
+      >
+        <h2 data-zh="一束激光。">One laser.</h2>
+        <p data-zh="每一个红点，都从一束光开始。">Every red dot starts as light.</p>
+      </section>
+      <section
+        class="f-deck__slide"
+        data-f-slide='{"laser":{"at":[12,30],"c":"var(--f-deck-ink)"},"b1":{"beam":[15.5,30,22],"c":"var(--f-deck-ink)"},"filter":{"at":[41,30]},"b2":{"beam":[44.5,30,41],"c":"oklch(0.72 0.08 15)"}}'
+      >
+        <h2 data-zh="滤色片只留下红光。">A filter keeps only red.</h2>
+        <p data-zh="部件改变颜色，光也跟着变。">Pieces change color, so the light does too.</p>
+      </section>
+      <section
+        class="f-deck__slide"
+        data-f-slide='{"laser":{"at":[12,30],"c":"var(--f-deck-ink)"},"b1":{"beam":[15.5,30,22],"c":"var(--f-deck-ink)"},"filter":{"at":[41,30]},"b2":{"beam":[44.5,30,26],"c":"oklch(0.72 0.08 15)"},"mirror":{"at":[74,30],"c":"var(--f-deck-ink)"},"b3":{"beam":[74,34,34],"c":"oklch(0.72 0.08 15)"},"target":{"at":[74,74],"c":"oklch(0.72 0.08 15)","lit":true}}'
+      >
+        <h2 data-zh="镜子让它转弯。">A mirror bends it.</h2>
+        <p data-zh="红光向下，找到了目标。">The red beam turns down and finds the target.</p>
+      </section>
+      <section
+        class="f-deck__slide"
+        data-f-slide='{"laser":{"at":[12,30],"c":"var(--f-deck-ink)"},"b1":{"beam":[15.5,30,22],"c":"var(--f-deck-ink)"},"filter":{"at":[41,30]},"b2":{"beam":[44.5,30,26],"c":"oklch(0.72 0.08 15)"},"mirror":{"at":[74,30],"c":"var(--f-deck-ink)"},"b3":{"beam":[74,34,34],"c":"oklch(0.72 0.08 15)"},"laser2":{"at":[12,74],"c":"oklch(0.78 0.08 150)"},"b4":{"beam":[15.5,74,55],"c":"oklch(0.78 0.08 150)"},"target":{"at":[74,74],"c":"oklch(0.86 0.08 95)","lit":true}}'
+      >
+        <h2 data-zh="光会叠加。">Light adds up.</h2>
+        <p data-zh="红光遇上绿光，目标变成黄色。">
+          Red and green meet, and the target turns yellow.
+        </p>
+      </section>
+      <section
+        class="f-deck__slide"
+        data-f-slide='{"s1":{"box":[6,4,42,44]},"s2":{"box":[52,4,42,44]},"s3":{"box":[6,52,42,44]},"s4":{"box":[52,52,42,44]}}'
+      >
+        <h2 data-zh="四个房间。">Four rooms.</h2>
+        <p data-zh="棋盘缩小，变成四个房间的红点路线。">
+          The board shrinks into four rooms of dot paths.
+        </p>
+      </section>
+      <section
+        class="f-deck__slide"
+        data-f-slide='{"s1":{"box":[26,18,48,64]},"s2":{"box":[30,22,40,56],"fade":true},"s3":{"box":[30,22,40,56],"fade":true},"s4":{"box":[30,22,40,56],"fade":true}}'
+      >
+        <h2 data-zh="开始追踪。">Start tracking.</h2>
+        <p data-zh="example.com/red-dot">example.com/red-dot</p>
+      </section>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,153 @@
+@layer facet.layouts {
+  /* A scroll story: a pinned visual beside steps that scroll past; story.js marks the step at
+     the reading line and its image .is-on. Without JS (no .is-ready) every step shows its own
+     inline image and the pinned visual is hidden, so the story reads top to bottom. */
+  .f-story {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  .f-story:not(.is-ready) {
+    display: block;
+  }
+
+  .f-story:not(.is-ready) .f-story__pin {
+    display: none;
+  }
+
+  .f-story.is-ready .f-story__inline {
+    display: none;
+  }
+
+  .f-story__inline {
+    width: 100%;
+    margin-bottom: var(--f-space-4);
+    border-radius: var(--f-r-lg);
+  }
+
+  /* The pinned part: a wrapper, so phones can give it a solid band of page color. */
+  .f-story__pin {
+    position: sticky;
+    top: calc(var(--f-nav-clear) + var(--f-space-4));
+    align-self: start;
+  }
+
+  /* A fixed-height box with no background: each image sits centered at its own shape. The
+     height never changes, so the pinned band (and the line that picks the active step) stays put
+     while the images change. Never animate its size: that moves the line and feeds back. */
+  .f-story__stage {
+    position: relative;
+    display: grid;
+    grid-template: 100% / 100%; /* a definite cell, so the images' max sizes resolve */
+    place-items: center;
+    height: min(70vh, 30rem);
+  }
+
+  .f-story__stage img {
+    grid-area: 1 / 1;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 100%;
+    border-radius: var(--f-r-lg);
+    opacity: 0;
+    transform: scale(0.985);
+    transition:
+      opacity var(--f-dur-3),
+      transform var(--f-dur-3);
+  }
+
+  .f-story__stage img.is-on {
+    opacity: 1;
+    transform: none;
+  }
+
+  .f-story__count {
+    display: block;
+    width: fit-content;
+    margin: 0.6rem auto 0;
+    color: var(--f-fg-3);
+    font: 600 0.72rem var(--f-font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .f-story__steps {
+    padding: 0 0 var(--f-space-6);
+  }
+
+  .f-story.is-ready .f-story__steps {
+    padding: 18vh 0 40vh;
+  }
+
+  .f-story__step {
+    padding-bottom: var(--f-space-6);
+  }
+
+  .f-story.is-ready .f-story__step {
+    min-height: 60vh;
+    padding-bottom: 0;
+    opacity: 0.35;
+    transition: opacity 0.4s;
+  }
+
+  .f-story.is-ready .f-story__step.is-on {
+    opacity: 1;
+  }
+
+  .f-story__step h2 {
+    margin: 0 0 0.6rem;
+  }
+
+  /* Phones: the visual pins at the top on a solid band of page color, and the steps scroll up
+     from below and slide under that band, so text and image never overlap. */
+  @media (max-width: 720px) {
+    .f-story {
+      display: block;
+    }
+
+    .f-story__pin {
+      top: 0;
+      z-index: 3;
+      margin-inline: calc(-1 * var(--f-gutter));
+      padding: max(var(--f-space-3), var(--f-nav-clear) - 0.8rem) var(--f-gutter) 0.9rem;
+      background: var(--f-bg);
+    }
+
+    /* A short fade under the band, so text eases out instead of being cut. */
+    .f-story__pin::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 100%;
+      height: 1.5rem;
+      background: linear-gradient(var(--f-bg), transparent);
+      pointer-events: none;
+    }
+
+    .f-story__stage {
+      height: 32vh;
+    }
+
+    .f-story.is-ready .f-story__steps {
+      padding: 1.5rem 0 45vh;
+    }
+
+    .f-story.is-ready .f-story__step {
+      min-height: 30vh;
+    }
+
+    .f-story__step h2 {
+      margin-top: 0;
+      font-size: 1.35rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .f-story__stage img,
+    .f-story.is-ready .f-story__step {
+      transition: none;
+    }
+  }
+}

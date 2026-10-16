@@ -1,0 +1,267 @@
+@layer facet.layouts {
+  /* A deck: one fixed stage, and one full-page scroll stop per slide. The board's pieces are
+     the same elements on every slide; each slide only changes their state, so they glide from
+     one arrangement to the next. deck.js moves each slide's caption into .f-deck__caps and
+     applies the slide's piece states. Without JS (no .is-ready) the slides are plain stacked
+     sections with their captions, and the stage is hidden. */
+  /* Default ink for light pieces: pale on the dark theme, dark on the light one. Slides can use
+     it as a color: {"c": "var(--f-deck-ink)"}. */
+  .f-deck {
+    --f-deck-ink: #e8ebf2;
+    --f-deck-ink: light-dark(oklch(0.45 0.02 260), #e8ebf2);
+  }
+
+  .f-deck__slide {
+    padding: var(--f-space-7) var(--f-gutter);
+    border-bottom: 1px solid var(--f-line);
+    text-align: center;
+  }
+
+  .f-deck__slide:first-of-type {
+    padding-top: calc(var(--f-nav-clear) + var(--f-space-5));
+  }
+
+  .f-deck:not(.is-ready) .f-deck__stage {
+    display: none;
+  }
+
+  .f-deck :is(.f-deck__slide, .f-deck__cap) h2 {
+    margin: 0;
+    font: 600 clamp(2rem, 5vw, 3.8rem) / 1.08 var(--f-font-serif);
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+  }
+
+  .f-deck :is(.f-deck__slide, .f-deck__cap) h2:lang(zh) {
+    line-height: 1.25;
+    letter-spacing: 0;
+  }
+
+  .f-deck :is(.f-deck__slide, .f-deck__cap) p {
+    max-width: 34rem;
+    margin: 0.7rem auto 0;
+    color: color-mix(in oklch, currentColor 72%, transparent);
+    font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+  }
+
+  /* With JS: each slide is an empty full-page scroll stop. */
+  :root:has(.f-deck.is-ready) {
+    scroll-snap-type: y mandatory;
+  }
+
+  .f-deck.is-ready .f-deck__slide {
+    height: 100svh;
+    padding: 0;
+    border: 0;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .f-deck__stage {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    overflow: hidden;
+    background-color: var(--f-bg-2);
+    background-image: var(--f-deck-image, none);
+    background-position: center;
+    background-size: cover;
+    color: var(--f-fg);
+  }
+
+  /* Captions: one per slide, crossfading in place. */
+  .f-deck__caps {
+    display: grid;
+    padding: calc(var(--f-nav-clear) + 2vh + 0.5rem) var(--f-gutter) 0;
+    text-align: center;
+  }
+
+  .f-deck__cap {
+    grid-area: 1 / 1;
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 0.5s,
+      transform var(--f-dur-3) var(--f-ease);
+  }
+
+  .f-deck__cap.is-on {
+    opacity: 1;
+    transform: none;
+    transition-delay: 0.15s;
+  }
+
+  /* The board: a 16:9 box; every piece is positioned in percent of it. */
+  .f-deck__frame {
+    display: grid;
+    place-items: center;
+    min-height: 0;
+    padding: var(--f-space-4) var(--f-gutter);
+  }
+
+  .f-deck__board {
+    --f-deck-t: 0.9s cubic-bezier(0.65, 0, 0.25, 1);
+    position: relative;
+    width: min(100%, 64rem, calc((100svh - 15rem) * 16 / 9));
+    aspect-ratio: 16 / 9;
+  }
+
+  .f-deck__piece {
+    position: absolute;
+    opacity: 0;
+    transition:
+      left var(--f-deck-t),
+      top var(--f-deck-t),
+      width var(--f-deck-t),
+      height var(--f-deck-t),
+      opacity 0.6s,
+      transform var(--f-deck-t),
+      background-color 0.6s,
+      box-shadow 0.6s;
+  }
+
+  /* Lasers, mirror, filter and target: small glass tiles with a glowing core. */
+  .f-deck__tile {
+    width: 7%;
+    aspect-ratio: 1;
+    border: 1px solid rgb(255 255 255 / 0.22);
+    border: 1px solid light-dark(rgb(0 0 0 / 0.12), rgb(255 255 255 / 0.22));
+    border-radius: 22%;
+    background: rgb(255 255 255 / 0.07);
+    background: light-dark(rgb(255 255 255 / 0.6), rgb(255 255 255 / 0.07));
+    backdrop-filter: blur(6px);
+    translate: -50% -50%;
+  }
+
+  .f-deck__tile::after {
+    content: "";
+    position: absolute;
+    inset: 28%;
+    border-radius: 50%;
+    background: var(--c, var(--f-deck-ink));
+    box-shadow: 0 0 18px var(--c, var(--f-deck-ink));
+    transition:
+      background 0.6s,
+      box-shadow 0.6s;
+  }
+
+  .f-deck__tile--mirror::after {
+    inset: 46% 10%;
+    border-radius: 2px;
+    transform: rotate(-45deg);
+  }
+
+  .f-deck__tile--filter::after {
+    inset: 24%;
+    border-radius: 3px;
+    background: oklch(0.7 0.08 15 / 0.75);
+    box-shadow: none;
+  }
+
+  .f-deck__tile--target {
+    border-radius: 50%;
+    corner-shape: round;
+  }
+
+  .f-deck__tile--target::after {
+    inset: 30%;
+    background: var(--fill, transparent);
+    box-shadow:
+      inset 0 0 0 2px var(--ring, color-mix(in oklch, currentColor 50%, transparent)),
+      0 0 26px var(--fill, transparent);
+  }
+
+  /* Beams: thin glowing bars that grow from their start. */
+  .f-deck__beam {
+    height: 0.5%;
+    min-height: 3px;
+    border-radius: var(--f-r-pill);
+    corner-shape: round;
+    background: var(--c, var(--f-deck-ink));
+    box-shadow: 0 0 14px var(--c, var(--f-deck-ink));
+    translate: 0 -50%;
+  }
+
+  .f-deck__beam--v {
+    width: 0.5%;
+    min-width: 3px;
+    translate: -50% 0;
+  }
+
+  /* Screenshots: the page sets each one's background-image. */
+  .f-deck__shot {
+    border-radius: var(--f-r-md);
+    background-position: center;
+    background-size: cover;
+    box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.8);
+  }
+
+  /* Bottom bar: previous, counter, progress, next, and a key hint. */
+  .f-deck__bar {
+    display: flex;
+    gap: var(--f-space-4);
+    align-items: center;
+    justify-content: center;
+    padding: 0 var(--f-gutter) 1.1rem;
+    color: color-mix(in oklch, currentColor 70%, transparent);
+    font: 600 0.75rem var(--f-font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .f-deck__progress {
+    width: min(16rem, 40vw);
+    height: 3px;
+    overflow: hidden;
+    border-radius: var(--f-r-pill);
+    corner-shape: round;
+    background: color-mix(in oklch, currentColor 20%, transparent);
+  }
+
+  .f-deck__progress::before {
+    content: "";
+    display: block;
+    width: var(--p, 0%);
+    height: 100%;
+    background: currentColor;
+    transition: width 0.5s;
+  }
+
+  .f-deck__bar button {
+    padding: 0.3rem 0.7rem;
+    border: 1px solid color-mix(in oklch, currentColor 30%, transparent);
+    border-radius: var(--f-r-pill);
+    corner-shape: round;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  /* Phones: a taller board fills the screen; pieces keep their percent positions. */
+  @media (max-width: 720px) {
+    .f-deck__board {
+      width: 100%;
+      max-height: 100%;
+      aspect-ratio: 3 / 4;
+    }
+
+    .f-deck__tile {
+      width: 12%;
+    }
+
+    .f-deck__keys {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .f-deck__piece,
+    .f-deck__tile::after,
+    .f-deck__cap,
+    .f-deck__progress::before {
+      transition: none;
+    }
+  }
+}

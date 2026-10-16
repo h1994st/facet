@@ -28,7 +28,22 @@ def test_matrix_covers_the_layouts():
     layouts = {p for p in PAGES if p.startswith("layouts/")}
     assert layouts == {
         f"layouts/{n}.html"
-        for n in ["index", "reading", "docs", "margin", "split", "grid", "list", "resume", "empty"]
+        for n in [
+            "index",
+            "reading",
+            "docs",
+            "margin",
+            "split",
+            "grid",
+            "list",
+            "resume",
+            "empty",
+            "cover",
+            "story",
+            "panels",
+            "deck",
+            "app",
+        ]
     }
 
 

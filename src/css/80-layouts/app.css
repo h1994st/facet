@@ -1,0 +1,92 @@
+@layer facet.layouts {
+  /* An app page: the content fills the window, and the site's chrome shrinks to one glass pill
+     in the top-left corner (a slim bar above the app on phones, where there is no room to float). */
+  :root:has(.f-app) {
+    --f-app-bar: 44px;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  :root:has(.f-app) body {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .f-app {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    background: var(--f-bg-2);
+  }
+
+  .f-app__bar {
+    position: fixed;
+    left: var(--f-space-4);
+    top: var(--f-space-3);
+    z-index: 30;
+    display: flex;
+    gap: var(--f-space-1);
+    align-items: center;
+    max-width: calc(100% - 2 * var(--f-space-4));
+    padding: 0.3rem;
+    border: 1px solid var(--f-glass-edge);
+    border-radius: var(--f-r-pill);
+    corner-shape: round;
+    background: var(--f-glass-bg);
+    backdrop-filter: blur(var(--f-glass-blur)) saturate(140%);
+    box-shadow: var(--f-shadow);
+    color: var(--f-fg);
+    font-size: var(--f-text-sm);
+    white-space: nowrap;
+  }
+
+  .f-app__bar :is(a, button) {
+    padding: 0.4rem 0.75rem;
+    border: 0;
+    border-radius: var(--f-r-pill);
+    corner-shape: round;
+    background: none;
+    color: var(--f-fg-2);
+    font: 500 var(--f-text-sm) var(--f-font-sans);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .f-app__bar :is(a, button):hover {
+    background: color-mix(in oklch, var(--f-fg) 10%, transparent);
+    color: var(--f-fg);
+  }
+
+  .f-app__brand {
+    padding: 0 0.6rem 0 0.3rem;
+    font: 600 0.92rem var(--f-font-serif);
+  }
+
+  .f-app__sep {
+    width: 1px;
+    height: 1.1rem;
+    background: var(--f-line-2);
+  }
+
+  @media (max-width: 640px) {
+    .f-app {
+      top: var(--f-app-bar);
+    }
+
+    .f-app__bar {
+      inset: 0 0 auto;
+      max-width: none;
+      height: var(--f-app-bar);
+      justify-content: space-between;
+      padding: 0 0.4rem;
+      border: 0;
+      border-bottom: 1px solid var(--f-line);
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .f-app__sep {
+      display: none;
+    }
+  }
+}

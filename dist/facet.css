@@ -3087,6 +3087,510 @@
   }
 }
 
+/* src/css/80-layouts/app.css */
+@layer facet.layouts {
+  /* An app page: the content fills the window, and the site's chrome shrinks to one glass pill
+     in the top-left corner (a slim bar above the app on phones, where there is no room to float). */
+  :root:has(.f-app) {
+    --f-app-bar: 44px;
+    height: 100%;
+    overflow: hidden;
+  }
+
+  :root:has(.f-app) body {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .f-app {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    background: var(--f-bg-2);
+  }
+
+  .f-app__bar {
+    position: fixed;
+    left: var(--f-space-4);
+    top: var(--f-space-3);
+    z-index: 30;
+    display: flex;
+    gap: var(--f-space-1);
+    align-items: center;
+    max-width: calc(100% - 2 * var(--f-space-4));
+    padding: 0.3rem;
+    border: 1px solid var(--f-glass-edge);
+    border-radius: var(--f-r-pill);
+    corner-shape: round;
+    background: var(--f-glass-bg);
+    backdrop-filter: blur(var(--f-glass-blur)) saturate(140%);
+    box-shadow: var(--f-shadow);
+    color: var(--f-fg);
+    font-size: var(--f-text-sm);
+    white-space: nowrap;
+  }
+
+  .f-app__bar :is(a, button) {
+    padding: 0.4rem 0.75rem;
+    border: 0;
+    border-radius: var(--f-r-pill);
+    corner-shape: round;
+    background: none;
+    color: var(--f-fg-2);
+    font: 500 var(--f-text-sm) var(--f-font-sans);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .f-app__bar :is(a, button):hover {
+    background: color-mix(in oklch, var(--f-fg) 10%, transparent);
+    color: var(--f-fg);
+  }
+
+  .f-app__brand {
+    padding: 0 0.6rem 0 0.3rem;
+    font: 600 0.92rem var(--f-font-serif);
+  }
+
+  .f-app__sep {
+    width: 1px;
+    height: 1.1rem;
+    background: var(--f-line-2);
+  }
+
+  @media (max-width: 640px) {
+    .f-app {
+      top: var(--f-app-bar);
+    }
+
+    .f-app__bar {
+      inset: 0 0 auto;
+      max-width: none;
+      height: var(--f-app-bar);
+      justify-content: space-between;
+      padding: 0 0.4rem;
+      border: 0;
+      border-bottom: 1px solid var(--f-line);
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .f-app__sep {
+      display: none;
+    }
+  }
+}
+
+/* src/css/80-layouts/cover.css */
+@layer facet.layouts {
+  /* A cover: an image or video fills the first screen, the title sits on a scrim at its foot,
+     and a fixed .f-nav--over floats clear over it (nav.js turns it to glass past the cover). */
+  .f-cover {
+    position: relative;
+    display: grid;
+    align-items: end;
+    min-height: 100svh;
+    overflow: hidden;
+    background: oklch(0.15 0.012 260);
+    color: #fff;
+  }
+
+  .f-cover__media {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* The scrim keeps the title readable on any frame, in both themes. */
+  .f-cover::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to top, rgb(6 8 14 / 0.88), rgb(6 8 14 / 0.25) 55%, rgb(6 8 14 / 0.45)),
+      linear-gradient(to right, rgb(6 8 14 / 0.55), transparent 60%);
+    pointer-events: none;
+  }
+
+  .f-cover__inner {
+    position: relative;
+    z-index: 1;
+    width: min(100% - 2 * var(--f-gutter), 64rem);
+    margin: 0 auto;
+    padding: calc(var(--f-nav-clear) + var(--f-space-6)) 0 4.5rem;
+  }
+
+  .f-cover__inner h1 {
+    max-width: 18ch;
+    margin: 0;
+    color: #fff;
+    font: 600 clamp(2.6rem, 6vw, 4.6rem) / 1.04 var(--f-font-serif);
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+  }
+
+  .f-cover__inner h1:lang(zh) {
+    max-width: 14em;
+    line-height: 1.2;
+    letter-spacing: 0;
+  }
+
+  .f-cover__inner p {
+    max-width: 34rem;
+    margin: 1rem 0 1.5rem;
+    color: rgb(255 255 255 / 0.78);
+    font-size: 1.12rem;
+  }
+
+  /* On media the kicker takes the accent's hue at a light tone, so it reads in both themes. */
+  .f-cover .f-kicker {
+    margin: 0 0 0.6rem;
+    color: rgb(255 255 255 / 0.75);
+    color: oklch(from var(--f-accent) 0.85 0.06 h);
+  }
+
+  .f-cover .f-meta {
+    color: rgb(255 255 255 / 0.65);
+  }
+
+  /* A scroll cue at the foot of the cover. */
+  .f-cover__cue {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 1.2rem;
+    z-index: 1;
+    width: 22px;
+    height: 34px;
+    margin-inline: auto;
+    border: 1.5px solid rgb(255 255 255 / 0.5);
+    border-radius: var(--f-r-pill);
+    corner-shape: round;
+  }
+
+  .f-cover__cue::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 7px;
+    width: 3px;
+    height: 7px;
+    border-radius: 2px;
+    background: #fff;
+    transform: translateX(-50%);
+    animation: f-cover-cue 1.6s ease-in-out infinite;
+  }
+
+  @keyframes f-cover-cue {
+    50% {
+      transform: translate(-50%, 9px);
+      opacity: 0.3;
+    }
+  }
+
+  /* Pause control for a playing cover video (autoplay.js shows it while the video plays). */
+  .f-cover__toggle {
+    position: absolute;
+    right: var(--f-gutter);
+    bottom: 1.25rem;
+    z-index: 2;
+    padding: 0.4rem 0.75rem;
+    border: 1px solid rgb(255 255 255 / 0.3);
+    border-radius: var(--f-r-pill);
+    corner-shape: round;
+    background: rgb(0 0 0 / 0.35);
+    color: #fff;
+    font: 600 0.75rem var(--f-font-mono);
+    backdrop-filter: blur(8px);
+    cursor: pointer;
+  }
+
+  /* The page after a cover starts with a little air, not the nav clearance. */
+  .f-cover + :is(main, .f-page, .f-wrap) {
+    padding-top: var(--f-space-7);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .f-cover__cue::after {
+      animation: none;
+    }
+  }
+}
+
+/* src/css/80-layouts/deck.css */
+@layer facet.layouts {
+  /* A deck: one fixed stage, and one full-page scroll stop per slide. The board's pieces are
+     the same elements on every slide; each slide only changes their state, so they glide from
+     one arrangement to the next. deck.js moves each slide's caption into .f-deck__caps and
+     applies the slide's piece states. Without JS (no .is-ready) the slides are plain stacked
+     sections with their captions, and the stage is hidden. */
+  /* Default ink for light pieces: pale on the dark theme, dark on the light one. Slides can use
+     it as a color: {"c": "var(--f-deck-ink)"}. */
+  .f-deck {
+    --f-deck-ink: #e8ebf2;
+    --f-deck-ink: light-dark(oklch(0.45 0.02 260), #e8ebf2);
+  }
+
+  .f-deck__slide {
+    padding: var(--f-space-7) var(--f-gutter);
+    border-bottom: 1px solid var(--f-line);
+    text-align: center;
+  }
+
+  .f-deck__slide:first-of-type {
+    padding-top: calc(var(--f-nav-clear) + var(--f-space-5));
+  }
+
+  .f-deck:not(.is-ready) .f-deck__stage {
+    display: none;
+  }
+
+  .f-deck :is(.f-deck__slide, .f-deck__cap) h2 {
+    margin: 0;
+    font: 600 clamp(2rem, 5vw, 3.8rem) / 1.08 var(--f-font-serif);
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+  }
+
+  .f-deck :is(.f-deck__slide, .f-deck__cap) h2:lang(zh) {
+    line-height: 1.25;
+    letter-spacing: 0;
+  }
+
+  .f-deck :is(.f-deck__slide, .f-deck__cap) p {
+    max-width: 34rem;
+    margin: 0.7rem auto 0;
+    color: color-mix(in oklch, currentColor 72%, transparent);
+    font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+  }
+
+  /* With JS: each slide is an empty full-page scroll stop. */
+  :root:has(.f-deck.is-ready) {
+    scroll-snap-type: y mandatory;
+  }
+
+  .f-deck.is-ready .f-deck__slide {
+    height: 100svh;
+    padding: 0;
+    border: 0;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .f-deck__stage {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    overflow: hidden;
+    background-color: var(--f-bg-2);
+    background-image: var(--f-deck-image, none);
+    background-position: center;
+    background-size: cover;
+    color: var(--f-fg);
+  }
+
+  /* Captions: one per slide, crossfading in place. */
+  .f-deck__caps {
+    display: grid;
+    padding: calc(var(--f-nav-clear) + 2vh + 0.5rem) var(--f-gutter) 0;
+    text-align: center;
+  }
+
+  .f-deck__cap {
+    grid-area: 1 / 1;
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 0.5s,
+      transform var(--f-dur-3) var(--f-ease);
+  }
+
+  .f-deck__cap.is-on {
+    opacity: 1;
+    transform: none;
+    transition-delay: 0.15s;
+  }
+
+  /* The board: a 16:9 box; every piece is positioned in percent of it. */
+  .f-deck__frame {
+    display: grid;
+    place-items: center;
+    min-height: 0;
+    padding: var(--f-space-4) var(--f-gutter);
+  }
+
+  .f-deck__board {
+    --f-deck-t: 0.9s cubic-bezier(0.65, 0, 0.25, 1);
+    position: relative;
+    width: min(100%, 64rem, calc((100svh - 15rem) * 16 / 9));
+    aspect-ratio: 16 / 9;
+  }
+
+  .f-deck__piece {
+    position: absolute;
+    opacity: 0;
+    transition:
+      left var(--f-deck-t),
+      top var(--f-deck-t),
+      width var(--f-deck-t),
+      height var(--f-deck-t),
+      opacity 0.6s,
+      transform var(--f-deck-t),
+      background-color 0.6s,
+      box-shadow 0.6s;
+  }
+
+  /* Lasers, mirror, filter and target: small glass tiles with a glowing core. */
+  .f-deck__tile {
+    width: 7%;
+    aspect-ratio: 1;
+    border: 1px solid rgb(255 255 255 / 0.22);
+    border: 1px solid light-dark(rgb(0 0 0 / 0.12), rgb(255 255 255 / 0.22));
+    border-radius: 22%;
+    background: rgb(255 255 255 / 0.07);
+    background: light-dark(rgb(255 255 255 / 0.6), rgb(255 255 255 / 0.07));
+    backdrop-filter: blur(6px);
+    translate: -50% -50%;
+  }
+
+  .f-deck__tile::after {
+    content: "";
+    position: absolute;
+    inset: 28%;
+    border-radius: 50%;
+    background: var(--c, var(--f-deck-ink));
+    box-shadow: 0 0 18px var(--c, var(--f-deck-ink));
+    transition:
+      background 0.6s,
+      box-shadow 0.6s;
+  }
+
+  .f-deck__tile--mirror::after {
+    inset: 46% 10%;
+    border-radius: 2px;
+    transform: rotate(-45deg);
+  }
+
+  .f-deck__tile--filter::after {
+    inset: 24%;
+    border-radius: 3px;
+    background: oklch(0.7 0.08 15 / 0.75);
+    box-shadow: none;
+  }
+
+  .f-deck__tile--target {
+    border-radius: 50%;
+    corner-shape: round;
+  }
+
+  .f-deck__tile--target::after {
+    inset: 30%;
+    background: var(--fill, transparent);
+    box-shadow:
+      inset 0 0 0 2px var(--ring, color-mix(in oklch, currentColor 50%, transparent)),
+      0 0 26px var(--fill, transparent);
+  }
+
+  /* Beams: thin glowing bars that grow from their start. */
+  .f-deck__beam {
+    height: 0.5%;
+    min-height: 3px;
+    border-radius: var(--f-r-pill);
+    corner-shape: round;
+    background: var(--c, var(--f-deck-ink));
+    box-shadow: 0 0 14px var(--c, var(--f-deck-ink));
+    translate: 0 -50%;
+  }
+
+  .f-deck__beam--v {
+    width: 0.5%;
+    min-width: 3px;
+    translate: -50% 0;
+  }
+
+  /* Screenshots: the page sets each one's background-image. */
+  .f-deck__shot {
+    border-radius: var(--f-r-md);
+    background-position: center;
+    background-size: cover;
+    box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.8);
+  }
+
+  /* Bottom bar: previous, counter, progress, next, and a key hint. */
+  .f-deck__bar {
+    display: flex;
+    gap: var(--f-space-4);
+    align-items: center;
+    justify-content: center;
+    padding: 0 var(--f-gutter) 1.1rem;
+    color: color-mix(in oklch, currentColor 70%, transparent);
+    font: 600 0.75rem var(--f-font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .f-deck__progress {
+    width: min(16rem, 40vw);
+    height: 3px;
+    overflow: hidden;
+    border-radius: var(--f-r-pill);
+    corner-shape: round;
+    background: color-mix(in oklch, currentColor 20%, transparent);
+  }
+
+  .f-deck__progress::before {
+    content: "";
+    display: block;
+    width: var(--p, 0%);
+    height: 100%;
+    background: currentColor;
+    transition: width 0.5s;
+  }
+
+  .f-deck__bar button {
+    padding: 0.3rem 0.7rem;
+    border: 1px solid color-mix(in oklch, currentColor 30%, transparent);
+    border-radius: var(--f-r-pill);
+    corner-shape: round;
+    background: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  /* Phones: a taller board fills the screen; pieces keep their percent positions. */
+  @media (max-width: 720px) {
+    .f-deck__board {
+      width: 100%;
+      max-height: 100%;
+      aspect-ratio: 3 / 4;
+    }
+
+    .f-deck__tile {
+      width: 12%;
+    }
+
+    .f-deck__keys {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .f-deck__piece,
+    .f-deck__tile::after,
+    .f-deck__cap,
+    .f-deck__progress::before {
+      transition: none;
+    }
+  }
+}
+
 /* src/css/80-layouts/docs.css */
 @layer facet.layouts {
   /* Two columns: a sticky table of contents (.f-toc), then the reading column. */
@@ -3539,6 +4043,279 @@
   .f-wrap > header p:not(.f-kicker),
   .f-list > header p:not(.f-kicker) {
     max-width: 36rem;
+  }
+}
+
+/* src/css/80-layouts/panels.css */
+@layer facet.layouts {
+  /* Full-page panels: every scroll snaps to the next panel, like a product page. panels.js marks
+     the settled panel .is-on (its .f-reveal text arrives, its video plays) and fills nav.f-dots.
+     Without JS (no .is-ready) the text is simply visible. */
+  :root:has(.f-panels) {
+    scroll-snap-type: y mandatory;
+  }
+
+  .f-panel {
+    position: relative;
+    display: grid;
+    height: 100svh;
+    overflow: hidden;
+    scroll-snap-align: start;
+    scroll-snap-stop: always; /* one swipe or wheel turn moves one panel, never two */
+    background-color: oklch(0.13 0.012 260);
+    background-image: var(--f-panel-image, none);
+    background-position: center;
+    background-size: cover;
+    color: #fff;
+  }
+
+  /* A panel in the page's own colors: the nav turns to glass over it. */
+  .f-panel--plain {
+    background-color: var(--f-bg);
+    color: var(--f-fg);
+  }
+
+  .f-panel__media {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* A scrim under the text whenever a panel has background media. */
+  .f-panel:has(> .f-panel__media)::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgb(6 8 14 / 0.85), rgb(6 8 14 / 0.1) 60%);
+    pointer-events: none;
+  }
+
+  .f-panel__copy {
+    position: relative;
+    z-index: 1;
+    width: min(100% - 2 * var(--f-gutter), 64rem);
+    margin: 0 auto;
+  }
+
+  .f-panel h2 {
+    margin: 0;
+    color: inherit;
+    font: 600 clamp(2.4rem, 6vw, 4.8rem) / 1.04 var(--f-font-serif);
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+  }
+
+  .f-panel h2:lang(zh) {
+    line-height: 1.2;
+    letter-spacing: 0;
+  }
+
+  .f-panel p {
+    max-width: 34rem;
+    margin: 0.9rem 0 0;
+    color: color-mix(in oklch, currentColor 76%, transparent);
+    font-size: clamp(1rem, 1.6vw, 1.2rem);
+  }
+
+  .f-panel .f-kicker {
+    margin: 0 0 0.6rem;
+    color: rgb(255 255 255 / 0.75);
+    color: oklch(from var(--f-accent) 0.85 0.06 h);
+    font-size: 0.78rem;
+  }
+
+  .f-panel--plain .f-kicker {
+    color: var(--f-accent);
+  }
+
+  /* Shapes. */
+  .f-panel--bottom {
+    align-items: end;
+    padding-bottom: 5rem;
+  }
+
+  .f-panel--center {
+    place-items: end center;
+    padding-bottom: 4.5rem;
+    text-align: center;
+  }
+
+  .f-panel--center p,
+  .f-panel--stage p,
+  .f-panel--end p {
+    margin-inline: auto;
+  }
+
+  .f-panel--stage {
+    grid-template-rows: auto minmax(0, 1fr);
+    padding-top: calc(var(--f-nav-clear) + 1rem);
+    text-align: center;
+  }
+
+  .f-panel__figure {
+    display: grid;
+    place-items: center;
+    min-height: 0;
+    padding: 2rem var(--f-gutter) 2.5rem;
+  }
+
+  .f-panel__figure img {
+    max-width: min(100%, 56rem);
+    max-height: 100%;
+    border-radius: var(--f-r-lg);
+    box-shadow: 0 40px 80px -40px rgb(0 0 0 / 0.8);
+  }
+
+  .f-panel--split {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .f-panel__side {
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .f-panel--split .f-panel__copy {
+    align-self: center;
+    width: auto;
+    margin: 0;
+    padding: 0 clamp(1.5rem, 5vw, 4.5rem);
+  }
+
+  .f-panel--end {
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+
+  .f-panel--end .f-panel__copy {
+    align-self: center;
+    text-align: center;
+  }
+
+  .f-panel--end .f-cluster {
+    justify-content: center;
+    margin-top: var(--f-space-5);
+  }
+
+  .f-panel--end .f-footer {
+    margin: 0;
+  }
+
+  /* Text arrives when its panel settles; only once panels.js is running. */
+  .f-panels.is-ready .f-reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.7s,
+      transform 0.7s var(--f-ease);
+  }
+
+  .f-panels.is-ready .is-on .f-reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  .f-panels.is-ready .is-on .f-reveal:nth-child(2) {
+    transition-delay: 0.08s;
+  }
+
+  .f-panels.is-ready .is-on .f-reveal:nth-child(3) {
+    transition-delay: 0.16s;
+  }
+
+  /* Page dots on the right edge. */
+  .f-dots {
+    position: fixed;
+    right: 1rem;
+    top: 50%;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    transform: translateY(-50%);
+  }
+
+  .f-dots:empty {
+    display: none;
+  }
+
+  .f-dots button {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--f-r-pill);
+    corner-shape: round;
+    background: rgb(255 255 255 / 0.4);
+    box-shadow: 0 0 0 1px rgb(0 0 0 / 0.25);
+    cursor: pointer;
+    transition:
+      height 0.3s,
+      background 0.3s;
+  }
+
+  /* A larger touch target than the dot itself. */
+  .f-dots button::before {
+    content: "";
+    position: absolute;
+    inset: -8px -12px;
+  }
+
+  .f-dots button[aria-current] {
+    height: 22px;
+    background: #fff;
+  }
+
+  /* Over a panel in page colors, the dots take the page's text color. */
+  .f-dots.is-over-plain button {
+    background: color-mix(in oklch, var(--f-fg) 35%, transparent);
+    box-shadow: none;
+  }
+
+  .f-dots.is-over-plain button[aria-current] {
+    background: var(--f-fg);
+  }
+
+  @media (max-width: 720px) {
+    .f-panel--split {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: 45% minmax(0, 1fr);
+    }
+
+    .f-panel--split .f-panel__copy {
+      align-self: start;
+      padding: 1.75rem var(--f-gutter) 0;
+    }
+
+    .f-panel--bottom {
+      padding-bottom: 3.5rem;
+    }
+
+    .f-dots {
+      right: 0.5rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :root:has(.f-panels) {
+      scroll-snap-type: none;
+    }
+
+    .f-panels.is-ready .f-reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+
+    .f-dots button {
+      transition: none;
+    }
   }
 }
 
@@ -4051,6 +4828,161 @@
 
     .f-split__feature:nth-of-type(even) > :first-child {
       order: 0;
+    }
+  }
+}
+
+/* src/css/80-layouts/story.css */
+@layer facet.layouts {
+  /* A scroll story: a pinned visual beside steps that scroll past; story.js marks the step at
+     the reading line and its image .is-on. Without JS (no .is-ready) every step shows its own
+     inline image and the pinned visual is hidden, so the story reads top to bottom. */
+  .f-story {
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  .f-story:not(.is-ready) {
+    display: block;
+  }
+
+  .f-story:not(.is-ready) .f-story__pin {
+    display: none;
+  }
+
+  .f-story.is-ready .f-story__inline {
+    display: none;
+  }
+
+  .f-story__inline {
+    width: 100%;
+    margin-bottom: var(--f-space-4);
+    border-radius: var(--f-r-lg);
+  }
+
+  /* The pinned part: a wrapper, so phones can give it a solid band of page color. */
+  .f-story__pin {
+    position: sticky;
+    top: calc(var(--f-nav-clear) + var(--f-space-4));
+    align-self: start;
+  }
+
+  /* A fixed-height box with no background: each image sits centered at its own shape. The
+     height never changes, so the pinned band (and the line that picks the active step) stays put
+     while the images change. Never animate its size: that moves the line and feeds back. */
+  .f-story__stage {
+    position: relative;
+    display: grid;
+    grid-template: 100% / 100%; /* a definite cell, so the images' max sizes resolve */
+    place-items: center;
+    height: min(70vh, 30rem);
+  }
+
+  .f-story__stage img {
+    grid-area: 1 / 1;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: 100%;
+    border-radius: var(--f-r-lg);
+    opacity: 0;
+    transform: scale(0.985);
+    transition:
+      opacity var(--f-dur-3),
+      transform var(--f-dur-3);
+  }
+
+  .f-story__stage img.is-on {
+    opacity: 1;
+    transform: none;
+  }
+
+  .f-story__count {
+    display: block;
+    width: fit-content;
+    margin: 0.6rem auto 0;
+    color: var(--f-fg-3);
+    font: 600 0.72rem var(--f-font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .f-story__steps {
+    padding: 0 0 var(--f-space-6);
+  }
+
+  .f-story.is-ready .f-story__steps {
+    padding: 18vh 0 40vh;
+  }
+
+  .f-story__step {
+    padding-bottom: var(--f-space-6);
+  }
+
+  .f-story.is-ready .f-story__step {
+    min-height: 60vh;
+    padding-bottom: 0;
+    opacity: 0.35;
+    transition: opacity 0.4s;
+  }
+
+  .f-story.is-ready .f-story__step.is-on {
+    opacity: 1;
+  }
+
+  .f-story__step h2 {
+    margin: 0 0 0.6rem;
+  }
+
+  /* Phones: the visual pins at the top on a solid band of page color, and the steps scroll up
+     from below and slide under that band, so text and image never overlap. */
+  @media (max-width: 720px) {
+    .f-story {
+      display: block;
+    }
+
+    .f-story__pin {
+      top: 0;
+      z-index: 3;
+      margin-inline: calc(-1 * var(--f-gutter));
+      padding: max(var(--f-space-3), var(--f-nav-clear) - 0.8rem) var(--f-gutter) 0.9rem;
+      background: var(--f-bg);
+    }
+
+    /* A short fade under the band, so text eases out instead of being cut. */
+    .f-story__pin::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 100%;
+      height: 1.5rem;
+      background: linear-gradient(var(--f-bg), transparent);
+      pointer-events: none;
+    }
+
+    .f-story__stage {
+      height: 32vh;
+    }
+
+    .f-story.is-ready .f-story__steps {
+      padding: 1.5rem 0 45vh;
+    }
+
+    .f-story.is-ready .f-story__step {
+      min-height: 30vh;
+    }
+
+    .f-story__step h2 {
+      margin-top: 0;
+      font-size: 1.35rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .f-story__stage img,
+    .f-story.is-ready .f-story__step {
+      transition: none;
     }
   }
 }

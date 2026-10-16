@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Layout · App</title>
+    <script>
+      try {
+        const s = JSON.parse(localStorage.getItem("facet-site") || "{}");
+        // The theme toggle's own saved value wins over the site-wide one.
+        if (s.theme && !localStorage.getItem("facet-theme"))
+          document.documentElement.dataset.theme = s.theme;
+        if (s.lang) document.documentElement.lang = s.lang === "zh" ? "zh-Hans" : "en";
+      } catch {}
+    </script>
+    <link rel="stylesheet" href="../dist/facet.css" />
+    <link rel="stylesheet" href="../dist/cast/cast-layered.css" />
+    <script type="module" src="../dist/js/facet.js"></script>
+    <style>
+      /* Page-only demo app: pounce on the red dot (you won't catch it). */
+      .demo-game {
+        position: relative;
+        height: 100%;
+        overflow: hidden;
+        background: url(../assets/board.jpg) center / cover;
+        cursor: crosshair;
+        touch-action: manipulation;
+      }
+      .demo-score {
+        position: absolute;
+        top: 0.75rem;
+        left: 0;
+        right: 0;
+        z-index: 2;
+        display: flex;
+        gap: 1.2rem;
+        align-items: center;
+        width: fit-content;
+        margin-inline: auto;
+        padding: 0.4rem 0.5rem 0.4rem 1rem;
+        border: 1px solid rgb(255 255 255 / 0.12);
+        border-radius: 999px;
+        background: rgb(16 20 32 / 0.7);
+        backdrop-filter: blur(12px);
+        color: rgb(255 255 255 / 0.85);
+        font: 500 0.85rem var(--f-font-sans);
+        white-space: nowrap;
+        cursor: default;
+      }
+      .demo-score b {
+        color: #fff;
+        font-variant-numeric: tabular-nums;
+      }
+      .demo-score button {
+        padding: 0.3rem 0.8rem;
+        border: 0;
+        border-radius: 999px;
+        background: rgb(255 255 255 / 0.14);
+        color: #fff;
+        font: inherit;
+        cursor: pointer;
+      }
+      .demo-dot {
+        position: absolute;
+        left: 50%;
+        top: 55%;
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        background: oklch(0.72 0.08 15);
+        box-shadow:
+          0 0 0 6px oklch(0.72 0.08 15 / 0.25),
+          0 0 30px oklch(0.72 0.08 15);
+        translate: -50% -50%;
+        transition:
+          left 0.35s var(--f-ease),
+          top 0.35s var(--f-ease);
+      }
+      .demo-hint {
+        position: fixed;
+        right: 1rem;
+        top: 4rem;
+        z-index: 30;
+        max-width: 18rem;
+        margin: 0;
+        padding: 0.7rem 0.9rem;
+        border: 1px solid var(--f-glass-edge);
+        border-radius: 16px;
+        background: var(--f-glass-bg);
+        backdrop-filter: blur(16px);
+        color: var(--f-fg-2);
+        font-size: 0.8rem;
+        line-height: 1.5;
+      }
+      @media (max-width: 640px) {
+        .demo-hint {
+          display: none;
+        }
+        .demo-score {
+          top: auto;
+          bottom: 0.75rem;
+          gap: 0.8rem;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .demo-dot {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="f-app" id="app">
+      <div class="demo-game" id="game">
+        <div class="demo-score">
+          <span data-zh="客厅">Living room</span>
+          <span><span data-zh="扑击">Pounces</span> <b id="pounces">0</b></span>
+          <span><span data-zh="抓到">Caught</span> <b>0</b></span>
+          <button type="button" id="reset" data-zh="重来">Reset</button>
+        </div>
+        <span class="demo-dot" id="dot" aria-hidden="true"></span>
+      </div>
+      <p
+        class="demo-hint"
+        data-zh="应用版式：内容占满窗口，网站的导航缩成角落里的一个玻璃胶囊。适合：游戏、交互演示、工具。"
+      >
+        App layout: the content fills the window and the site's nav shrinks to one glass pill in a
+        corner the app leaves free. For: games, interactive demos, tools.
+      </p>
+    </main>
+    <nav class="f-app__bar" aria-label="Site">
+      <a href="index.html" data-zh="← 返回">← Back</a>
+      <span class="f-app__sep" aria-hidden="true"></span>
+      <span class="f-app__brand">Red Dot</span>
+      <button type="button" id="fs" data-zh="全屏">Fullscreen</button>
+    </nav>
+
+    <script type="module">
+      // The dot drifts on its own (not under reduced motion) and darts away from the pointer.
+      const game = document.getElementById("game");
+      const dot = document.getElementById("dot");
+      const count = document.getElementById("pounces");
+      const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      let pounces = 0;
+      const move = () => {
+        dot.style.left = 8 + Math.random() * 84 + "%";
+        dot.style.top = 18 + Math.random() * 70 + "%";
+      };
+      if (!still) setInterval(move, 1600);
+      game.addEventListener("pointermove", (e) => {
+        const r = dot.getBoundingClientRect();
+        if (Math.hypot(e.clientX - r.x - r.width / 2, e.clientY - r.y - r.height / 2) < 70) move();
+      });
+      game.addEventListener("pointerdown", (e) => {
+        if (e.target.closest(".demo-score")) return;
+        count.textContent = ++pounces;
+        move();
+      });
+      document.getElementById("reset").addEventListener("click", () => {
+        pounces = 0;
+        count.textContent = 0;
+      });
+      const fs = document.getElementById("fs");
+      if (!document.fullscreenEnabled) fs.hidden = true;
+      fs.addEventListener("click", () => document.getElementById("app").requestFullscreen?.());
+    </script>
+  </body>
+</html>

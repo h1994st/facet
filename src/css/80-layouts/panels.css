@@ -1,0 +1,271 @@
+@layer facet.layouts {
+  /* Full-page panels: every scroll snaps to the next panel, like a product page. panels.js marks
+     the settled panel .is-on (its .f-reveal text arrives, its video plays) and fills nav.f-dots.
+     Without JS (no .is-ready) the text is simply visible. */
+  :root:has(.f-panels) {
+    scroll-snap-type: y mandatory;
+  }
+
+  .f-panel {
+    position: relative;
+    display: grid;
+    height: 100svh;
+    overflow: hidden;
+    scroll-snap-align: start;
+    scroll-snap-stop: always; /* one swipe or wheel turn moves one panel, never two */
+    background-color: oklch(0.13 0.012 260);
+    background-image: var(--f-panel-image, none);
+    background-position: center;
+    background-size: cover;
+    color: #fff;
+  }
+
+  /* A panel in the page's own colors: the nav turns to glass over it. */
+  .f-panel--plain {
+    background-color: var(--f-bg);
+    color: var(--f-fg);
+  }
+
+  .f-panel__media {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* A scrim under the text whenever a panel has background media. */
+  .f-panel:has(> .f-panel__media)::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgb(6 8 14 / 0.85), rgb(6 8 14 / 0.1) 60%);
+    pointer-events: none;
+  }
+
+  .f-panel__copy {
+    position: relative;
+    z-index: 1;
+    width: min(100% - 2 * var(--f-gutter), 64rem);
+    margin: 0 auto;
+  }
+
+  .f-panel h2 {
+    margin: 0;
+    color: inherit;
+    font: 600 clamp(2.4rem, 6vw, 4.8rem) / 1.04 var(--f-font-serif);
+    letter-spacing: -0.015em;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+  }
+
+  .f-panel h2:lang(zh) {
+    line-height: 1.2;
+    letter-spacing: 0;
+  }
+
+  .f-panel p {
+    max-width: 34rem;
+    margin: 0.9rem 0 0;
+    color: color-mix(in oklch, currentColor 76%, transparent);
+    font-size: clamp(1rem, 1.6vw, 1.2rem);
+  }
+
+  .f-panel .f-kicker {
+    margin: 0 0 0.6rem;
+    color: rgb(255 255 255 / 0.75);
+    color: oklch(from var(--f-accent) 0.85 0.06 h);
+    font-size: 0.78rem;
+  }
+
+  .f-panel--plain .f-kicker {
+    color: var(--f-accent);
+  }
+
+  /* Shapes. */
+  .f-panel--bottom {
+    align-items: end;
+    padding-bottom: 5rem;
+  }
+
+  .f-panel--center {
+    place-items: end center;
+    padding-bottom: 4.5rem;
+    text-align: center;
+  }
+
+  .f-panel--center p,
+  .f-panel--stage p,
+  .f-panel--end p {
+    margin-inline: auto;
+  }
+
+  .f-panel--stage {
+    grid-template-rows: auto minmax(0, 1fr);
+    padding-top: calc(var(--f-nav-clear) + 1rem);
+    text-align: center;
+  }
+
+  .f-panel__figure {
+    display: grid;
+    place-items: center;
+    min-height: 0;
+    padding: 2rem var(--f-gutter) 2.5rem;
+  }
+
+  .f-panel__figure img {
+    max-width: min(100%, 56rem);
+    max-height: 100%;
+    border-radius: var(--f-r-lg);
+    box-shadow: 0 40px 80px -40px rgb(0 0 0 / 0.8);
+  }
+
+  .f-panel--split {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .f-panel__side {
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .f-panel--split .f-panel__copy {
+    align-self: center;
+    width: auto;
+    margin: 0;
+    padding: 0 clamp(1.5rem, 5vw, 4.5rem);
+  }
+
+  .f-panel--end {
+    grid-template-rows: minmax(0, 1fr) auto;
+  }
+
+  .f-panel--end .f-panel__copy {
+    align-self: center;
+    text-align: center;
+  }
+
+  .f-panel--end .f-cluster {
+    justify-content: center;
+    margin-top: var(--f-space-5);
+  }
+
+  .f-panel--end .f-footer {
+    margin: 0;
+  }
+
+  /* Text arrives when its panel settles; only once panels.js is running. */
+  .f-panels.is-ready .f-reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 0.7s,
+      transform 0.7s var(--f-ease);
+  }
+
+  .f-panels.is-ready .is-on .f-reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  .f-panels.is-ready .is-on .f-reveal:nth-child(2) {
+    transition-delay: 0.08s;
+  }
+
+  .f-panels.is-ready .is-on .f-reveal:nth-child(3) {
+    transition-delay: 0.16s;
+  }
+
+  /* Page dots on the right edge. */
+  .f-dots {
+    position: fixed;
+    right: 1rem;
+    top: 50%;
+    z-index: 20;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    transform: translateY(-50%);
+  }
+
+  .f-dots:empty {
+    display: none;
+  }
+
+  .f-dots button {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--f-r-pill);
+    corner-shape: round;
+    background: rgb(255 255 255 / 0.4);
+    box-shadow: 0 0 0 1px rgb(0 0 0 / 0.25);
+    cursor: pointer;
+    transition:
+      height 0.3s,
+      background 0.3s;
+  }
+
+  /* A larger touch target than the dot itself. */
+  .f-dots button::before {
+    content: "";
+    position: absolute;
+    inset: -8px -12px;
+  }
+
+  .f-dots button[aria-current] {
+    height: 22px;
+    background: #fff;
+  }
+
+  /* Over a panel in page colors, the dots take the page's text color. */
+  .f-dots.is-over-plain button {
+    background: color-mix(in oklch, var(--f-fg) 35%, transparent);
+    box-shadow: none;
+  }
+
+  .f-dots.is-over-plain button[aria-current] {
+    background: var(--f-fg);
+  }
+
+  @media (max-width: 720px) {
+    .f-panel--split {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-rows: 45% minmax(0, 1fr);
+    }
+
+    .f-panel--split .f-panel__copy {
+      align-self: start;
+      padding: 1.75rem var(--f-gutter) 0;
+    }
+
+    .f-panel--bottom {
+      padding-bottom: 3.5rem;
+    }
+
+    .f-dots {
+      right: 0.5rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :root:has(.f-panels) {
+      scroll-snap-type: none;
+    }
+
+    .f-panels.is-ready .f-reveal {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+
+    .f-dots button {
+      transition: none;
+    }
+  }
+}
