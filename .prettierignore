@@ -5,3 +5,5 @@ site/dist
 site/assets
 src/cast/cast.css
 src/cast/cast.js
+# Written by release-please on every release; its format is not ours to restyle.
+CHANGELOG.md
