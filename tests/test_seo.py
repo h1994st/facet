@@ -153,7 +153,7 @@ def head_of(published, rel, lang):
 def test_each_language_has_its_own_url_linked_both_ways(published, rel):
     for lang, code in (("en", "en"), ("zh", "zh-Hans")):
         page, head = head_of(published, rel, lang)
-        assert f'<html lang="{code}" data-site-lang="{lang}" data-f-ga4="G-ZMH6NLL7C7">' in page
+        assert f'<html lang="{code}" data-site-lang="{lang}" data-f-ga4="{site_meta.GA4}">' in page
         assert f'<link rel="canonical" href="{expected_url(rel, lang)}" />' in head
         assert f'hreflang="en" href="{expected_url(rel)}"' in head
         assert f'hreflang="zh-Hans" href="{expected_url(rel, "zh")}"' in head
@@ -245,10 +245,11 @@ def test_the_chinese_copy_renders_and_switches_by_url(browser, published_url, re
 
 
 def test_published_pages_carry_the_ga4_id_and_sources_do_not(published):
+    assert re.fullmatch(r"G-[A-Z0-9]+", site_meta.GA4)
     for rel in PAGES:
         for prefix in ("", "zh/"):
             page = (published / prefix / rel).read_text()
-            assert 'data-f-ga4="G-ZMH6NLL7C7"' in page.split(">", 2)[1] + ">", (prefix, rel)
+            assert f'data-f-ga4="{site_meta.GA4}"' in page.split(">", 2)[1] + ">", (prefix, rel)
         # index.html documents the attribute in its text; only the <html> tag matters.
         assert "data-f-ga4" not in re.search(r"<html\b[^>]*>", source(rel)).group(0), rel
     for path in (published / "mockups").glob("*.html"):

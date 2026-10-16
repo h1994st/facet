@@ -7,9 +7,26 @@ def text(page, sel="#t"):
     return page.evaluate(f"document.querySelector({sel!r}).textContent")
 
 
+def install_paused_clock(page):
+    # A clock that is only installed keeps moving in real time, so a slow start would fire the
+    # timers early. Paused, it moves only with run_for.
+    page.clock.install(time=0)
+    page.clock.pause_at(1000)
+
+
+def frame(page):
+    # A paused clock also stops requestAnimationFrame, so wait for a rendered frame through an
+    # observer of our own: intersection observers report together, after the page's own.
+    page.evaluate(
+        "new Promise((r) => { const io = new IntersectionObserver(() => { io.disconnect(); r(); });"
+        " io.observe(document.body); })"
+    )
+    page.clock.run_for(32)
+
+
 def ready(page_factory, site_url, **kw):
     page = page_factory(**kw)
-    page.clock.install()
+    install_paused_clock(page)
     page.goto(f"{site_url}/tests/typewriter.html")
     page.wait_for_function("document.querySelector('#t').dataset.fTypeOn === '1'")
     return page
@@ -47,11 +64,11 @@ def test_loops_back_to_the_first_phrase(page_factory, site_url):
 
 def test_still_under_reduced_motion(page_factory, site_url):
     page = page_factory(reduced_motion=True)
-    page.clock.install()
+    install_paused_clock(page)
     page.goto(f"{site_url}/tests/typewriter.html")
     # In view, and a frame rendered: an observer that was wrongly running would have fired by now.
     page.wait_for_function("document.querySelector('#t').getBoundingClientRect().bottom > 0")
-    page.evaluate("new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)))")
+    frame(page)
     # Sample mid-cycle: a moving loop shows "", "h" or "hi" here, never "meow".
     for ms in (2550, 2600, 2500):
         page.clock.run_for(ms)
@@ -110,10 +127,11 @@ def test_init_twice_runs_one_loop_and_cleanup_restores(page_factory, site_url):
 def test_cleanup_then_observer_activity_stays_still(page_factory, site_url):
     page = ready(page_factory, site_url)
     page.evaluate(f"{FACET}.then((m) => m.cleanup())")
-    page.evaluate("document.querySelector('#t').scrollIntoView()")
+    # Off screen and back, a frame each, so a still-connected observer would report both.
     page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+    frame(page)
     page.evaluate("window.scrollTo(0, 0)")
-    page.evaluate("new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)))")
+    frame(page)
     page.clock.run_for(6000)
     assert text(page) == "meow"
     assert page.evaluate("document.querySelector('#t').dataset.fTypeOn") is None
