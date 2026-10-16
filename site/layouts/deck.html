@@ -134,6 +134,35 @@
       >
         <h2 data-zh="开始追踪。">Start tracking.</h2>
         <p data-zh="example.com/red-dot">example.com/red-dot</p>
+        <details class="site-markup">
+          <summary data-zh="标记">Markup</summary>
+          <pre class="f-code">
+&lt;main class="f-deck" data-f-deck&gt;
+  &lt;div class="f-deck__stage"&gt;
+    &lt;div class="f-deck__caps"&gt;&lt;/div&gt;
+    &lt;div class="f-deck__frame"&gt;
+      &lt;div class="f-deck__board" aria-hidden="true"&gt;
+        &lt;i class="f-deck__piece f-deck__tile" data-f-piece="laser"&gt;&lt;/i&gt;
+        &lt;i class="f-deck__piece f-deck__beam" data-f-piece="b1"&gt;&lt;/i&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;div class="f-deck__bar"&gt;
+      &lt;button type="button" data-f-deck-prev aria-label="Previous slide"&gt;↑&lt;/button&gt;
+      &lt;span class="f-deck__count"&gt;1 / 2&lt;/span&gt;
+      &lt;span class="f-deck__progress"&gt;&lt;/span&gt;
+      &lt;button type="button" data-f-deck-next aria-label="Next slide"&gt;↓&lt;/button&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;section class="f-deck__slide" data-f-slide='{"laser": {"at": [50, 50]}}'&gt;
+    &lt;h2&gt;How light moves.&lt;/h2&gt;
+  &lt;/section&gt;
+  &lt;section class="f-deck__slide"
+    data-f-slide='{"laser": {"at": [20, 50]}, "b1": {"beam": [20, 50, 60]}}'&gt;
+    &lt;h2&gt;In straight lines.&lt;/h2&gt;
+  &lt;/section&gt;
+&lt;/main&gt;
+&lt;!-- The data-f-slide format is on the Overview page, under Behavior. --&gt;</pre>
+        </details>
       </section>
     </main>
   </body>

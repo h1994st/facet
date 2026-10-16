@@ -136,3 +136,15 @@ def test_panel_video_stays_paused_under_reduced_motion(page_factory, site_url):
     page.wait_for_timeout(300)
     assert page.evaluate("document.querySelector('.f-panel video').paused")
     assert not page.locator("[data-f-panel-toggle]").is_visible()
+
+
+def test_theme_snippet_is_documented_verbatim():
+    import html
+    import re
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[1]
+    fixture = (root / "site/tests/theme-snippet.html").read_text()
+    snippet = re.search(r"<script>try\{.*?</script>", fixture)[0]
+    assert snippet in (root / "README.md").read_text()
+    assert snippet in html.unescape((root / "site/index.html").read_text())

@@ -14,8 +14,8 @@ just check         # check formatting without changing files
 just build         # generate dist/ from src/
 just test          # build, then run the browser tests (pytest + Playwright)
 just fonts         # rebuild the self-hosted fonts (network; cached in fonts/.cache/)
-just serve         # serve the repo at http://localhost:8000
-just site          # assemble the GitHub Pages site into _site/ (what CI deploys)
+just serve         # build, then serve the Pages layout (site/ + mockups/) live at http://localhost:8000
+just site          # assemble the GitHub Pages site into _site/ (what CI deploys; no site/tests)
 ```
 
 ## Repository layout
@@ -33,15 +33,20 @@ just site          # assemble the GitHub Pages site into _site/ (what CI deploys
 - `fonts/`: the font build script and its cache. `mockups/`: design explorations, left as is.
 
 Cascade layers, in order: `facet.reset`, `facet.tokens`, `facet.base`, `facet.prose`, `facet.cast`,
-`facet.components`, `facet.layouts`, `facet.utilities`. Consumer CSS is unlayered and always wins.
+`facet.components`, `facet.layouts`, `facet.utilities`. Consumer CSS is unlayered and wins, except
+over facet's two layered `!important` rules (`[hidden]` and the global reduced-motion block), which
+nothing unlayered can beat; keep it to those two.
 
 ## Engineering rules
 
 - **No build step for consumers.** Ship plain CSS (custom properties and classes) and small,
   optional vanilla JS. No framework, no preprocessor output that a consumer must compile: every
   consuming site has a different stack.
-- **Every token has a dark and a light value.** Dark is the default (`:root`); light overrides it.
-  Never add a color, shadow or glass token for one theme only.
+- **Every token has a dark and a light value.** Dark is the default. A themed token is one
+  declaration on the theme switch in `10-tokens.css`,
+  `var(--f-unless-light, <dark>) var(--f-unless-dark, <light>)`; the light theme, `auto` on a light
+  system and print flip the switch, so never copy token values into a per-theme block. Never add a
+  color, shadow or glass token for one theme only.
 - **Low saturation.** Every color is muted: in OKLCH, keep accents at chroma 0.08 or below and
   neutrals at 0.02 or below. No saturated brand hues, including in illustrations and semantic
   colors.
@@ -125,9 +130,10 @@ Cascade layers, in order: `facet.reset`, `facet.tokens`, `facet.base`, `facet.pr
 - **Python:** dependencies change only through `uv add` / `uv remove` (`--dev` for dev tools), never
   by editing `pyproject.toml`; `.claude/hooks/protect-pyproject.sh` denies it and `settings.json`
   denies editing `uv.lock`. Ruff formats and lints Python (`just fmt`, `just check`).
-- **CI:** `.github/workflows/ci.yml` runs `just check` on every PR and push to `main`, with the same
-  Prettier version as the Brewfile's (pinned in the workflow; bump both together). `pages.yml`
-  deploys `just site` to GitHub Pages on every push to `main`.
+- **CI:** `.github/workflows/ci.yml` runs on every PR and push to `main`: `just check` (with the
+  same Prettier version as the Brewfile's, pinned in the workflow; bump both together), `just build`
+  with a check that `dist/` has no uncommitted changes, and `just test`. `pages.yml` deploys
+  `just site` to GitHub Pages on every push to `main`.
 - **Formatting:** Prettier owns CSS, JS, HTML, Markdown, JSON and YAML (`.prettierrc.json`: width
   100, prose wrapped). `just --fmt` owns the justfile. `.claude/hooks/format.sh` runs
   `just fmt <file>` after every edit; run `just check` before committing.

@@ -87,6 +87,9 @@
         font-size: 0.8rem;
         line-height: 1.5;
       }
+      .demo-hint p {
+        margin: 0 0 var(--f-space-2);
+      }
       @media (max-width: 640px) {
         .demo-hint {
           display: none;
@@ -115,13 +118,24 @@
         </div>
         <span class="demo-dot" id="dot" aria-hidden="true"></span>
       </div>
-      <p
-        class="demo-hint"
-        data-zh="应用版式：内容占满窗口，网站的导航缩成角落里的一个玻璃胶囊。适合：游戏、交互演示、工具。"
-      >
-        App layout: the content fills the window and the site's nav shrinks to one glass pill in a
-        corner the app leaves free. For: games, interactive demos, tools.
-      </p>
+      <div class="demo-hint">
+        <p
+          data-zh="应用版式：内容占满窗口，网站的导航缩成角落里的一个玻璃胶囊。适合：游戏、交互演示、工具。"
+        >
+          App layout: the content fills the window and the site's nav shrinks to one glass pill in a
+          corner the app leaves free. For: games, interactive demos, tools.
+        </p>
+        <details class="site-markup">
+          <summary data-zh="标记">Markup</summary>
+          <pre class="f-code">
+&lt;main class="f-app" id="app"&gt;…&lt;/main&gt;
+&lt;nav class="f-app__bar" aria-label="Site"&gt;
+  &lt;a href="/"&gt;← Back&lt;/a&gt;
+  &lt;span class="f-app__sep" aria-hidden="true"&gt;&lt;/span&gt;
+  &lt;span class="f-app__brand"&gt;Red Dot&lt;/span&gt;
+&lt;/nav&gt;</pre>
+        </details>
+      </div>
     </main>
     <nav class="f-app__bar" aria-label="Site">
       <a href="index.html" data-zh="← 返回">← Back</a>

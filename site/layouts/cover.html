@@ -102,6 +102,26 @@
         <button type="button" aria-pressed="false" data-kind="video" data-zh="视频">Video</button>
       </div>
     </main>
+    <details class="site-markup">
+      <summary data-zh="标记">Markup</summary>
+      <pre class="f-code">
+&lt;nav class="f-nav f-nav--fixed f-nav--over" aria-label="Site" data-f-nav-cover="#cover"&gt;…&lt;/nav&gt;
+&lt;header class="f-cover" id="cover"&gt;
+  &lt;img class="f-cover__media" src="board.jpg" alt="" /&gt;
+  &lt;div class="f-cover__inner"&gt;
+    &lt;h1&gt;Twelve Rooms, Zero Dots Caught&lt;/h1&gt;
+    &lt;p&gt;Two years of Operation Red Dot.&lt;/p&gt;
+  &lt;/div&gt;
+  &lt;span class="f-cover__cue" aria-hidden="true"&gt;&lt;/span&gt;
+&lt;/header&gt;
+&lt;main class="f-page f-prose"&gt;…&lt;/main&gt;
+
+&lt;!-- A video cover: the video plus its pause control, both inside .f-cover. --&gt;
+&lt;video class="f-cover__media" id="cover-video" src="loop.mp4" poster="loop-poster.jpg"
+  muted loop playsinline data-f-autoplay&gt;&lt;/video&gt;
+&lt;button class="f-media-toggle f-cover__toggle" type="button"
+  data-f-autoplay-toggle aria-controls="cover-video" hidden&gt;Pause&lt;/button&gt;</pre>
+    </details>
     <footer class="f-footer">
       <div class="f-footer__cats"></div>
       <span data-zh="© 2026 Duna Feline · example.com">© 2026 Duna Feline · example.com</span>

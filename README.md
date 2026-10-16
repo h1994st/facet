@@ -15,9 +15,10 @@ as one family. The name: each site is one facet of the same identity, cut from t
 ## Design choices
 
 - **Type:** Source Serif 4 and Noto Serif SC for headings, Geist for text and UI, Geist Mono for
-  code. Chinese body text uses the system's built-in fonts; LXGW WenKai (霞鹜文楷) is available as
-  an opt-in. All fonts are self-hosted alongside the sites, so they load wherever the sites do,
-  including mainland China (`just fonts` rebuilds them from the pinned official releases).
+  code. Chinese body text uses the system's built-in fonts. An opt-in LXGW WenKai (霞鹜文楷) is
+  planned but not shipped yet. All fonts are self-hosted alongside the sites, so they load wherever
+  the sites do, including mainland China (`just fonts` rebuilds them from the pinned official
+  releases).
 - **Color:** low saturation throughout, on cool (slightly blue) neutral grays. Accents share one
   lightness and chroma in OKLCH, so every site's buttons and links have the same contrast.
 - **Glass:** solid surfaces at rest, with frosted glass only on things that float (nav, sheets).
@@ -94,6 +95,14 @@ git -C vendor/facet checkout v0.1.0
 
 <!-- x-release-please-end -->
 
+To apply a saved theme before first paint (`facet.js` runs after it, so the page would flash), put
+this line in `<head>`, before the stylesheet. It accepts only `dark`, `light` or `auto`:
+
+<!-- prettier-ignore -->
+```html
+<script>try{var t=localStorage.getItem("facet-theme");if(/^(dark|light|auto)$/.test(t))document.documentElement.dataset.theme=t}catch(e){}</script>
+```
+
 A minimal page:
 
 ```html
@@ -110,23 +119,45 @@ A minimal page:
 ```
 
 - `data-accent` picks the accent (see the tables above); `data-theme` is `dark` (default), `light`
-  or `auto`. The theme toggle remembers its choice in `localStorage["facet-theme"]`.
+  or `auto`. The theme toggle remembers its choice in `localStorage["facet-theme"]`. Both work on
+  `<html>` only (`:root[data-accent]`); to give part of a page its own accent, set `--f-accent` and
+  `--f-accent-contrast` on it.
 - A plain `.f-nav` sits in the page flow. Add `.f-nav--fixed` to float it over the page; while one
   is present, `--f-nav-clear` reserves room for it at the top of the layouts (override it if your
   nav is taller).
-- Everything is in `@layer facet.*`, so your own unlayered CSS wins without `!important`.
+- Everything is in `@layer facet.*`, so your own unlayered CSS wins without `!important`, with two
+  exceptions: `[hidden]` is `display: none !important`, and under reduced motion one rule stops
+  every animation and transition on the page, yours included. A layered `!important` beats unlayered
+  CSS, even unlayered `!important`, so neither can be overridden.
 - Set `lang="zh-Hans"` on any element for Chinese typography.
+
+### Behavior
+
+The JavaScript is optional. Importing `dist/js/facet.js` initializes itself: each module takes over
+the elements that opt in with a `data-f-*` attribute (`data-f-theme-toggle`, `data-f-liquid`,
+`data-f-scrollspy`, `data-f-nav-cover`, `data-f-autoplay`, `data-f-story`, `data-f-panels`,
+`data-f-deck`), and calling `init()` again skips what is already set up. To use one module, import
+it and keep the cleanup it returns:
+
+```js
+import { init } from "./vendor/facet/dist/js/deck.js";
+const stop = init(document.querySelector("#talk"));
+```
+
+Every hook, the deck's slide data, and the reduced-motion and no-JS behavior are documented on the
+reference site's overview page, under "Behavior".
 
 ## Layout
 
 - `src/`: the source CSS, JS, cast and font slices. `dist/` is generated from it by `just build` and
   committed; never edit `dist/` by hand.
-- `site/`: the reference site (`just serve`, or `just site` for the GitHub Pages bundle).
+- `site/`: the reference site. `just serve` serves it at http://localhost:8000 in the published
+  layout (with the mockups); `just site` assembles the GitHub Pages bundle into `_site/`.
 - `tests/`: browser tests (`just test`).
 - `fonts/`: the font build (`just fonts`).
 - `pyproject.toml`: the uv project for the Python tooling (fonts, images, tests).
-- `mockups/`: design explorations (type, color, shape, glass, layout, the cats), viewable with
-  `just serve` at http://localhost:8000/mockups/.
+- `mockups/`: design explorations (type, color, shape, glass, layout, the cats), at
+  http://localhost:8000/mockups/ under `just serve`.
 - `mockups/assets/craft.py`: draws the demo images and video loop the mockups use
   (`uv run mockups/assets/craft.py`; the loop needs ffmpeg).
 

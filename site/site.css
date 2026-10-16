@@ -318,9 +318,57 @@
   color: var(--sw);
 }
 
-/* The toolbar is reference-site chrome: keep it off paper. */
+/* The toolbar and markup disclosures are reference-site chrome: keep them off paper. */
 @media print {
-  .site-bar {
+  .site-bar,
+  .site-markup {
     display: none;
   }
+}
+
+/* ---------- "Markup" disclosures: a component's or layout's minimal markup ---------- */
+
+/* Padding, not margin, so the room for the footer cats does not collapse into the footer's. */
+.site-markup {
+  width: min(100% - 2 * var(--f-gutter), 64rem);
+  margin: var(--f-space-6) auto 0;
+  padding-bottom: var(--f-space-6);
+  text-align: start;
+  /* A long snippet line must not widen the block's container (a grid track, a centered copy). */
+  contain: inline-size;
+}
+
+.demo .site-markup,
+.f-panel .site-markup,
+.f-deck .site-markup,
+.demo-hint .site-markup {
+  width: auto;
+  margin: 0;
+  padding: 0;
+}
+
+.site-markup > summary {
+  width: fit-content;
+  color: inherit;
+  font: 600 var(--f-text-sm) var(--f-font-sans);
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+.site-markup > summary:hover {
+  opacity: 1;
+}
+
+/* Long lines scroll inside the block, never the page. Inside full-screen layouts, tall snippets
+   scroll too. */
+.site-markup pre.f-code {
+  margin: var(--f-space-3) 0 0;
+  font-size: 0.8rem;
+  text-align: start;
+}
+
+.f-panel .site-markup pre.f-code,
+.f-deck .site-markup pre.f-code,
+.demo-hint .site-markup pre.f-code {
+  max-height: 40svh;
 }

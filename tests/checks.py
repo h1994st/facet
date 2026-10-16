@@ -71,6 +71,8 @@ def cat_text_overlaps(page):
       while ((n = walker.nextNode())) {
         if (!n.textContent.trim()) continue;
         if (n.parentElement.closest('[aria-hidden="true"], .cat')) continue;
+        // Text that is not rendered (a closed <details>, display: none) cannot be covered.
+        if (!n.parentElement.checkVisibility()) continue;
         const r = document.createRange(); r.selectNodeContents(n);
         for (const t of r.getClientRects()) for (const c of cats)
           if (t.left < c.right && t.right > c.left && t.top < c.bottom && t.bottom > c.top) hits++;

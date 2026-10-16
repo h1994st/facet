@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import pytest
-from checks import contrast, contrast_on, no_hscroll
+from checks import cat_text_overlaps, contrast, contrast_on, no_hscroll
 
 SITE = Path(__file__).resolve().parents[1] / "site"
 # Every reference-site page except the test fixtures; the symlinked dist/ and assets/ are skipped.
@@ -376,3 +376,54 @@ def test_english_text_keeps_its_leading(page_factory, site_url):
     page.goto(f"{site_url}/components.html")
     page.evaluate("document.querySelector('.f-alert').lang = 'en'")
     assert _leading(page, ".f-alert p") == pytest.approx(1.6)
+
+
+MARKUP_PAGES = ["components.html"] + [
+    p for p in PAGES if p.startswith("layouts/") and p != "layouts/index.html"
+]
+
+
+def test_every_component_and_layout_shows_its_markup(page_factory, site_url):
+    page = page_factory()
+    for path in MARKUP_PAGES:
+        page.goto(f"{site_url}/{path}")
+        blocks = page.evaluate("""[...document.querySelectorAll('details.site-markup')].map(d => ({
+            summary: d.querySelector('summary').textContent.trim(),
+            escaped: d.querySelector('pre.f-code').children.length === 0,
+            text: d.querySelector('pre.f-code').textContent,
+            section: d.closest('main.demo > section')?.querySelector('h2')?.textContent ?? null,
+          }))""")
+        if path == "components.html":
+            sections = page.evaluate("document.querySelectorAll('main.demo > section').length")
+            assert len(blocks) == sections
+            assert len({b["section"] for b in blocks}) == sections
+        else:
+            assert len(blocks) == 1, path
+        for b in blocks:
+            assert b["summary"] == "Markup", path
+            assert b["escaped"], (path, b["section"])
+            assert b["text"].lstrip().startswith("<"), (path, b["section"])
+
+
+@pytest.mark.parametrize("width", [390, 1280])
+@pytest.mark.parametrize("path", MARKUP_PAGES)
+def test_open_markup_never_scrolls_the_page_sideways(page_factory, site_url, path, width):
+    page = page_factory(width=width)
+    page.goto(f"{site_url}/{path}")
+    page.evaluate("document.querySelectorAll('details.site-markup').forEach(d => d.open = true)")
+    no_hscroll(page)
+    page.wait_for_timeout(300)
+    assert cat_text_overlaps(page) == 0
+    # Nor widen a container that clips (a full-screen panel or deck stage hides the overflow).
+    for sel in ["details.site-markup", "main h2"]:
+        right = page.evaluate(
+            f"Math.max(0, ...[...document.querySelectorAll({sel!r})]"
+            ".filter(e => e.checkVisibility()).map(e => e.getBoundingClientRect().right))"
+        )
+        assert right <= width, sel
+    # Long lines scroll inside the code block.
+    for overflow in page.evaluate(
+        "[...document.querySelectorAll('details.site-markup pre')]"
+        ".map(p => getComputedStyle(p).overflowX)"
+    ):
+        assert overflow == "auto"

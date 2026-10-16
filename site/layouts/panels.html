@@ -105,6 +105,28 @@
             <a class="f-btn f-btn--primary" href="#" data-zh="开始追踪 ↗">Start tracking ↗</a>
             <a class="f-btn" href="#" data-zh="读文档">Read the docs</a>
           </div>
+          <details class="site-markup">
+            <summary data-zh="标记">Markup</summary>
+            <pre class="f-code">
+&lt;nav class="f-nav f-nav--fixed f-nav--over" aria-label="Site"&gt;…&lt;/nav&gt;
+&lt;nav class="f-dots" aria-label="Panels"&gt;&lt;/nav&gt;
+&lt;main class="f-panels" data-f-panels&gt;
+  &lt;section class="f-panel f-panel--bottom"&gt;
+    &lt;video class="f-panel__media" src="loop.mp4" poster="loop-poster.jpg"
+      muted loop playsinline&gt;&lt;/video&gt;
+    &lt;button class="f-media-toggle f-panel__toggle" type="button"
+      data-f-panel-toggle hidden&gt;Pause&lt;/button&gt;
+    &lt;div class="f-panel__copy"&gt;
+      &lt;h2 class="f-reveal"&gt;Every red dot, on the record.&lt;/h2&gt;
+    &lt;/div&gt;
+  &lt;/section&gt;
+  &lt;section class="f-panel f-panel--split f-panel--plain"&gt;
+    &lt;img class="f-panel__side" src="board-2.jpg" alt="" /&gt;
+    &lt;div class="f-panel__copy"&gt;&lt;h2 class="f-reveal"&gt;One record.&lt;/h2&gt;&lt;/div&gt;
+  &lt;/section&gt;
+&lt;/main&gt;
+&lt;!-- Shapes: f-panel--bottom, --center, --stage, --split, --end; --plain uses page colors. --&gt;</pre>
+          </details>
         </div>
         <footer class="f-footer">
           <div class="f-footer__cats"></div>
