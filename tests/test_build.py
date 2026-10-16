@@ -6,7 +6,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DIST = ROOT / "dist"
 LAYERS = (
     "@layer facet.reset, facet.tokens, facet.base, facet.prose, "
-    "facet.components, facet.layouts, facet.utilities;"
+    "facet.cast, facet.components, facet.layouts, facet.utilities;"
 )
 
 

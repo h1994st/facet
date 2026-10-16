@@ -103,3 +103,10 @@ def test_cast_page(page_factory, site_url, width):
     assert page.errors == []
     assert page.locator("main .cat").count() == 3
     assert page.locator(".f-footer .cat").count() == 3
+
+
+def test_site_css_can_resize_footer_cats(page_factory, site_url):
+    page = page_factory()
+    page.goto(f"{site_url}/tests/cat-override.html")
+    page.wait_for_timeout(200)
+    assert page.evaluate("getComputedStyle(document.querySelector('.cat')).width") == "90px"

@@ -1,5 +1,5 @@
 /* src/css/00-layers.css */
-@layer facet.reset, facet.tokens, facet.base, facet.prose, facet.components, facet.layouts, facet.utilities;
+@layer facet.reset, facet.tokens, facet.base, facet.prose, facet.cast, facet.components, facet.layouts, facet.utilities;
 
 /* src/css/10-tokens.css */
 /* Design tokens. Dark is the default; light overrides it. Every color has both values. */
@@ -2705,7 +2705,7 @@
   }
 
   .f-empty__cat {
-    width: 120px !important; /* beats the unlayered cast.css */
+    width: 120px;
     margin: 0 auto var(--f-space-2);
   }
 
@@ -2746,12 +2746,11 @@
     text-align: center;
   }
 
-  /* Cats sit on the top border at the ends, clear of the centered text. cast.css is unlayered, so
-     its position and width beat any layered rule; !important flips that. */
+  /* Cats sit on the top border at the ends, clear of the centered text. */
   .f-footer__cats .cat {
-    position: absolute !important;
+    position: absolute;
     bottom: calc(100% - 4px);
-    width: 56px !important;
+    width: 56px;
   }
 
   .f-footer__cats .cat:nth-of-type(1) {

@@ -9,12 +9,11 @@
     text-align: center;
   }
 
-  /* Cats sit on the top border at the ends, clear of the centered text. cast.css is unlayered, so
-     its position and width beat any layered rule; !important flips that. */
+  /* Cats sit on the top border at the ends, clear of the centered text. */
   .f-footer__cats .cat {
-    position: absolute !important;
+    position: absolute;
     bottom: calc(100% - 4px);
-    width: 56px !important;
+    width: 56px;
   }
 
   .f-footer__cats .cat:nth-of-type(1) {

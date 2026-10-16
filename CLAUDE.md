@@ -68,10 +68,12 @@ just site          # assemble the GitHub Pages site into _site/ (what CI deploys
 - **The cats.** The canonical drawing of Duna, Dudu and Nangnang is in the my-resume template's
   `site` branch (`site/cast.js` for the SVG and poses, `.cat[data-cat=…]` in `site/style.css` for
   the palettes). Copy from there verbatim (the shipped copy is `src/cast/`, which the build copies
-  to `dist/cast/`; `mockups/cast/` stays a copy for the mockups), noting the source commit in a
-  header comment, and keep the copies out of Prettier (`.prettierignore`) so a re-sync is a clean
-  diff. Never redraw or recolor them here. Cats are decorative (`aria-hidden`), never cover text,
-  and get a faint white outline (`--cat-edge`) on dark backgrounds.
+  to `dist/cast/`; `mockups/cast/` stays a copy for the mockups). Consumers load
+  `dist/cast/cast-layered.css`, which imports `cast.css` into the `facet.cast` layer so facet
+  components and site CSS can override it; never use `!important` to beat it. Note the source commit
+  in a header comment, and keep the copies out of Prettier (`.prettierignore`) so a re-sync is a
+  clean diff. Never redraw or recolor them here. Cats are decorative (`aria-hidden`), never cover
+  text, and get a faint white outline (`--cat-edge`) on dark backgrounds.
 - **No personal information.** Sample content uses Duna Feline's fictional world (example.com, her
   projects and posts) and the generated art in `mockups/assets/` (`craft.py`). Never add real names,
   domains, accounts, employers, local paths or personal stories.
