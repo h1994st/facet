@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Layout</title>
+    <link rel="stylesheet" href="base.css" />
+    <link rel="stylesheet" href="layout.css" />
+    <style>
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+      .item {
+        display: block;
+        padding: 0.9rem;
+        color: inherit;
+        text-decoration: none;
+      }
+      .item h2 {
+        margin: 0.85rem 0.2rem 0.15rem;
+        font: 600 1.2rem/1.3 var(--heading);
+      }
+      .item p {
+        margin: 0 0.2rem;
+        color: var(--fg-2);
+        font-size: 0.84rem;
+        line-height: 1.5;
+      }
+      /* Wireframes: blocks for text (t), media (m), sidebar (s) and the nav pill (n). */
+      .wf {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        height: 150px;
+        padding: 14px 18px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--bg);
+      }
+      .wf i {
+        display: block;
+        flex: none;
+        height: 6px;
+        border-radius: 3px;
+        background: color-mix(in oklch, var(--fg) 18%, transparent);
+      }
+      .wf i.h {
+        height: 10px;
+        width: 60%;
+        background: color-mix(in oklch, var(--fg) 34%, transparent);
+      }
+      .wf i.m {
+        height: 34px;
+        border-radius: 6px;
+        background: color-mix(in oklch, var(--accent) 35%, transparent);
+      }
+      .wf .n {
+        align-self: center;
+        width: 34%;
+        height: 9px;
+        margin-bottom: 4px;
+        border-radius: 999px;
+        background: color-mix(in oklch, var(--fg) 22%, transparent);
+      }
+      .wf .col {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        min-width: 0;
+      }
+      .wf .two {
+        display: flex;
+        gap: 12px;
+        flex: 1;
+      }
+      .wf.cover {
+        padding: 0;
+      }
+      .wf.cover .bg {
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(to top, rgb(0 0 0 / 0.55), transparent),
+          url(assets/board.jpg) center / cover;
+      }
+      .wf.cover .over {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        height: 100%;
+        padding: 14px 18px;
+        justify-content: flex-end;
+      }
+      .wf.cover .over i {
+        background: rgb(255 255 255 / 0.5);
+      }
+      .wf.cover .over i.h {
+        background: rgb(255 255 255 / 0.85);
+      }
+      .wf .narrow {
+        width: 62%;
+        align-self: center;
+      }
+      .wf .bento {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-auto-rows: 30px;
+        gap: 6px;
+      }
+      .wf .bento b {
+        border-radius: 7px;
+        background: color-mix(in oklch, var(--fg) 12%, transparent);
+      }
+      .wf .bento b.big {
+        grid-column: span 2;
+        grid-row: span 2;
+        background: color-mix(in oklch, var(--accent) 35%, transparent);
+      }
+      .wf .rule {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+      .wf .rule i:first-child {
+        width: 14%;
+      }
+      .wf.app {
+        padding: 0;
+        background: #0b0e19;
+      }
+      .wf.app .pill {
+        position: absolute;
+        left: 10px;
+        bottom: 10px;
+        width: 40%;
+        height: 14px;
+        border-radius: 999px;
+        background: rgb(255 255 255 / 0.25);
+      }
+      .wf.app .game {
+        position: absolute;
+        inset: 14px 18px 30px;
+        background:
+          linear-gradient(90deg, oklch(0.76 0.06 15 / 0.7) 0 0) 20% 40% / 50% 2px no-repeat,
+          linear-gradient(oklch(0.76 0.06 165 / 0.7) 0 0) 70% 30% / 2px 50% no-repeat,
+          repeating-linear-gradient(90deg, rgb(255 255 255 / 0.05) 0 1px, transparent 1px 18px),
+          repeating-linear-gradient(rgb(255 255 255 / 0.05) 0 1px, transparent 1px 18px);
+      }
+      .wf.empty {
+        align-items: center;
+        justify-content: center;
+      }
+      .wf .dot {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: color-mix(in oklch, var(--fg) 25%, transparent);
+      }
+    </style>
+  </head>
+  <body>
+    <main class="mk-page">
+      <header>
+        <h1 data-zh="版式">Layout</h1>
+        <p
+          data-zh="十三种页面版式，全部建立在同一个页面网格上：正文、加宽、铺满三条列线，加一个可选的侧栏。点开每一个看实际的例子，用的是生成的示例图片和视频。"
+        >
+          Thirteen page layouts, all built on one page grid: content, wide and full column lines,
+          plus an optional sidebar. Open each for a working example, using generated demo images and
+          video.
+        </p>
+      </header>
+
+      <div class="grid">
+        <a class="item card" href="layout-cover.html">
+          <div class="wf cover">
+            <div class="bg"></div>
+            <div class="over">
+              <i class="h"></i><i style="width: 70%"></i><i style="width: 40%"></i>
+            </div>
+          </div>
+          <h2 data-zh="封面">Cover</h2>
+          <p
+            data-zh="首屏是整张图片或视频，导航浮在上面，滚动后变成玻璃。首页、精选文章、项目首页。"
+          >
+            A full-screen image or video first; the nav floats over it and turns to glass on scroll.
+            Homepage, feature posts, project landings.
+          </p>
+        </a>
+        <a class="item card" href="layout-reading.html">
+          <div class="wf">
+            <span class="n"></span>
+            <div class="col narrow"><i class="h"></i><i></i><i></i></div>
+            <i class="m" style="margin: 0 4%"></i>
+            <div class="col narrow"><i></i><i style="width: 70%"></i></div>
+          </div>
+          <h2 data-zh="阅读">Reading</h2>
+          <p data-zh="单栏正文，图片可以加宽或铺满。普通博客文章。">
+            One reading column; figures break out to wide or full. Normal blog posts.
+          </p>
+        </a>
+        <a class="item card" href="layout-sidebar.html">
+          <div class="wf">
+            <span class="n"></span>
+            <div class="two">
+              <div class="col" style="width: 26%">
+                <i style="width: 80%"></i><i style="width: 60%"></i><i style="width: 70%"></i>
+              </div>
+              <div class="col" style="flex: 1">
+                <i class="h"></i><i></i><i></i><i style="width: 80%"></i>
+              </div>
+            </div>
+          </div>
+          <h2 data-zh="侧栏">Sidebar</h2>
+          <p data-zh="正文加一个固定的目录。文档、笔记本、长文、简历。">
+            Text with a sticky table of contents. Docs, the notebook, long posts, the resume.
+          </p>
+        </a>
+        <a class="item card" href="layout-margin.html">
+          <div class="wf">
+            <span class="n"></span>
+            <div class="two">
+              <div class="col" style="flex: 1">
+                <i class="h"></i><i></i><i></i><i></i><i style="width: 70%"></i>
+              </div>
+              <div class="col" style="width: 26%; padding-top: 16px">
+                <i style="width: 90%; opacity: 0.6"></i><i style="width: 70%; opacity: 0.6"></i>
+              </div>
+            </div>
+          </div>
+          <h2 data-zh="旁注">Margin notes</h2>
+          <p data-zh="脚注放在正文旁边，窄屏时点开。长文、调查记录。">
+            Footnotes beside the text, tap-to-open on phones. Long writeups, investigation notes.
+          </p>
+        </a>
+        <a class="item card" href="layout-split.html">
+          <div class="wf">
+            <span class="n"></span>
+            <div class="two" style="align-items: center">
+              <div class="col" style="flex: 1">
+                <i class="h" style="width: 90%"></i><i></i><i style="width: 60%"></i>
+              </div>
+              <i class="m" style="flex: 1; height: 70px"></i>
+            </div>
+          </div>
+          <h2 data-zh="左右分栏">Split</h2>
+          <p data-zh="一边文字，一边画面，下面是左右交替的特性行。项目首页、产品页。">
+            Text on one side, a visual on the other, then alternating feature rows. Project
+            landings.
+          </p>
+        </a>
+        <a class="item card" href="layout-grid.html">
+          <div class="wf">
+            <span class="n"></span>
+            <div class="bento"><b class="big"></b><b></b><b></b><b></b><b></b><b></b></div>
+          </div>
+          <h2 data-zh="网格">Grid</h2>
+          <p data-zh="卡片网格，可筛选。项目、照片、博客卡片、标签页。">
+            A filterable grid of cards. Projects, photos, blog cards, tag pages.
+          </p>
+        </a>
+        <a class="item card" href="layout-list.html">
+          <div class="wf">
+            <span class="n"></span><i class="h" style="width: 40%"></i>
+            <div class="rule"><i></i><i style="flex: 1"></i></div>
+            <div class="rule"><i></i><i style="flex: 1"></i></div>
+            <div class="rule"><i></i><i style="flex: 1"></i></div>
+            <div class="rule"><i></i><i style="flex: 1"></i></div>
+          </div>
+          <h2 data-zh="列表">List</h2>
+          <p data-zh="按年份分组的紧凑列表，可搜索。博客归档、链接合集、搜索结果。">
+            A dense list grouped by year, searchable. Archives, link collections, search results.
+          </p>
+        </a>
+        <a class="item card" href="layout-app.html">
+          <div class="wf app">
+            <div class="game"></div>
+            <span class="pill"></span>
+          </div>
+          <h2 data-zh="应用">App</h2>
+          <p data-zh="内容占满窗口，导航缩成一个胶囊。游戏、交互演示、工具。">
+            The content fills the window; the nav shrinks to one pill. Games, demos, tools.
+          </p>
+        </a>
+        <a class="item card" href="layout-story.html">
+          <div class="wf">
+            <span class="n"></span>
+            <div class="two">
+              <i class="m" style="flex: 1.3; height: 90px"></i>
+              <div class="col" style="flex: 1; padding-top: 20px">
+                <i class="h" style="width: 80%"></i><i></i><i style="width: 70%"></i>
+              </div>
+            </div>
+          </div>
+          <h2 data-zh="滚动叙事">Story</h2>
+          <p data-zh="固定的画面随文字滚动而变化。讲解型文章、项目介绍、影片页。">
+            A pinned visual that changes as the steps scroll by. Explainers, project tours, films.
+          </p>
+        </a>
+        <a class="item card" href="layout-empty.html">
+          <div class="wf empty">
+            <span class="dot"></span><i class="h" style="width: 30%"></i><i style="width: 45%"></i>
+          </div>
+          <h2 data-zh="空状态">Empty</h2>
+          <p data-zh="一句话加一只猫。404、无结果、离线。">
+            A short message with a cat. 404, no results, offline.
+          </p>
+        </a>
+        <a class="item card" href="layout-panels.html">
+          <div class="wf cover">
+            <div
+              class="bg"
+              style="
+                background:
+                  linear-gradient(to top, rgb(0 0 0 / 0.5), transparent),
+                  url(assets/prism.jpg) center / cover;
+              "
+            ></div>
+            <div class="over"><i class="h"></i><i style="width: 50%"></i></div>
+            <span
+              style="
+                position: absolute;
+                right: 8px;
+                top: 40%;
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+              "
+              ><b style="width: 4px; height: 10px; border-radius: 2px; background: #fff"></b
+              ><b
+                style="
+                  width: 4px;
+                  height: 4px;
+                  border-radius: 2px;
+                  background: rgb(255 255 255 / 0.4);
+                "
+              ></b
+              ><b
+                style="
+                  width: 4px;
+                  height: 4px;
+                  border-radius: 2px;
+                  background: rgb(255 255 255 / 0.4);
+                "
+              ></b
+            ></span>
+          </div>
+          <h2 data-zh="全页面板">Panels</h2>
+          <p data-zh="一页一页的全屏画面加简短文字，每次滚动翻一整页。项目发布、作品展示。">
+            Full-page images or videos with brief text; each scroll moves one whole page. Launches,
+            showcases.
+          </p>
+        </a>
+        <a class="item card" href="layout-deck.html">
+          <div class="wf" style="background: url(assets/aurora.jpg) center / cover">
+            <i class="h" style="align-self: center; width: 46%"></i>
+            <div style="position: relative; flex: 1">
+              <span
+                style="
+                  position: absolute;
+                  left: 14%;
+                  top: 30%;
+                  width: 9%;
+                  aspect-ratio: 1;
+                  border-radius: 4px;
+                  background: rgb(255 255 255 / 0.2);
+                "
+              ></span
+              ><span
+                style="
+                  position: absolute;
+                  left: 23%;
+                  top: 40%;
+                  width: 50%;
+                  height: 2px;
+                  background: oklch(0.72 0.12 15);
+                "
+              ></span
+              ><span
+                style="
+                  position: absolute;
+                  left: 73%;
+                  top: 40%;
+                  width: 2px;
+                  height: 45%;
+                  background: oklch(0.72 0.12 15);
+                "
+              ></span>
+            </div>
+          </div>
+          <h2 data-zh="演示">Deck</h2>
+          <p data-zh="一张画面，每次滚动是下一张幻灯片，部件在幻灯片之间平滑移动。讲解、演讲。">
+            One stage; each scroll is the next slide, and pieces glide between slides. Talks,
+            explainers.
+          </p>
+        </a>
+        <a class="item card" href="layout-resume.html">
+          <div class="wf">
+            <span class="n"></span><i class="m" style="height: 26px; opacity: 0.6"></i>
+            <div class="two">
+              <div class="col" style="width: 20%">
+                <i style="width: 80%"></i><i style="width: 60%"></i>
+              </div>
+              <div
+                class="col"
+                style="flex: 1; border-left: 2px solid var(--line-2); padding-left: 8px"
+              >
+                <i class="h" style="width: 70%"></i><i></i><i class="h" style="width: 55%"></i
+                ><i></i>
+              </div>
+            </div>
+          </div>
+          <h2 data-zh="简历">Resume</h2>
+          <p data-zh="头部卡片、固定的分节目录和时间线；打印成干净的一栏。">
+            A header card, a sticky section index and a timeline; prints as one clean column.
+          </p>
+        </a>
+      </div>
+    </main>
+
+    <script type="module">
+      import { liquidCards } from "./layout.js";
+      liquidCards();
+    </script>
+    <script type="module" src="base.js"></script>
+  </body>
+</html>

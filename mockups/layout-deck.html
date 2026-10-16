@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Layout · Deck</title>
+    <link rel="stylesheet" href="base.css" />
+    <link rel="stylesheet" href="layout.css" />
+    <style>
+      /* A deck: one fixed stage, and one full-page scroll stop per slide. The stage's pieces
+         are the same elements on every slide; each slide only changes their state, so they glide
+         from one arrangement to the next (Keynote's Magic Move). */
+      html {
+        scroll-snap-type: y mandatory;
+        scroll-padding-top: var(--mk-bar);
+      }
+      body {
+        background: #07090f;
+      }
+      .stops > section {
+        height: calc(100svh - var(--mk-bar));
+        scroll-snap-align: start;
+        scroll-snap-stop: always;
+      }
+      .stage {
+        position: fixed;
+        inset: var(--mk-bar) 0 0 0;
+        display: grid;
+        grid-template-rows: auto minmax(0, 1fr) auto;
+        overflow: hidden;
+        background: url(assets/aurora.jpg) center / cover;
+        color: #fff;
+      }
+      :root[data-theme="light"] .stage {
+        background-image: url(assets/mist.jpg);
+        color: var(--fg);
+      }
+
+      /* Captions: one per slide, crossfading in place. */
+      .caps {
+        display: grid;
+        padding: calc(4.6rem + 2vh) 1.25rem 0;
+        text-align: center;
+      }
+      .cap {
+        grid-area: 1 / 1;
+        opacity: 0;
+        transform: translateY(14px);
+        transition:
+          opacity 0.5s,
+          transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .cap.on {
+        opacity: 1;
+        transform: none;
+        transition-delay: 0.15s;
+      }
+      .cap h1 {
+        margin: 0;
+        font: 600 clamp(2rem, 5vw, 3.8rem) / 1.08 var(--heading);
+        letter-spacing: -0.015em;
+      }
+      .cap p {
+        max-width: 34rem;
+        margin: 0.7rem auto 0;
+        color: color-mix(in oklch, currentColor 70%, transparent);
+        font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+      }
+
+      /* The board: a 16:9 box; every piece is positioned in percent of it. */
+      .board-wrap {
+        display: grid;
+        place-items: center;
+        min-height: 0;
+        padding: 1rem 1.25rem;
+      }
+      .board {
+        --t: 0.9s cubic-bezier(0.65, 0, 0.25, 1);
+        position: relative;
+        width: min(100%, 64rem, calc((100svh - var(--mk-bar) - 15rem) * 16 / 9));
+        aspect-ratio: 16 / 9;
+      }
+      .piece {
+        position: absolute;
+        transition:
+          left var(--t),
+          top var(--t),
+          width var(--t),
+          height var(--t),
+          opacity 0.6s,
+          transform var(--t),
+          background-color 0.6s,
+          box-shadow 0.6s,
+          border-radius var(--t);
+      }
+      /* Lasers, mirror, filter and target: small glass tiles. */
+      .tile {
+        width: 7%;
+        aspect-ratio: 1;
+        border: 1px solid rgb(255 255 255 / 0.22);
+        border-radius: 22%;
+        background: rgb(255 255 255 / 0.07);
+        backdrop-filter: blur(6px);
+        translate: -50% -50%;
+      }
+      :root[data-theme="light"] .tile {
+        border-color: rgb(0 0 0 / 0.12);
+        background: rgb(255 255 255 / 0.6);
+      }
+      .tile::after {
+        content: "";
+        position: absolute;
+        inset: 28%;
+        border-radius: 50%;
+        background: var(--c, #e8ebf2);
+        box-shadow: 0 0 18px var(--c, #e8ebf2);
+        transition:
+          background 0.6s,
+          box-shadow 0.6s;
+      }
+      .mirror::after {
+        inset: 46% 10%;
+        border-radius: 2px;
+        transform: rotate(-45deg);
+      }
+      .filter::after {
+        inset: 24%;
+        border-radius: 3px;
+        background: oklch(0.7 0.09 15 / 0.75);
+        box-shadow: none;
+      }
+      .target {
+        border-radius: 50%;
+      }
+      .target::after {
+        inset: 30%;
+        background: var(--fill, transparent);
+        box-shadow:
+          inset 0 0 0 2px var(--ring, rgb(255 255 255 / 0.5)),
+          0 0 26px var(--fill, transparent);
+      }
+      /* Beams: thin glowing bars that grow from their start. */
+      .beam {
+        height: 0.5%;
+        min-height: 3px;
+        border-radius: 999px;
+        background: var(--c, #e8ebf2);
+        box-shadow: 0 0 14px var(--c, #e8ebf2);
+        translate: 0 -50%;
+      }
+      .beam.v {
+        width: 0.5%;
+        min-width: 3px;
+        translate: -50% 0;
+      }
+      /* Screenshots for the last slides. */
+      .shot {
+        border-radius: 14px;
+        background-size: cover;
+        background-position: center;
+        box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.8);
+      }
+
+      /* Bottom bar: counter, progress, keys. */
+      .bar {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        justify-content: center;
+        padding: 0 1.25rem 1.1rem;
+        font: 600 0.75rem var(--mk-mono);
+        color: color-mix(in oklch, currentColor 65%, transparent);
+      }
+      .progress {
+        width: min(16rem, 40vw);
+        height: 3px;
+        overflow: hidden;
+        border-radius: 999px;
+        background: color-mix(in oklch, currentColor 20%, transparent);
+      }
+      .progress i {
+        display: block;
+        height: 100%;
+        width: var(--p, 0%);
+        background: currentColor;
+        transition: width 0.5s;
+      }
+      .bar button {
+        padding: 0.3rem 0.7rem;
+        border: 1px solid color-mix(in oklch, currentColor 30%, transparent);
+        border-radius: 999px;
+        background: none;
+        color: inherit;
+        font: inherit;
+        cursor: pointer;
+      }
+      /* Centered with auto margins, not left: 50%, which would cap its width at half the
+         screen and wrap the links on phones. */
+      .fnav {
+        position: fixed;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+      }
+
+      /* Phones: a taller board fills the screen; pieces keep their percent positions. */
+      @media (max-width: 720px) {
+        .board {
+          width: 100%;
+          max-height: 100%;
+          aspect-ratio: 3 / 4;
+        }
+        .tile {
+          width: 12%;
+        }
+        .bar .keys {
+          display: none;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .piece,
+        .cap {
+          transition: none !important;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="stage" id="stage">
+      <div class="caps" id="caps"></div>
+      <div class="board-wrap">
+        <div class="board" id="board" aria-hidden="true">
+          <i class="piece beam" id="b1"></i>
+          <i class="piece beam" id="b2"></i>
+          <i class="piece beam v" id="b3"></i>
+          <i class="piece beam" id="b4"></i>
+          <i class="piece tile laser" id="laser"></i>
+          <i class="piece tile laser" id="laser2"></i>
+          <i class="piece tile filter" id="filter"></i>
+          <i class="piece tile mirror" id="mirror"></i>
+          <i class="piece tile target" id="target"></i>
+          <i class="piece shot" id="s1" style="background-image: url(assets/board-1.jpg)"></i>
+          <i class="piece shot" id="s2" style="background-image: url(assets/board-2.jpg)"></i>
+          <i class="piece shot" id="s3" style="background-image: url(assets/board-3.jpg)"></i>
+          <i class="piece shot" id="s4" style="background-image: url(assets/board-4.jpg)"></i>
+        </div>
+      </div>
+      <div class="bar">
+        <button id="prev" aria-label="Previous slide">↑</button>
+        <span id="count">1 / 7</span>
+        <span class="progress"><i id="prog"></i></span>
+        <button id="next" aria-label="Next slide">↓</button>
+        <span class="keys" data-zh="← → 或滚动">← → or scroll</span>
+      </div>
+    </div>
+    <nav class="fnav" id="nav">
+      <b>Duna Feline</b><a href="#" data-zh="博客" aria-current="page">Blog</a
+      ><a href="#" data-zh="项目">Projects</a><a href="#" data-zh="简历">Resume</a>
+    </nav>
+    <main class="stops" id="stops"></main>
+
+    <script type="module">
+      // Positions are [left %, top %] of the board. Each slide lists every piece's state; a piece
+      // left out is hidden. Beams: [left, top, length %] (vertical beams grow downward).
+      const W = "#e8ebf2",
+        RED = "oklch(0.72 0.12 15)",
+        GREEN = "oklch(0.78 0.12 150)",
+        YEL = "oklch(0.86 0.12 95)";
+      const SLIDES = [
+        {
+          en: ["How light moves.", "A deck: one stage, and every scroll is the next slide."],
+          zh: ["光是怎么走的。", "演示文稿：画面不动，每次滚动是下一张幻灯片。"],
+          laser: { at: [50, 50], c: W },
+        },
+        {
+          en: ["One laser.", "Every red dot starts as light."],
+          zh: ["一束激光。", "每一个红点，都从一束光开始。"],
+          laser: { at: [12, 30], c: W },
+          b1: { beam: [15.5, 30, 70], c: W },
+        },
+        {
+          en: ["A filter keeps only red.", "Pieces change color, so the light does too."],
+          zh: ["滤色片只留下红光。", "部件改变颜色，光也跟着变。"],
+          laser: { at: [12, 30], c: W },
+          b1: { beam: [15.5, 30, 22], c: W },
+          filter: { at: [41, 30] },
+          b2: { beam: [44.5, 30, 41], c: RED },
+        },
+        {
+          en: ["A mirror bends it.", "The red beam turns down and finds the target."],
+          zh: ["镜子让它转弯。", "红光向下，找到了目标。"],
+          laser: { at: [12, 30], c: W },
+          b1: { beam: [15.5, 30, 22], c: W },
+          filter: { at: [41, 30] },
+          b2: { beam: [44.5, 30, 26], c: RED },
+          mirror: { at: [74, 30], c: W },
+          b3: { beam: [74, 34, 34], c: RED },
+          target: { at: [74, 74], c: RED, lit: true },
+        },
+        {
+          en: ["Light adds up.", "Red and green meet, and the target turns yellow."],
+          zh: ["光会叠加。", "红光遇上绿光，目标变成黄色。"],
+          laser: { at: [12, 30], c: W },
+          b1: { beam: [15.5, 30, 22], c: W },
+          filter: { at: [41, 30] },
+          b2: { beam: [44.5, 30, 26], c: RED },
+          mirror: { at: [74, 30], c: W },
+          b3: { beam: [74, 34, 34], c: RED },
+          laser2: { at: [12, 74], c: GREEN },
+          b4: { beam: [15.5, 74, 55], c: GREEN },
+          target: { at: [74, 74], c: YEL, lit: true },
+        },
+        {
+          en: ["Four rooms.", "The board shrinks into four rooms of dot paths."],
+          zh: ["四个房间。", "棋盘缩小，变成四个房间的红点路线。"],
+          s1: { box: [6, 4, 42, 44] },
+          s2: { box: [52, 4, 42, 44] },
+          s3: { box: [6, 52, 42, 44] },
+          s4: { box: [52, 52, 42, 44] },
+        },
+        {
+          en: ["Start tracking.", "example.com/red-dot"],
+          zh: ["开始追踪。", "example.com/red-dot"],
+          s1: { box: [26, 18, 48, 64] },
+          s2: { box: [30, 22, 40, 56], fade: true },
+          s3: { box: [30, 22, 40, 56], fade: true },
+          s4: { box: [30, 22, 40, 56], fade: true },
+        },
+      ];
+      const ids = [
+        "b1",
+        "b2",
+        "b3",
+        "b4",
+        "laser",
+        "laser2",
+        "filter",
+        "mirror",
+        "target",
+        "s1",
+        "s2",
+        "s3",
+        "s4",
+      ];
+      const el = Object.fromEntries(ids.map((id) => [id, document.getElementById(id)]));
+      const caps = document.getElementById("caps");
+      const stops = document.getElementById("stops");
+      SLIDES.forEach((s) => {
+        caps.insertAdjacentHTML(
+          "beforeend",
+          `<div class="cap"><h1>${s.en[0]}</h1><p>${s.en[1]}</p></div>`,
+        );
+        stops.append(document.createElement("section"));
+      });
+      const capEls = [...caps.children];
+      const last = { b1: [15.5, 30], b2: [44.5, 30], b3: [74, 34], b4: [15.5, 74] };
+
+      function apply(i) {
+        const s = SLIDES[i];
+        for (const id of ids) {
+          const p = el[id],
+            st = s[id];
+          if (!st) {
+            p.style.opacity = 0;
+            if (p.classList.contains("beam")) {
+              // Retract to its start, so it grows again when it comes back.
+              const [l, t] = last[id];
+              Object.assign(p.style, { left: l + "%", top: t + "%" });
+              p.classList.contains("v") ? (p.style.height = "0%") : (p.style.width = "0%");
+            }
+            continue;
+          }
+          p.style.opacity = st.fade ? 0 : 1;
+          if (st.c) p.style.setProperty("--c", st.c);
+          if (st.at) Object.assign(p.style, { left: st.at[0] + "%", top: st.at[1] + "%" });
+          if (st.beam) {
+            const [l, t, len] = st.beam;
+            Object.assign(p.style, { left: l + "%", top: t + "%" });
+            p.classList.contains("v") ? (p.style.height = len + "%") : (p.style.width = len + "%");
+          }
+          if (st.box) {
+            const [l, t, w, h] = st.box;
+            Object.assign(p.style, {
+              left: l + "%",
+              top: t + "%",
+              width: w + "%",
+              height: h + "%",
+            });
+          }
+        }
+        // The target glows in its color once lit.
+        const tg = el.target;
+        tg.style.setProperty("--fill", s.target?.lit ? s.target.c : "transparent");
+        tg.style.setProperty("--ring", s.target?.lit ? s.target.c : "rgb(255 255 255 / 0.5)");
+        capEls.forEach((c, j) => c.classList.toggle("on", j === i));
+        document.getElementById("count").textContent = `${i + 1} / ${SLIDES.length}`;
+        document
+          .getElementById("prog")
+          .style.setProperty("--p", ((i + 1) / SLIDES.length) * 100 + "%");
+      }
+
+      // Hidden pieces start where slide 1 will first show them, so nothing flies in from 0,0.
+      Object.assign(el.laser2.style, { left: "12%", top: "74%" });
+      Object.assign(el.filter.style, { left: "41%", top: "30%" });
+      Object.assign(el.mirror.style, { left: "74%", top: "30%" });
+      Object.assign(el.target.style, { left: "74%", top: "74%" });
+      for (const [id, [l, t]] of Object.entries(last))
+        Object.assign(el[id].style, { left: l + "%", top: t + "%" });
+      for (const id of ["s1", "s2", "s3", "s4"])
+        Object.assign(el[id].style, { left: "40%", top: "35%", width: "20%", height: "30%" });
+
+      let current = -1;
+      const sectionH = () => stops.firstElementChild.offsetHeight;
+      const update = () => {
+        const i = Math.max(0, Math.min(SLIDES.length - 1, Math.round(scrollY / sectionH())));
+        if (i !== current) apply((current = i));
+      };
+      addEventListener("scroll", update, { passive: true });
+      addEventListener("resize", update);
+      const go = (d) => scrollTo({ top: (current + d) * sectionH(), behavior: "smooth" });
+      document.getElementById("next").onclick = () => go(1);
+      document.getElementById("prev").onclick = () => go(-1);
+      addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight") go(1);
+        if (e.key === "ArrowLeft") go(-1);
+      });
+      update();
+
+      // Captions follow the toolbar's language.
+      document.addEventListener("mk:change", () => {
+        const zh = document.documentElement.lang.startsWith("zh");
+        capEls.forEach((c, j) => {
+          const [h, p] = zh ? SLIDES[j].zh : SLIDES[j].en;
+          c.querySelector("h1").textContent = h;
+          c.querySelector("p").textContent = p;
+        });
+      });
+    </script>
+    <script type="module" src="base.js"></script>
+  </body>
+</html>

@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Layout · Story</title>
+    <link rel="stylesheet" href="base.css" />
+    <link rel="stylesheet" href="cast/cast.css" />
+    <link rel="stylesheet" href="layout.css" />
+    <style>
+      .wrap {
+        width: min(100% - 2.5rem, 70rem);
+        margin: 0 auto;
+      }
+      .intro {
+        max-width: 40rem;
+        padding: 3.5rem 0 1rem;
+      }
+      .intro h1 {
+        margin: 0 0 0.6rem;
+        font-size: 2.8rem;
+        line-height: 1.1;
+      }
+      /* A pinned visual beside the scrolling steps. */
+      .story {
+        display: grid;
+        grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+        gap: clamp(1.5rem, 4vw, 3rem);
+      }
+      /* The pinned part: a wrapper, so phones can give it a solid band of page color. */
+      .pin {
+        position: sticky;
+        top: calc(var(--mk-bar) + 5rem);
+        align-self: start;
+      }
+      /* A fixed-height box with no background: each image sits centered at its own shape, with
+         its own rounded corners. The height never changes, so the pinned band (and the line
+         that decides the active step) stays put while the images change. */
+      .stage {
+        position: relative;
+        display: grid;
+        grid-template: 100% / 100%; /* a definite cell, so the images' max sizes resolve */
+        place-items: center;
+        height: min(70vh, 30rem);
+      }
+      .stage img {
+        grid-area: 1 / 1;
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        border-radius: 20px;
+        opacity: 0;
+        transform: scale(0.985);
+        transition:
+          opacity 0.6s,
+          transform 0.6s;
+      }
+      .stage img.on {
+        opacity: 1;
+        transform: none;
+      }
+      .count {
+        display: block;
+        width: fit-content;
+        margin: 0.6rem auto 0;
+        color: var(--fg-3);
+        font: 600 0.72rem var(--mk-mono);
+      }
+      .steps {
+        padding: 18vh 0 40vh;
+      }
+      .step {
+        min-height: 60vh;
+        opacity: 0.35;
+        transition: opacity 0.4s;
+      }
+      .step.on {
+        opacity: 1;
+      }
+      .step h2 {
+        margin: 0 0 0.6rem;
+      }
+      /* Phones: the visual pins at the top on a solid band of page color, and the steps scroll
+         up from below and slide under that band, so text and image never overlap. */
+      @media (max-width: 720px) {
+        .story {
+          display: block;
+        }
+        .pin {
+          top: var(--mk-bar);
+          z-index: 3;
+          margin: 0 -1.25rem;
+          padding: 3.7rem 1.25rem 0.9rem;
+          background: var(--bg);
+        }
+        /* A short fade under the band, so text eases out instead of being cut. */
+        .pin::after {
+          content: "";
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: 100%;
+          height: 1.5rem;
+          background: linear-gradient(var(--bg), transparent);
+          pointer-events: none;
+        }
+        .stage {
+          height: 32vh;
+        }
+        .steps {
+          padding: 1.5rem 0 45vh;
+        }
+        .step {
+          min-height: 30vh;
+        }
+        .step h2 {
+          margin-top: 0;
+          font-size: 1.35rem;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .stage img,
+        .step {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="fnav">
+      <b>Duna Feline</b><a href="#" data-zh="博客" aria-current="page">Blog</a
+      ><a href="#" data-zh="项目">Projects</a><a href="#" data-zh="简历">Resume</a>
+    </nav>
+
+    <main class="wrap prose">
+      <header class="intro">
+        <p class="kicker" data-zh="故事">Story</p>
+        <h1 data-zh="红点行动">Operation Red Dot</h1>
+        <p
+          data-zh="滚动叙事：左边的画面固定不动，右边的文字一步步滚过去，画面跟着换。适合：讲解型文章、项目介绍、影片式页面。"
+        >
+          A scroll story: the visual stays pinned while the steps scroll past, and the visual
+          follows along. For: explainer posts, project tours, film-like pages.
+        </p>
+      </header>
+
+      <div class="story">
+        <div class="pin">
+          <div class="stage" aria-hidden="true">
+            <img src="assets/board.jpg" alt="" data-step="0" />
+            <img src="assets/board-1.jpg" alt="" data-step="1" />
+            <img src="assets/prism.jpg" alt="" data-step="2" />
+            <img src="assets/board-3.jpg" alt="" data-step="3" />
+            <img src="assets/horizon.jpg" alt="" data-step="4" />
+          </div>
+          <span class="count" id="count">1 / 5</span>
+        </div>
+        <div class="steps">
+          <section class="step">
+            <h2 data-zh="第一天">Day one</h2>
+            <p data-zh="客厅墙上出现了一个红点。我扑了上去，它不见了。">
+              A red dot appears on the living-room wall. I pounce, and it is gone.
+            </p>
+          </section>
+          <section class="step">
+            <h2 data-zh="规律">The pattern</h2>
+            <p data-zh="它沿直线前进，碰到镜子就拐弯，从不停下来等我。">
+              It travels in straight lines, turns at every mirror, and never waits for me.
+            </p>
+          </section>
+          <section class="step">
+            <h2 data-zh="光">The light</h2>
+            <p data-zh="原来红点只是光。光会反射、会折射，还总比我快一步。">
+              The dot is only light. Light bounces, light bends, and it is always one step ahead.
+            </p>
+          </section>
+          <section class="step">
+            <h2 data-zh="追踪器">The tracker</h2>
+            <p data-zh="于是我开始记录它去过的每一个地方，一个房间接一个房间。">
+              So I start writing down everywhere it goes, one room at a time.
+            </p>
+          </section>
+          <section class="step">
+            <h2 data-zh="两年以后">Two years later</h2>
+            <p data-zh="十二个房间，412 个红点，零次捕获。我依然很满意。">
+              Twelve rooms, 412 dots, zero catches. I am still very satisfied.
+            </p>
+          </section>
+        </div>
+      </div>
+    </main>
+    <footer class="ffoot" id="foot">© 2026 Duna Feline · example.com</footer>
+
+    <script type="module">
+      import { footerCats } from "./layout.js";
+      footerCats(document.getElementById("foot"));
+      const steps = [...document.querySelectorAll(".step")];
+      const imgs = [...document.querySelectorAll(".stage img")];
+      const count = document.getElementById("count");
+      const show = (i) => {
+        steps.forEach((s, j) => s.classList.toggle("on", i === j));
+        imgs.forEach((im) => im.classList.toggle("on", +im.dataset.step === i));
+        count.textContent = `${i + 1} / ${steps.length}`;
+      };
+      // The active step is the last one whose top has passed a line on screen: the middle on
+      // wide screens; on phones, a line in the area below the pinned visual. Checked on every scroll, so a
+      // fast scroll or a jump never skips a step.
+      const phone = matchMedia("(max-width: 720px)");
+      let current = -1;
+      const update = () => {
+        const pin = document.querySelector(".pin").getBoundingClientRect().bottom;
+        // Phones: a line partway down the visible area under the pinned band.
+        const line = phone.matches ? pin + (innerHeight - pin) * 0.3 : innerHeight * 0.5;
+        let i = 0;
+        steps.forEach((st, j) => {
+          if (st.getBoundingClientRect().top < line) i = j;
+        });
+        if (i !== current) show((current = i));
+      };
+      addEventListener("scroll", update, { passive: true });
+      addEventListener("resize", update);
+      update();
+    </script>
+    <script type="module" src="base.js"></script>
+  </body>
+</html>

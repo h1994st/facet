@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Layout · Panels</title>
+    <link rel="stylesheet" href="base.css" />
+    <link rel="stylesheet" href="cast/cast.css" />
+    <link rel="stylesheet" href="layout.css" />
+    <style>
+      /* Full-page panels: every scroll snaps to the next panel, like a product page. */
+      html {
+        scroll-snap-type: y mandatory;
+        scroll-padding-top: var(--mk-bar);
+      }
+      .panel {
+        position: relative;
+        display: grid;
+        height: calc(100svh - var(--mk-bar));
+        overflow: hidden;
+        scroll-snap-align: start;
+        scroll-snap-stop: always; /* one swipe or wheel turn moves one panel, never two */
+        background: #07090f;
+        color: #fff;
+      }
+      .panel.light {
+        background: var(--bg);
+        color: var(--fg);
+      }
+      .panel > img.bg,
+      .panel > video.bg {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .scrim::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to top, rgb(6 8 14 / 0.85), rgb(6 8 14 / 0.1) 60%);
+      }
+      .copy {
+        position: relative;
+        z-index: 1;
+        width: min(100% - 2.5rem, 64rem);
+        margin: 0 auto;
+      }
+      .panel h2 {
+        margin: 0;
+        font-size: clamp(2.4rem, 6vw, 4.8rem);
+        line-height: 1.04;
+        color: inherit;
+      }
+      :root:lang(zh) .panel h2 {
+        line-height: 1.2;
+      }
+      .panel p:not(.kicker) {
+        max-width: 34rem;
+        margin: 0.9rem 0 0;
+        font-size: clamp(1rem, 1.6vw, 1.2rem);
+        color: color-mix(in oklch, currentColor 72%, transparent);
+      }
+      .panel .kicker {
+        color: oklch(0.82 0.06 15);
+      }
+      .panel.light .kicker {
+        color: var(--accent);
+      }
+      /* Panel shapes */
+      .p-bottom {
+        align-items: end;
+        padding-bottom: 5rem;
+      }
+      .p-center {
+        place-items: end center;
+        padding-bottom: 4.5rem;
+        text-align: center;
+      }
+      .p-center p:not(.kicker) {
+        margin-inline: auto;
+      }
+      .p-stage {
+        grid-template-rows: auto minmax(0, 1fr);
+        padding-top: 5.5rem;
+        text-align: center;
+      }
+      .p-stage p:not(.kicker) {
+        margin-inline: auto;
+      }
+      .p-stage .media {
+        display: grid;
+        place-items: center;
+        min-height: 0;
+        padding: 2rem 1.25rem 2.5rem;
+      }
+      .p-stage .media img {
+        max-width: min(100%, 56rem);
+        max-height: 100%;
+        border-radius: 22px;
+        box-shadow: 0 40px 80px -40px rgb(0 0 0 / 0.8);
+      }
+      .p-split {
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      }
+      .p-split img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .p-split .copy {
+        align-self: center;
+        width: auto;
+        margin: 0;
+        padding: 0 clamp(1.5rem, 5vw, 4.5rem);
+      }
+      .p-end {
+        grid-template-rows: minmax(0, 1fr) auto;
+        background: url(assets/aurora.jpg) center / cover;
+      }
+      :root[data-theme="light"] .p-end {
+        background-image: url(assets/mist.jpg);
+      }
+      .p-end .copy {
+        align-self: center;
+        text-align: center;
+      }
+      .p-end .row {
+        justify-content: center;
+        margin-top: 1.5rem;
+      }
+      .p-end .ffoot {
+        margin: 0;
+      }
+
+      /* Text arrives when its panel settles. */
+      .reveal {
+        opacity: 0;
+        transform: translateY(18px);
+        transition:
+          opacity 0.7s,
+          transform 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+      }
+      .on .reveal {
+        opacity: 1;
+        transform: none;
+      }
+      .on .reveal:nth-child(2) {
+        transition-delay: 0.08s;
+      }
+      .on .reveal:nth-child(3) {
+        transition-delay: 0.16s;
+      }
+
+      /* Nav floats over every panel; page dots on the right. */
+      /* Centered with auto margins, not left: 50%, which would cap its width at half the
+         screen and wrap the links on phones. */
+      .fnav {
+        position: fixed;
+        left: 0;
+        right: 0;
+        margin: 0 auto;
+      }
+      .dots {
+        position: fixed;
+        right: 1rem;
+        top: 50%;
+        z-index: 20;
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+        transform: translateY(-50%);
+      }
+      .dots button {
+        width: 8px;
+        height: 8px;
+        padding: 0;
+        border: 0;
+        border-radius: 999px;
+        background: rgb(255 255 255 / 0.35);
+        box-shadow: 0 0 0 1px rgb(0 0 0 / 0.25);
+        cursor: pointer;
+        transition:
+          height 0.3s,
+          background 0.3s;
+      }
+      .dots button[aria-current] {
+        height: 22px;
+        background: #fff;
+      }
+
+      @media (max-width: 720px) {
+        .p-split {
+          grid-template-columns: minmax(0, 1fr);
+          grid-template-rows: 45% minmax(0, 1fr);
+        }
+        .p-split .copy {
+          align-self: start;
+          padding: 1.75rem 1.25rem 0;
+        }
+        .p-bottom {
+          padding-bottom: 3.5rem;
+        }
+        .p-stage {
+          padding-top: 5rem;
+        }
+        .dots {
+          right: 0.5rem;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        html {
+          scroll-snap-type: none;
+        }
+        .reveal {
+          opacity: 1;
+          transform: none;
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="fnav over" id="nav">
+      <b>Red Dot Tracker</b><a href="#" data-zh="首页" aria-current="page">Home</a
+      ><a href="#" data-zh="文档">Docs</a><a href="#" data-zh="下载">Releases</a>
+    </nav>
+    <nav class="dots" id="dots" aria-label="Pages"></nav>
+
+    <main class="prose">
+      <section class="panel p-bottom scrim" data-video>
+        <video
+          class="bg"
+          src="assets/loop.mp4"
+          poster="assets/loop-poster.jpg"
+          muted
+          loop
+          playsinline
+        ></video>
+        <div class="copy">
+          <p class="kicker reveal" data-zh="全页面板">Panels</p>
+          <h2 class="reveal" data-zh="每一个红点，<br />都有迹可循。">
+            Every red dot, on the record.
+          </h2>
+          <p
+            class="reveal"
+            data-zh="每次滚动就翻到下一整页，像产品介绍页。适合：项目发布页、作品展示。"
+          >
+            Each scroll moves one whole page, like a product page. For: project launches and
+            showcases.
+          </p>
+        </div>
+      </section>
+
+      <section class="panel p-stage">
+        <div class="copy">
+          <p class="kicker reveal" data-zh="规律">The pattern</p>
+          <h2 class="reveal" data-zh="碰到镜子就拐弯。">It turns at every mirror.</h2>
+          <p class="reveal" data-zh="红点沿直线前进，从不停下来等你。追踪器把每一段路线都画下来。">
+            The dot travels in straight lines and never waits. The tracker draws every segment.
+          </p>
+        </div>
+        <div class="media reveal"><img src="assets/board-1.jpg" alt="" /></div>
+      </section>
+
+      <section class="panel p-split light">
+        <img src="assets/board-2.jpg" alt="" />
+        <div class="copy">
+          <p class="kicker reveal" data-zh="十二个房间">Twelve rooms</p>
+          <h2 class="reveal" data-zh="一份记录。">One record.</h2>
+          <p class="reveal" data-zh="每个房间的红点路线，都写进同一个文件。">
+            Every room's dot paths, in the same file.
+          </p>
+        </div>
+      </section>
+
+      <section class="panel p-center scrim">
+        <img class="bg" src="assets/prism.jpg" alt="" />
+        <div class="copy">
+          <p class="kicker reveal" data-zh="两年以后">Two years later</p>
+          <h2 class="reveal" data-zh="一束光，<br />每一种颜色。">One beam.<br />Every color.</h2>
+          <p class="reveal" data-zh="红点只是光。光会反射，也会散开。">
+            The dot is only light. Light bounces, and light spreads.
+          </p>
+        </div>
+      </section>
+
+      <section class="panel p-end light">
+        <div class="copy">
+          <h2 class="reveal" data-zh="开始追踪。">Start tracking.</h2>
+          <p class="reveal" data-zh="开源，免费，适合任何有窗台的家。">
+            Open source, free, and ready for any home with a windowsill.
+          </p>
+          <div class="row reveal">
+            <a class="btn primary" href="#" data-zh="开始追踪 ↗">Start tracking ↗</a>
+            <a class="btn" href="#" data-zh="读文档">Read the docs</a>
+          </div>
+        </div>
+        <footer class="ffoot" id="foot">© 2026 Duna Feline · example.com</footer>
+      </section>
+    </main>
+
+    <script type="module">
+      import { footerCats } from "./layout.js";
+      footerCats(document.getElementById("foot"));
+
+      const panels = [...document.querySelectorAll(".panel")];
+      const nav = document.getElementById("nav");
+      const dots = document.getElementById("dots");
+      panels.forEach((p, i) => {
+        const b = document.createElement("button");
+        b.setAttribute("aria-label", `Page ${i + 1}`);
+        b.addEventListener("click", () => p.scrollIntoView({ behavior: "smooth" }));
+        dots.append(b);
+      });
+      // The panel filling most of the screen is current: reveal its text, play its video,
+      // light its dot, and keep the nav clear over dark panels and glass over light ones.
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            const on = e.intersectionRatio > 0.55;
+            e.target.classList.toggle("on", on);
+            const v = e.target.querySelector("video");
+            if (v)
+              on && !matchMedia("(prefers-reduced-motion: reduce)").matches
+                ? v.play().catch(() => {})
+                : v.pause();
+            if (on) {
+              const i = panels.indexOf(e.target);
+              [...dots.children].forEach((d, j) =>
+                j === i
+                  ? d.setAttribute("aria-current", "step")
+                  : d.removeAttribute("aria-current"),
+              );
+              nav.classList.toggle("scrolled", e.target.classList.contains("light"));
+            }
+          }
+        },
+        { threshold: [0, 0.55, 1] },
+      );
+      panels.forEach((p) => io.observe(p));
+    </script>
+    <script type="module" src="base.js"></script>
+  </body>
+</html>

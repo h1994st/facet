@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Type</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Source+Sans+3:wght@400;600&family=Caveat:wght@400;600&family=Noto+Serif+SC:wght@600;700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css"
+    />
+    <link rel="stylesheet" href="base.css" />
+    <style>
+      /* Each pairing sets the same five roles; :lang(zh) swaps in CJK-aware stacks. */
+      /* Chinese defaults to the built-in system fonts (no download); LXGW WenKai is the
+         opt-in alternative, switched on for the whole page with the control above. */
+      .pair {
+        --cjk-sans:
+          "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC",
+          "Source Han Sans SC";
+        --cjk-serif: "Songti SC", "STSong", "SimSun", "Noto Serif CJK SC", "Source Han Serif SC";
+        --pen: "Caveat", "LXGW WenKai", cursive;
+      }
+      :root[data-cjk="wenkai"] .pair {
+        --cjk-sans: "LXGW WenKai";
+        --cjk-serif: "LXGW WenKai";
+      }
+      .pair[data-pair="chosen"] {
+        --display: "Source Serif 4", "Noto Serif SC", var(--cjk-serif), serif;
+        --body: "Geist", var(--cjk-sans), sans-serif;
+        --mono: "Geist Mono", var(--cjk-sans), monospace;
+        --display-weight: 600;
+        --display-track: -0.015em;
+        border-color: color-mix(in oklch, var(--accent) 45%, transparent);
+      }
+      .pair[data-pair="inter"] {
+        --display: "Inter", var(--cjk-sans), sans-serif;
+        --body: "Inter", var(--cjk-sans), sans-serif;
+        --mono: "JetBrains Mono", var(--cjk-sans), monospace;
+        --display-weight: 650;
+        --display-track: -0.025em;
+      }
+      .pair[data-pair="geist"] {
+        --display: "Geist", var(--cjk-sans), sans-serif;
+        --body: "Geist", var(--cjk-sans), sans-serif;
+        --mono: "Geist Mono", var(--cjk-sans), monospace;
+        --display-weight: 600;
+        --display-track: -0.03em;
+      }
+      .pair[data-pair="editorial"] {
+        --display: "Source Serif 4", var(--cjk-serif), serif;
+        --body: "Source Sans 3", var(--cjk-sans), sans-serif;
+        --mono: "JetBrains Mono", var(--cjk-sans), monospace;
+        --display-weight: 600;
+        --display-track: -0.015em;
+      }
+      .pair[data-pair="wenkai-display"] {
+        --display: "LXGW WenKai", "Geist", serif;
+        --body: "Geist", var(--cjk-sans), sans-serif;
+        --mono: "Geist Mono", var(--cjk-sans), monospace;
+        --display-weight: 700;
+        --display-track: 0;
+      }
+      .pair[data-pair="wenkai"] {
+        --display: "LXGW WenKai", serif;
+        --body: "LXGW WenKai", serif;
+        --mono: "LXGW WenKai Mono", monospace;
+        --display-weight: 700;
+        --display-track: 0;
+      }
+      :root:lang(zh) .pair {
+        --pen: "LXGW WenKai", "Caveat", cursive;
+        --display-track: 0;
+      }
+
+      .cjk-ctl {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem 0.9rem;
+        align-items: center;
+        margin-top: 1.5rem;
+      }
+      .cjk-ctl .mk-label {
+        margin: 0;
+      }
+      .cjk-ctl .mk-seg button {
+        border: 1px solid transparent;
+        border-radius: 999px;
+        background: none;
+        padding: 0.4rem 0.75rem;
+        color: var(--fg-2);
+        font: 600 0.8rem/1 var(--mk-mono);
+        cursor: pointer;
+      }
+      .cjk-ctl .mk-seg button[aria-pressed="true"] {
+        border-color: var(--line-2);
+        background: var(--surface);
+        color: var(--fg);
+      }
+      .pairs {
+        display: grid;
+        gap: 1.25rem;
+        margin-top: 2rem;
+      }
+
+      .pair {
+        display: grid;
+        grid-template-columns: 15rem minmax(0, 1fr);
+        gap: 2rem;
+        padding: 1.75rem;
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        background: var(--bg-2);
+      }
+
+      .pair-meta h2 {
+        margin: 0 0 0.25rem;
+        font: 600 1.05rem/1.3 var(--mk-sans);
+      }
+      .pair-meta .mk-label {
+        margin-bottom: 0.4rem;
+      }
+      .pair-meta ul {
+        margin: 0.75rem 0 0;
+        padding-left: 1.1rem;
+        color: var(--fg-2);
+        font-size: 0.85rem;
+      }
+      .pair-meta li {
+        margin: 0.2rem 0;
+      }
+      .pair-meta dl {
+        margin: 0.6rem 0 0;
+        font: 0.75rem/1.5 var(--mk-mono);
+        color: var(--fg-3);
+      }
+      .pair-meta dt {
+        float: left;
+        width: 4.2rem;
+      }
+      .pair-meta dd {
+        margin: 0;
+        color: var(--fg-2);
+      }
+
+      .spec {
+        font-family: var(--body);
+        min-width: 0;
+      }
+      .spec .kicker {
+        margin: 0;
+        color: var(--accent);
+        font: 600 0.78rem/1 var(--mono);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+      }
+      :root:lang(zh) .spec .kicker {
+        letter-spacing: 0.12em;
+      }
+      .spec h3 {
+        margin: 0.6rem 0 0.8rem;
+        font-family: var(--display);
+        font-weight: var(--display-weight);
+        font-size: clamp(1.9rem, 3.6vw, 2.75rem);
+        line-height: 1.12;
+        letter-spacing: var(--display-track);
+        text-wrap: balance;
+      }
+      :root:lang(zh) .spec h3 {
+        line-height: 1.3;
+        word-break: keep-all;
+        overflow-wrap: anywhere;
+      }
+      .spec p {
+        margin: 0 0 1rem;
+        max-width: 38rem;
+        color: var(--fg-2);
+        font-size: 1.04rem;
+        line-height: 1.65;
+      }
+      :root:lang(zh) .spec p {
+        line-height: 1.8;
+        text-align: justify;
+      }
+      .spec h4 {
+        margin: 1.5rem 0 0.4rem;
+        font-family: var(--display);
+        font-weight: var(--display-weight);
+        font-size: 1.35rem;
+        letter-spacing: var(--display-track);
+      }
+      .spec .meta {
+        color: var(--fg-3);
+        font-size: 0.82rem;
+        font-variant-numeric: tabular-nums;
+      }
+      .spec .ui {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        align-items: center;
+        margin: 1.25rem 0;
+      }
+      .spec .navpill {
+        display: inline-flex;
+        gap: 0.15rem;
+        padding: 0.3rem;
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: var(--surface);
+      }
+      .spec .navpill span {
+        padding: 0.35rem 0.8rem;
+        border-radius: 999px;
+        color: var(--fg-2);
+        font-size: 0.9rem;
+        font-weight: 500;
+      }
+      .spec .navpill span.on {
+        background: var(--accent);
+        color: var(--bg);
+      }
+      .spec .btn {
+        padding: 0.45rem 0.9rem;
+        border: 1px solid var(--line-2);
+        border-radius: 999px;
+        font-size: 0.88rem;
+        font-weight: 600;
+      }
+      .spec .btn.primary {
+        border-color: var(--fg);
+        background: var(--fg);
+        color: var(--bg);
+      }
+      .spec .chip {
+        padding: 0.15rem 0.6rem;
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--fg) 8%, transparent);
+        color: var(--fg-2);
+        font-size: 0.78rem;
+        font-weight: 600;
+      }
+      .spec pre {
+        margin: 0;
+        padding: 0.8rem 1rem;
+        overflow: auto;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--surface);
+        font: 0.88rem/1.6 var(--mono);
+      }
+      .spec pre .p {
+        color: var(--fg-3);
+      }
+      .spec pre .o {
+        color: var(--accent);
+      }
+      .spec .pen {
+        display: inline-block;
+        margin-top: 1rem;
+        color: var(--accent);
+        font: 600 1.6rem/1.1 var(--pen);
+        transform: rotate(-2deg);
+      }
+      :root:lang(zh) .spec .pen {
+        font-size: 1.35rem;
+        font-weight: 400;
+      }
+
+      @media (max-width: 860px) {
+        .pair {
+          grid-template-columns: 1fr;
+          gap: 1rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="mk-page">
+      <header>
+        <h1 data-zh="字体">Type</h1>
+        <p
+          data-zh="选定的是 F：D 的 Geist 正文，配上 Source Serif 4 与 Noto Serif SC 衬线标题。其余五组留作对比。切换 EN / 中文 看两种语言，切换 Dark / Light 看两种主题。字体此处从 CDN 加载，仅供比较。"
+        >
+          The choice is F: D's Geist text with Source Serif 4 and Noto Serif SC headings. The other
+          five stay for comparison. Switch EN / 中文 for both languages and Dark / Light for both
+          themes. Fonts load from CDNs here, for comparison only.
+        </p>
+      </header>
+      <div class="cjk-ctl">
+        <span class="mk-label" data-zh="中文字体">Chinese font</span>
+        <span class="mk-seg" id="cjk">
+          <button type="button" data-v="system" data-zh="系统内置（默认）">
+            Built-in (default)
+          </button>
+          <button type="button" data-v="wenkai">LXGW WenKai</button>
+        </span>
+        <span
+          class="mk-note"
+          data-zh="内置：苹方（Mac）、微软雅黑（Windows），无需下载。霞鹜文楷：按需分片加载，完整字体约 25 MB。"
+          >Built-in: PingFang (Mac), Microsoft YaHei (Windows), nothing to download. WenKai: loaded
+          in slices on demand; the full font is about 25 MB.</span
+        >
+      </div>
+      <div class="pairs" id="pairs"></div>
+    </main>
+
+    <template id="spec">
+      <div class="spec">
+        <p class="kicker" data-zh="项目 · 开源">Projects · Open source</p>
+        <h3 data-zh="追着红点跑过每一面墙，记下每一次扑击。">
+          Chase the red dot across every wall, and log every pounce.
+        </h3>
+        <p
+          data-zh="把 Red Dot Tracker 放在窗台上，照常打盹，醒来时每一个红点的轨迹都在一份 <code>dots.json</code> 里。"
+        >
+          Put Red Dot Tracker on the windowsill, nap as usual, and wake up to every red dot's path
+          in a single <code>dots.json</code>.
+        </p>
+        <div class="ui">
+          <span class="navpill"
+            ><span data-zh="博客">Blog</span><span class="on" data-zh="项目">Projects</span
+            ><span data-zh="简历">Resume</span></span
+          >
+          <span class="btn primary" data-zh="开玩 ↗">Play ↗</span>
+          <span class="btn" data-zh="代码">Code</span>
+          <span class="chip">Laser Pointer</span>
+          <span class="chip" data-zh="安全">Security</span>
+        </div>
+        <pre><span class="p">$</span> red-dot track ./living-room <span class="o">→ dots.json</span></pre>
+        <h4 data-zh="十二个房间，一个红点都没抓到">Twelve rooms, zero dots caught</h4>
+        <p class="meta" data-zh="2026 年 10 月 11 日 · 6 分钟阅读">Oct 11, 2026 · 6 min read</p>
+        <p
+          data-zh="整整两年，我在十二个房间里追那个红点。一次都没抓到，却因此学到了很多关于光的事：它会反射、会拐弯，还总比我快一步。"
+        >
+          For two years I chased the red dot across twelve rooms. I never caught it, but I learned a
+          lot about light: it bounces, it bends, and it is always one step ahead of me.
+        </p>
+        <span class="pen" data-zh="嘟娜批准了。">Duna approves.</span>
+      </div>
+    </template>
+
+    <script type="module">
+      const PAIRS = [
+        {
+          id: "chosen",
+          name: "Source Serif 4 + Geist",
+          tag: "F · D with serif headings",
+          chosen: true,
+          fonts: [
+            ["Headings", "Source Serif 4 + Noto Serif SC"],
+            ["Body", "Geist + PingFang / YaHei"],
+            ["Mono", "Geist Mono"],
+          ],
+          notes: [
+            "D's clean Geist text, with serif headings for warmth and contrast",
+            "Chinese headings in a Song-style serif; Chinese body text downloads nothing",
+          ],
+        },
+        {
+          id: "inter",
+          name: "Inter + built-in Chinese",
+          tag: "A · Neutral sans",
+          fonts: [
+            ["Latin", "Inter"],
+            ["中文", "PingFang / YaHei"],
+            ["Mono", "JetBrains Mono"],
+          ],
+          notes: [
+            "The safe modern default; very legible at UI sizes",
+            "Feels generic: many sites use it",
+          ],
+        },
+        {
+          id: "geist",
+          name: "Geist + built-in Chinese",
+          tag: "B · Technical sans",
+          fonts: [
+            ["Latin", "Geist"],
+            ["中文", "PingFang / YaHei"],
+            ["Mono", "Geist Mono"],
+          ],
+          notes: [
+            "Crisper and more distinctive than Inter, with a matching mono",
+            "Suits developer-tool sites and docs",
+          ],
+        },
+        {
+          id: "editorial",
+          name: "Source Serif 4 + Source Sans 3",
+          tag: "C · Editorial",
+          fonts: [
+            ["Latin", "Source Serif 4 / Sans 3"],
+            ["中文", "Songti / PingFang"],
+            ["Mono", "JetBrains Mono"],
+          ],
+          notes: [
+            "Classic, readable serif headings",
+            "Warmer, more bookish; less 'modern product'",
+          ],
+        },
+        {
+          id: "wenkai-display",
+          name: "Geist + LXGW WenKai headings",
+          tag: "D · Sans body, WenKai voice",
+          fonts: [
+            ["Display", "LXGW WenKai"],
+            ["Body", "Geist + PingFang / YaHei"],
+            ["Mono", "Geist Mono"],
+          ],
+          notes: [
+            "WenKai gives headings a hand-written warmth in both languages",
+            "Body stays clean and fast to read",
+          ],
+        },
+        {
+          id: "wenkai",
+          name: "LXGW WenKai throughout",
+          tag: "E · All WenKai",
+          fonts: [
+            ["All", "LXGW WenKai"],
+            ["Mono", "LXGW WenKai Mono"],
+          ],
+          notes: [
+            "The strongest personality; reads like a notebook",
+            "Weak for UI and dense technical text; big font to load",
+          ],
+        },
+      ];
+      // Chinese font switch (page-local): ?cjk=wenkai works too.
+      const cjk = document.getElementById("cjk");
+      const setCjk = (v) => {
+        document.documentElement.dataset.cjk = v;
+        for (const b of cjk.querySelectorAll("button"))
+          b.setAttribute("aria-pressed", b.dataset.v === v);
+      };
+      cjk.addEventListener("click", (e) => {
+        const b = e.target.closest("button");
+        if (b) setCjk(b.dataset.v);
+      });
+      setCjk(new URLSearchParams(location.search).get("cjk") === "wenkai" ? "wenkai" : "system");
+
+      const out = document.getElementById("pairs");
+      const tpl = document.getElementById("spec");
+      for (const p of PAIRS) {
+        const sec = document.createElement("section");
+        sec.className = "pair";
+        sec.dataset.pair = p.id;
+        sec.innerHTML = `<div class="pair-meta"><p class="mk-label">${p.tag}</p><h2>${p.name}${p.chosen ? ' <span class="mk-chosen" data-zh="已选">Chosen</span>' : ""}</h2>
+          <dl>${p.fonts.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>
+          <ul>${p.notes.map((n) => `<li>${n}</li>`).join("")}</ul></div>`;
+        sec.append(tpl.content.cloneNode(true));
+        out.append(sec);
+      }
+    </script>
+    <script type="module" src="base.js"></script>
+  </body>
+</html>

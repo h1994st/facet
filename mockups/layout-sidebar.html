@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Layout · Sidebar</title>
+    <link rel="stylesheet" href="base.css" />
+    <link rel="stylesheet" href="cast/cast.css" />
+    <link rel="stylesheet" href="layout.css" />
+    <style>
+      /* Two columns: a sticky table of contents, then the reading column. */
+      .docs {
+        display: grid;
+        grid-template-columns: 13rem min(var(--measure), 100%);
+        gap: 3.5rem;
+        justify-content: center;
+        width: min(100% - 2.5rem, 64rem);
+        margin: 0 auto;
+        padding-top: 3.5rem;
+      }
+      .docs > article {
+        min-width: 0;
+      }
+      .toc {
+        position: sticky;
+        top: calc(var(--mk-bar) + 5rem);
+        align-self: start;
+        display: flex;
+        flex-direction: column;
+        gap: 0.1rem;
+        padding-left: 0.9rem;
+        border-left: 1px solid var(--line-2);
+        font-size: 0.88rem;
+      }
+      .toc .mk-label {
+        margin: 0 0 0.6rem -0.9rem;
+        padding-left: 0.9rem;
+      }
+      .toc a {
+        position: relative;
+        padding: 0.3rem 0;
+        color: var(--fg-3);
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .toc a[aria-current] {
+        color: var(--fg);
+      }
+      .toc a[aria-current]::before {
+        content: "";
+        position: absolute;
+        left: calc(-0.9rem - 1px);
+        top: 0.3rem;
+        bottom: 0.3rem;
+        width: 2px;
+        border-radius: 2px;
+        background: var(--accent);
+      }
+      .docs h1 {
+        margin: 0 0 0.6rem;
+        font-size: 2.6rem;
+        line-height: 1.1;
+      }
+      .docs section {
+        scroll-margin-top: calc(var(--mk-bar) + 5rem);
+      }
+      /* Phones: the TOC becomes a scrollable bar under the nav. */
+      @media (max-width: 900px) {
+        .docs {
+          grid-template-columns: minmax(0, 1fr);
+          gap: 1.5rem;
+          padding-top: 1.5rem;
+        }
+        .toc {
+          top: calc(var(--mk-bar) + 4.2rem);
+          z-index: 10;
+          flex-direction: row;
+          gap: 0.3rem;
+          overflow-x: auto;
+          padding: 0.4rem;
+          border: 1px solid var(--line);
+          border-radius: 999px;
+          background: color-mix(in oklch, var(--surface) 80%, transparent);
+          backdrop-filter: blur(12px);
+          scrollbar-width: none;
+        }
+        .toc .mk-label {
+          display: none;
+        }
+        .toc a {
+          flex: none;
+          padding: 0.3rem 0.7rem;
+          border-radius: 999px;
+          white-space: nowrap;
+        }
+        .toc a[aria-current] {
+          background: color-mix(in oklch, var(--fg) 10%, transparent);
+        }
+        .toc a[aria-current]::before {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="fnav">
+      <b>Red Dot Tracker</b><a href="#" data-zh="文档" aria-current="page">Docs</a
+      ><a href="#" data-zh="代码">Code</a><a href="#" data-zh="下载">Releases</a>
+    </nav>
+
+    <div class="docs prose">
+      <nav class="toc" aria-label="On this page" id="toc">
+        <p class="mk-label" data-zh="本页内容">On this page</p>
+        <a href="#start" data-zh="快速开始">Quick start</a>
+        <a href="#how" data-zh="工作原理">How it works</a>
+        <a href="#commands" data-zh="命令">Commands</a>
+        <a href="#config" data-zh="配置">Configuration</a>
+        <a href="#faq" data-zh="常见问题">FAQ</a>
+      </nav>
+      <article>
+        <p class="kicker" data-zh="文档">Documentation</p>
+        <h1 data-zh="追踪家里的每一个红点">Track every red dot in the house</h1>
+        <p class="meta" data-zh="适合：文档、笔记本、长文章、简历">
+          For: docs, the notebook, long posts, the resume
+        </p>
+
+        <section id="start">
+          <h2 data-zh="快速开始">Quick start</h2>
+          <p
+            data-zh="把 Red Dot Tracker 放在窗台上，照常打盹，醒来时每一个红点的轨迹都在一份 <code>dots.json</code> 里。"
+          >
+            Put Red Dot Tracker on the windowsill, nap as usual, and wake up to every red dot's path
+            in a single <code>dots.json</code>.
+          </p>
+          <pre><span class="p">$</span> install red-dot
+<span class="p">$</span> red-dot watch ./living-room
+<span class="p">$</span> red-dot track ./living-room <span class="o">→ dots.json</span></pre>
+        </section>
+
+        <section id="how">
+          <h2 data-zh="工作原理">How it works</h2>
+          <p
+            data-zh="追踪器每秒看墙面三十次。每看到一个红点，就记下它的位置；红点在镜子上反射或在门框边拐弯时，就开始一段新的路线。"
+          >
+            The tracker looks at the walls thirty times a second. Each time it sees the dot, it
+            notes where; whenever the dot bounces off a mirror or turns at a door frame, a new
+            segment of its path begins.
+          </p>
+          <p data-zh="<code>red-dot track</code> 把这些路线拼在一起，写成一个文件，按房间分组。">
+            <code>red-dot track</code> joins those segments into one file, grouped by room.
+          </p>
+        </section>
+
+        <section id="commands">
+          <h2 data-zh="命令">Commands</h2>
+          <ul>
+            <li>
+              <code>red-dot watch</code>:
+              <span data-zh="开始盯着墙面">start watching the walls</span>
+            </li>
+            <li>
+              <code>red-dot track</code>:
+              <span data-zh="把所有路线写进一个文件">write every path to one file</span>
+            </li>
+            <li>
+              <code>red-dot stats</code>:
+              <span data-zh="统计红点、扑击和成功次数（通常是零）"
+                >count dots, pounces and catches (usually zero)</span
+              >
+            </li>
+          </ul>
+        </section>
+
+        <section id="config">
+          <h2 data-zh="配置">Configuration</h2>
+          <p data-zh="第一次运行时，房间会自动检测，并写进 <code>~/.red-dot/config.toml</code>。">
+            On first run, rooms are detected and written to <code>~/.red-dot/config.toml</code>.
+          </p>
+          <pre>
+[rooms]
+living-room = { windows = 2, mirrors = 1 }
+hallway = { windows = 0, mirrors = 3 }</pre>
+        </section>
+
+        <section id="faq">
+          <h2 data-zh="常见问题">FAQ</h2>
+          <h3 data-zh="能帮我抓到红点吗？">Will it help me catch the dot?</h3>
+          <p data-zh="不能。但它会告诉你红点下一次会去哪儿。">
+            No. But it will tell you where the dot goes next.
+          </p>
+          <div class="note" data-zh="侧边目录在窄屏上会变成导航下方可以横向滚动的一条。">
+            On narrow screens the table of contents becomes a scrollable bar under the nav.
+          </div>
+        </section>
+      </article>
+    </div>
+    <footer class="ffoot" id="foot">© 2026 Duna Feline · example.com</footer>
+
+    <script type="module">
+      import { scrollSpy, footerCats } from "./layout.js";
+      scrollSpy([...document.querySelectorAll("#toc a")]);
+      footerCats(document.getElementById("foot"));
+    </script>
+    <script type="module" src="base.js"></script>
+  </body>
+</html>

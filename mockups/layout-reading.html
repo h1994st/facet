@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Layout · Reading</title>
+    <link rel="stylesheet" href="base.css" />
+    <link rel="stylesheet" href="cast/cast.css" />
+    <link rel="stylesheet" href="layout.css" />
+    <style>
+      .title {
+        padding: 4rem 0 1rem;
+      }
+      .title h1 {
+        margin: 0 0 0.8rem;
+        font-size: clamp(2.2rem, 4.5vw, 3.2rem);
+        line-height: 1.1;
+      }
+      .lead {
+        font-size: 1.2rem;
+        color: var(--fg) !important;
+      }
+      /* Labels that show which column a block sits in (mockup only). */
+      .col-label {
+        display: block;
+        margin-bottom: 0.4rem;
+        color: var(--accent);
+        font: 600 0.68rem/1 var(--mk-mono);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .full .col-label {
+        width: min(var(--measure), 100% - 2 * var(--gutter));
+        margin-inline: auto;
+      }
+      .shots {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
+      }
+      @media (max-width: 640px) {
+        .shots {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="fnav">
+      <b>Duna Feline</b><a href="#" data-zh="博客" aria-current="page">Blog</a
+      ><a href="#" data-zh="项目">Projects</a><a href="#" data-zh="简历">Resume</a>
+    </nav>
+
+    <main class="lay">
+      <header class="title">
+        <p class="kicker" data-zh="博客 · 研究">Blog · Research</p>
+        <h1 data-zh="十二个房间，一个红点都没抓到">Twelve Rooms, Zero Dots Caught</h1>
+        <p class="meta" data-zh="2026 年 10 月 11 日 · 6 分钟阅读">Oct 11, 2026 · 6 min read</p>
+      </header>
+
+      <p class="lead" data-zh="整整两年，我在十二个房间里追一个红点。这是我学到的东西。">
+        For two years I chased one red dot across twelve rooms. Here is what I learned.
+      </p>
+      <p
+        data-zh="正文是单栏，每行大约 65 个英文字符（中文约 36 字），读起来最舒服。图片和图表可以从正文栏“探出去”：宽一点，或者铺满整个页面。"
+      >
+        Text sits in one column, about 65 characters a line (around 36 in Chinese), the comfortable
+        reading width. Figures can break out of it: a little wider, or the full width of the page.
+      </p>
+
+      <figure>
+        <span class="col-label" data-zh="正文宽度">Content width</span>
+        <img src="assets/board-1.jpg" alt="" />
+        <figcaption data-zh="正文宽度：和文字一样宽。">
+          Content width: as wide as the text.
+        </figcaption>
+      </figure>
+
+      <p
+        data-zh="红点从不乱跑。它沿直线前进，碰到镜子就拐弯，最后总停在一个我够不着的地方。把它的路线画下来，就是上面这张图。"
+      >
+        The dot never wanders. It travels in straight lines, turns at every mirror, and always stops
+        somewhere just out of reach. Draw its paths and you get the board above.
+      </p>
+
+      <figure class="wide">
+        <span class="col-label" data-zh="加宽">Wide</span>
+        <img src="assets/horizon.jpg" alt="" />
+        <figcaption data-zh="加宽：两侧各多出一点，适合图表和截图组。">
+          Wide: reaches past the text on both sides, for diagrams and screenshot sets.
+        </figcaption>
+      </figure>
+
+      <p data-zh="两个房间，两种路线：">Two rooms, two kinds of path:</p>
+      <div class="wide shots">
+        <img src="assets/board-1.jpg" alt="" style="width: 100%; border-radius: var(--r-media)" />
+        <img src="assets/board-2.jpg" alt="" style="width: 100%; border-radius: var(--r-media)" />
+      </div>
+
+      <blockquote data-zh="你抓不到光，但你可以读懂它。">
+        You can't catch light, but you can learn to read it.
+      </blockquote>
+
+      <pre><span class="p">$</span> red-dot track ./living-room
+<span class="o">→ 412 dots, 0 caught</span></pre>
+
+      <figure class="full">
+        <span class="col-label" data-zh="铺满">Full</span>
+        <img src="assets/board.jpg" alt="" />
+        <figcaption data-zh="铺满：从页面一边到另一边，给真正需要震撼力的图片。">
+          Full: edge to edge, for the images that need the impact.
+        </figcaption>
+      </figure>
+
+      <div class="note" data-zh="这是一个虚构的示例网站。">This is a fictional sample site.</div>
+      <p data-zh="如果你家也有一个红点，试试看吧。它可能比你想的更好懂。">
+        If your home has a red dot too, give it a try. It may be easier to read than you expect.
+      </p>
+
+      <footer class="ffoot full" id="foot">© 2026 Duna Feline · example.com</footer>
+    </main>
+
+    <script type="module">
+      import { footerCats } from "./layout.js";
+      footerCats(document.getElementById("foot"));
+    </script>
+    <script type="module" src="base.js"></script>
+  </body>
+</html>

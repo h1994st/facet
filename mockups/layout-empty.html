@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Layout · Empty</title>
+    <link rel="stylesheet" href="base.css" />
+    <link rel="stylesheet" href="cast/cast.css" />
+    <link rel="stylesheet" href="layout.css" />
+    <style>
+      /* A centered message with a cat: 404s, empty search results, offline. */
+      .empty {
+        display: grid;
+        place-items: center;
+        min-height: calc(100svh - var(--mk-bar) - 4rem);
+        padding: 2rem 1.25rem;
+        text-align: center;
+      }
+      .empty .cat {
+        width: 120px;
+        margin: 0 auto 0.5rem;
+      }
+      .empty .code {
+        margin: 0;
+        color: var(--fg-3);
+        font: 600 0.85rem var(--mk-mono);
+        letter-spacing: 0.1em;
+      }
+      .empty h1 {
+        margin: 0.4rem 0 0.6rem;
+        font-size: clamp(2rem, 4vw, 2.8rem);
+        line-height: 1.15;
+      }
+      .empty p {
+        max-width: 26rem;
+        margin: 0 auto 1.4rem;
+      }
+      .empty .row {
+        justify-content: center;
+      }
+      .variants {
+        display: flex;
+        gap: 0.4rem;
+        justify-content: center;
+        margin-top: 2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="fnav">
+      <b>Duna Feline</b><a href="#" data-zh="博客">Blog</a><a href="#" data-zh="项目">Projects</a
+      ><a href="#" data-zh="简历">Resume</a>
+    </nav>
+
+    <main class="empty prose">
+      <div id="box">
+        <div id="pet"></div>
+        <p class="code" id="code">404</p>
+        <h1 id="title"></h1>
+        <p id="msg"></p>
+        <div class="row">
+          <a class="btn primary" href="#" data-zh="回到首页">Back to home</a>
+          <a class="btn" href="#" data-zh="看看博客">Browse the blog</a>
+        </div>
+        <div class="variants" id="variants">
+          <button class="chip" data-v="404" aria-pressed="true">404</button>
+          <button class="chip" data-v="search" aria-pressed="false" data-zh="无结果">
+            No results
+          </button>
+          <button class="chip" data-v="offline" aria-pressed="false" data-zh="离线">Offline</button>
+        </div>
+      </div>
+    </main>
+
+    <script type="module">
+      import { createCat } from "./cast/cast.js";
+      // Each empty state gets one cat in a pose that fits it.
+      const V = {
+        404: [
+          "dudu",
+          "jump",
+          "404",
+          "This page fell off the table.",
+          "这一页从桌上掉下去了。",
+          "Dudu knocked it off. It may have moved, or never existed.",
+          "嘟嘟把它推下去了。它可能搬家了，也可能从来没存在过。",
+        ],
+        search: [
+          "nangnang",
+          "blink",
+          "0",
+          "Nothing matches.",
+          "没有匹配的结果。",
+          "Nangnang looked everywhere. Try fewer words.",
+          "囔囔到处都找过了。试试少用几个词。",
+        ],
+        offline: [
+          "duna",
+          "sit",
+          "OFFLINE",
+          "You're offline.",
+          "你离线了。",
+          "Duna will wait here until the connection is back.",
+          "嘟娜会在这里等，直到网络恢复。",
+        ],
+      };
+      let current = "404";
+      function render() {
+        const [cat, pose, code, en, zh, msgEn, msgZh] = V[current];
+        const isZh = document.documentElement.lang.startsWith("zh");
+        document.getElementById("pet").replaceChildren(createCat(cat, { pose, label: "" }));
+        document.getElementById("code").textContent = code;
+        document.getElementById("title").textContent = isZh ? zh : en;
+        document.getElementById("msg").textContent = isZh ? msgZh : msgEn;
+      }
+      const chips = [...document.querySelectorAll("#variants .chip")];
+      chips.forEach((c) =>
+        c.addEventListener("click", () => {
+          current = c.dataset.v;
+          chips.forEach((x) => x.setAttribute("aria-pressed", x === c));
+          render();
+        }),
+      );
+      document.addEventListener("mk:change", render);
+      render();
+    </script>
+    <script type="module" src="base.js"></script>
+  </body>
+</html>

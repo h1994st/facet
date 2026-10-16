@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Glass</title>
+    <link rel="stylesheet" href="base.css" />
+    <style>
+      .stages {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+      }
+      .cand h2 {
+        margin: 0;
+        font-size: 1.05rem;
+      }
+      .cand > p {
+        margin: 0.25rem 0 0.8rem;
+        color: var(--fg-2);
+        font-size: 0.88rem;
+      }
+
+      /* ---------- the shared scene ---------- */
+      .stage {
+        --mx: 50%;
+        --my: 30%;
+        position: relative;
+        height: 430px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        background: var(--bg);
+        isolation: isolate;
+      }
+      /* What sits behind the glass: soft light in the accent and two neighbors,
+         a faint grid, and big text, so the blur has something to work on. */
+      .backdrop {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+      }
+      .backdrop i {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(30px);
+      }
+      .backdrop i:nth-child(1) {
+        width: 260px;
+        height: 260px;
+        left: -40px;
+        top: 60px;
+        background: var(--accent);
+        opacity: 0.55;
+      }
+      .backdrop i:nth-child(2) {
+        width: 220px;
+        height: 220px;
+        right: 40px;
+        top: -60px;
+        background: oklch(0.6 0.07 295);
+        opacity: 0.4;
+      }
+      .backdrop i:nth-child(3) {
+        width: 200px;
+        height: 200px;
+        right: -30px;
+        bottom: -40px;
+        background: oklch(0.7 0.07 60);
+        opacity: 0.35;
+      }
+      .backdrop .grid {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(var(--line) 1px, transparent 1px),
+          linear-gradient(90deg, var(--line) 1px, transparent 1px);
+        background-size: 32px 32px;
+        mask: radial-gradient(80% 80% at 50% 40%, black, transparent);
+      }
+      .backdrop .word {
+        position: absolute;
+        left: 1.5rem;
+        bottom: 0.6rem;
+        color: color-mix(in srgb, var(--fg) 9%, transparent);
+        font: 800 7.5rem/1 var(--mk-sans);
+        letter-spacing: -0.05em;
+      }
+
+      .nav {
+        position: absolute;
+        top: 1rem;
+        left: 50%;
+        display: flex;
+        gap: 0.15rem;
+        padding: 0.3rem;
+        border-radius: 999px;
+        transform: translateX(-50%);
+        font-size: 0.85rem;
+        font-weight: 500;
+        white-space: nowrap;
+      }
+      .nav span {
+        padding: 0.35rem 0.75rem;
+        border-radius: 999px;
+        color: var(--fg-2);
+      }
+      .nav span.on {
+        background: color-mix(in srgb, var(--fg) 12%, transparent);
+        color: var(--fg);
+      }
+      .card {
+        position: absolute;
+        top: 5rem;
+        left: 1.5rem;
+        width: min(330px, calc(100% - 3rem));
+        padding: 1.1rem 1.2rem 1.2rem;
+        border-radius: 22px;
+      }
+      .card .row {
+        display: flex;
+        gap: 0.8rem;
+        align-items: center;
+      }
+      .card .ico {
+        display: grid;
+        place-items: center;
+        width: 46px;
+        height: 46px;
+        border-radius: 12px;
+        background: var(--accent);
+        color: var(--bg);
+        font: 800 1.2rem/1 var(--mk-mono);
+      }
+      .card h3 {
+        margin: 0;
+        font-size: 1.05rem;
+      }
+      .card .sub {
+        color: var(--fg-3);
+        font-size: 0.8rem;
+      }
+      .card p {
+        margin: 0.7rem 0 0.9rem;
+        color: var(--fg-2);
+        font-size: 0.88rem;
+        line-height: 1.55;
+      }
+      .card .acts {
+        display: flex;
+        gap: 0.4rem;
+      }
+      .btn {
+        padding: 0.35rem 0.8rem;
+        border: 1px solid var(--line-2);
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+      .btn.primary {
+        border-color: var(--accent);
+        background: var(--accent);
+        color: var(--bg);
+      }
+      .sheet {
+        position: absolute;
+        right: 1.25rem;
+        bottom: 1.25rem;
+        width: 220px;
+        padding: 0.9rem 1rem;
+        border-radius: 18px;
+        font-size: 0.85rem;
+      }
+      .sheet b {
+        display: block;
+        margin-bottom: 0.5rem;
+      }
+      .toggle {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0.35rem 0;
+        color: var(--fg-2);
+      }
+      .switch {
+        position: relative;
+        width: 34px;
+        height: 20px;
+        border-radius: 999px;
+        background: color-mix(in srgb, var(--fg) 18%, transparent);
+      }
+      .switch.on {
+        background: var(--accent);
+      }
+      .switch::after {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #fff;
+        box-shadow: 0 1px 3px rgb(0 0 0 / 0.3);
+      }
+      .switch.on::after {
+        left: 16px;
+      }
+
+      /* ---------- 1 · Clear: solid surfaces; glass only on what floats ---------- */
+      .g-clear .backdrop i {
+        opacity: 0.18;
+      }
+      .g-clear .card {
+        border: 1px solid var(--line);
+        background: var(--surface);
+        box-shadow: var(--shadow);
+      }
+      .g-clear .nav,
+      .g-clear .sheet {
+        border: 1px solid var(--line);
+        background: color-mix(in srgb, var(--surface) 72%, transparent);
+        backdrop-filter: blur(16px);
+        box-shadow: var(--shadow);
+      }
+
+      /* ---------- 2 · Frost: frosted panels, a lit top edge ---------- */
+      .g-frost .glass {
+        border: 1px solid rgb(255 255 255 / 0.08);
+        background: rgb(255 255 255 / 0.06);
+        backdrop-filter: blur(24px) saturate(150%);
+        box-shadow:
+          inset 0 1px 0 rgb(255 255 255 / 0.1),
+          0 18px 40px -20px rgb(0 0 0 / 0.6);
+      }
+      :root[data-theme="light"] .g-frost .glass {
+        border-color: rgb(255 255 255 / 0.7);
+        background: rgb(255 255 255 / 0.55);
+        box-shadow:
+          inset 0 1px 0 rgb(255 255 255 / 0.9),
+          0 18px 40px -22px rgb(0 0 0 / 0.25);
+      }
+
+      /* ---------- 3 · Liquid: clearer glass, specular edges, a light that follows the cursor ---------- */
+      .g-liquid .glass {
+        position: absolute;
+        background: rgb(255 255 255 / 0.03);
+        backdrop-filter: blur(10px) saturate(200%) brightness(1.08);
+        box-shadow:
+          inset 0 1px 0 rgb(255 255 255 / 0.28),
+          inset 0 -1px 0 rgb(255 255 255 / 0.06),
+          inset 0 0 24px rgb(255 255 255 / 0.04),
+          0 20px 44px -22px rgb(0 0 0 / 0.7);
+      }
+      :root[data-theme="light"] .g-liquid .glass {
+        background: rgb(255 255 255 / 0.28);
+        box-shadow:
+          inset 0 1px 0 rgb(255 255 255 / 0.95),
+          inset 0 -1px 0 rgb(255 255 255 / 0.5),
+          inset 0 0 24px rgb(255 255 255 / 0.35),
+          0 20px 44px -24px rgb(0 0 0 / 0.3);
+      }
+      /* Gradient rim: bright at the top left, fading round the edge. */
+      .g-liquid .glass::before,
+      .g-facet .glass::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        padding: 1px;
+        border-radius: inherit;
+        mask:
+          linear-gradient(#000 0 0) content-box exclude,
+          linear-gradient(#000 0 0);
+        pointer-events: none;
+      }
+      .g-liquid .glass::before {
+        background: linear-gradient(
+          135deg,
+          rgb(255 255 255 / 0.55),
+          rgb(255 255 255 / 0.06) 40%,
+          rgb(255 255 255 / 0.04) 70%,
+          rgb(255 255 255 / 0.3)
+        );
+      }
+      /* The light that follows the cursor. */
+      .g-liquid .glass::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        border-radius: inherit;
+        background: radial-gradient(
+          240px circle at var(--lx, 50%) var(--ly, 0%),
+          rgb(255 255 255 / 0.14),
+          transparent 60%
+        );
+        pointer-events: none;
+      }
+
+      /* ---------- 4 · Facet: frost plus a cut-glass reflection band and a prism edge ---------- */
+      .g-facet .glass {
+        position: absolute;
+        overflow: hidden;
+        background: rgb(255 255 255 / 0.05);
+        backdrop-filter: blur(20px) saturate(140%);
+        box-shadow:
+          inset 0 1px 0 rgb(255 255 255 / 0.12),
+          0 18px 40px -20px rgb(0 0 0 / 0.65);
+      }
+      :root[data-theme="light"] .g-facet .glass {
+        background: rgb(255 255 255 / 0.5);
+        box-shadow:
+          inset 0 1px 0 rgb(255 255 255 / 0.9),
+          0 18px 40px -22px rgb(0 0 0 / 0.25);
+      }
+      /* Prism edge: a faint red-green-blue hairline that catches light, like a cut edge. */
+      .g-facet .glass::before {
+        background: linear-gradient(
+          120deg,
+          rgb(255 80 100 / 0.5),
+          rgb(255 255 255 / 0.08) 30%,
+          rgb(80 255 160 / 0.3) 55%,
+          rgb(255 255 255 / 0.06) 75%,
+          rgb(90 130 255 / 0.5)
+        );
+      }
+      /* Reflection band: a diagonal sheen across the surface; it slides with the cursor. */
+      .g-facet .glass::after {
+        content: "";
+        position: absolute;
+        inset: -50%;
+        background: linear-gradient(
+          115deg,
+          transparent 42%,
+          rgb(255 255 255 / 0.1) 47%,
+          rgb(255 255 255 / 0.02) 50%,
+          transparent 53%
+        );
+        transform: translateX(calc((var(--lx-n, 0.5) - 0.5) * 30%));
+        transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+        pointer-events: none;
+      }
+      :root[data-theme="light"] .g-facet .glass::after {
+        background: linear-gradient(
+          115deg,
+          transparent 42%,
+          rgb(255 255 255 / 0.4) 47.5%,
+          rgb(255 255 255 / 0.1) 50%,
+          transparent 53%
+        );
+      }
+      /* Floor reflection under the card (WebKit/Blink only). */
+      .g-facet .card {
+        -webkit-box-reflect: below 6px linear-gradient(transparent 72%, rgb(255 255 255 / 0.1));
+      }
+
+      /* ---------- 5 · Clear + liquid on hover ----------
+         Clear at rest. While the pointer is over a card it lifts, a soft light in the accent
+         follows the cursor, and its rim catches the light: the projects-page hover. */
+      .g-hybrid .card {
+        transition:
+          transform 0.25s,
+          box-shadow 0.25s;
+      }
+      .g-hybrid .card.hot {
+        transform: translateY(-3px);
+        box-shadow:
+          0 2px 4px rgb(0 0 0 / 0.3),
+          0 24px 48px -20px rgb(0 0 0 / 0.75);
+      }
+      :root[data-theme="light"] .g-hybrid .card.hot {
+        box-shadow:
+          0 2px 4px rgb(0 0 0 / 0.05),
+          0 24px 48px -20px rgb(0 0 0 / 0.25);
+      }
+      .g-hybrid .card::before,
+      .g-hybrid .card::after {
+        content: "";
+        position: absolute;
+        inset: -1px;
+        border-radius: inherit;
+        opacity: 0;
+        transition: opacity 0.3s;
+        pointer-events: none;
+      }
+      .g-hybrid .card::before {
+        background: radial-gradient(
+          300px circle at var(--lx, 50%) var(--ly, 0%),
+          color-mix(in oklch, var(--accent) 18%, transparent),
+          transparent 55%
+        );
+      }
+      .g-hybrid .card::after {
+        padding: 1px;
+        background:
+          radial-gradient(
+            220px circle at var(--lx, 50%) var(--ly, 0%),
+            var(--accent),
+            transparent 70%
+          ),
+          linear-gradient(rgb(255 255 255 / 0.18), transparent 40%);
+        mask:
+          linear-gradient(#000 0 0) content-box exclude,
+          linear-gradient(#000 0 0);
+      }
+      .g-hybrid .card.hot::before,
+      .g-hybrid .card.hot::after {
+        opacity: 1;
+      }
+      .cand.wide {
+        grid-column: 1 / -1;
+      }
+
+      @media (max-width: 900px) {
+        .stages {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .g-facet .glass::after,
+        .g-hybrid .card {
+          transition: none;
+        }
+        .g-hybrid .card.hot {
+          transform: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="mk-page">
+      <header>
+        <h1 data-zh="玻璃">Glass</h1>
+        <p
+          data-zh="选定的是 5：平时通透，悬停时出现液态玻璃，放在最前面。下面是四个候选方案，从几乎没有玻璃到最多玻璃，场景完全相同：导航胶囊、卡片和浮层。在 3 和 4 上移动鼠标可以看到反光。切换主题与站点强调色看看各自的表现。"
+        >
+          The choice is 5, Clear with liquid glass on hover, shown first. Then the four candidates,
+          from almost no glass to the most, on the same scene: nav pill, card and a floating sheet.
+          Move the pointer over 3 and 4 to see the reflections. Switch theme and accent to see how
+          each holds up.
+        </p>
+      </header>
+
+      <div class="stages">
+        <section class="cand wide">
+          <h2>
+            <span data-zh="5 · 通透 + 悬停液态">5 · Clear + liquid on hover</span>
+            <span class="mk-chosen" data-zh="已选">Chosen</span>
+          </h2>
+          <p
+            data-zh="选定的方向：平时是方案 1 的通透，只有悬停时卡片才浮起来，强调色的光跟着鼠标走，边缘被照亮。和项目页的卡片一样，但只在交互时出现。"
+          >
+            The choice: Clear at rest. Only on hover does a card lift, with a soft accent light that
+            follows the pointer and a rim that catches it, like the projects page. Liquid glass
+            appears only when you interact.
+          </p>
+          <div class="stage g-clear g-hybrid"></div>
+        </section>
+        <section class="cand">
+          <h2 data-zh="1 · 通透">1 · Clear</h2>
+          <p
+            data-zh="卡片是实色的；只有浮在上面的东西（导航、浮层）是磨砂玻璃。安静、快、最易读。玻璃成为“这个是浮起来的”的信号。"
+          >
+            Solid cards; only floating things (nav, sheets) are frosted. Calm, fast, most legible.
+            Glass becomes a signal for "this floats".
+          </p>
+          <div class="stage g-clear"></div>
+        </section>
+        <section class="cand">
+          <h2 data-zh="2 · 磨砂">2 · Frost</h2>
+          <p
+            data-zh="所有表面都是磨砂玻璃，顶边有一道亮线，下面是柔和的强调色光。经典的玻璃感，仍然克制。"
+          >
+            Every surface is frosted glass with a lit top edge, over soft accent light. The classic
+            glass look; still quiet.
+          </p>
+          <div class="stage g-frost"></div>
+        </section>
+        <section class="cand">
+          <h2 data-zh="3 · 液态">3 · Liquid</h2>
+          <p
+            data-zh="更通透的玻璃，上下边缘有高光，还有一束跟随鼠标的光。最灵动；对可读性和 GPU 的负担最重。"
+          >
+            Clearer glass with specular rims top and bottom, and a light that follows the cursor.
+            Most lively; heaviest on legibility and GPU.
+          </p>
+          <div class="stage g-liquid"></div>
+        </section>
+        <section class="cand">
+          <h2 data-zh="4 · 切面">4 · Facet</h2>
+          <p
+            data-zh="磨砂玻璃加上切割玻璃的特征：一条随鼠标滑动的斜向反光带、一道淡淡的棱镜（RGB）边缘，以及卡片下方的倒影。"
+          >
+            Frost plus a cut-glass identity: a diagonal reflection band that slides with the cursor,
+            a faint prism (RGB) edge, and a floor reflection under the card.
+          </p>
+          <div class="stage g-facet"></div>
+        </section>
+      </div>
+    </main>
+
+    <template id="scene">
+      <div class="backdrop">
+        <i></i><i></i><i></i>
+        <div class="grid"></div>
+        <div class="word">facet</div>
+      </div>
+      <div class="nav glass">
+        <span data-zh="博客">Blog</span><span class="on" data-zh="项目">Projects</span
+        ><span data-zh="简历">Resume</span>
+      </div>
+      <div class="card glass">
+        <div class="row">
+          <span class="ico">r</span>
+          <div>
+            <h3>Red Dot Tracker</h3>
+            <div class="sub" data-zh="2021 年至今">2021 – now</div>
+          </div>
+        </div>
+        <p data-zh="追着红点跑过每一面墙，把每一次扑击都记进一个 dots.json。">
+          Chase the red dot across every wall, and log every pounce in one dots.json.
+        </p>
+        <div class="acts">
+          <span class="btn primary" data-zh="网站 ↗">Site ↗</span>
+          <span class="btn" data-zh="代码">Code</span>
+        </div>
+      </div>
+      <div class="sheet glass">
+        <b data-zh="显示">Display</b>
+        <div class="toggle">
+          <span data-zh="深色模式">Dark mode</span><span class="switch on"></span>
+        </div>
+        <div class="toggle"><span data-zh="动画">Motion</span><span class="switch"></span></div>
+      </div>
+    </template>
+
+    <script type="module">
+      const scene = document.getElementById("scene");
+      for (const stage of document.querySelectorAll(".stage")) {
+        stage.append(scene.content.cloneNode(true));
+        // Cursor position, relative to each glass surface, for the reflections.
+        for (const card of stage.querySelectorAll(".g-hybrid .card")) {
+          card.addEventListener("pointerenter", () => card.classList.add("hot"));
+          card.addEventListener("pointerleave", () => card.classList.remove("hot"));
+        }
+        stage.addEventListener("pointermove", (e) => {
+          for (const g of stage.querySelectorAll(".glass")) {
+            const r = g.getBoundingClientRect();
+            g.style.setProperty("--lx", e.clientX - r.left + "px");
+            g.style.setProperty("--ly", e.clientY - r.top + "px");
+            g.style.setProperty("--lx-n", ((e.clientX - r.left) / r.width).toFixed(3));
+          }
+        });
+      }
+    </script>
+    <script type="module" src="base.js"></script>
+  </body>
+</html>

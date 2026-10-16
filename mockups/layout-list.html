@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Layout · List</title>
+    <link rel="stylesheet" href="base.css" />
+    <link rel="stylesheet" href="cast/cast.css" />
+    <link rel="stylesheet" href="layout.css" />
+    <style>
+      .wrap {
+        width: min(100% - 2.5rem, 46rem);
+        margin: 0 auto;
+        padding-top: 3.5rem;
+      }
+      .wrap > header h1 {
+        margin: 0 0 0.4rem;
+        font-size: 2.8rem;
+        line-height: 1.1;
+      }
+      .tools {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem;
+        align-items: center;
+        margin: 1.4rem 0 0.5rem;
+      }
+      .year {
+        display: grid;
+        grid-template-columns: 5rem minmax(0, 1fr);
+        gap: 1rem;
+        padding-top: 1.6rem;
+      }
+      .year > h2 {
+        position: sticky;
+        top: calc(var(--mk-bar) + 4.6rem);
+        align-self: start;
+        margin: 0.35rem 0 0;
+        color: var(--fg-3);
+        font-size: 1.1rem;
+      }
+      .year ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        border-top: 1px solid var(--line);
+      }
+      .year li {
+        border-bottom: 1px solid var(--line);
+      }
+      .year a {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 1rem;
+        align-items: baseline;
+        padding: 0.7rem 0.6rem;
+        margin: 0 -0.6rem;
+        border-radius: 12px;
+        color: var(--fg);
+        text-decoration: none;
+        transition: background 0.15s;
+      }
+      .year a:hover {
+        background: color-mix(in oklch, var(--accent) 9%, transparent);
+      }
+      .year .t {
+        font: 600 1.05rem/1.4 var(--heading);
+      }
+      .year .tag {
+        margin-left: 0.5rem;
+        color: var(--fg-3);
+        font: 500 0.75rem var(--mk-sans);
+      }
+      .year time {
+        color: var(--fg-3);
+        font: 0.8rem var(--mk-mono);
+      }
+      .empty {
+        padding: 2rem 0;
+        color: var(--fg-3);
+      }
+      @media (max-width: 640px) {
+        .year {
+          grid-template-columns: 1fr;
+          gap: 0.3rem;
+        }
+        .year > h2 {
+          position: static;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="fnav">
+      <b>Duna Feline</b><a href="#" data-zh="博客" aria-current="page">Blog</a
+      ><a href="#" data-zh="项目">Projects</a><a href="#" data-zh="简历">Resume</a>
+    </nav>
+
+    <main class="wrap prose">
+      <header>
+        <p class="kicker" data-zh="列表">List</p>
+        <h1 data-zh="全部文章">All posts</h1>
+        <p class="meta" data-zh="适合：博客归档、标签页、链接合集、搜索结果">
+          For: the blog archive, tag pages, link collections, search results
+        </p>
+      </header>
+      <div class="tools">
+        <input class="search" id="q" type="search" placeholder="Search…" />
+        <div class="row" id="tags">
+          <button class="chip" data-f="" aria-pressed="true" data-zh="全部">All</button>
+          <button class="chip" data-f="Research" aria-pressed="false" data-zh="研究">
+            Research
+          </button>
+          <button class="chip" data-f="Cases" aria-pressed="false" data-zh="案件">Cases</button>
+          <button class="chip" data-f="Naps" aria-pressed="false" data-zh="打盹">Naps</button>
+          <button class="chip" data-f="Tools" aria-pressed="false" data-zh="工具">Tools</button>
+        </div>
+      </div>
+      <div id="list"></div>
+    </main>
+    <footer class="ffoot" id="foot">© 2026 Duna Feline · example.com</footer>
+
+    <script type="module">
+      import { footerCats } from "./layout.js";
+      footerCats(document.getElementById("foot"));
+
+      const POSTS = [
+        ["2026-10-11", "Twelve Rooms, Zero Dots Caught", "Research"],
+        ["2026-09-21", "The Missing Sock", "Cases"],
+        ["2026-09-13", "Purrometheus: Watching the Food Bowl", "Tools"],
+        ["2026-09-07", "If It Fits, It Sits: Are Boxes Ready for Production?", "Research"],
+        ["2026-04-06", "The Moving Vase", "Cases"],
+        ["2025-11-29", "A Field Guide to Sunbeams", "Naps"],
+        ["2025-10-05", "Hairball, Archived", "Tools"],
+        ["2025-08-19", "The 3 a.m. Zoomies, Explained", "Naps"],
+        ["2025-08-15", "Who Knocked the Glass Off the Table?", "Cases"],
+        ["2025-08-15", "Counter Surfing for Beginners", "Naps"],
+        ["2025-08-15", "The Dog Treaty, 1,000 Days In", "Cases"],
+        ["2025-06-08", "Untangling the Yarn", "Research"],
+        ["2025-06-06", "Bird Watching from the Bay Window", "Naps"],
+        ["2025-06-06", "Landing on Your Feet", "Research"],
+      ];
+      const list = document.getElementById("list");
+      const q = document.getElementById("q");
+      const chips = [...document.querySelectorAll("#tags .chip")];
+      let tag = "";
+      function render() {
+        const term = q.value.trim().toLowerCase();
+        const hits = POSTS.filter(
+          ([, t, g]) => (!tag || g === tag) && t.toLowerCase().includes(term),
+        );
+        const zh = document.documentElement.lang.startsWith("zh");
+        if (!hits.length) {
+          list.innerHTML = `<p class="empty">${zh ? "没有匹配的文章。" : "No posts match."}</p>`;
+          return;
+        }
+        const years = [...new Set(hits.map((p) => p[0].slice(0, 4)))];
+        list.innerHTML = years
+          .map(
+            (y) =>
+              `<section class="year"><h2>${y}</h2><ul>${hits
+                .filter((p) => p[0].startsWith(y))
+                .map(
+                  ([d, t, g]) =>
+                    `<li><a href="#"><span><span class="t">${t}</span><span class="tag">${g}</span></span><time>${d.slice(5)}</time></a></li>`,
+                )
+                .join("")}</ul></section>`,
+          )
+          .join("");
+      }
+      q.addEventListener("input", render);
+      chips.forEach((c) =>
+        c.addEventListener("click", () => {
+          tag = c.dataset.f;
+          chips.forEach((x) => x.setAttribute("aria-pressed", x === c));
+          render();
+        }),
+      );
+      document.addEventListener("mk:change", () => {
+        q.placeholder = document.documentElement.lang.startsWith("zh") ? "搜索…" : "Search…";
+        render();
+      });
+      render();
+    </script>
+    <script type="module" src="base.js"></script>
+  </body>
+</html>

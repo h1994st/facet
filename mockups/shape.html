@@ -1,0 +1,470 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Shape</title>
+    <link rel="stylesheet" href="base.css" />
+    <style>
+      .cands {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+      }
+      .cand h2 {
+        margin: 0;
+        font: 700 1.2rem/1.3 var(--mk-display);
+      }
+      .cand > p {
+        margin: 0.25rem 0 0.8rem;
+        min-height: 2.8em;
+        color: var(--fg-2);
+        font-size: 0.88rem;
+      }
+
+      /* Each candidate only sets these; the scene below reads them. */
+      .sh-soft {
+        --r-panel: 24px;
+        --r-card: 18px;
+        --r-media: 12px;
+        --r-btn: 999px;
+        --r-chip: 999px;
+        --r-input: 12px;
+        --r-tile: 14px;
+        --r-code: 12px;
+        --corner: round;
+      }
+      /* The choice: 2 + 5. Squircle containers and tiles, true pills and circles for controls. */
+      .sh-blend {
+        --r-panel: 30px;
+        --r-card: 22px;
+        --r-media: 14px;
+        --r-btn: 999px;
+        --r-chip: 999px;
+        --r-input: 999px;
+        --r-tile: 50%;
+        --r-code: 14px;
+        --corner: squircle;
+      }
+      .sh-blend :is(.btn, .chip, .input, .tile, .nav .links span, .nav .logo) {
+        corner-shape: round;
+      }
+      .sh-blend .nav .logo {
+        border-radius: 50%;
+      }
+      .cand.wide {
+        grid-column: 1 / -1;
+      }
+      .cand.wide .panel {
+        max-width: calc(50% - 0.75rem);
+      }
+      .sh-squircle {
+        --r-panel: 40px;
+        --r-card: 32px;
+        --r-media: 22px;
+        --r-btn: 16px;
+        --r-chip: 12px;
+        --r-input: 16px;
+        --r-tile: 26px;
+        --r-code: 20px;
+        --corner: squircle;
+      }
+      .sh-sharp {
+        --r-panel: 0;
+        --r-card: 0;
+        --r-media: 0;
+        --r-btn: 0;
+        --r-chip: 0;
+        --r-input: 0;
+        --r-tile: 0;
+        --r-code: 0;
+        --corner: round;
+      }
+      .sh-facet {
+        --r-panel: 22px;
+        --r-card: 16px;
+        --r-media: 10px;
+        --r-btn: 8px;
+        --r-chip: 6px;
+        --r-input: 8px;
+        --r-tile: 14px;
+        --r-code: 10px;
+        --corner: bevel;
+      }
+      .sh-mixed {
+        --r-panel: 4px;
+        --r-card: 4px;
+        --r-media: 2px;
+        --r-btn: 999px;
+        --r-chip: 999px;
+        --r-input: 4px;
+        --r-tile: 50%;
+        --r-code: 4px;
+        --corner: round;
+      }
+      /* Single cut: square corners with one bevelled corner (top right), like a cut gem. */
+      .sh-cut {
+        --r-panel: 26px;
+        --r-card: 20px;
+        --r-media: 12px;
+        --r-btn: 9px;
+        --r-chip: 6px;
+        --r-input: 9px;
+        --r-tile: 14px;
+        --r-code: 12px;
+        --corner: round;
+      }
+      .sh-cut .panel,
+      .sh-cut .card,
+      .sh-cut .media,
+      .sh-cut .btn,
+      .sh-cut .chip,
+      .sh-cut .input,
+      .sh-cut .tile,
+      .sh-cut pre,
+      .sh-cut .sheet {
+        border-radius: 0 var(--r) 0 0;
+        corner-shape: bevel;
+      }
+
+      /* ---------- scene ---------- */
+      .panel {
+        --r: var(--r-panel);
+        position: relative;
+        padding: 1.25rem;
+        border: 1px solid var(--line);
+        border-radius: var(--r);
+        background: var(--bg-2);
+        corner-shape: var(--corner);
+      }
+      .nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+      .nav .logo {
+        --r: var(--r-tile);
+        display: grid;
+        place-items: center;
+        width: 30px;
+        height: 30px;
+        border-radius: calc(var(--r) * 0.6);
+        corner-shape: var(--corner);
+        background: var(--accent);
+        color: var(--bg);
+        font: 700 0.95rem/1 var(--mk-display);
+      }
+      .sh-cut .nav .logo {
+        border-radius: 0 10px 0 0;
+        corner-shape: bevel;
+      }
+      .sh-mixed .nav .logo {
+        border-radius: 50%;
+      }
+      .nav .links {
+        display: flex;
+        gap: 0.2rem;
+        font-size: 0.82rem;
+      }
+      .nav .links span {
+        --r: var(--r-btn);
+        padding: 0.3rem 0.65rem;
+        border-radius: var(--r);
+        corner-shape: var(--corner);
+        color: var(--fg-2);
+      }
+      .nav .links span.on {
+        background: color-mix(in srgb, var(--fg) 10%, transparent);
+        color: var(--fg);
+      }
+      .sh-cut .nav .links span {
+        border-radius: 0 7px 0 0;
+        corner-shape: bevel;
+      }
+      .row {
+        display: grid;
+        grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+        gap: 0.9rem;
+      }
+      .card {
+        --r: var(--r-card);
+        padding: 0.7rem;
+        border: 1px solid var(--line-2);
+        border-radius: var(--r);
+        corner-shape: var(--corner);
+        background: var(--surface);
+      }
+      .media {
+        --r: var(--r-media);
+        height: 92px;
+        border-radius: var(--r);
+        corner-shape: var(--corner);
+        background:
+          radial-gradient(
+            60% 90% at 25% 30%,
+            color-mix(in oklch, var(--accent) 70%, transparent),
+            transparent
+          ),
+          radial-gradient(60% 90% at 85% 80%, oklch(0.6 0.05 295 / 0.6), transparent), var(--bg);
+      }
+      .card h3 {
+        margin: 0.6rem 0.2rem 0.15rem;
+        font: 700 1rem/1.3 var(--mk-display);
+      }
+      .card p {
+        margin: 0 0.2rem 0.6rem;
+        color: var(--fg-2);
+        font-size: 0.78rem;
+        line-height: 1.5;
+      }
+      .acts {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        margin: 0 0.2rem 0.2rem;
+      }
+      .btn {
+        --r: var(--r-btn);
+        padding: 0.3rem 0.7rem;
+        border: 1px solid var(--line-2);
+        border-radius: var(--r);
+        corner-shape: var(--corner);
+        font-size: 0.76rem;
+        font-weight: 600;
+      }
+      .btn.primary {
+        border-color: var(--accent);
+        background: var(--accent);
+        color: var(--bg);
+      }
+      .side {
+        display: flex;
+        flex-direction: column;
+        gap: 0.65rem;
+      }
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.3rem;
+      }
+      .chip {
+        --r: var(--r-chip);
+        padding: 0.12rem 0.5rem;
+        border-radius: var(--r);
+        corner-shape: var(--corner);
+        background: color-mix(in srgb, var(--fg) 8%, transparent);
+        color: var(--fg-2);
+        font-size: 0.72rem;
+        font-weight: 600;
+      }
+      .input {
+        --r: var(--r-input);
+        padding: 0.45rem 0.65rem;
+        border: 1px solid var(--line-2);
+        border-radius: var(--r);
+        corner-shape: var(--corner);
+        background: var(--bg);
+        color: var(--fg-3);
+        font-size: 0.78rem;
+      }
+      .tiles {
+        display: flex;
+        gap: 0.45rem;
+      }
+      .tile {
+        --r: var(--r-tile);
+        display: grid;
+        place-items: center;
+        width: 42px;
+        height: 42px;
+        border-radius: var(--r);
+        corner-shape: var(--corner);
+        font: 700 0.9rem/1 var(--mk-mono);
+      }
+      .tile:nth-child(1) {
+        background: oklch(0.76 0.06 165 / 0.25);
+        color: oklch(0.86 0.05 165);
+      }
+      .tile:nth-child(2) {
+        background: oklch(0.74 0.06 255 / 0.25);
+        color: oklch(0.86 0.05 255);
+      }
+      .tile:nth-child(3) {
+        background: oklch(0.72 0.07 15 / 0.25);
+        color: oklch(0.86 0.05 15);
+      }
+      .tile:nth-child(4) {
+        background: oklch(0.75 0.07 55 / 0.25);
+        color: oklch(0.86 0.05 55);
+      }
+      :root[data-theme="light"] .tile {
+        color: var(--fg);
+      }
+      pre {
+        --r: var(--r-code);
+        margin: 0;
+        padding: 0.5rem 0.65rem;
+        border: 1px solid var(--line);
+        border-radius: var(--r);
+        corner-shape: var(--corner);
+        background: var(--bg);
+        font: 0.72rem/1.5 var(--mk-mono);
+        overflow: hidden;
+      }
+      pre .o {
+        color: var(--accent);
+      }
+      .sheet {
+        --r: var(--r-card);
+        position: absolute;
+        right: 1.25rem;
+        bottom: -1.1rem;
+        padding: 0.5rem 0.75rem;
+        border: 1px solid var(--line-2);
+        border-radius: var(--r);
+        corner-shape: var(--corner);
+        background: color-mix(in srgb, var(--surface) 80%, transparent);
+        backdrop-filter: blur(12px);
+        box-shadow: var(--shadow);
+        font-size: 0.76rem;
+      }
+      .cand {
+        padding-bottom: 1.2rem;
+      }
+
+      @media (max-width: 900px) {
+        .cands {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .cand.wide .panel {
+          max-width: none;
+        }
+      }
+      @media (max-width: 640px) {
+        .row {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="mk-page">
+      <header>
+        <h1 data-zh="形状">Shape</h1>
+        <p
+          data-zh="选定的是 2 + 5 融合，放在最前面。下面是它由来的六种形状语言，用在同一组组件上：导航、带图卡片、按钮、标签、输入框、图标、代码块和浮层。“松鼠角”和“切角”使用较新的 CSS（corner-shape），需要时可降级为普通圆角或 clip-path。"
+        >
+          The choice is 2 + 5, Blend, shown first. Below are the six shape languages it came from,
+          on the same components: nav, card with media, buttons, chips, input, icon tiles, code
+          block and a floating sheet. Squircle and the cut corners use newer CSS
+          (<code>corner-shape</code>), with a plain-radius or clip-path fallback where needed.
+        </p>
+      </header>
+
+      <div class="cands">
+        <section class="cand sh-blend wide">
+          <h2>
+            <span data-zh="2 + 5 · 融合">2 + 5 · Blend</span>
+            <span class="mk-chosen" data-zh="已选">Chosen</span>
+          </h2>
+          <p
+            data-zh="松鼠角（连续曲率）的容器和图标底板，加上真正的胶囊按钮和圆形图标。胶囊和圆形保持普通圆弧，所以在每个浏览器里都一样。"
+          >
+            Squircle (continuous-curvature) containers, with true pill controls and round icons.
+            Pills and circles keep plain arcs, so they look the same in every browser.
+          </p>
+        </section>
+        <section class="cand sh-soft">
+          <h2 data-zh="1 · 柔和">1 · Soft</h2>
+          <p data-zh="现在的样子：大圆角卡片，胶囊按钮。友好，但很常见。">
+            What we have now: rounded cards and pill buttons. Friendly, but common.
+          </p>
+        </section>
+        <section class="cand sh-squircle">
+          <h2 data-zh="2 · 松鼠角">2 · Squircle</h2>
+          <p
+            data-zh="连续曲率的圆角（像 iOS 图标），比圆角更柔顺、更“实”。它的容器并入了上面的融合方案。"
+          >
+            Continuous-curvature corners, like iOS icons. Its containers became half of the Blend
+            above.
+          </p>
+        </section>
+        <section class="cand sh-sharp">
+          <h2 data-zh="3 · 直角">3 · Sharp</h2>
+          <p data-zh="完全直角，靠细线和留白组织版面。最“瑞士”，最冷静，也最像文档。">
+            Square corners everywhere, structured by hairlines and space. The most Swiss and calm;
+            reads like documentation.
+          </p>
+        </section>
+        <section class="cand sh-facet">
+          <h2 data-zh="4 · 切面">4 · Facet</h2>
+          <p data-zh="四个角都切成斜角，像切割过的玻璃或宝石。和名字 facet 最贴切，辨识度最高。">
+            All four corners bevelled, like cut glass or a gem. The closest match to the name, and
+            the most recognizable.
+          </p>
+        </section>
+        <section class="cand sh-mixed">
+          <h2 data-zh="5 · 混合">5 · Mixed</h2>
+          <p data-zh="容器几乎直角，控件是胶囊，图标是圆形。它的胶囊和圆形并入了上面的融合方案。">
+            Near-square containers, pill controls, round icons. Its pills and circles became the
+            other half of the Blend above.
+          </p>
+        </section>
+        <section class="cand sh-cut">
+          <h2 data-zh="6 · 单切角">6 · Single cut</h2>
+          <p data-zh="直角，只在右上角切一刀。比全切角克制，像一个签名。">
+            Square, with one corner cut (top right). Quieter than cutting every corner; reads like a
+            signature.
+          </p>
+        </section>
+      </div>
+    </main>
+
+    <template id="scene">
+      <div class="panel">
+        <div class="nav">
+          <span class="logo">f</span>
+          <span class="links"
+            ><span data-zh="博客">Blog</span><span class="on" data-zh="项目">Projects</span
+            ><span data-zh="简历">Resume</span></span
+          >
+        </div>
+        <div class="row">
+          <div class="card">
+            <div class="media"></div>
+            <h3 data-zh="十二个房间，零个红点">Twelve rooms, zero dots</h3>
+            <p data-zh="两年的追逐，一次也没抓到。">Two years of chasing, not one dot caught.</p>
+            <div class="acts">
+              <span class="btn primary" data-zh="开玩 ↗">Play ↗</span
+              ><span class="btn" data-zh="代码">Code</span>
+            </div>
+          </div>
+          <div class="side">
+            <div class="chips">
+              <span class="chip">Naps</span><span class="chip">Boxes</span
+              ><span class="chip" data-zh="安全">Security</span>
+            </div>
+            <div class="input" data-zh="搜索…">Search…</div>
+            <div class="tiles">
+              <span class="tile">r</span><span class="tile">p</span><span class="tile">h</span
+              ><span class="tile">d</span>
+            </div>
+            <pre>$ red-dot track ./den
+<span class="o">→ dots.json</span></pre>
+          </div>
+        </div>
+        <div class="sheet" data-zh="已复制到剪贴板">Copied to clipboard</div>
+      </div>
+    </template>
+
+    <script type="module">
+      const scene = document.getElementById("scene");
+      for (const cand of document.querySelectorAll(".cand")) {
+        cand.append(scene.content.cloneNode(true));
+      }
+    </script>
+    <script type="module" src="base.js"></script>
+  </body>
+</html>

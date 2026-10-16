@@ -1,0 +1,605 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Layout · Resume</title>
+    <link rel="stylesheet" href="base.css" />
+    <link rel="stylesheet" href="cast/cast.css" />
+    <link rel="stylesheet" href="layout.css" />
+    <style>
+      /* Resume: a header card, then a sticky section index beside a timeline. Entries carry role
+         metadata and a one-line summary only. Prints as a plain, single-column document. */
+      .cv {
+        width: min(100% - 2.5rem, 64rem);
+        margin: 0 auto;
+        padding-top: 5.5rem;
+      }
+      .head {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 1.5rem 2rem;
+        align-items: end;
+        padding: 2rem;
+        border: 1px solid var(--line);
+        border-radius: 28px;
+        background:
+          radial-gradient(
+            70% 120% at 0% 0%,
+            color-mix(in oklch, var(--accent) 16%, transparent),
+            transparent
+          ),
+          var(--bg-2);
+      }
+      .head h1 {
+        margin: 0;
+        font-size: clamp(2.4rem, 5vw, 3.4rem);
+        line-height: 1.05;
+      }
+      .head .headline {
+        margin: 0.5rem 0 0;
+        color: var(--fg-2);
+        font-size: 1.1rem;
+      }
+      .contact {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        align-items: flex-end;
+        font: 0.85rem var(--mk-mono);
+      }
+      .contact a {
+        color: var(--fg-2);
+        text-decoration: none;
+      }
+      .contact .row {
+        margin-top: 0.5rem;
+      }
+
+      .body {
+        display: grid;
+        grid-template-columns: 11rem minmax(0, 1fr);
+        gap: 3rem;
+        margin-top: 2.5rem;
+      }
+      .toc {
+        position: sticky;
+        top: calc(var(--mk-bar) + 5rem);
+        align-self: start;
+        display: flex;
+        flex-direction: column;
+        gap: 0.1rem;
+        padding-left: 0.9rem;
+        border-left: 1px solid var(--line-2);
+        font-size: 0.88rem;
+      }
+      .toc a {
+        position: relative;
+        padding: 0.3rem 0;
+        color: var(--fg-3);
+        text-decoration: none;
+      }
+      .toc a[aria-current] {
+        color: var(--fg);
+      }
+      .toc a[aria-current]::before {
+        content: "";
+        position: absolute;
+        left: calc(-0.9rem - 1px);
+        top: 0.3rem;
+        bottom: 0.3rem;
+        width: 2px;
+        border-radius: 2px;
+        background: var(--accent);
+      }
+      .cv section {
+        scroll-margin-top: calc(var(--mk-bar) + 5rem);
+        margin-bottom: 2.5rem;
+      }
+      .cv section > h2 {
+        margin: 0 0 1rem;
+        font-size: 1.5rem;
+      }
+      .summary {
+        margin: 0;
+        font-size: 1.05rem;
+      }
+      .skills {
+        display: grid;
+        grid-template-columns: 9rem minmax(0, 1fr);
+        gap: 0.6rem 1rem;
+        margin-top: 1.2rem;
+        font-size: 0.9rem;
+      }
+      .skills dt {
+        color: var(--fg-3);
+      }
+      .skills dd {
+        margin: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.3rem;
+      }
+
+      /* Timeline: a spine with a node per entry, dates as pills (echoing my-resume). */
+      .tl {
+        position: relative;
+        margin: 0;
+        padding: 0 0 0 1.6rem;
+        list-style: none;
+      }
+      .tl::before {
+        content: "";
+        position: absolute;
+        left: 0.42rem;
+        top: 0.6rem;
+        bottom: 0.6rem;
+        width: 2px;
+        border-radius: 2px;
+        background: var(--line-2);
+      }
+      .tl > li {
+        position: relative;
+        padding: 0 0 1.4rem;
+      }
+      .tl > li::before {
+        content: "";
+        position: absolute;
+        left: calc(-1.6rem + 0.12rem);
+        top: 0.45rem;
+        width: 0.65rem;
+        height: 0.65rem;
+        border: 2px solid var(--accent);
+        border-radius: 50%;
+        background: var(--bg);
+      }
+      .tl > li.now::before {
+        background: var(--accent);
+        box-shadow: 0 0 0 4px color-mix(in oklch, var(--accent) 22%, transparent);
+      }
+      .entry-head {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.2rem 0.8rem;
+        align-items: baseline;
+        justify-content: space-between;
+      }
+      .entry-head h3 {
+        margin: 0;
+        font-size: 1.15rem;
+      }
+      .entry-head .org {
+        color: var(--fg-2);
+        font: 500 0.95rem var(--mk-sans);
+        letter-spacing: 0;
+      }
+      .date {
+        padding: 0.12rem 0.55rem;
+        border-radius: 999px;
+        background: color-mix(in oklch, var(--fg) 7%, transparent);
+        color: var(--fg-2);
+        font: 600 0.72rem var(--mk-mono);
+        white-space: nowrap;
+      }
+      .tl p {
+        margin: 0.3rem 0 0;
+        font-size: 0.92rem;
+        line-height: 1.6;
+      }
+      .tl .loc {
+        color: var(--fg-3);
+        font-size: 0.82rem;
+      }
+
+      .bul {
+        margin: 0.4rem 0 0;
+        padding-left: 1.1rem;
+      }
+      .bul li {
+        margin: 0.2rem 0;
+        font-size: 0.9rem;
+        line-height: 1.6;
+      }
+      .bul li::marker {
+        color: var(--fg-3);
+      }
+      .lines {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        border-top: 1px solid var(--line);
+      }
+      .lines li {
+        display: flex;
+        gap: 1rem;
+        justify-content: space-between;
+        align-items: baseline;
+        padding: 0.6rem 0;
+        border-bottom: 1px solid var(--line);
+        color: var(--fg-2);
+        font-size: 0.92rem;
+      }
+      .head {
+        position: relative;
+      }
+      .head-cat {
+        position: absolute;
+        right: 2.2rem;
+        bottom: calc(100% - 6px);
+        width: 72px;
+      }
+      .pubs {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        counter-reset: pub;
+      }
+      .pubs li {
+        position: relative;
+        padding: 0 0 1.2rem 2.2rem;
+        counter-increment: pub;
+      }
+      .pubs li::before {
+        content: "[" counter(pub) "]";
+        position: absolute;
+        left: 0;
+        top: 0.15rem;
+        color: var(--fg-3);
+        font: 600 0.75rem var(--mk-mono);
+      }
+      .pubs .t {
+        display: block;
+        color: var(--fg);
+        font: 600 1.02rem/1.4 var(--heading);
+      }
+      .pubs .a {
+        display: block;
+        margin-top: 0.2rem;
+        color: var(--fg-2);
+        font-size: 0.86rem;
+      }
+      .pubs .a b {
+        color: var(--fg);
+        font-weight: 600;
+      }
+      .pubs .v {
+        display: block;
+        color: var(--fg-3);
+        font-size: 0.84rem;
+        font-style: italic;
+      }
+      .pubs .row {
+        margin-top: 0.4rem;
+      }
+      .pubs .chip {
+        text-decoration: none;
+      }
+      .award {
+        background: oklch(0.76 0.06 85 / 0.18);
+        color: oklch(0.86 0.06 85);
+      }
+      :root[data-theme="light"] .award {
+        color: oklch(0.45 0.08 85);
+      }
+
+      @media (max-width: 900px) {
+        .body {
+          grid-template-columns: minmax(0, 1fr);
+          gap: 1.25rem;
+        }
+        .toc {
+          top: calc(var(--mk-bar) + 4.2rem);
+          z-index: 10;
+          flex-direction: row;
+          gap: 0.3rem;
+          overflow-x: auto;
+          padding: 0.4rem;
+          border: 1px solid var(--line);
+          border-radius: 999px;
+          background: color-mix(in oklch, var(--surface) 82%, transparent);
+          backdrop-filter: blur(12px);
+          scrollbar-width: none;
+        }
+        .toc a {
+          flex: none;
+          padding: 0.3rem 0.7rem;
+          border-radius: 999px;
+          white-space: nowrap;
+        }
+        .toc a[aria-current] {
+          background: color-mix(in oklch, var(--fg) 10%, transparent);
+        }
+        .toc a[aria-current]::before {
+          display: none;
+        }
+        .cv section {
+          scroll-margin-top: calc(var(--mk-bar) + 8rem);
+        }
+      }
+      @media (max-width: 640px) {
+        .head {
+          grid-template-columns: minmax(0, 1fr);
+          padding: 1.4rem;
+        }
+        .contact {
+          align-items: flex-start;
+        }
+        .skills {
+          grid-template-columns: minmax(0, 1fr);
+          gap: 0.3rem;
+        }
+        .skills dd {
+          margin-bottom: 0.6rem;
+        }
+      }
+      /* Print: one plain column, no nav, no colors that waste ink. */
+      @media print {
+        .mk-bar,
+        .fnav,
+        .toc,
+        .ffoot,
+        .contact .row,
+        .head-cat {
+          display: none !important;
+        }
+        body {
+          background: #fff;
+          color: #000;
+        }
+        .head {
+          border: 0;
+          background: none;
+          padding: 0;
+        }
+        .body {
+          display: block;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="fnav">
+      <b>Duna Feline</b><a href="#" data-zh="博客">Blog</a><a href="#" data-zh="项目">Projects</a
+      ><a href="#" data-zh="简历" aria-current="page">Resume</a>
+    </nav>
+
+    <main class="cv prose">
+      <header class="head" id="head">
+        <div>
+          <p class="kicker" data-zh="简历">Resume</p>
+          <h1>Duna Feline</h1>
+          <p class="headline">Senior Mischief Engineer, Ph.C., Certified Box Inspector</p>
+        </div>
+        <div class="contact">
+          <a href="#">duna.feline@example.com</a>
+          <a href="#">example.com</a>
+          <a href="#">+1 (555) 010-0199</a>
+          <div class="row">
+            <a class="btn primary" href="#" data-zh="下载 PDF">Download PDF</a>
+            <button class="btn" onclick="print()" data-zh="打印">Print</button>
+          </div>
+        </div>
+      </header>
+
+      <div class="body">
+        <nav class="toc" id="toc" aria-label="Resume sections">
+          <a href="#summary" data-zh="概要">Summary</a>
+          <a href="#experience" data-zh="经历">Experience</a>
+          <a href="#projects" data-zh="项目">Projects</a>
+          <a href="#education" data-zh="教育">Education</a>
+          <a href="#publications" data-zh="论文">Publications</a>
+          <a href="#service" data-zh="服务">Service</a>
+          <a href="#honors" data-zh="荣誉">Honors</a>
+        </nav>
+        <div>
+          <section id="summary">
+            <h2 data-zh="概要">Summary</h2>
+            <p class="summary">
+              Curious-by-nature cat with a Ph.C. (Doctor of Philosophy in Cat) and 5+ years of
+              cat-tree scratching experience. Always lands on her feet: takes ambiguous cardboard
+              boxes from first sniff to full occupancy, and ships naps, purrs, and head boops that
+              humans rely on daily (rarely knocking things over).
+            </p>
+            <dl class="skills" id="skills"></dl>
+          </section>
+          <section id="experience">
+            <h2 data-zh="经历">Experience</h2>
+            <ol class="tl" id="exp"></ol>
+          </section>
+          <section id="projects">
+            <h2 data-zh="项目">Projects</h2>
+            <ol class="tl" id="proj"></ol>
+          </section>
+          <section id="education">
+            <h2 data-zh="教育">Education</h2>
+            <ol class="tl" id="edu"></ol>
+          </section>
+          <section id="publications">
+            <h2 data-zh="论文">Publications</h2>
+            <ol class="pubs" id="pubs"></ol>
+          </section>
+          <section id="service">
+            <h2 data-zh="服务">Service</h2>
+            <ul class="lines" id="service-list"></ul>
+          </section>
+          <section id="honors">
+            <h2 data-zh="荣誉">Honors &amp; Awards</h2>
+            <ul class="lines" id="honors-list"></ul>
+          </section>
+        </div>
+      </div>
+    </main>
+    <footer class="ffoot" id="foot">© 2026 Duna Feline · example.com</footer>
+
+    <script type="module">
+      import { scrollSpy, footerCats } from "./layout.js";
+      import { createCat } from "./cast/cast.js";
+      // Duna Feline's sample resume, from my-resume's site (site/resume-data.js, canonical).
+      // She is fictional: a cat, not a person.
+      const SKILLS = [
+        [
+          "Languages/Tools",
+          "Meow, Purr, Chirp, Slow Blink, Hiss (deprecated), Scratching Post, Laser Pointer, Yarn",
+        ],
+        [
+          "Skills",
+          "Box Inspection, Napping, Bird Watching, Counter Surfing, Zoomies, Lap Acquisition",
+        ],
+      ];
+      const EXP = [
+        [
+          "Head of Windowsill Operations",
+          "Sunbeam Estates",
+          "Living Room",
+          "Apr 2023",
+          "Present",
+          [
+            "Initiated and led “Operation Red Dot”, a household-wide laser-pointer pursuit program spanning 12 rooms, with a perfectly consistent record of zero dots caught",
+            "Monitored 400+ birds and 37 squirrels a day from the bay window, chirping alerts in under 2 seconds",
+            "Cut 5 a.m. breakfast latency by 60% with a new wake-up protocol: paw tap, face sit, vase nudge",
+          ],
+        ],
+        [
+          "Senior Box Inspector",
+          "Cardboard Box Co.",
+          "Garage",
+          "Feb 2020",
+          "Mar 2023",
+          [
+            "Inspected 1,200 boxes of every size, confirming “if it fits, I sits” across 98% of form factors",
+            "Shipped “Hairball Express”, a chirp that warns humans 30 seconds before delivery (on the rug)",
+          ],
+        ],
+        [
+          "Professional Napper",
+          "Catnip Farms",
+          "Any Warm Laundry",
+          "Jul 2017",
+          "Jan 2020",
+          [
+            "Logged 2M sunbeam-minutes of napping across a multi-room portfolio of beds, boxes, and baskets",
+          ],
+        ],
+        [
+          "Kitten Intern",
+          "Happy Paws Shelter",
+          "Cage 3B",
+          "Jun 2016",
+          "Sep 2016",
+          [
+            "Delivered three toy mice per day to the volunteers’ shoes, establishing a reputation for reliable gifting",
+          ],
+        ],
+      ];
+      const PROJ = [
+        [
+          "Red Dot Tracker",
+          "Open source · 1.2k+ stars, 0 dots caught",
+          "",
+          "May 2021",
+          "Present",
+          [
+            "Created an open-source tracker that chases the red dot across walls and pounces on every outlier",
+          ],
+        ],
+        [
+          "Purrometheus",
+          "Weekend project",
+          "",
+          "Jan 2022",
+          "Present",
+          [
+            "Charts food-bowl levels, nap durations, and 3 a.m. zoomies, with alerts routed to the nearest human",
+          ],
+        ],
+        ["Hairball", "Surprise-delivery planner", "", "Mar 2019", "Aug 2020", []],
+      ];
+      const EDU = [
+        [
+          "Ph.C. in Feline Philosophy",
+          "Calico University",
+          "Catnip Valley",
+          "Sep 2012",
+          "Jun 2017",
+          ["Dissertation: Landing on Your Feet: A Unified Theory of Self-Righting"],
+        ],
+        ["B.S. in Box Science", "Tabby Institute of Technology", "", "Sep 2008", "May 2012", []],
+      ];
+      const PUBS = [
+        [
+          "Curiosity Killed the Rat: A Field Study of Indoor Rodent Detection",
+          "Duna Feline, Dudu Whiskers, and Nangnang Mittens",
+          "Annual Conference on Whisker Sciences (ACWS 2019)",
+          "Best Paper Award",
+          ["Paper", "Slides"],
+        ],
+        [
+          "If It Fits, It Sits: Are Cardboard Boxes Ready for Production?",
+          "Dudu Whiskers, Duna Feline, and Mochi Paws",
+          "Workshop on Boxes and Containers (WBC 2017)",
+          "",
+          ["Paper"],
+        ],
+        [
+          "Untangling the Yarn: An Incremental Approach to Knot Resolution",
+          "Duna Feline and Nangnang Mittens",
+          "Journal of Feline Engineering, vol. 9",
+          "",
+          ["Paper", "Code"],
+        ],
+        [
+          "Schrödinger’s Cat Flap: Doors That Are Both Open and Closed",
+          "Duna Feline, Mochi Paws, and Dudu Whiskers",
+          "Workshop on Hot Topics in Doors (HotDoors 2015)",
+          "",
+          ["Paper"],
+        ],
+      ];
+      const SERVICE = [
+        ["Annual Conference on Whisker Sciences (ACWS) Program Committee", "2022–2025"],
+        ["Journal of Feline Engineering Reviewer", "2020–2025"],
+        ["Kitten Socialization Program Mentor", "2021"],
+        ["Cat Café Nap Review Club Organizer (monthly, treats provided)", "2019–2025"],
+      ];
+      const HONORS = [
+        ["The Cat’s Whiskers Award for Excellence in Mischief, Sunbeam Estates", "2024"],
+        ["ACWS Best Paper Award", "2019"],
+        ["Golden Whisker Fellowship, Calico University (Top 5% of the litter)", "2013, 2014"],
+        ["Dean’s List (“Top Cat”), Tabby Institute of Technology", "2009–2012"],
+      ];
+      const chip = (t, cls = "") => `<span class="chip ${cls}">${t}</span>`;
+      document.getElementById("skills").innerHTML = SKILLS.map(
+        ([k, v]) =>
+          `<dt>${k}</dt><dd>${v
+            .split(", ")
+            .map((x) => chip(x))
+            .join("")}</dd>`,
+      ).join("");
+      const tl = (rows) =>
+        rows
+          .map(
+            ([title, org, loc, start, end, bullets]) =>
+              `<li class="${end === "Present" ? "now" : ""}"><div class="entry-head"><h3>${title} <span class="org">· ${org}</span></h3><span class="date">${start} – ${end}</span></div>${loc ? `<span class="loc">${loc}</span>` : ""}${bullets.length ? `<ul class="bul">${bullets.map((b) => `<li>${b}</li>`).join("")}</ul>` : ""}</li>`,
+          )
+          .join("");
+      document.getElementById("exp").innerHTML = tl(EXP);
+      document.getElementById("proj").innerHTML = tl(PROJ);
+      document.getElementById("edu").innerHTML = tl(EDU);
+      document.getElementById("pubs").innerHTML = PUBS.map(
+        ([t, a, v, award, links]) =>
+          `<li><span class="t">${t}</span><span class="a">${a.replace("Duna Feline", "<b>Duna Feline</b>")}</span><span class="v">${v}</span><div class="row">${award ? chip(award, "award") : ""}${links.map((l) => `<a class="chip" href="#">${l}</a>`).join("")}</div></li>`,
+      ).join("");
+      const lines = (rows) =>
+        rows.map(([t, y]) => `<li><span>${t}</span><span class="date">${y}</span></li>`).join("");
+      document.getElementById("service-list").innerHTML = lines(SERVICE);
+      document.getElementById("honors-list").innerHTML = lines(HONORS);
+      // Duna herself, sitting on the header card's top edge.
+      const duna = createCat("duna", { pose: "wave", label: "" });
+      duna.classList.add("head-cat");
+      document.getElementById("head").append(duna);
+      scrollSpy([...document.querySelectorAll("#toc a")]);
+      footerCats(document.getElementById("foot"));
+    </script>
+    <script type="module" src="base.js"></script>
+  </body>
+</html>

@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Cast</title>
+    <link rel="stylesheet" href="base.css" />
+    <link rel="stylesheet" href="cast/cast.css" />
+    <style>
+      .cast {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.25rem;
+        margin-top: 2rem;
+      }
+      .member {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 1.5rem 1.25rem 1.25rem;
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        background: var(--bg-2);
+        text-align: center;
+      }
+      .member .cat {
+        width: 150px;
+      }
+      .member h2 {
+        margin: 1rem 0 0;
+        font-size: 1.15rem;
+      }
+      .member .zh {
+        color: var(--fg-3);
+        font-size: 0.9rem;
+      }
+      .member p {
+        margin: 0.6rem 0 0.9rem;
+        color: var(--fg-2);
+        font-size: 0.88rem;
+      }
+      .swatches {
+        display: flex;
+        gap: 0.35rem;
+        justify-content: center;
+      }
+      .swatches span {
+        width: 22px;
+        height: 22px;
+        border: 1px solid var(--line-2);
+        border-radius: 7px;
+      }
+      .poses {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.3rem;
+        justify-content: center;
+        margin-top: 0.9rem;
+      }
+      .poses button {
+        padding: 0.3rem 0.65rem;
+        border: 1px solid var(--line-2);
+        border-radius: 999px;
+        background: none;
+        color: var(--fg-2);
+        font: 600 0.75rem/1 var(--mk-mono);
+        cursor: pointer;
+      }
+      .poses button[aria-pressed="true"] {
+        border-color: var(--accent);
+        color: var(--fg);
+      }
+
+      /* ---------- where the cats could live ---------- */
+      .uses {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1.25rem;
+        margin-top: 1rem;
+      }
+      .use {
+        position: relative;
+        margin: 0;
+        min-height: 230px;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 22px;
+        background: var(--bg-2);
+      }
+      .use figcaption {
+        position: absolute;
+        left: 1rem;
+        top: 0.9rem;
+        right: 1rem;
+        color: var(--fg-3);
+        font-size: 0.8rem;
+      }
+      .use figcaption b {
+        display: block;
+        color: var(--fg);
+        font-size: 0.92rem;
+      }
+      /* Peeking over a card's top edge. */
+      .peek .card {
+        position: absolute;
+        left: 1rem;
+        right: 1rem;
+        bottom: 1rem;
+        height: 84px;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--surface);
+        z-index: 2;
+      }
+      .peek .cat {
+        position: absolute;
+        right: 2rem;
+        bottom: 52px;
+        width: 86px;
+        z-index: 1;
+      }
+      /* Sitting on the footer line. */
+      .footer .line {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 46px;
+        border-top: 1px solid var(--line-2);
+        color: var(--fg-3);
+        font-size: 0.78rem;
+        line-height: 46px;
+        text-align: center;
+      }
+      .footer .cat {
+        position: absolute;
+        bottom: 42px;
+        width: 64px;
+      }
+      .footer .cat:nth-of-type(1) {
+        left: 1.25rem;
+      }
+      .footer .cat:nth-of-type(2) {
+        left: 4.6rem;
+      }
+      .footer .cat:nth-of-type(3) {
+        right: 1.25rem;
+      }
+      /* An empty state. */
+      .empty {
+        display: grid;
+        place-items: center;
+        padding-top: 2.5rem;
+        text-align: center;
+      }
+      .empty .cat {
+        width: 92px;
+        margin: 0 auto;
+      }
+      .empty .big {
+        font: 800 2rem/1 var(--mk-sans);
+        letter-spacing: -0.03em;
+      }
+      .empty .msg {
+        color: var(--fg-2);
+        font-size: 0.85rem;
+      }
+
+      @media (max-width: 860px) {
+        .cast,
+        .uses {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="mk-page">
+      <header>
+        <h1 data-zh="猫咪们">Cast</h1>
+        <p
+          data-zh="嘟娜、嘟嘟和囔囔：同一个 SVG（cast.js），按猫着色。点姿势按钮试试；切换主题看深色背景上的描边。"
+        >
+          Duna, Dudu and Nangnang: one SVG (cast.js), colored per cat. Try the pose buttons, and
+          switch themes to see the outline they get on dark backgrounds.
+        </p>
+      </header>
+
+      <div class="cast" id="cast"></div>
+
+      <p class="mk-label" style="margin-top: 2.5rem" data-zh="可以出现的地方">
+        Where they could live
+      </p>
+      <div class="uses">
+        <figure class="use peek" id="use-peek">
+          <figcaption>
+            <b data-zh="从卡片后探头">Peeking over a card</b
+            ><span data-zh="嘟娜在卡片后面，从不挡住文字。"
+              >Behind the card, never over its text.</span
+            >
+          </figcaption>
+          <div class="card"></div>
+        </figure>
+        <figure class="use footer" id="use-footer">
+          <figcaption>
+            <b data-zh="坐在页脚线上">Sitting on the footer</b
+            ><span data-zh="每个网站页脚都有一只。">One on every site's footer.</span>
+          </figcaption>
+          <div class="line">© Duna Feline · example.com</div>
+        </figure>
+        <figure class="use empty" id="use-empty">
+          <div>
+            <div class="big">404</div>
+            <div class="msg" data-zh="嘟嘟把这一页从桌上推下去了。">
+              Dudu knocked this page off the table.
+            </div>
+          </div>
+        </figure>
+      </div>
+    </main>
+
+    <script type="module">
+      import { createCat, POSES } from "./cast/cast.js";
+
+      const CAST = [
+        {
+          id: "duna",
+          name: "Duna Feline",
+          zh: "嘟娜·菲琳",
+          en: "Gray tabby, amber eyes. The star, and the author of every sample on these pages.",
+          zhText: "灰色虎斑，琥珀色眼睛。主角，这些页面上所有示例的作者。",
+          colors: ["#9aa3ad", "#59626d", "#eceff2", "#e3a72f", "#e48b8b"],
+          pose: "wave",
+        },
+        {
+          id: "dudu",
+          name: "Dudu",
+          zh: "嘟嘟",
+          en: "Solid gray, medium-long hair, green eyes. Duna’s co-author and chief table-clearer.",
+          zhText: "纯灰色中长毛，绿眼睛。嘟娜的合著者，也是首席桌面清理员。",
+          colors: ["#8c939c", "#8c939c", "#b9bfc6", "#8fc27a", "#c98a8f"],
+          pose: "blink",
+        },
+        {
+          id: "nangnang",
+          name: "Nangnang",
+          zh: "囔囔",
+          en: "Brown tabby, medium-long hair. Duna’s other co-author and the official stamp-keeper.",
+          zhText: "棕色虎斑中长毛。嘟娜的另一位合著者，负责盖章。",
+          colors: ["#b48c5f", "#5a4230", "#f2e7d7", "#b9c25a", "#d98579"],
+          pose: "sit",
+        },
+      ];
+
+      const out = document.getElementById("cast");
+      for (const c of CAST) {
+        const m = document.createElement("section");
+        m.className = "member";
+        const cat = createCat(c.id, { pose: c.pose, label: "" });
+        m.append(cat);
+        m.insertAdjacentHTML(
+          "beforeend",
+          `<h2>${c.name}</h2><div class="zh">${c.zh}</div>
+           <p data-zh="${c.zhText}">${c.en}</p>
+           <div class="swatches">${c.colors.map((x) => `<span style="background:${x}" title="${x}"></span>`).join("")}</div>
+           <div class="poses">${POSES.map((p) => `<button type="button" data-pose="${p}" aria-pressed="${p === c.pose}">${p}</button>`).join("")}</div>`,
+        );
+        m.querySelector(".poses").addEventListener("click", (e) => {
+          const b = e.target.closest("button");
+          if (!b) return;
+          cat.pose(b.dataset.pose);
+          for (const x of m.querySelectorAll(".poses button"))
+            x.setAttribute("aria-pressed", x === b);
+        });
+        out.append(m);
+      }
+
+      document.getElementById("use-peek").append(createCat("duna", { pose: "sit", label: "" }));
+      const footer = document.getElementById("use-footer");
+      footer.append(
+        createCat("dudu", { label: "" }),
+        createCat("nangnang", { label: "" }),
+        createCat("duna", { pose: "wave", label: "" }),
+      );
+      document
+        .getElementById("use-empty")
+        .firstElementChild.prepend(createCat("dudu", { pose: "jump", label: "" }));
+    </script>
+    <script type="module" src="base.js"></script>
+  </body>
+</html>

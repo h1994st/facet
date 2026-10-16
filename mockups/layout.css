@@ -1,0 +1,370 @@
+/* Shared by the layout mockups: the decided design as provisional components, plus the page grid
+   every layout is built from. The grid has named column lines (full, wide, content), so a page
+   is a single column of content whose children can break out to wide or full width. */
+
+:root {
+  --mk-bar: 49px; /* the mockup toolbar above each page */
+  --heading: "Source Serif 4", "Noto Serif SC", "Songti SC", "STSong", var(--mk-cjk), serif;
+  --measure: 40rem; /* about 65 characters of English */
+  --gutter: 1.25rem;
+  --breakout: 9rem; /* how far "wide" reaches past the text on each side */
+  --r-card: 22px;
+  --r-media: 16px;
+  --r-code: 14px;
+}
+:root:lang(zh) {
+  --measure: 36rem; /* about 36 Chinese characters */
+}
+
+/* Blend shape: squircle containers, plain arcs for pills and circles. */
+body * {
+  corner-shape: squircle;
+}
+:is(.btn, .chip, .fnav, .fnav a, .search, .avatar, .tile, .mk-bar *, .pctl, .pctl *) {
+  corner-shape: round;
+}
+
+/* ---------- page grid ---------- */
+.lay {
+  display: grid;
+  grid-template-columns:
+    [full-start] minmax(var(--gutter), 1fr)
+    [wide-start] minmax(0, var(--breakout))
+    [content-start] min(var(--measure), 100% - 2 * var(--gutter))
+    [content-end] minmax(0, var(--breakout))
+    [wide-end] minmax(var(--gutter), 1fr)
+    [full-end];
+}
+.lay > * {
+  grid-column: content;
+}
+.lay > .wide {
+  grid-column: wide;
+}
+.lay > .full {
+  grid-column: full;
+}
+
+/* ---------- type ---------- */
+:is(.lay, .prose) h1,
+:is(.lay, .prose) h2,
+:is(.lay, .prose) h3 {
+  font-family: var(--heading);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+:root:lang(zh) :is(.lay, .prose) :is(h1, h2, h3) {
+  letter-spacing: 0;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+:is(.lay, .prose) p,
+:is(.lay, .prose) li {
+  color: var(--fg-2);
+  line-height: 1.7;
+}
+:root:lang(zh) :is(.lay, .prose) :is(p, li) {
+  line-height: 1.85;
+}
+:is(.lay, .prose) h2 {
+  margin: 2.5rem 0 0.75rem;
+  font-size: 1.75rem;
+  line-height: 1.25;
+}
+:is(.lay, .prose) h3 {
+  margin: 1.75rem 0 0.5rem;
+  font-size: 1.3rem;
+}
+.kicker {
+  margin: 0 0 0.6rem;
+  color: var(--accent);
+  font: 600 0.78rem/1 var(--mk-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.meta {
+  color: var(--fg-3);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+:is(.lay, .prose) :not(pre) > code {
+  padding: 0.1rem 0.35rem;
+  border-radius: 6px;
+  background: color-mix(in oklch, var(--fg) 8%, transparent);
+  color: var(--fg);
+  font: 0.88em var(--mk-mono);
+}
+:is(.lay, .prose) pre {
+  margin: 1.25rem 0;
+  padding: 0.95rem 1.1rem;
+  overflow: auto;
+  border: 1px solid var(--line);
+  border-radius: var(--r-code);
+  background: var(--bg-2);
+  font: 0.86rem/1.65 var(--mk-mono);
+}
+:is(.lay, .prose) pre .p {
+  color: var(--fg-3);
+}
+:is(.lay, .prose) pre .o {
+  color: var(--accent);
+}
+:is(.lay, .prose) blockquote {
+  margin: 1.5rem 0;
+  padding: 0.2rem 0 0.2rem 1.1rem;
+  border-left: 2px solid var(--accent);
+  font: 500 1.2rem/1.6 var(--heading);
+  color: var(--fg);
+}
+:is(.lay, .prose) figure {
+  margin: 1.75rem 0;
+}
+:is(.lay, .prose) figure img,
+:is(.lay, .prose) figure video {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: var(--r-media);
+}
+:is(.lay, .prose) figure.full img {
+  border-radius: 0;
+}
+:is(.lay, .prose) figcaption {
+  margin-top: 0.6rem;
+  color: var(--fg-3);
+  font-size: 0.85rem;
+}
+:is(.lay, .prose) figure.full figcaption {
+  width: min(var(--measure), 100% - 2 * var(--gutter));
+  margin-inline: auto;
+}
+.note {
+  margin: 1.25rem 0;
+  padding: 0.85rem 1rem;
+  border: 1px solid oklch(0.76 0.06 255 / 0.35);
+  border-radius: var(--r-code);
+  background: oklch(0.76 0.06 255 / 0.08);
+  color: oklch(0.86 0.04 255);
+  font-size: 0.92rem;
+}
+:root[data-theme="light"] .note {
+  border-color: oklch(0.52 0.07 255 / 0.3);
+  background: oklch(0.52 0.07 255 / 0.06);
+  color: oklch(0.4 0.07 255);
+}
+
+/* ---------- controls ---------- */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  align-items: center;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  background: none;
+  color: var(--fg);
+  font: 600 0.88rem/1.2 var(--mk-sans);
+  text-decoration: none;
+  cursor: pointer;
+}
+.btn.primary {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: var(--bg);
+}
+.btn.ghost-light {
+  border-color: rgb(255 255 255 / 0.35);
+  color: #fff;
+}
+.chip {
+  padding: 0.16rem 0.6rem;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: color-mix(in oklch, var(--fg) 8%, transparent);
+  color: var(--fg-2);
+  font: 600 0.75rem/1.4 var(--mk-sans);
+  cursor: pointer;
+}
+.chip[aria-pressed="true"] {
+  border-color: var(--accent);
+  color: var(--fg);
+}
+.search {
+  min-width: 14rem;
+  padding: 0.5rem 0.9rem;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  background: var(--bg-2);
+  color: var(--fg);
+  font: 0.9rem var(--mk-sans);
+}
+
+/* ---------- site nav: a floating glass pill ---------- */
+.fnav {
+  position: sticky;
+  top: calc(var(--mk-bar) + 0.75rem);
+  z-index: 20;
+  display: flex;
+  gap: 0.2rem;
+  align-items: center;
+  width: fit-content;
+  margin: 0.75rem auto 0;
+  padding: 0.3rem 0.35rem 0.3rem 0.95rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: color-mix(in oklch, var(--surface) 72%, transparent);
+  backdrop-filter: blur(16px) saturate(140%);
+  box-shadow: var(--shadow);
+  font-size: 0.88rem;
+  white-space: nowrap;
+  transition:
+    background 0.3s,
+    border-color 0.3s,
+    box-shadow 0.3s;
+}
+.fnav b {
+  margin-right: 0.6rem;
+  font: 600 0.95rem var(--heading);
+}
+.fnav a {
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  color: var(--fg-2);
+  text-decoration: none;
+}
+.fnav a[aria-current] {
+  background: color-mix(in oklch, var(--fg) 10%, transparent);
+  color: var(--fg);
+}
+/* Over a cover image: clear until the page scrolls, then glass. */
+.fnav.over:not(.scrolled) {
+  border-color: transparent;
+  background: transparent;
+  backdrop-filter: none;
+  box-shadow: none;
+  color: #fff;
+}
+.fnav.over:not(.scrolled) a {
+  color: rgb(255 255 255 / 0.8);
+}
+.fnav.over:not(.scrolled) a[aria-current] {
+  background: rgb(255 255 255 / 0.16);
+  color: #fff;
+}
+
+/* ---------- cards with the liquid hover (glass option 5) ---------- */
+.card {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  background: var(--bg-2);
+  transition:
+    transform 0.25s,
+    box-shadow 0.25s;
+}
+.card.hot {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+.card::before,
+.card::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  z-index: 1;
+  border-radius: inherit;
+  opacity: 0;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+.card::before {
+  background: radial-gradient(
+    300px circle at var(--lx, 50%) var(--ly, 0%),
+    color-mix(in oklch, var(--accent) 16%, transparent),
+    transparent 55%
+  );
+}
+.card::after {
+  padding: 1px;
+  background:
+    radial-gradient(220px circle at var(--lx, 50%) var(--ly, 0%), var(--accent), transparent 70%),
+    linear-gradient(rgb(255 255 255 / 0.16), transparent 40%);
+  mask:
+    linear-gradient(#000 0 0) content-box exclude,
+    linear-gradient(#000 0 0);
+}
+.card.hot::before,
+.card.hot::after {
+  opacity: 1;
+}
+
+/* ---------- footer with the cats ---------- */
+.ffoot {
+  position: relative;
+  margin-top: 5rem;
+  padding: 1.1rem 0 1.4rem;
+  border-top: 1px solid var(--line-2);
+  color: var(--fg-3);
+  font-size: 0.82rem;
+  text-align: center;
+}
+.ffoot .cat {
+  position: absolute;
+  bottom: calc(100% - 4px);
+  width: 56px;
+}
+.ffoot .cat:nth-of-type(1) {
+  left: max(1.25rem, 50% - 30rem);
+}
+.ffoot .cat:nth-of-type(2) {
+  left: calc(max(1.25rem, 50% - 30rem) + 3.1rem);
+}
+.ffoot .cat:nth-of-type(3) {
+  right: max(1.25rem, 50% - 30rem);
+}
+
+/* A page-local switch row (only on some layouts). */
+.pctl {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 40;
+  display: flex;
+  gap: 0.3rem;
+  padding: 0.3rem;
+  border: 1px solid var(--line-2);
+  border-radius: 999px;
+  background: color-mix(in oklch, var(--surface) 80%, transparent);
+  backdrop-filter: blur(12px);
+  font: 600 0.75rem var(--mk-mono);
+}
+.pctl button {
+  padding: 0.35rem 0.7rem;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--fg-2);
+  font: inherit;
+  cursor: pointer;
+}
+.pctl button[aria-pressed="true"] {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .fnav {
+    transition: none;
+  }
+  .card.hot {
+    transform: none;
+  }
+}

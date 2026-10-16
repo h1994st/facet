@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Layout · Cover</title>
+    <link rel="stylesheet" href="base.css" />
+    <link rel="stylesheet" href="cast/cast.css" />
+    <link rel="stylesheet" href="layout.css" />
+    <style>
+      /* The cover fills the first screen; the nav floats over it. */
+      .cover {
+        position: relative;
+        display: grid;
+        align-items: end;
+        min-height: calc(100svh - var(--mk-bar));
+        margin-top: calc(-0.75rem - 2.6rem); /* pull up under the floating nav */
+        overflow: hidden;
+        background: #0b0e19;
+        color: #fff;
+      }
+      .cover > img,
+      .cover > video {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+      }
+      /* Scrim: keeps the title readable on any frame, in both themes. */
+      .cover::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          linear-gradient(to top, rgb(6 8 14 / 0.88), rgb(6 8 14 / 0.25) 55%, rgb(6 8 14 / 0.45)),
+          linear-gradient(to right, rgb(6 8 14 / 0.55), transparent 60%);
+      }
+      .cover .inner {
+        position: relative;
+        z-index: 1;
+        width: min(100% - 2.5rem, 64rem);
+        margin: 0 auto;
+        padding: 0 0 4.5rem;
+      }
+      .cover .kicker {
+        color: oklch(0.85 0.06 15);
+      }
+      .cover h1 {
+        color: #fff;
+        max-width: 18ch;
+        margin: 0;
+        font-size: clamp(2.6rem, 6vw, 4.6rem);
+        line-height: 1.04;
+      }
+      :root:lang(zh) .cover h1 {
+        max-width: 14em;
+        line-height: 1.2;
+      }
+      .cover p:not(.kicker) {
+        max-width: 34rem;
+        margin: 1rem 0 1.5rem;
+        color: rgb(255 255 255 / 0.78);
+        font-size: 1.12rem;
+      }
+      .cover .meta {
+        color: rgb(255 255 255 / 0.6);
+      }
+      .cue {
+        position: absolute;
+        left: 50%;
+        bottom: 1.2rem;
+        z-index: 1;
+        width: 22px;
+        height: 34px;
+        border: 1.5px solid rgb(255 255 255 / 0.5);
+        border-radius: 999px;
+        transform: translateX(-50%);
+      }
+      .cue::after {
+        content: "";
+        position: absolute;
+        left: 50%;
+        top: 7px;
+        width: 3px;
+        height: 7px;
+        border-radius: 2px;
+        background: #fff;
+        transform: translateX(-50%);
+        animation: cue 1.6s ease-in-out infinite;
+      }
+      @keyframes cue {
+        50% {
+          transform: translate(-50%, 9px);
+          opacity: 0.3;
+        }
+      }
+      .playpause {
+        position: absolute;
+        right: 1.25rem;
+        bottom: 1.25rem;
+        z-index: 2;
+        padding: 0.4rem 0.75rem;
+        border: 1px solid rgb(255 255 255 / 0.3);
+        border-radius: 999px;
+        background: rgb(0 0 0 / 0.35);
+        color: #fff;
+        font: 600 0.75rem var(--mk-mono);
+        backdrop-filter: blur(8px);
+        cursor: pointer;
+      }
+      .body {
+        padding-top: 3rem;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .cue::after {
+          animation: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="fnav over" id="nav">
+      <b>Duna Feline</b><a href="#" data-zh="博客" aria-current="page">Blog</a
+      ><a href="#" data-zh="项目">Projects</a><a href="#" data-zh="简历">Resume</a>
+    </nav>
+
+    <header class="cover prose" id="cover">
+      <img id="cover-img" src="assets/board.jpg" alt="" />
+      <video
+        id="cover-video"
+        src="assets/loop.mp4"
+        poster="assets/loop-poster.jpg"
+        muted
+        loop
+        playsinline
+        hidden
+      ></video>
+      <div class="inner">
+        <p class="kicker" data-zh="博客 · 研究">Blog · Research</p>
+        <h1 data-zh="十二个房间，一个红点都没抓到">Twelve Rooms, Zero Dots Caught</h1>
+        <p data-zh="两年的“红点行动”：十二个房间，零次捕获，以及我从中学到的关于光的一切。">
+          Two years of Operation Red Dot: twelve rooms, zero catches, and everything it taught me
+          about light.
+        </p>
+        <div class="row">
+          <a class="btn primary" href="#" data-zh="看看追踪器 ↗">See the tracker ↗</a>
+          <a class="btn ghost-light" href="#read" data-zh="阅读文章">Read the post</a>
+          <span class="meta" data-zh="2026 年 10 月 11 日 · 6 分钟阅读"
+            >Oct 11, 2026 · 6 min read</span
+          >
+        </div>
+      </div>
+      <span class="cue" aria-hidden="true"></span>
+      <button class="playpause" id="playpause" hidden>Pause</button>
+    </header>
+
+    <main class="lay body" id="read">
+      <p
+        data-zh="一切从客厅墙上的一个红点开始。它出现，它移动，它在我扑上去的那一刻消失。整整两年，我在十二个房间里追它。"
+      >
+        It started with a red dot on the living-room wall. It appeared, it moved, and it vanished
+        the moment I pounced. For two years I chased it across twelve rooms.
+      </p>
+      <p
+        data-zh="我一次也没抓到它。但我学会了它的规律：它会在镜子上反射，会在门框边拐弯，而且总比我快一步。"
+      >
+        I never caught it once. But I learned its habits: it bounces off mirrors, turns at door
+        frames, and is always one step ahead of me.
+      </p>
+      <h2 data-zh="这个版式适合">When to use this layout</h2>
+      <ul>
+        <li data-zh="首页、精选文章、项目首页：图片或视频本身就在讲故事的时候。">
+          The homepage, feature posts and project landings: where the image carries the story.
+        </li>
+        <li data-zh="一页只用一次；导航在封面上是透明的，滚动后变成玻璃。">
+          Once per page. The nav is clear over the cover and turns to glass once you scroll.
+        </li>
+        <li data-zh="视频：静音、循环、先显示海报帧；用户减少动态效果时只显示海报。">
+          Video: muted, looping, poster frame first; only the poster when motion is reduced.
+        </li>
+      </ul>
+      <footer class="ffoot full" id="foot">© 2026 Duna Feline · example.com</footer>
+    </main>
+
+    <div class="pctl" id="media">
+      <button data-v="image" data-zh="图片">Image</button>
+      <button data-v="video" data-zh="视频">Video</button>
+    </div>
+
+    <script type="module">
+      import { navOverCover, footerCats, pageSwitch } from "./layout.js";
+      navOverCover(document.getElementById("nav"), document.getElementById("cover"));
+      footerCats(document.getElementById("foot"));
+
+      const img = document.getElementById("cover-img");
+      const video = document.getElementById("cover-video");
+      const pp = document.getElementById("playpause");
+      const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      pageSwitch(document.getElementById("media"), (v) => {
+        const isVideo = v === "video";
+        img.hidden = isVideo;
+        video.hidden = !isVideo;
+        pp.hidden = !isVideo || still;
+        if (isVideo && !still) video.play().catch(() => {});
+        else video.pause();
+      });
+      pp.addEventListener("click", () => {
+        if (video.paused) video.play();
+        else video.pause();
+        pp.textContent = video.paused ? "Play" : "Pause";
+      });
+    </script>
+    <script type="module" src="base.js"></script>
+  </body>
+</html>

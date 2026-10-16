@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Layout · Margin notes</title>
+    <link rel="stylesheet" href="base.css" />
+    <link rel="stylesheet" href="cast/cast.css" />
+    <link rel="stylesheet" href="layout.css" />
+    <style>
+      /* The reading column sits left of center, leaving a margin column for notes. */
+      .page {
+        width: min(100% - 2.5rem, 40rem);
+        margin: 0 auto;
+        padding: 3.5rem 0 0;
+      }
+      @media (min-width: 1100px) {
+        .page {
+          transform: translateX(-7.5rem);
+        }
+      }
+      .page h1 {
+        margin: 0 0 0.6rem;
+        font-size: 2.6rem;
+        line-height: 1.1;
+      }
+      /* Footnote numbers in the text. */
+      .sn-ref {
+        counter-increment: sn;
+        cursor: pointer;
+      }
+      .sn-ref::after {
+        content: counter(sn);
+        position: relative;
+        top: -0.5em;
+        margin-left: 0.1rem;
+        color: var(--accent);
+        font: 600 0.72em var(--mk-mono);
+      }
+      .page {
+        counter-reset: sn;
+      }
+      /* Contain the floated notes so the last one never runs into the footer. */
+      .page::after {
+        content: "";
+        display: block;
+        clear: both;
+      }
+      .sn-toggle {
+        display: none;
+      }
+      /* Phones: the number is a small tappable pill, so it reads as something to open. */
+      @media (max-width: 1099px) {
+        .sn-ref::after {
+          top: -0.15em;
+          display: inline-grid;
+          place-items: center;
+          min-width: 1.35rem;
+          height: 1.35rem;
+          margin-left: 0.25rem;
+          padding: 0 0.3rem;
+          border-radius: 999px;
+          background: color-mix(in oklch, var(--accent) 22%, transparent);
+          color: var(--fg);
+          font-size: 0.72rem;
+        }
+        .sn-toggle:checked + .sidenote {
+          animation: sn-open 0.25s ease-out;
+        }
+        @keyframes sn-open {
+          from {
+            opacity: 0;
+            transform: translateY(-4px);
+          }
+        }
+      }
+      .sidenote {
+        display: none;
+        margin: 0.6rem 0;
+        padding: 0.6rem 0.8rem;
+        border-left: 2px solid var(--accent);
+        background: var(--bg-2);
+        color: var(--fg-2);
+        font-size: 0.85rem;
+        line-height: 1.55;
+      }
+      .sidenote::before {
+        content: counter(sn) ". ";
+        color: var(--accent);
+        font: 600 0.8em var(--mk-mono);
+      }
+      .sn-toggle:checked + .sidenote {
+        display: block;
+      }
+      /* Wide screens: notes float into the right margin, next to their line. */
+      @media (min-width: 1100px) {
+        .sidenote {
+          display: block;
+          float: right;
+          clear: right;
+          width: 13rem;
+          margin: 0.3rem -15.5rem 0.8rem 0;
+          padding: 0 0 0 0.8rem;
+          background: none;
+          border-left: 1px solid var(--line-2);
+        }
+        .sn-ref {
+          cursor: default;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="fnav">
+      <b>Duna Feline</b><a href="#" data-zh="博客" aria-current="page">Blog</a
+      ><a href="#" data-zh="项目">Projects</a><a href="#" data-zh="简历">Resume</a>
+    </nav>
+
+    <article class="page prose">
+      <p class="kicker" data-zh="案件记录">Case file</p>
+      <h1 data-zh="消失的袜子">The Missing Sock</h1>
+      <p class="meta" data-zh="适合：长文、调查记录、需要很多旁注的文章">
+        For: long writeups, investigation notes, posts with many asides
+      </p>
+
+      <p>
+        <span data-zh="第一步还是闻一闻现场。除了洗衣篮，只有床底下还开着一条缝，里面传出一点动静"
+          >The first step is still a sniff of the scene. Apart from the laundry basket, only the gap
+          under the bed is open, and something is rustling in there</span
+        ><label class="sn-ref" for="sn1"></label
+        ><input type="checkbox" id="sn1" class="sn-toggle" /><span
+          class="sidenote"
+          data-zh="动静就在床头柜的影子里，所以不用猜。"
+          >The rustling is right under the nightstand's shadow, so no guessing.</span
+        ><span data-zh="。往里看一眼，就能找到一条公开的通道。"
+          >. One look turns up a well-known passage.</span
+        >
+      </p>
+
+      <pre><span class="p">$</span> sniff --deep ./bedroom
+<span class="o">basket: socks ×3 · bed: dust ×12 · closet: box ×1</span></pre>
+
+      <p>
+        <span data-zh="钻进去之后，只能看到一些灰尘。翻一下旁边的纸箱，能找到另一只袜子的气味"
+          >Under the bed there is only dust. Digging through the box next to it turns up the scent
+          of a second sock</span
+        ><label class="sn-ref" for="sn2"></label
+        ><input type="checkbox" id="sn2" class="sn-toggle" /><span
+          class="sidenote"
+          data-zh="它和洗衣篮里那只是一对：成对的东西永远值得一查。"
+          >It pairs with the one in the basket: matching things are always worth a look.</span
+        ><span data-zh="，于是线索换到了衣柜。">, which moves the trail to the closet.</span>
+      </p>
+      <p>
+        <span data-zh="真相在衣柜顶上，那里有一个只有猫才上得去的角落"
+          >The answer is on top of the closet, in a corner only a cat can reach</span
+        ><label class="sn-ref" for="sn3"></label
+        ><input type="checkbox" id="sn3" class="sn-toggle" /><span
+          class="sidenote"
+          data-zh="旁注适合放“为什么”和“顺便一提”，正文保持在主线上。窄屏时点上标数字就能展开。"
+          >Margin notes hold the "why" and "by the way", keeping the text on the main line. On
+          narrow screens, tap the number to open one.</span
+        ><span data-zh="。剩下的就水到渠成了。">. The rest follows.</span>
+      </p>
+    </article>
+    <footer class="ffoot" id="foot">© 2026 Duna Feline · example.com</footer>
+
+    <script type="module">
+      import { footerCats } from "./layout.js";
+      footerCats(document.getElementById("foot"));
+    </script>
+    <script type="module" src="base.js"></script>
+  </body>
+</html>

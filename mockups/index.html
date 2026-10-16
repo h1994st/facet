@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Mockups</title>
+    <link rel="stylesheet" href="base.css" />
+    <style>
+      .links {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+        margin-top: 2rem;
+      }
+      .links a {
+        display: block;
+        padding: 1.25rem;
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        background: var(--bg-2);
+        color: var(--fg);
+        text-decoration: none;
+      }
+      .links a:hover {
+        border-color: var(--accent);
+      }
+      .links b {
+        display: block;
+        font-size: 1.1rem;
+      }
+      .links span {
+        color: var(--fg-2);
+        font-size: 0.88rem;
+      }
+      @media (max-width: 760px) {
+        .links {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="mk-page">
+      <header>
+        <h1 data-zh="facet 设计稿">facet mockups</h1>
+        <p
+          data-zh="facet 的设计稿。预览页展示定下来的设计；其他页面保留了做决定时比较过的方案，选定的那个标着“已选”。顶部工具栏切换主题、语言和各网站的强调色。"
+        >
+          Mockups for facet. Preview shows the decided design; the other pages keep the options we
+          compared, with the chosen one marked. The toolbar switches theme, language and each site's
+          accent.
+        </p>
+      </header>
+      <div class="links">
+        <a href="preview.html"
+          ><b data-zh="预览">Preview</b
+          ><span data-zh="定下来的设计">The decided design, together</span></a
+        >
+        <a href="type.html"
+          ><b data-zh="字体">Type</b
+          ><span data-zh="衬线标题 + Geist 正文">Serif headings, Geist text</span></a
+        >
+        <a href="color.html"
+          ><b data-zh="色彩">Color</b
+          ><span data-zh="低饱和度，冷灰">Low saturation, cool neutrals</span></a
+        >
+        <a href="shape.html"
+          ><b data-zh="形状">Shape</b
+          ><span data-zh="松鼠角容器 + 胶囊控件">Squircle containers, pill controls</span></a
+        >
+        <a href="glass.html"
+          ><b data-zh="玻璃">Glass</b
+          ><span data-zh="平时通透，悬停时液态">Clear, liquid on hover</span></a
+        >
+        <a href="layouts.html"
+          ><b data-zh="版式">Layout</b
+          ><span data-zh="十三种页面版式">Thirteen page layouts, one grid</span></a
+        >
+        <a href="cast.html"
+          ><b data-zh="猫咪们">Cast</b
+          ><span data-zh="嘟娜、嘟嘟和囔囔">Duna, Dudu and Nangnang</span></a
+        >
+      </div>
+    </main>
+    <script type="module" src="base.js"></script>
+  </body>
+</html>

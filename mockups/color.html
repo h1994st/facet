@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Color</title>
+    <link rel="stylesheet" href="base.css" />
+    <style>
+      .why {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1rem;
+        margin: 2rem 0 0;
+        padding: 0;
+        list-style: none;
+      }
+      .why li {
+        padding: 1rem 1.1rem;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--bg-2);
+        color: var(--fg-2);
+        font-size: 0.88rem;
+      }
+      .why b {
+        display: block;
+        margin-bottom: 0.2rem;
+        color: var(--fg);
+        font-size: 0.95rem;
+      }
+      section.block {
+        margin-top: 3rem;
+      }
+      section.block > h2 {
+        margin: 0 0 0.3rem;
+        font: 700 1.4rem/1.3 var(--mk-display);
+      }
+      section.block > p {
+        margin: 0 0 1.2rem;
+        max-width: 46rem;
+        color: var(--fg-2);
+        font-size: 0.92rem;
+      }
+
+      /* Accent palette */
+      .hues {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1rem;
+      }
+      .hue {
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--bg-2);
+      }
+      .hue .sw {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        height: 84px;
+      }
+      .hue .sw span {
+        display: flex;
+        align-items: flex-end;
+        padding: 0.45rem 0.55rem;
+        font: 600 0.68rem/1 var(--mk-mono);
+      }
+      .hue .meta {
+        padding: 0.7rem 0.85rem 0.85rem;
+        font-size: 0.82rem;
+      }
+      .hue .meta b {
+        font-size: 0.95rem;
+      }
+      .hue .meta .zh {
+        margin-left: 0.3rem;
+        color: var(--fg-3);
+      }
+      .hue .meta code {
+        display: block;
+        margin-top: 0.25rem;
+        color: var(--fg-3);
+        font: 0.7rem/1.5 var(--mk-mono);
+      }
+      .hue .sites {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.3rem;
+        margin-top: 0.45rem;
+      }
+      .tag {
+        padding: 0.1rem 0.5rem;
+        border-radius: 999px;
+        font-size: 0.72rem;
+        font-weight: 600;
+      }
+      .hue .sample {
+        margin-top: 0.6rem;
+        display: flex;
+        gap: 0.4rem;
+        align-items: center;
+      }
+      .btn {
+        padding: 0.32rem 0.7rem;
+        border-radius: 999px;
+        font-size: 0.78rem;
+        font-weight: 600;
+      }
+      .ratio {
+        margin-left: auto;
+        color: var(--fg-3);
+        font: 0.7rem var(--mk-mono);
+      }
+
+      /* Neutral ramps */
+      .ramps {
+        display: grid;
+        gap: 1rem;
+      }
+      .ramp {
+        display: grid;
+        grid-template-columns: 10rem minmax(0, 1fr);
+        gap: 1rem;
+        align-items: center;
+      }
+      .ramp .name b {
+        display: block;
+      }
+      .ramp .name span {
+        color: var(--fg-3);
+        font-size: 0.8rem;
+      }
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+      }
+      .steps span {
+        height: 56px;
+        padding: 0.3rem;
+        font: 600 0.62rem/1 var(--mk-mono);
+      }
+      .preview {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+        margin-top: 1.25rem;
+      }
+      .pv {
+        padding: 1rem;
+        border-radius: 16px;
+      }
+      .pv .card {
+        padding: 0.9rem 1rem;
+        border-radius: 12px;
+      }
+      .pv b {
+        display: block;
+        font-size: 0.85rem;
+        margin-bottom: 0.6rem;
+      }
+      .pv h4 {
+        margin: 0 0 0.25rem;
+        font: 700 1.05rem/1.3 var(--mk-display);
+      }
+      .pv p {
+        margin: 0;
+        font-size: 0.82rem;
+      }
+
+      /* Semantic */
+      .sem {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 1rem;
+      }
+      .alert {
+        padding: 0.8rem 0.95rem;
+        border: 1px solid;
+        border-radius: 14px;
+        font-size: 0.85rem;
+      }
+      .alert b {
+        display: block;
+        margin-bottom: 0.15rem;
+      }
+
+      /* Data and illustration */
+      .data {
+        display: grid;
+        grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+        gap: 1rem;
+      }
+      .chart,
+      .tags {
+        padding: 1.1rem;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        background: var(--bg-2);
+      }
+      .bars {
+        display: flex;
+        align-items: flex-end;
+        gap: 0.5rem;
+        height: 140px;
+      }
+      .bars i {
+        flex: 1;
+        border-radius: 6px 6px 2px 2px;
+      }
+      .tags .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+      }
+
+      @media (max-width: 900px) {
+        .why,
+        .hues,
+        .sem {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .preview,
+        .data {
+          grid-template-columns: 1fr;
+        }
+        .ramp {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="mk-page">
+      <header>
+        <h1 data-zh="色彩">Color</h1>
+        <p
+          data-zh="需要一套色板吗？需要，但它很小，而且都是低饱和度。强调色是每个网站唯一“有颜色”的地方，其他颜色各有用途："
+        >
+          Do we need a palette? Yes, a small one, all low-saturation. The accent is the only
+          colorful thing on a site; everything else has a job:
+        </p>
+      </header>
+
+      <ul class="why">
+        <li>
+          <b data-zh="中性色阶">Neutrals</b
+          ><span data-zh="背景、表面、边线和文字。一个 12 级色阶，深浅两套，承担了 90% 的界面。"
+            >Backgrounds, surfaces, lines and text. One 12-step ramp, for dark and light, carries
+            90% of every page.</span
+          >
+        </li>
+        <li>
+          <b data-zh="强调色">Accents</b
+          ><span data-zh="一组同亮度、同饱和度的色相，每个网站从中挑一个，所以它们不同又协调。"
+            >A set of hues at equal lightness and chroma. Each site picks one, so the sites differ
+            but still match.</span
+          >
+        </li>
+        <li>
+          <b data-zh="语义色">Semantic</b
+          ><span data-zh="成功、警告、错误、提示。直接复用强调色的色相，不另起颜色。"
+            >Success, warning, danger, info. They reuse accent hues instead of adding new
+            colors.</span
+          >
+        </li>
+        <li>
+          <b data-zh="插图与数据">Illustration</b
+          ><span data-zh="标签、图表、示意图需要多种颜色同时出现。"
+            >Tags, charts and diagrams need several colors at once.</span
+          >
+        </li>
+      </ul>
+
+      <section class="block">
+        <h2 data-zh="强调色">Accents</h2>
+        <p
+          data-zh="八个色相，深色主题 L 0.76 / C 0.06，浅色主题 L 0.52 / C 0.07（OKLCH）。同样的亮度意味着无论哪个网站，按钮和链接的对比度都一样。另有一个接近中性的石墨色。下方的数字是对页面背景的对比度。"
+        >
+          Eight hues at OKLCH L 0.76 / C 0.06 on dark and L 0.52 / C 0.07 on light. Equal lightness
+          means buttons and links have the same contrast on every site. Graphite is a near-neutral
+          extra. The ratio is against the page background.
+        </p>
+        <div class="hues" id="hues"></div>
+      </section>
+
+      <section class="block">
+        <h2 data-zh="近中性强调色">Near-neutral accents</h2>
+        <p
+          data-zh="当八个色相都被用完时，再加近中性色：和强调色同样的亮度（所以对比度一样），但饱和度只有 C 0.02，几乎是灰色，只带一点冷暖。色相之间至少隔 70°，否则会分不清。"
+        >
+          When all eight hues are taken, add near-neutrals: the same lightness as the accents (so
+          the same contrast), but at C 0.02, nearly gray with only a hint of warmth or coolness.
+          Keep them at least 70° apart, or they become hard to tell apart.
+        </p>
+        <div class="hues" id="neutrals"></div>
+      </section>
+
+      <section class="block">
+        <h2 data-zh="中性色">Neutrals</h2>
+        <p
+          data-zh="三种微微带色的灰：冷灰偏蓝，暖灰偏褐，还有几乎纯灰。选定冷灰。下方用同一张卡片对比。"
+        >
+          Three barely-tinted grays: cool (toward blue), warm (toward brown) and nearly pure. Cool
+          is the choice. The same card is shown on each below.
+        </p>
+        <div class="ramps" id="ramps"></div>
+        <div class="preview" id="preview"></div>
+      </section>
+
+      <section class="block">
+        <h2 data-zh="语义色">Semantic</h2>
+        <p data-zh="直接取自强调色板：苔绿、赭黄、玫瑰、石板蓝。">
+          Taken from the accent palette: moss, ochre, rose and slate.
+        </p>
+        <div class="sem" id="sem"></div>
+      </section>
+
+      <section class="block">
+        <h2 data-zh="插图与数据">Illustration and data</h2>
+        <p data-zh="全部八个色相同时出现时，依然安静。">All eight hues at once, and still quiet.</p>
+        <div class="data">
+          <div class="chart"><div class="bars" id="bars"></div></div>
+          <div class="tags"><div class="row" id="tags"></div></div>
+        </div>
+      </section>
+    </main>
+
+    <script type="module">
+      // OKLCH -> sRGB, for contrast ratios.
+      function oklchToRgb(L, C, h) {
+        const a = C * Math.cos((h * Math.PI) / 180);
+        const b = C * Math.sin((h * Math.PI) / 180);
+        const l_ = (L + 0.3963377774 * a + 0.2158037573 * b) ** 3;
+        const m_ = (L - 0.1055613458 * a - 0.0638541728 * b) ** 3;
+        const s_ = (L - 0.0894841775 * a - 1.291485548 * b) ** 3;
+        const lin = [
+          4.0767416621 * l_ - 3.3077115913 * m_ + 0.2309699292 * s_,
+          -1.2684380046 * l_ + 2.6097574011 * m_ - 0.3413193965 * s_,
+          -0.0041960863 * l_ - 0.7034186147 * m_ + 1.707614701 * s_,
+        ];
+        return lin.map((v) => Math.min(1, Math.max(0, v)));
+      }
+      const lum = (rgb) => 0.2126 * rgb[0] + 0.7152 * rgb[1] + 0.0722 * rgb[2];
+      const ratio = (x, y) => {
+        const [a, b] = [lum(x), lum(y)].sort((p, q) => q - p);
+        return (a + 0.05) / (b + 0.05);
+      };
+
+      const HUES = [
+        ["Sage", "鼠尾草", 165],
+        ["Teal", "青", 205],
+        ["Slate", "石板", 255],
+        ["Lavender", "薰衣草", 295],
+        ["Rose", "玫瑰", 15],
+        ["Clay", "陶土", 55],
+        ["Ochre", "赭黄", 85],
+        ["Moss", "苔绿", 130],
+      ];
+      const DARK = { L: 0.76, C: 0.06 };
+      const LIGHT = { L: 0.52, C: 0.07 };
+      const col = (t, h) => `oklch(${t.L} ${t.C} ${h})`;
+      const BG = { dark: oklchToRgb(0.16, 0.01, 260), light: oklchToRgb(0.975, 0.004, 260) };
+
+      const hues = document.getElementById("hues");
+      for (const [name, zh, h, site] of HUES) {
+        const rd = ratio(oklchToRgb(DARK.L, DARK.C, h), BG.dark).toFixed(1);
+        const rl = ratio(oklchToRgb(LIGHT.L, LIGHT.C, h), BG.light).toFixed(1);
+        const el = document.createElement("div");
+        el.className = "hue";
+        el.style.setProperty("--h", h);
+        el.innerHTML = `<div class="sw"><span style="background:${col(DARK, h)};color:#0b0d12">dark ${rd}:1</span><span style="background:${col(LIGHT, h)};color:#fff">light ${rl}:1</span></div>
+          <div class="meta"><b>${name}</b><span class="zh">${zh}</span><code>h ${h}</code>
+          ${site ? `<div class="sites"><span class="tag" style="background:color-mix(in oklch, ${col(DARK, h)} 20%, transparent);color:var(--fg)">${site}</span></div>` : ""}
+          <div class="sample"><span class="btn hue-btn">Button</span><a href="#" class="hue-link">Link</a></div></div>`;
+        hues.append(el);
+      }
+      // Graphite: a near-neutral accent, outside the equal-lightness set.
+      const hexRgb = (h) =>
+        [1, 3, 5].map((i) => {
+          const c = parseInt(h.slice(i, i + 2), 16) / 255;
+          return c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4;
+        });
+      const GD = "#d5dbe3",
+        GL = "#374151";
+      const gd = ratio(hexRgb(GD), BG.dark).toFixed(1),
+        gl = ratio(hexRgb(GL), BG.light).toFixed(1);
+      hues.insertAdjacentHTML(
+        "beforeend",
+        `<div class="hue graphite"><div class="sw"><span style="background:${GD};color:#0b0d12">dark ${gd}:1</span><span style="background:${GL};color:#fff">light ${gl}:1</span></div>
+        <div class="meta"><b>Graphite</b><span class="zh">石墨</span><code>${GL} / ${GD}</code>
+        <div class="sample"><span class="btn hue-btn">Button</span><a href="#" class="hue-link">Link</a></div></div></div>`,
+      );
+      // Near-neutral accents: same lightness as the accents, chroma 0.02.
+      const NEAR = [
+        ["Stone", "石", 70],
+        ["Lichen", "地衣", 150],
+        ["Steel", "钢", 250],
+        ["Heather", "石南", 320],
+      ];
+      const NDARK = { L: 0.76, C: 0.02 };
+      const NLIGHT = { L: 0.52, C: 0.025 };
+      const neutrals = document.getElementById("neutrals");
+      for (const [name, zh, h] of NEAR) {
+        const rd = ratio(oklchToRgb(NDARK.L, NDARK.C, h), BG.dark).toFixed(1);
+        const rl = ratio(oklchToRgb(NLIGHT.L, NLIGHT.C, h), BG.light).toFixed(1);
+        neutrals.insertAdjacentHTML(
+          "beforeend",
+          `<div class="hue near-${h}"><div class="sw"><span style="background:${col(NDARK, h)};color:#0b0d12">dark ${rd}:1</span><span style="background:${col(NLIGHT, h)};color:#fff">light ${rl}:1</span></div>
+          <div class="meta"><b>${name}</b><span class="zh">${zh}</span><code>h ${h} · C 0.02</code>
+          <div class="sample"><span class="btn hue-btn">Button</span><a href="#" class="hue-link">Link</a></div></div></div>`,
+        );
+      }
+      // Buttons and links follow the theme.
+      const style = document.createElement("style");
+      style.textContent = HUES.map(
+        (
+          [, , h],
+          i,
+        ) => `#hues .hue:nth-child(${i + 1}) .hue-btn{background:${col(DARK, h)};color:#0b0d12}
+         #hues .hue:nth-child(${i + 1}) .hue-link{color:${col(DARK, h)}}
+         :root[data-theme=light] #hues .hue:nth-child(${i + 1}) .hue-btn{background:${col(LIGHT, h)};color:#fff}
+         :root[data-theme=light] #hues .hue:nth-child(${i + 1}) .hue-link{color:${col(LIGHT, h)}}`,
+      ).join("\n");
+      style.textContent += `.graphite .hue-btn{background:${GD};color:#0b0d12}.graphite .hue-link{color:${GD}}
+        :root[data-theme=light] .graphite .hue-btn{background:${GL};color:#fff}:root[data-theme=light] .graphite .hue-link{color:${GL}}`;
+      for (const [, , h] of NEAR) {
+        style.textContent += `.near-${h} .hue-btn{background:${col(NDARK, h)};color:#0b0d12}.near-${h} .hue-link{color:${col(NDARK, h)}}
+          :root[data-theme=light] .near-${h} .hue-btn{background:${col(NLIGHT, h)};color:#fff}:root[data-theme=light] .near-${h} .hue-link{color:${col(NLIGHT, h)}}`;
+      }
+      document.head.append(style);
+
+      // Neutral ramps.
+      const DARK_L = [0.15, 0.18, 0.21, 0.24, 0.27, 0.31, 0.37, 0.45, 0.56, 0.7, 0.83, 0.95];
+      const LIGHT_L = [0.99, 0.975, 0.955, 0.93, 0.9, 0.86, 0.8, 0.72, 0.6, 0.48, 0.36, 0.2];
+      const RAMPS = [
+        ["Cool", "冷灰", 0.012, 260],
+        ["Warm", "暖灰", 0.01, 60],
+        ["Pure", "纯灰", 0.003, 260],
+      ];
+      const ramps = document.getElementById("ramps");
+      const preview = document.getElementById("preview");
+      function drawRamps() {
+        const light = document.documentElement.dataset.theme === "light";
+        const Ls = light ? LIGHT_L : DARK_L;
+        ramps.innerHTML = "";
+        preview.innerHTML = "";
+        for (const [name, zh, c, h] of RAMPS) {
+          const steps = Ls.map((L) => `oklch(${L} ${c} ${h})`);
+          ramps.insertAdjacentHTML(
+            "beforeend",
+            `<div class="ramp"><div class="name"><b>${name} · ${zh}${name === "Cool" ? ' <span class="mk-chosen">' + (document.documentElement.lang.startsWith("zh") ? "已选" : "Chosen") + "</span>" : ""}</b><span>C ${c} · h ${h}</span></div>
+            <div class="steps">${steps.map((s, i) => `<span style="background:${s};color:${i < 8 === !light ? "rgb(255 255 255 / .55)" : "rgb(0 0 0 / .5)"}">${i + 1}</span>`).join("")}</div></div>`,
+          );
+          preview.insertAdjacentHTML(
+            "beforeend",
+            `<div class="pv" style="background:${steps[0]};color:${steps[11]}"><b style="color:${steps[8]}">${name}</b>
+            <div class="card" style="background:${steps[1]};border:1px solid ${steps[4]}"><h4>If It Fits, It Sits</h4>
+            <p style="color:${steps[9]}">Notes from 1,200 cardboard boxes, inspected one nap at a time.</p></div></div>`,
+          );
+        }
+      }
+      drawRamps();
+      document.addEventListener("mk:change", drawRamps);
+
+      // Semantic, from the accent hues.
+      const SEM = [
+        ["Success", "成功", 130, "Deployed. The site is live.", "已部署，网站已上线。"],
+        ["Warning", "警告", 85, "The food bowl is half empty.", "食盆只剩一半了。"],
+        [
+          "Danger",
+          "错误",
+          15,
+          "The build failed: a broken internal link.",
+          "构建失败：有一个失效的内部链接。",
+        ],
+        ["Info", "提示", 255, "This is a fictional sample site.", "这是一个虚构的示例网站。"],
+      ];
+      const sem = document.getElementById("sem");
+      for (const [n, zh, h, en, zhText] of SEM) {
+        sem.insertAdjacentHTML(
+          "beforeend",
+          `<div class="alert sem-${h}"><b data-zh="${zh}">${n}</b><span data-zh="${zhText}">${en}</span></div>`,
+        );
+        style.textContent += `.sem-${h}{border-color:oklch(${DARK.L} ${DARK.C} ${h} / .4);background:oklch(${DARK.L} ${DARK.C} ${h} / .08);color:oklch(0.86 0.04 ${h})}
+          :root[data-theme=light] .sem-${h}{border-color:oklch(${LIGHT.L} ${LIGHT.C} ${h} / .35);background:oklch(${LIGHT.L} ${LIGHT.C} ${h} / .07);color:oklch(0.4 0.07 ${h})}`;
+      }
+
+      // Data.
+      const bars = document.getElementById("bars");
+      const heights = [62, 88, 45, 72, 95, 54, 80, 38];
+      HUES.forEach(([, , h], i) => {
+        bars.insertAdjacentHTML(
+          "beforeend",
+          `<i class="bar-${i}" style="height:${heights[i]}%"></i>`,
+        );
+        style.textContent += `.bar-${i}{background:oklch(${DARK.L} ${DARK.C} ${h})}:root[data-theme=light] .bar-${i}{background:oklch(${LIGHT.L} ${LIGHT.C} ${h})}`;
+      });
+      const tags = document.getElementById("tags");
+      [
+        "Naps",
+        "Research",
+        "Fuzzing",
+        "Birds",
+        "Security",
+        "Zoomies",
+        "Laser Pointers",
+        "Boxes",
+        "Yarn",
+        "Treats",
+      ].forEach((t, i) => {
+        const h = HUES[i % HUES.length][2];
+        tags.insertAdjacentHTML("beforeend", `<span class="tag tag-${i}">${t}</span>`);
+        style.textContent += `.tag-${i}{background:oklch(${DARK.L} ${DARK.C} ${h} / .14);color:oklch(0.86 0.045 ${h})}
+            :root[data-theme=light] .tag-${i}{background:oklch(${LIGHT.L} ${LIGHT.C} ${h} / .12);color:oklch(0.42 0.07 ${h})}`;
+      });
+    </script>
+    <script type="module" src="base.js"></script>
+  </body>
+</html>

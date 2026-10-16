@@ -1,0 +1,210 @@
+@import url("https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&family=Noto+Serif+SC:wght@600;700&display=swap");
+@import url("https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css");
+
+/* Shared chrome for the mockup pages: provisional tokens (dark-first, with a
+   light theme and a per-site accent) and the toolbar. Not facet's real tokens
+   yet; these exist so the candidates can be compared on equal footing. */
+
+:root {
+  color-scheme: dark;
+  --accent: oklch(0.76 0.06 130);
+  /* Cool neutral ramp (OKLCH C 0.012, h 260): steps 1, 2 and 3. */
+  --bg: oklch(0.15 0.012 260);
+  --bg-2: oklch(0.18 0.012 260);
+  --surface: oklch(0.21 0.012 260);
+  --fg: #e8ebf2;
+  --fg-2: rgb(232 235 242 / 0.68);
+  --fg-3: rgb(232 235 242 / 0.44);
+  --line: rgb(255 255 255 / 0.08);
+  --line-2: rgb(255 255 255 / 0.14);
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 12px 32px -12px rgb(0 0 0 / 0.7);
+  --cat-edge: rgb(255 255 255 / 0.2);
+  --cat-shadow: rgb(0 0 0 / 0.35);
+  /* The chosen type: Source Serif 4 + Noto Serif SC headings, Geist with built-in Chinese for
+     text, Geist Mono for code. */
+  --mk-cjk: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC";
+  --mk-sans: "Geist", system-ui, -apple-system, "Segoe UI", var(--mk-cjk), sans-serif;
+  --mk-display: "Source Serif 4", "Noto Serif SC", "Songti SC", var(--mk-cjk), serif;
+  --mk-mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, var(--mk-cjk), monospace;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: oklch(0.975 0.004 260);
+  --bg-2: oklch(0.955 0.006 260);
+  --surface: oklch(0.995 0.002 260);
+  --fg: #0f1218;
+  --fg-2: rgb(15 18 24 / 0.66);
+  --fg-3: rgb(15 18 24 / 0.44);
+  --line: rgb(0 0 0 / 0.08);
+  --line-2: rgb(0 0 0 / 0.14);
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.05), 0 12px 32px -14px rgb(0 0 0 / 0.18);
+  --cat-edge: transparent;
+  --cat-shadow: rgb(29 35 43 / 0.13);
+}
+
+/* Accents a site can pick, all muted (OKLCH chroma <= 0.08); graphite is the near-neutral one. */
+:root[data-site="moss"] {
+  --accent: oklch(0.76 0.06 130);
+}
+:root[data-site="slate"] {
+  --accent: oklch(0.76 0.06 255);
+}
+:root[data-site="sage"] {
+  --accent: oklch(0.76 0.06 165);
+}
+:root[data-site="rose"] {
+  --accent: oklch(0.76 0.06 15);
+}
+:root[data-site="graphite"] {
+  --accent: #d5dbe3;
+}
+:root[data-theme="light"][data-site="moss"] {
+  --accent: oklch(0.52 0.07 130);
+}
+:root[data-theme="light"][data-site="slate"] {
+  --accent: oklch(0.52 0.07 255);
+}
+:root[data-theme="light"][data-site="sage"] {
+  --accent: oklch(0.52 0.07 165);
+}
+:root[data-theme="light"][data-site="rose"] {
+  --accent: oklch(0.52 0.07 15);
+}
+:root[data-theme="light"][data-site="graphite"] {
+  --accent: #374151;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font: 16px/1.6 var(--mk-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--accent);
+}
+
+/* ---------- toolbar ---------- */
+
+.mk-bar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: none;
+  white-space: nowrap;
+  gap: 0.5rem 1rem;
+  align-items: center;
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  backdrop-filter: blur(14px);
+  font: 600 0.8rem/1 var(--mk-mono);
+  color: var(--fg-3);
+}
+
+.mk-bar b {
+  color: var(--fg);
+  letter-spacing: 0.02em;
+}
+
+.mk-bar nav,
+.mk-seg {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.mk-bar nav a,
+.mk-seg button {
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: none;
+  padding: 0.4rem 0.7rem;
+  color: var(--fg-2);
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.mk-bar nav a[aria-current="page"],
+.mk-seg button[aria-pressed="true"] {
+  border-color: var(--line-2);
+  background: var(--surface);
+  color: var(--fg);
+}
+
+.mk-sp {
+  flex: 1;
+}
+
+/* Site buttons show only their dot until chosen, so the bar stays on one line. */
+.mk-seg button:not([aria-pressed="true"]) .mk-lbl {
+  display: none;
+}
+.mk-seg button:not([aria-pressed="true"]) .mk-dot {
+  margin-right: 0;
+}
+.mk-dot {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  margin-right: 0.35rem;
+  border-radius: 50%;
+  vertical-align: -0.1rem;
+}
+
+/* ---------- page ---------- */
+
+.mk-page {
+  width: min(100% - 2rem, 76rem);
+  margin: 0 auto;
+  padding: 2.5rem 0 6rem;
+}
+
+.mk-page > header h1 {
+  margin: 0 0 0.4rem;
+  font: 600 2.2rem/1.2 var(--mk-display);
+  letter-spacing: -0.015em;
+}
+
+/* Marks the option that was chosen on each exploration page. */
+.mk-chosen {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: color-mix(in oklch, var(--accent) 24%, transparent);
+  color: var(--fg);
+  font: 700 0.66rem/1 var(--mk-mono);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  vertical-align: 0.2em;
+}
+
+.mk-page > header p {
+  margin: 0;
+  max-width: 46rem;
+  color: var(--fg-2);
+}
+
+.mk-label {
+  margin: 0 0 0.75rem;
+  color: var(--fg-3);
+  font: 700 0.72rem/1 var(--mk-mono);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mk-note {
+  color: var(--fg-3);
+  font-size: 0.85rem;
+}

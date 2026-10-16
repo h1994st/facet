@@ -1,0 +1,518 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Preview</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600;8..60,700&family=Noto+Serif+SC:wght@600;700&display=swap"
+    />
+    <link rel="stylesheet" href="base.css" />
+    <link rel="stylesheet" href="cast/cast.css" />
+    <style>
+      /* The decided design: Source Serif 4 + Noto Serif SC headings, and the Blend shape:
+         continuous-curvature (squircle) containers with true pill and circle controls. */
+      :root {
+        --heading: "Source Serif 4", "Noto Serif SC", "Songti SC", "STSong", var(--mk-cjk), serif;
+        --serif-weight: 600;
+        --serif-track: -0.015em;
+        --r-frame: 30px;
+        --r-card: 22px;
+        --r-btn: 999px;
+        --r-chip: 999px;
+        --r-input: 999px;
+        --r-tile: 50%;
+        --r-code: 14px;
+        --r-nav: 999px;
+      }
+      .site * {
+        corner-shape: squircle;
+      }
+      /* Pills and circles stay plain arcs: a squircle pill is a squarer capsule in Chromium but
+         a true pill elsewhere, so round keeps controls identical in every browser. */
+      .site :is(.snav, .snav span, .btn, .chip, .search, .tile) {
+        corner-shape: round;
+      }
+
+      /* ---------- the mock site ---------- */
+      .site {
+        position: relative;
+        margin-top: 2rem;
+        overflow: hidden;
+        border: 1px solid var(--line);
+        border-radius: var(--r-frame);
+        background: var(--bg);
+        padding: 0 0 0;
+      }
+      .site h1,
+      .site h2,
+      .site h3 {
+        font-family: var(--heading);
+        font-weight: var(--serif-weight);
+        letter-spacing: var(--serif-track);
+        text-wrap: balance;
+      }
+      :root:lang(zh) .site h1,
+      :root:lang(zh) .site h2,
+      :root:lang(zh) .site h3 {
+        letter-spacing: 0;
+        word-break: keep-all;
+        overflow-wrap: anywhere;
+      }
+      .snav {
+        position: sticky;
+        top: 0.9rem;
+        z-index: 5;
+        display: flex;
+        gap: 0.2rem;
+        align-items: center;
+        width: fit-content;
+        margin: 0.9rem auto 0;
+        padding: 0.3rem 0.35rem 0.3rem 0.9rem;
+        border: 1px solid var(--line);
+        border-radius: var(--r-nav);
+        background: color-mix(in oklch, var(--surface) 72%, transparent);
+        backdrop-filter: blur(16px) saturate(140%);
+        box-shadow: var(--shadow);
+        font-size: 0.88rem;
+      }
+      .snav b {
+        margin-right: 0.6rem;
+        font-family: var(--heading);
+        font-weight: var(--serif-weight);
+      }
+      .snav span {
+        padding: 0.35rem 0.75rem;
+        border-radius: var(--r-btn);
+        color: var(--fg-2);
+      }
+      .snav span.on {
+        background: color-mix(in oklch, var(--fg) 10%, transparent);
+        color: var(--fg);
+      }
+      .inner {
+        width: min(100% - 3rem, 56rem);
+        margin: 0 auto;
+      }
+      .hero {
+        padding: 4rem 0 2.5rem;
+      }
+      .hero h1 {
+        margin: 0;
+        font-size: clamp(2.6rem, 5vw, 3.6rem);
+        line-height: 1.05;
+      }
+      .hero p {
+        margin: 0.9rem 0 1.4rem;
+        max-width: 34rem;
+        color: var(--fg-2);
+        font-size: 1.1rem;
+      }
+      :root:lang(zh) .hero p {
+        line-height: 1.8;
+      }
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.45rem;
+        align-items: center;
+      }
+      .btn {
+        padding: 0.48rem 0.95rem;
+        border: 1px solid var(--line-2);
+        border-radius: var(--r-btn);
+        font-size: 0.86rem;
+        font-weight: 600;
+      }
+      .btn.primary {
+        border-color: var(--accent);
+        background: var(--accent);
+        color: var(--bg);
+      }
+      .chip {
+        padding: 0.14rem 0.55rem;
+        border-radius: var(--r-chip);
+        background: color-mix(in oklch, var(--fg) 8%, transparent);
+        color: var(--fg-2);
+        font-size: 0.74rem;
+        font-weight: 600;
+      }
+      .search {
+        min-width: 13rem;
+        padding: 0.45rem 0.8rem;
+        border: 1px solid var(--line-2);
+        border-radius: var(--r-input);
+        background: var(--bg-2);
+        color: var(--fg-3);
+        font-size: 0.86rem;
+      }
+      .sec {
+        padding: 1.5rem 0;
+      }
+      .sec > h2 {
+        margin: 0 0 1rem;
+        font-size: 1.7rem;
+      }
+
+      /* Project cards: solid at rest, liquid light on hover (glass option 5). */
+      .cards {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 1rem;
+      }
+      .card {
+        position: relative;
+        padding: 1.1rem;
+        border: 1px solid var(--line);
+        border-radius: var(--r-card);
+        background: var(--bg-2);
+        transition:
+          transform 0.25s,
+          box-shadow 0.25s;
+      }
+      .card.hot {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow);
+      }
+      .card::before,
+      .card::after {
+        content: "";
+        position: absolute;
+        inset: -1px;
+        border-radius: inherit;
+        opacity: 0;
+        transition: opacity 0.3s;
+        pointer-events: none;
+      }
+      .card::before {
+        background: radial-gradient(
+          300px circle at var(--lx, 50%) var(--ly, 0%),
+          color-mix(in oklch, var(--accent) 16%, transparent),
+          transparent 55%
+        );
+      }
+      .card::after {
+        padding: 1px;
+        background:
+          radial-gradient(
+            220px circle at var(--lx, 50%) var(--ly, 0%),
+            var(--accent),
+            transparent 70%
+          ),
+          linear-gradient(rgb(255 255 255 / 0.16), transparent 40%);
+        mask:
+          linear-gradient(#000 0 0) content-box exclude,
+          linear-gradient(#000 0 0);
+      }
+      .card.hot::before,
+      .card.hot::after {
+        opacity: 1;
+      }
+      .tile {
+        display: grid;
+        place-items: center;
+        width: 44px;
+        height: 44px;
+        border-radius: var(--r-tile);
+        font: 700 1rem/1 var(--mk-mono);
+      }
+      .t-slate {
+        --h: 255;
+        --c: 0.06;
+      }
+      .t-rose {
+        --h: 15;
+        --c: 0.06;
+      }
+      .t-graphite {
+        --h: 255;
+        --c: 0.015;
+      }
+      .tile {
+        background: oklch(0.76 var(--c) var(--h) / 0.2);
+        color: oklch(0.86 var(--c) var(--h));
+      }
+      :root[data-theme="light"] .tile {
+        background: oklch(0.52 var(--c) var(--h) / 0.12);
+        color: oklch(0.45 var(--c) var(--h));
+      }
+      .card h3 {
+        margin: 0.85rem 0 0.25rem;
+        font-size: 1.2rem;
+      }
+      .card p {
+        margin: 0 0 0.9rem;
+        color: var(--fg-2);
+        font-size: 0.86rem;
+        line-height: 1.55;
+      }
+      :root:lang(zh) .card p {
+        line-height: 1.75;
+      }
+
+      /* Writing */
+      .posts {
+        border-top: 1px solid var(--line);
+      }
+      .post {
+        display: grid;
+        grid-template-columns: 7rem minmax(0, 1fr);
+        gap: 1rem;
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--line);
+      }
+      .post time {
+        color: var(--fg-3);
+        font: 0.8rem/1.9 var(--mk-mono);
+      }
+      .post h3 {
+        margin: 0 0 0.2rem;
+        font-size: 1.25rem;
+      }
+      .post p {
+        margin: 0;
+        color: var(--fg-2);
+        font-size: 0.9rem;
+      }
+
+      /* Article */
+      .article {
+        max-width: 40rem;
+      }
+      .article h2 {
+        margin: 0 0 0.6rem;
+        font-size: 1.7rem;
+      }
+      .article p {
+        margin: 0 0 1rem;
+        color: var(--fg-2);
+        line-height: 1.7;
+      }
+      :root:lang(zh) .article p {
+        line-height: 1.85;
+      }
+      .article code {
+        padding: 0.1rem 0.35rem;
+        border-radius: 6px;
+        background: color-mix(in oklch, var(--fg) 8%, transparent);
+        font: 0.88em var(--mk-mono);
+      }
+      .article pre {
+        margin: 0 0 1rem;
+        padding: 0.9rem 1rem;
+        border: 1px solid var(--line);
+        border-radius: var(--r-code);
+        background: var(--bg-2);
+        font: 0.85rem/1.6 var(--mk-mono);
+        overflow: auto;
+      }
+      .article pre .p {
+        color: var(--fg-3);
+      }
+      .article pre .o {
+        color: var(--accent);
+      }
+      .note {
+        margin: 0 0 1rem;
+        padding: 0.8rem 1rem;
+        border: 1px solid oklch(0.76 0.06 255 / 0.35);
+        border-radius: var(--r-code);
+        background: oklch(0.76 0.06 255 / 0.08);
+        color: oklch(0.86 0.04 255);
+        font-size: 0.9rem;
+      }
+      :root[data-theme="light"] .note {
+        border-color: oklch(0.52 0.07 255 / 0.3);
+        background: oklch(0.52 0.07 255 / 0.06);
+        color: oklch(0.4 0.07 255);
+      }
+
+      /* Footer with the cats */
+      .sfoot {
+        position: relative;
+        margin-top: 4rem;
+        padding: 1.1rem 0;
+        border-top: 1px solid var(--line-2);
+        color: var(--fg-3);
+        font-size: 0.82rem;
+        text-align: center;
+      }
+      .sfoot .cat {
+        position: absolute;
+        bottom: calc(100% - 4px);
+        width: 58px;
+      }
+      .sfoot .cat:nth-of-type(1) {
+        left: 2rem;
+      }
+      .sfoot .cat:nth-of-type(2) {
+        left: 5.2rem;
+      }
+      .sfoot .cat:nth-of-type(3) {
+        right: 2rem;
+      }
+
+      @media (max-width: 860px) {
+        .cards {
+          grid-template-columns: 1fr;
+        }
+        .post {
+          grid-template-columns: 1fr;
+          gap: 0.2rem;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .card {
+          transition: none;
+        }
+        .card.hot {
+          transform: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="mk-page">
+      <header>
+        <h1 data-zh="预览">Preview</h1>
+        <p
+          data-zh="定下来的设计放在一起：冷灰、各网站的强调色、Geist 正文、Source Serif 4 与 Noto Serif SC 衬线标题、松鼠角容器配胶囊控件、悬停时的液态玻璃，以及猫咪们。"
+        >
+          The decided design, together: cool neutrals, per-site accents, Geist text, Source Serif 4
+          and Noto Serif SC headings, squircle containers with pill controls, liquid glass on hover,
+          and the cats.
+        </p>
+      </header>
+
+      <div class="site">
+        <nav class="snav">
+          <b>Duna Feline</b><span data-zh="博客">Blog</span
+          ><span class="on" data-zh="项目">Projects</span><span data-zh="简历">Resume</span>
+        </nav>
+        <div class="inner">
+          <section class="hero">
+            <h1 data-zh="检查纸箱，追逐红点，<br />也写给自己看的笔记。">
+              I inspect boxes, chase red dots, and write notes to myself.
+            </h1>
+            <p data-zh="资深捣蛋工程师。纸箱科学、打盹研究，偶尔也把桌上的东西推下去。">
+              Senior Mischief Engineer. Box science, nap research, and now and then something
+              knocked off the table.
+            </p>
+            <div class="row">
+              <span class="btn primary" data-zh="看看项目">See projects</span>
+              <span class="btn" data-zh="读博客">Read the blog</span>
+              <span class="search" data-zh="搜索…">Search…</span>
+            </div>
+          </section>
+
+          <section class="sec">
+            <h2 data-zh="项目">Projects</h2>
+            <div class="cards">
+              <article class="card">
+                <span class="tile t-slate">r</span>
+                <h3>Red Dot Tracker</h3>
+                <p data-zh="追着红点跑过每一面墙，记下每一次扑击。">
+                  Chase the red dot across every wall, and log every pounce.
+                </p>
+                <div class="row">
+                  <span class="chip">Laser Pointer</span
+                  ><span class="chip" data-zh="开源">Open source</span>
+                </div>
+              </article>
+              <article class="card">
+                <span class="tile t-rose">p</span>
+                <h3>Purrometheus</h3>
+                <p data-zh="监控食盆、打盹时长和凌晨三点的跑酷。">
+                  Watches food bowls, nap lengths and 3 a.m. zoomies.
+                </p>
+                <div class="row">
+                  <span class="chip" data-zh="监控">Monitoring</span
+                  ><span class="chip" data-zh="周末项目">Weekend</span>
+                </div>
+              </article>
+              <article class="card">
+                <span class="tile t-graphite">h</span>
+                <h3>Hairball</h3>
+                <p data-zh="为每一次惊喜投递规划最贵的那块地毯。">
+                  Plans each surprise delivery for the most expensive rug.
+                </p>
+                <div class="row">
+                  <span class="chip" data-zh="规划">Planning</span
+                  ><span class="chip" data-zh="已归档">Archived</span>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section class="sec">
+            <h2 data-zh="写作">Writing</h2>
+            <div class="posts">
+              <div class="post">
+                <time>2026-10-11</time>
+                <div>
+                  <h3 data-zh="十二个房间，一个红点都没抓到">Twelve Rooms, Zero Dots Caught</h3>
+                  <p data-zh="两年的“红点行动”，以及我从中学到的关于光的一切。">
+                    Two years of Operation Red Dot, and everything it taught me about light.
+                  </p>
+                </div>
+              </div>
+              <div class="post">
+                <time>2026-09-07</time>
+                <div>
+                  <h3 data-zh="能装下，就能坐：纸箱准备好上线了吗？">
+                    If It Fits, It Sits: Are Boxes Ready for Production?
+                  </h3>
+                  <p data-zh="检查了 1,200 个纸箱之后的一些结论。">
+                    What I learned after inspecting 1,200 cardboard boxes.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="sec article">
+            <h2 data-zh="红点总比我快一步">The dot is always one step ahead</h2>
+            <p
+              data-zh="红点会在镜子上反射，会在门框边拐弯，而且从不停下来等我。所以我开始记录它去过的每一个地方。"
+            >
+              The dot bounces off mirrors, turns at door frames, and never waits for me. So I
+              started writing down everywhere it went.
+            </p>
+            <pre><span class="p">$</span> red-dot track ./living-room
+<span class="o">→ dots.json</span></pre>
+            <div class="note" data-zh="这是一个虚构的示例网站。">
+              This is a fictional sample site.
+            </div>
+          </section>
+        </div>
+        <footer class="sfoot" id="sfoot">© 2026 Duna Feline · example.com</footer>
+      </div>
+    </main>
+
+    <script type="module">
+      import { createCat } from "./cast/cast.js";
+
+      // Liquid light on hover.
+      for (const card of document.querySelectorAll(".site .card")) {
+        card.addEventListener("pointerenter", () => card.classList.add("hot"));
+        card.addEventListener("pointerleave", () => card.classList.remove("hot"));
+        card.addEventListener("pointermove", (e) => {
+          const r = card.getBoundingClientRect();
+          card.style.setProperty("--lx", e.clientX - r.left + "px");
+          card.style.setProperty("--ly", e.clientY - r.top + "px");
+        });
+      }
+
+      const foot = document.getElementById("sfoot");
+      foot.append(
+        createCat("dudu", { label: "" }),
+        createCat("nangnang", { label: "" }),
+        createCat("duna", { pose: "wave", label: "" }),
+      );
+    </script>
+    <script type="module" src="base.js"></script>
+  </body>
+</html>

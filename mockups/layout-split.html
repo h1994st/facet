@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Layout · Split</title>
+    <link rel="stylesheet" href="base.css" />
+    <link rel="stylesheet" href="cast/cast.css" />
+    <link rel="stylesheet" href="layout.css" />
+    <style>
+      .wrap {
+        width: min(100% - 2.5rem, 68rem);
+        margin: 0 auto;
+      }
+      /* Hero: text left, visual right; stacks on phones. */
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+        gap: 3rem;
+        align-items: center;
+        padding: 4.5rem 0 3rem;
+      }
+      .hero h1 {
+        margin: 0;
+        font-size: clamp(2.4rem, 4.4vw, 3.5rem);
+        line-height: 1.06;
+      }
+      .hero p:not(.kicker) {
+        margin: 1rem 0 1.5rem;
+        font-size: 1.1rem;
+      }
+      .install {
+        display: inline-flex;
+        gap: 0.8rem;
+        align-items: center;
+        margin-top: 1rem;
+        padding: 0.55rem 0.6rem 0.55rem 1rem;
+        border: 1px solid var(--line-2);
+        border-radius: 14px;
+        background: var(--bg-2);
+        font: 0.88rem var(--mk-mono);
+      }
+      .install {
+        max-width: 100%;
+      }
+      .install > span:first-child {
+        flex: 1;
+        min-width: 0;
+        overflow-x: auto;
+        white-space: nowrap;
+        scrollbar-width: none;
+      }
+      .install .btn {
+        padding: 0.25rem 0.65rem;
+        font-size: 0.75rem;
+      }
+      .visual {
+        padding: 1rem;
+        border: 1px solid var(--line);
+        border-radius: 30px;
+        background: var(--bg-2);
+      }
+      .visual img {
+        display: block;
+        width: 100%;
+        border-radius: 20px;
+      }
+      /* Feature rows alternate sides. */
+      .feature {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 3rem;
+        align-items: center;
+        padding: 2.5rem 0;
+        border-top: 1px solid var(--line);
+      }
+      .feature:nth-of-type(even) .text {
+        order: 2;
+      }
+      .feature h2 {
+        margin: 0 0 0.6rem;
+      }
+      .feature img {
+        display: block;
+        width: 100%;
+        border-radius: 22px;
+      }
+      .band {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 2.5rem;
+        padding: 2rem 2.2rem;
+        border: 1px solid var(--line);
+        border-radius: 30px;
+        background:
+          radial-gradient(
+            60% 120% at 0% 0%,
+            color-mix(in oklch, var(--accent) 20%, transparent),
+            transparent
+          ),
+          var(--bg-2);
+      }
+      .band h2 {
+        margin: 0;
+      }
+      @media (max-width: 720px) {
+        .hero,
+        .feature {
+          grid-template-columns: minmax(0, 1fr);
+          gap: 1.5rem;
+        }
+        .feature:nth-of-type(even) .text {
+          order: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="fnav">
+      <b>Red Dot Tracker</b><a href="#" data-zh="首页" aria-current="page">Home</a
+      ><a href="#" data-zh="文档">Docs</a><a href="#" data-zh="下载">Releases</a>
+    </nav>
+
+    <main class="wrap prose">
+      <section class="hero">
+        <div>
+          <p class="kicker" data-zh="项目 · 开源">Project · Open source</p>
+          <h1 data-zh="每一个红点，都有迹可循。">Every red dot, on the record.</h1>
+          <p
+            data-zh="Red Dot Tracker 追着红点跑过每一面墙，记下每一次扑击。适合：项目首页、产品页。"
+          >
+            Red Dot Tracker chases the dot across every wall and logs every pounce. For: project
+            landing pages and product pages.
+          </p>
+          <div class="row">
+            <a class="btn primary" href="#" data-zh="开始追踪 ↗">Start tracking ↗</a>
+            <a class="btn" href="#" data-zh="文档">Docs</a>
+          </div>
+          <div class="install"><span>install red-dot</span><span class="btn">Copy</span></div>
+        </div>
+        <div class="visual"><img src="assets/board-1.jpg" alt="" /></div>
+      </section>
+
+      <section class="feature">
+        <div class="text">
+          <h2 data-zh="十二个房间，一份记录">Twelve rooms, one record</h2>
+          <p
+            data-zh="客厅、走廊、卧室：每个房间的红点路线都写进同一个文件，按房间分组，随时可以回看。"
+          >
+            Living room, hallway, bedroom: every room's dot paths land in the same file, grouped by
+            room, ready to replay.
+          </p>
+        </div>
+        <img src="assets/board-2.jpg" alt="" />
+      </section>
+      <section class="feature">
+        <div class="text">
+          <h2 data-zh="读懂光的规律">Learn how light moves</h2>
+          <p data-zh="红点沿直线前进，碰到镜子就拐弯。看得多了，你就知道它下一步会去哪儿。">
+            The dot travels in straight lines and turns at every mirror. Watch long enough, and you
+            know where it goes next.
+          </p>
+        </div>
+        <img src="assets/horizon.jpg" alt="" />
+      </section>
+
+      <section class="band">
+        <h2 data-zh="一个都没抓到，也没关系。">Zero dots caught, and that's fine.</h2>
+        <a class="btn primary" href="#" data-zh="开始追踪 ↗">Start tracking ↗</a>
+      </section>
+    </main>
+    <footer class="ffoot" id="foot">© 2026 Duna Feline · example.com</footer>
+
+    <script type="module">
+      import { footerCats } from "./layout.js";
+      footerCats(document.getElementById("foot"));
+    </script>
+    <script type="module" src="base.js"></script>
+  </body>
+</html>
