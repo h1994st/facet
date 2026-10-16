@@ -16,6 +16,10 @@
     overflow: auto;
   }
 
+  html:has(.f-sheet[open]) {
+    overflow: hidden;
+  }
+
   .f-sheet:not([open]) {
     display: none;
   }
