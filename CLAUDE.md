@@ -67,8 +67,9 @@ nothing unlayered can beat; keep it to those two.
 - **Accent is a per-site input.** Components read the accent from a custom property and never
   hard-code a site's color.
 - **Bilingual.** Test every component in English and Chinese (`lang="zh-Hans"`). Never assume Latin
-  text widths. Chinese text gets its own line-height, `letter-spacing: 0`, and
-  `word-break: keep-all` with `overflow-wrap: anywhere` as the fallback.
+  text widths. Chinese text gets its own line-height and `letter-spacing: 0`, and breaks between any
+  two characters, as Chinese does; never set `word-break: keep-all` on it (that is for Korean:
+  Chinese has no spaces, so lines would end only at punctuation).
 - **Fonts.** Headings use Source Serif 4 with Noto Serif SC for Chinese; text and UI use Geist; code
   uses Geist Mono. Chinese body text never downloads a font: it falls through to the built-in system
   fonts (PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto/Source Han Sans CJK SC).

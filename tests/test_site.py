@@ -448,3 +448,30 @@ def test_open_markup_never_scrolls_the_page_sideways(page_factory, site_url, pat
         ".map(p => getComputedStyle(p).overflowX)"
     ):
         assert overflow == "auto"
+
+
+def test_chinese_lines_fill_the_measure(page_factory, site_url):
+    # Chinese has no spaces, so it must break between any two characters, not only at punctuation:
+    # every line but the last runs (nearly) to the edge.
+    page = page_factory(width=390, lang="zh")
+    page.goto(f"{site_url}/components.html")
+    fills = page.evaluate("""() => {
+      const p = document.createElement('p');
+      p.lang = 'zh-Hans';
+      p.style.cssText = 'width: 300px; margin: 0; padding: 0';
+      p.textContent = '红点在墙上，嘟娜在窗台，嘟嘟在沙发下，囔囔在门口，大家都在等，'
+        + '等红点再动一下，然后一起扑过去，扑了个空也不要紧。';
+      document.querySelector('main').append(p);
+      const left = p.getBoundingClientRect().left, text = p.firstChild, ends = new Map();
+      for (let i = 0; i < text.length; i++) {
+        const r = document.createRange();
+        r.setStart(text, i);
+        r.setEnd(text, i + 1);
+        const box = r.getBoundingClientRect();
+        const top = Math.round(box.top);
+        ends.set(top, Math.max(ends.get(top) || 0, box.right - left));
+      }
+      return [...ends.values()].slice(0, -1);
+    }""")
+    assert len(fills) >= 3
+    assert all(f >= 0.9 * 300 for f in fills), fills
