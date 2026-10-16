@@ -120,18 +120,66 @@ def test_variants_switch_within_scope(page_factory, site_url):
     assert shown(page, "#a-classic")
 
 
+COUNT = """() => { window.__writes = 0; if (window.__wrapped) return; window.__wrapped = 1;
+  const b = document.querySelector('#a button[data-variant=classic]');
+  const set = b.setAttribute.bind(b);
+  b.setAttribute = (n, v) => { if (n === 'aria-pressed') window.__writes++; set(n, v); }; }"""
+
+
 def test_variants_init_twice_binds_once(page_factory, site_url):
     page = page_factory()
     page.goto(f"{site_url}/tests/variants.html")
     page.wait_for_function("!document.querySelector('[data-f-variants]').hidden")
     page.evaluate(
-        "import('/dist/js/variants.js').then(m => { m.init(); m.init(); window.__ok = 1; })"
+        "import('/dist/js/variants.js').then(m => { window.__m = m; m.init(); m.init(); })"
     )
-    page.wait_for_function("window.__ok")
+    page.wait_for_function("window.__m")
+    page.evaluate(COUNT)
     page.click("#a button[data-variant=classic]")
+    assert page.evaluate("window.__writes") == 1
     assert shown(page, "#a-classic") and not shown(page, "#a-modern")
-    page.click("#a button[data-variant=modern]")
-    assert shown(page, "#a-modern") and not shown(page, "#a-classic")
+    # Cleanup then init binds again, once.
+    page.evaluate(
+        "import('/dist/js/facet.js').then(m => { m.cleanup(); window.__m.init(); window.__r = 1; })"
+    )
+    page.wait_for_function("window.__r")
+    page.evaluate(COUNT)
+    page.click("#a button[data-variant=classic]")
+    assert page.evaluate("window.__writes") == 1
+    page.evaluate("document.querySelector('#a button[data-variant=modern]').click()")
+    assert shown(page, "#a-modern")
+
+
+def test_variant_group_names_are_exact(page_factory, site_url):
+    page = page_factory()
+    page.goto(f"{site_url}/tests/variants.html")
+    page.wait_for_function("!document.querySelector('[data-f-variants]').hidden")
+    page.click("#c button[data-variant=y]")
+    assert shown(page, "#c-ay") and not shown(page, "#c-ax")
+    assert shown(page, "#c-abp") and not shown(page, "#c-abq")
+    page.click("#c button[data-variant=q]")
+    assert shown(page, "#c-abq") and not shown(page, "#c-abp")
+    assert shown(page, "#c-ay"), "group a is untouched by a:b"
+    assert not shown(page, "#c-orphan"), "a value with no button stays hidden"
+
+
+def test_variants_control_without_buttons_stays_hidden(page_factory, site_url):
+    page = page_factory()
+    page.goto(f"{site_url}/tests/variants.html")
+    page.wait_for_function("!document.querySelector('[data-f-variants]').hidden")
+    assert page.evaluate("document.querySelector('#d [data-f-variants]').hidden")
+
+
+def test_gallery_min_never_overflows(page_factory, site_url):
+    page = page_factory(width=390)
+    put(
+        page,
+        site_url,
+        GALLERY.replace('class="f-gallery"', 'class="f-gallery" style="--f-gallery-min: 30rem"'),
+    )
+    tops = page.evaluate(TOPS)
+    assert tops[0] < tops[1] < tops[2]
+    no_hscroll(page)
 
 
 def test_variants_cleanup_restores(page_factory, site_url):
@@ -143,5 +191,7 @@ def test_variants_cleanup_restores(page_factory, site_url):
     page.wait_for_function("window.__done")
     assert page.evaluate("document.querySelector('#a [data-f-variants]').hidden")
     assert shown(page, "#a-modern") and not shown(page, "#a-classic")
+    assert not shown(page, "#b-large") and shown(page, "#b-small") and shown(page, "#b-look")
+    assert page.evaluate("document.querySelector('#b [data-f-variants]').hidden")
     page.evaluate("document.querySelector('#a button[data-variant=classic]').click()")
     assert shown(page, "#a-modern"), "listeners are gone"

@@ -45,5 +45,23 @@
       <p id="b-large" data-f-variant="size:large" hidden>Large</p>
       <p id="b-look" data-f-variant="look:modern">Other group</p>
     </div>
+    <div id="c">
+      <div class="f-segmented" role="group" data-f-variants="a" hidden>
+        <button type="button" data-variant="x" aria-pressed="true">X</button>
+        <button type="button" data-variant="y" aria-pressed="false">Y</button>
+      </div>
+      <div class="f-segmented" role="group" data-f-variants="a:b" hidden>
+        <button type="button" data-variant="p" aria-pressed="true">P</button>
+        <button type="button" data-variant="q" aria-pressed="false">Q</button>
+      </div>
+      <p id="c-ax" data-f-variant="a:x">ax</p>
+      <p id="c-ay" data-f-variant="a:y" hidden>ay</p>
+      <p id="c-abp" data-f-variant="a:b:p">abp</p>
+      <p id="c-abq" data-f-variant="a:b:q" hidden>abq</p>
+      <p id="c-orphan" data-f-variant="a:zzz" hidden>no button</p>
+    </div>
+    <div id="d">
+      <div class="f-segmented" role="group" data-f-variants="empty" hidden></div>
+    </div>
   </body>
 </html>

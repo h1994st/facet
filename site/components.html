@@ -493,15 +493,22 @@
           </figcaption>
         </figure>
         <figure class="f-figure f-figure--bare">
-          <img
-            src="assets/board-1.jpg"
-            alt="Duna's board, already framed"
-            width="1280"
-            height="800"
-            style="border-radius: var(--f-r-md)"
-          />
-          <figcaption data-zh="已有自带画框的图用 <code>--bare</code>。">
-            A picture with its own frame takes <code>--bare</code>.
+          <svg
+            viewBox="0 0 480 200"
+            width="480"
+            height="200"
+            role="img"
+            aria-label="A laser bouncing off two mirrors"
+          >
+            <rect width="480" height="200" rx="14" fill="#1b2029" />
+            <path d="M40 150 H200 L320 50 H440" fill="none" stroke="#9fae8a" stroke-width="3" />
+            <rect x="188" y="138" width="24" height="24" rx="5" fill="#3a4658" />
+            <rect x="308" y="38" width="24" height="24" rx="5" fill="#3a4658" />
+            <circle cx="40" cy="150" r="9" fill="#9fae8a" />
+            <circle cx="440" cy="50" r="9" fill="none" stroke="#8d9bb0" stroke-width="3" />
+          </svg>
+          <figcaption data-zh="自带深色圆角底板的 SVG 用 <code>--bare</code>。">
+            An SVG with its own panel takes <code>--bare</code>.
           </figcaption>
         </figure>
         <details class="site-markup">

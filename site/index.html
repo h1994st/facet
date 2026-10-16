@@ -416,7 +416,9 @@ git -C vendor/facet checkout v0.1.2</pre>
                 On a <code>.f-segmented</code> with <code>data-variant</code> buttons: switches
                 every <code>data-f-variant="group:value"</code> inside the control's parent. The
                 control and the non-default variants ship <code>hidden</code>, so without JavaScript
-                the first variant shows and there are no dead buttons.
+                the first variant shows and there are no dead buttons. A variant whose value has no
+                button stays hidden, a control with no buttons is skipped and stays hidden, and
+                variants added after init are not picked up (call <code>init</code> again).
               </td>
             </tr>
           </tbody>
