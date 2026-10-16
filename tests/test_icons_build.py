@@ -36,6 +36,11 @@ def test_icons_css_has_one_rule_per_icon_and_the_alias():
     build()
     css = (DIST / "icons.css").read_text()
     assert "@layer facet.components" in css
+    # Declares facet's layer order first, so loading it before facet.css changes nothing.
+    layers = (ROOT / "src" / "css" / "00-layers.css").read_text().strip()
+    facet = re.sub(r"/\*.*?\*/", "", (DIST / "facet.css").read_text(), flags=re.S).strip()
+    assert facet.startswith(layers)
+    assert re.sub(r"/\*.*?\*/", "", css, flags=re.S).strip().startswith(layers)
     rules = dict(re.findall(r'\.f-icon--([a-z-]+)[^{]*\{\s*--f-icon: url\("([^"]+)"\)', css))
     assert sorted(rules) == NAMES
     for name, uri in rules.items():

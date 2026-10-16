@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 
 import pytest
-from checks import contrast, focus_ring
+from checks import contrast, contrast_on, focus_ring
 
 NAMES = sorted(p.stem for p in (Path(__file__).resolve().parents[1] / "src/icons").glob("*.svg"))
 
@@ -18,6 +18,14 @@ def test_icons_css_works_on_its_own(page_factory, site_url):
     )
     assert box == 32
     assert mask.startswith('url("data:image/svg+xml')
+
+
+def test_icons_css_first_keeps_the_layer_order(page_factory, site_url):
+    # Loaded before facet.css, icons.css must not make facet.components the first layer, or
+    # reset, tokens and base would beat every component rule.
+    page = page_factory()
+    page.goto(f"{site_url}/tests/icons-first.html")
+    assert contrast_on(page, ".f-btn--primary") >= 4.5
 
 
 def test_every_icon_is_shown_on_the_components_page(page_factory, site_url):
