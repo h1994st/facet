@@ -23,3 +23,6 @@ jobs:
       - uses: astral-sh/setup-uv@v6
       - run: uv sync --frozen
       - run: just check
+      - run: just build && git diff --exit-code -- dist
+      - run: uv run playwright install --with-deps chromium
+      - run: just test

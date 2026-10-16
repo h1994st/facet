@@ -39,14 +39,22 @@ check:
     uv run ruff check .
     just --fmt --check --unstable
 
+# Build dist/ from src/
+build:
+    uv run scripts/build.py
+
+# Run the test suite (builds first)
+test: build
+    uv run pytest -q
+
+# Serve the reference site at http://localhost:8000 (mockups at /assets via the symlink)
+serve port="8000":
+    python3 -m http.server {{ port }} -d site
+
 # Assemble the GitHub Pages site into _site/
-site:
+site: build
     rm -rf _site
     mkdir -p _site
+    cp -RL site/. _site/
     cp -R mockups _site/mockups
-    cp pages/index.html _site/index.html
     touch _site/.nojekyll
-
-# Serve the repo to view mockups and demos
-serve port="8000":
-    python3 -m http.server {{ port }}

@@ -1,0 +1,2 @@
+/* src/css/00-layers.css */
+@layer facet.reset, facet.tokens, facet.base, facet.prose, facet.components, facet.layouts, facet.utilities;

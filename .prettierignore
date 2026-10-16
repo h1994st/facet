@@ -1,2 +1,5 @@
 # Verbatim copies from the my-resume template (branch `site`); keep them diffable against the source.
 mockups/cast/
+dist/
+site/dist
+site/assets
