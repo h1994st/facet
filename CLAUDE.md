@@ -11,6 +11,7 @@ just               # list recipes
 just fmt [files]   # format everything, or only the given files
 just check         # check formatting without changing files
 just serve         # serve the repo at http://localhost:8000
+just site          # assemble the GitHub Pages site into _site/ (what CI deploys)
 ```
 
 ## Engineering rules
@@ -87,11 +88,19 @@ just serve         # serve the repo at http://localhost:8000
   one Conventional Commit), so `main`'s history stays linear: no merge commits.
   `.claude/hooks/protect-history.sh` denies any other `git merge`.
 
+- **Releases:** release-please reads the squashed commit titles on `main`: `feat:` bumps the minor
+  version (0.x), `fix:` the patch, `feat!:` or a `BREAKING CHANGE:` footer the major. It keeps a
+  release PR open; merging it tags the release and updates `CHANGELOG.md`. Never edit the version or
+  changelog by hand.
+
 ## Tooling
 
 - **Dependencies:** never edit `Brewfile` directly; add or remove tools with
   `brew bundle add <formula>` / `brew bundle remove <formula>`. `.claude/settings.json` denies
   editing it, and `.claude/hooks/protect-brewfile.sh` denies shell writes to it.
+- **CI:** `.github/workflows/ci.yml` runs `just check` on every PR and push to `main`, with the same
+  Prettier version as the Brewfile's (pinned in the workflow; bump both together). `pages.yml`
+  deploys `just site` to GitHub Pages on every push to `main`.
 - **Formatting:** Prettier owns CSS, JS, HTML, Markdown, JSON and YAML (`.prettierrc.json`: width
   100, prose wrapped). `just --fmt` owns the justfile. `.claude/hooks/format.sh` runs
   `just fmt <file>` after every edit; run `just check` before committing.

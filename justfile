@@ -27,6 +27,14 @@ check:
     prettier --check {{ prettier_globs }}
     just --fmt --check --unstable
 
+# Assemble the GitHub Pages site into _site/
+site:
+    rm -rf _site
+    mkdir -p _site
+    cp -R mockups _site/mockups
+    cp pages/index.html _site/index.html
+    touch _site/.nojekyll
+
 # Serve the repo to view mockups and demos
 serve port="8000":
     python3 -m http.server {{ port }}

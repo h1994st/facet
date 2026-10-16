@@ -65,3 +65,7 @@ template's site.
   `just serve` at http://localhost:8000/mockups/.
 - `mockups/assets/craft.py`: draws the demo images and video loop the mockups use
   (`uv run --with pillow mockups/assets/craft.py`; the loop needs ffmpeg).
+
+## License
+
+MIT. Fonts keep their own licenses (SIL OFL).
