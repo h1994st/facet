@@ -64,6 +64,13 @@
       var(--f-unless-dark, oklch(0.52 0.07 255));
     --f-accent-contrast: var(--f-unless-light, oklch(0.15 0.012 260)) var(--f-unless-dark, #fff);
     --f-accent-soft: color-mix(in oklch, var(--f-accent) 16%, transparent);
+    /* A deep shade of the accent for filled cards (.f-hero), the same in both themes. The first
+       line of each pair is the fallback (Slate) for browsers without relative colors. min() keeps
+       near-neutral accents and Graphite near-neutral, and 0.06 is the chroma both themes share. */
+    --f-accent-deep: oklch(0.42 0.06 255);
+    --f-accent-deep: oklch(from var(--f-accent) 0.42 min(c, 0.06) h);
+    --f-on-accent-deep: oklch(0.97 0.008 255);
+    --f-on-accent-deep: oklch(from var(--f-accent) 0.97 min(c, 0.008) h);
     --f-success: var(--f-unless-light, oklch(0.76 0.06 130))
       var(--f-unless-dark, oklch(0.52 0.07 130));
     --f-warning: var(--f-unless-light, oklch(0.76 0.06 85))

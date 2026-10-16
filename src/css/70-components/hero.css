@@ -1,0 +1,109 @@
+@layer facet.components {
+  /* A card filled with a deep shade of the accent: the opening of a home page. Text on the left,
+     an optional figure on the right; one column at 720px and below. */
+  .f-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    gap: 2.5rem;
+    align-items: center;
+    padding: clamp(1.75rem, 4vw, 3rem) clamp(1.5rem, 4vw, 3rem);
+    border-radius: var(--f-r-xl);
+    background: var(--f-accent-deep);
+    color: var(--f-on-accent-deep);
+  }
+
+  .f-hero > :only-child {
+    grid-column: 1 / -1;
+  }
+
+  .f-hero :focus-visible {
+    outline-color: var(--f-on-accent-deep);
+  }
+
+  .f-hero a:not(.f-btn) {
+    color: inherit;
+    text-decoration: underline 1px;
+    text-underline-offset: 0.2em;
+  }
+
+  .f-hero a:not(.f-btn):hover {
+    text-decoration-thickness: 2px;
+  }
+
+  .f-hero__kicker {
+    margin: 0 0 1.25rem;
+    font: 500 var(--f-text-xs) / 1.2 var(--f-font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .f-hero__title {
+    max-inline-size: 12ch;
+    margin: 0 0 1.5rem;
+    color: inherit;
+    font: 600 clamp(2.5rem, 6.5vw, 4rem) / 1.02 var(--f-font-serif);
+    letter-spacing: -0.03em;
+  }
+
+  .f-hero__lead {
+    max-inline-size: 35ch;
+    margin: 0 0 1rem;
+    color: inherit;
+    font-size: 1.25rem;
+    line-height: 1.4;
+  }
+
+  .f-hero__body {
+    max-inline-size: 40ch;
+    margin: 0 0 1.75rem;
+    color: inherit;
+    font: 1.1rem / 1.5 var(--f-font-serif);
+  }
+
+  .f-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    align-items: center;
+  }
+
+  .f-hero .f-btn--primary {
+    border-color: transparent;
+    background: var(--f-on-accent-deep);
+    color: var(--f-accent-deep);
+  }
+
+  .f-hero .f-btn--primary:hover {
+    background: color-mix(in oklch, var(--f-on-accent-deep) 88%, var(--f-accent-deep));
+  }
+
+  .f-hero .f-btn:not(.f-btn--primary) {
+    border-color: currentColor;
+    color: inherit;
+  }
+
+  .f-hero__media {
+    justify-self: center;
+    inline-size: min(100%, 13.75rem);
+    margin: 0;
+    text-align: center;
+  }
+
+  .f-hero__media img {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    border-radius: var(--f-r-md);
+  }
+
+  .f-hero__media figcaption {
+    margin-top: 0.75rem;
+    font: var(--f-text-xs) / 1.2 var(--f-font-mono);
+  }
+
+  @media (max-width: 720px) {
+    .f-hero {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+}

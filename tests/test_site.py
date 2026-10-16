@@ -226,6 +226,7 @@ def test_matrix_covers_the_layouts():
             "deck",
             "app",
             "focus",
+            "landing",
         ]
     }
 

@@ -68,6 +68,13 @@
       var(--f-unless-dark, oklch(0.52 0.07 255));
     --f-accent-contrast: var(--f-unless-light, oklch(0.15 0.012 260)) var(--f-unless-dark, #fff);
     --f-accent-soft: color-mix(in oklch, var(--f-accent) 16%, transparent);
+    /* A deep shade of the accent for filled cards (.f-hero), the same in both themes. The first
+       line of each pair is the fallback (Slate) for browsers without relative colors. min() keeps
+       near-neutral accents and Graphite near-neutral, and 0.06 is the chroma both themes share. */
+    --f-accent-deep: oklch(0.42 0.06 255);
+    --f-accent-deep: oklch(from var(--f-accent) 0.42 min(c, 0.06) h);
+    --f-on-accent-deep: oklch(0.97 0.008 255);
+    --f-on-accent-deep: oklch(from var(--f-accent) 0.97 min(c, 0.008) h);
     --f-success: var(--f-unless-light, oklch(0.76 0.06 130))
       var(--f-unless-dark, oklch(0.52 0.07 130));
     --f-warning: var(--f-unless-light, oklch(0.76 0.06 85))
@@ -2723,6 +2730,117 @@
   }
 }
 
+/* src/css/70-components/hero.css */
+@layer facet.components {
+  /* A card filled with a deep shade of the accent: the opening of a home page. Text on the left,
+     an optional figure on the right; one column at 720px and below. */
+  .f-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    gap: 2.5rem;
+    align-items: center;
+    padding: clamp(1.75rem, 4vw, 3rem) clamp(1.5rem, 4vw, 3rem);
+    border-radius: var(--f-r-xl);
+    background: var(--f-accent-deep);
+    color: var(--f-on-accent-deep);
+  }
+
+  .f-hero > :only-child {
+    grid-column: 1 / -1;
+  }
+
+  .f-hero :focus-visible {
+    outline-color: var(--f-on-accent-deep);
+  }
+
+  .f-hero a:not(.f-btn) {
+    color: inherit;
+    text-decoration: underline 1px;
+    text-underline-offset: 0.2em;
+  }
+
+  .f-hero a:not(.f-btn):hover {
+    text-decoration-thickness: 2px;
+  }
+
+  .f-hero__kicker {
+    margin: 0 0 1.25rem;
+    font: 500 var(--f-text-xs) / 1.2 var(--f-font-mono);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .f-hero__title {
+    max-inline-size: 12ch;
+    margin: 0 0 1.5rem;
+    color: inherit;
+    font: 600 clamp(2.5rem, 6.5vw, 4rem) / 1.02 var(--f-font-serif);
+    letter-spacing: -0.03em;
+  }
+
+  .f-hero__lead {
+    max-inline-size: 35ch;
+    margin: 0 0 1rem;
+    color: inherit;
+    font-size: 1.25rem;
+    line-height: 1.4;
+  }
+
+  .f-hero__body {
+    max-inline-size: 40ch;
+    margin: 0 0 1.75rem;
+    color: inherit;
+    font: 1.1rem / 1.5 var(--f-font-serif);
+  }
+
+  .f-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem 1.5rem;
+    align-items: center;
+  }
+
+  .f-hero .f-btn--primary {
+    border-color: transparent;
+    background: var(--f-on-accent-deep);
+    color: var(--f-accent-deep);
+  }
+
+  .f-hero .f-btn--primary:hover {
+    background: color-mix(in oklch, var(--f-on-accent-deep) 88%, var(--f-accent-deep));
+  }
+
+  .f-hero .f-btn:not(.f-btn--primary) {
+    border-color: currentColor;
+    color: inherit;
+  }
+
+  .f-hero__media {
+    justify-self: center;
+    inline-size: min(100%, 13.75rem);
+    margin: 0;
+    text-align: center;
+  }
+
+  .f-hero__media img {
+    display: block;
+    inline-size: 100%;
+    block-size: auto;
+    border-radius: var(--f-r-md);
+  }
+
+  .f-hero__media figcaption {
+    margin-top: 0.75rem;
+    font: var(--f-text-xs) / 1.2 var(--f-font-mono);
+  }
+
+  @media (max-width: 720px) {
+    .f-hero {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+}
+
 /* src/css/70-components/input.css */
 @layer facet.components {
   .f-input {
@@ -3812,6 +3930,84 @@
 
     .f-grid > .f-card--h2 {
       grid-row: span 1;
+    }
+  }
+}
+
+/* src/css/80-layouts/landing.css */
+@layer facet.layouts {
+  /* A home page: the hero card, then recent entries with their heading in a narrow column. */
+  .f-landing {
+    inline-size: min(100% - 2 * var(--f-gutter), 66rem);
+    margin-inline: auto;
+    padding: calc(var(--f-nav-clear) + var(--f-space-6)) 0 var(--f-space-8);
+  }
+
+  .f-landing__recent {
+    display: grid;
+    grid-template-columns: 23% minmax(0, 1fr);
+    gap: var(--f-space-5) 9%;
+    margin-top: var(--f-space-7);
+    padding-top: var(--f-space-5);
+    border-top: 2px solid var(--f-fg);
+  }
+
+  .f-landing__head h2 {
+    margin: 0 0 var(--f-space-3);
+    font: 500 var(--f-text-xl) / 1.2 var(--f-font-serif);
+  }
+
+  .f-landing__head a {
+    color: var(--f-fg-2);
+    font-size: var(--f-text-sm);
+  }
+
+  .f-landing__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .f-landing__item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0.35rem 1rem;
+    padding: var(--f-space-4) 0;
+    border-bottom: 1px solid var(--f-line-2);
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .f-landing__list > li:first-child .f-landing__item {
+    padding-top: 0;
+  }
+
+  .f-landing__meta {
+    color: var(--f-fg-3);
+    font: var(--f-text-xs) / 1.4 var(--f-font-mono);
+  }
+
+  .f-landing__item h3 {
+    grid-column: 1;
+    margin: 0;
+    font: 500 var(--f-text-lg) / 1.3 var(--f-font-serif);
+  }
+
+  .f-landing__item::after {
+    content: "↗";
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    color: var(--f-fg-3);
+  }
+
+  .f-landing__item:hover h3,
+  .f-landing__item:hover::after {
+    color: var(--f-accent);
+  }
+
+  @media (max-width: 720px) {
+    .f-landing__recent {
+      grid-template-columns: minmax(0, 1fr);
     }
   }
 }

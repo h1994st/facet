@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title data-zh="首页版式 · facet">Landing layout · facet</title>
+    <meta
+      name="description"
+      content="facet's landing layout: a home page that opens with a card in a deep shade of the site's accent, then the latest posts beside their heading."
+      data-zh="facet 的首页版式：以一张网站强调色深色调的卡片开场，下面是最近的文章，标题在左侧。"
+    />
+    <script src="../site.js"></script>
+    <link rel="stylesheet" href="../dist/facet.css" />
+    <link rel="stylesheet" href="../dist/cast/cast-layered.css" />
+    <link rel="stylesheet" href="../site.css" />
+    <script type="module" src="../dist/js/facet.js"></script>
+  </head>
+  <body>
+    <nav class="f-nav f-nav--fixed" aria-label="Site">
+      <span class="f-nav__brand">Duna Feline</span
+      ><a href="#" aria-current="page" data-zh="博客">Blog</a><a href="#" data-zh="项目">Projects</a
+      ><a href="#" data-zh="简历">Resume</a>
+    </nav>
+
+    <main class="f-landing">
+      <section class="f-hero">
+        <div>
+          <p class="f-hero__kicker" data-zh="吉祥物 · 红点">Mascot · Red dots</p>
+          <h1 class="f-hero__title" data-zh="嘟娜">Duna Feline</h1>
+          <p
+            class="f-hero__lead"
+            data-zh='我以追红点为生，在 <a href="#">客厅实验室</a> 做 <a href="#">红点追踪器</a>。'
+          >
+            I chase red dots for a living, at <a href="#">Living Room Labs</a>, working on
+            <a href="#">Red Dot Tracker</a>.
+          </p>
+          <p
+            class="f-hero__body"
+            data-zh="我记下红点碰过的每一面墙，在阳光落下的地方午睡。嘟嘟和囔囔也来帮忙，主要是把东西从桌上推下去。"
+          >
+            I map every wall the dot has touched and nap where the sun lands. Dudu and Nangnang
+            help, mostly by knocking things off tables.
+          </p>
+          <div class="f-hero__actions">
+            <a class="f-btn f-btn--primary" href="#" data-zh="关于我 ↗">About me ↗</a>
+            <a href="#" data-zh="查看简历">View resume</a>
+          </div>
+        </div>
+        <figure class="f-hero__media">
+          <img src="../assets/board-1.jpg" alt="" width="220" height="220" />
+          <figcaption data-zh="窗台">The windowsill</figcaption>
+        </figure>
+      </section>
+
+      <section class="f-landing__recent" aria-labelledby="recent">
+        <div class="f-landing__head">
+          <h2 id="recent" data-zh="随笔">Notes and essays</h2>
+          <a href="#" data-zh="全部文章 ↗">All writing ↗</a>
+        </div>
+        <ul class="f-landing__list">
+          <li>
+            <a class="f-landing__item" href="#"
+              ><span class="f-landing__meta" data-zh="2026-10-11 · 本站"
+                >October 11, 2026 · On this site</span
+              >
+              <h3 data-zh="红点为什么总在墙角消失">
+                Why the red dot always vanishes in the corner
+              </h3></a
+            >
+          </li>
+          <li>
+            <a class="f-landing__item" href="#"
+              ><span class="f-landing__meta" data-zh="2026-09-02 · 客厅实验室"
+                >September 2, 2026 · Living Room Labs</span
+              >
+              <h3 data-zh="十二个房间，一个红点">Twelve rooms, one red dot</h3></a
+            >
+          </li>
+          <li>
+            <a class="f-landing__item" href="#"
+              ><span class="f-landing__meta" data-zh="2026-08-15 · 本站"
+                >August 15, 2026 · On this site</span
+              >
+              <h3 data-zh="窗台上的午觉">A nap on the windowsill</h3></a
+            >
+          </li>
+        </ul>
+      </section>
+    </main>
+    <details class="site-markup">
+      <summary data-zh="标记">Markup</summary>
+      <pre class="f-code">
+&lt;main class="f-landing"&gt;
+  &lt;section class="f-hero"&gt;
+    &lt;div&gt;
+      &lt;p class="f-hero__kicker"&gt;Mascot · Red dots&lt;/p&gt;
+      &lt;h1 class="f-hero__title"&gt;Duna Feline&lt;/h1&gt;
+      &lt;p class="f-hero__lead"&gt;I chase red dots for a living…&lt;/p&gt;
+      &lt;p class="f-hero__body"&gt;I map every wall the dot has touched…&lt;/p&gt;
+      &lt;div class="f-hero__actions"&gt;
+        &lt;a class="f-btn f-btn--primary" href="#"&gt;About me ↗&lt;/a&gt;
+        &lt;a href="#"&gt;View resume&lt;/a&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+    &lt;figure class="f-hero__media"&gt;&lt;img src="…" alt="" /&gt;&lt;figcaption&gt;…&lt;/figcaption&gt;&lt;/figure&gt;
+  &lt;/section&gt;
+  &lt;section class="f-landing__recent" aria-labelledby="recent"&gt;
+    &lt;div class="f-landing__head"&gt;
+      &lt;h2 id="recent"&gt;Notes and essays&lt;/h2&gt;
+      &lt;a href="#"&gt;All writing ↗&lt;/a&gt;
+    &lt;/div&gt;
+    &lt;ul class="f-landing__list"&gt;
+      &lt;li&gt;
+        &lt;a class="f-landing__item" href="#"&gt;
+          &lt;span class="f-landing__meta"&gt;October 11, 2026 · On this site&lt;/span&gt;
+          &lt;h3&gt;Why the red dot always vanishes in the corner&lt;/h3&gt;
+        &lt;/a&gt;
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/section&gt;
+&lt;/main&gt;</pre>
+    </details>
+    <p
+      class="f-meta site-credit"
+      data-zh='设计灵感来自 <a href="https://mldangelo.com/">mldangelo.com</a>。'
+    >
+      Design inspired by <a href="https://mldangelo.com/">mldangelo.com</a>.
+    </p>
+  </body>
+</html>

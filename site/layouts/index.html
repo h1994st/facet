@@ -6,8 +6,8 @@
     <title data-zh="版式 · facet">Layouts · facet</title>
     <meta
       name="description"
-      content="All 14 facet layouts on one page grid: cover, reading, docs, margin notes, split, grid, list, app, story, panels, deck, resume, empty and focus."
-      data-zh="facet 的十四种版式：封面、阅读、文档、旁注、分屏、网格、列表、应用、故事、全页面板、演示文稿、简历、空状态和聚焦。"
+      content="All 15 facet layouts on one page grid: cover, reading, docs, margin notes, split, grid, list, app, story, panels, deck, resume, empty, focus, landing."
+      data-zh="facet 的十五种版式：封面、阅读、文档、旁注、分屏、网格、列表、应用、故事、全页面板、演示文稿、简历、空状态、聚焦和首页。"
     />
     <script src="../site.js"></script>
     <link rel="stylesheet" href="../dist/facet.css" />
@@ -66,6 +66,14 @@
         height: 34px;
         border-radius: 6px;
         background: color-mix(in oklch, var(--f-accent) 35%, transparent);
+      }
+      .lx-wf i.lx-hero {
+        height: 62px;
+        border-radius: 8px;
+        background: var(--f-accent-deep);
+      }
+      .lx-wf i.lx-short {
+        width: 70%;
       }
       .lx-n {
         align-self: center;
@@ -402,6 +410,16 @@
           <h2 data-zh="聚焦">Focus</h2>
           <p data-zh="围绕一件事的居中页面：联系方式、链接汇总、发布页。">
             A centered page about one thing: contact, a link hub, a launch page.
+          </p>
+        </a>
+        <a class="f-card lx-item" href="landing.html">
+          <div class="lx-wf" aria-hidden="true">
+            <i class="lx-hero"></i><i class="h"></i><i class="lx-short"></i>
+          </div>
+          <h2 data-zh="首页">Landing</h2>
+          <p data-zh="以强调色深色调的大卡片开场的首页，下面是最近的文章。">
+            A home page that opens with a large card in a deep shade of the accent, then the latest
+            posts.
           </p>
         </a>
       </div>
