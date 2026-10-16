@@ -9,7 +9,7 @@
   }
 
   .f-empty__cat {
-    width: 120px;
+    width: 120px !important; /* beats the unlayered cast.css */
     margin: 0 auto var(--f-space-2);
   }
 

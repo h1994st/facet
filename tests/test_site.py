@@ -81,3 +81,25 @@ def test_components_page(page_factory, site_url, width, theme, lang):
     no_hscroll(page)
     assert page.errors == []
     assert contrast_on(page, ".f-btn--primary") >= 4.5
+
+
+@pytest.mark.parametrize("width", [390, 1280])
+def test_cats_never_cover_text(page_factory, site_url, width):
+    from checks import cat_text_overlaps
+
+    for path in ["cast.html", "components.html"]:
+        page = page_factory(width=width)
+        page.goto(f"{site_url}/{path}")
+        page.wait_for_timeout(300)
+        assert cat_text_overlaps(page) == 0, path
+
+
+@pytest.mark.parametrize("width", [390, 860, 1280])
+def test_cast_page(page_factory, site_url, width):
+    page = page_factory(width=width)
+    page.goto(f"{site_url}/cast.html")
+    page.wait_for_timeout(300)
+    no_hscroll(page)
+    assert page.errors == []
+    assert page.locator("main .cat").count() == 3
+    assert page.locator(".f-footer .cat").count() == 3
