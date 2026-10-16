@@ -2465,7 +2465,8 @@
     gap: var(--f-space-2);
     align-items: center;
     margin: 0 0 var(--f-space-1);
-    color: var(--_c);
+    /* Nudged toward the text color so every status title keeps 4.5:1 on its tinted background. */
+    color: color-mix(in oklch, var(--_c), var(--f-fg) 30%);
     font-weight: 600;
   }
 
