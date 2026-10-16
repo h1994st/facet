@@ -9,7 +9,12 @@
       "extra-files": [
         { "type": "generic", "path": "README.md" },
         { "type": "generic", "path": "site/index.html" },
-        { "type": "generic", "path": "pyproject.toml" }
+        { "type": "generic", "path": "pyproject.toml" },
+        {
+          "type": "toml",
+          "path": "uv.lock",
+          "jsonpath": "$.package[?(@.name.value=='facet')].version"
+        }
       ],
       "bump-minor-pre-major": true,
       "bump-patch-for-minor-pre-major": true,
