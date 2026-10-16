@@ -477,6 +477,136 @@
 &lt;/div&gt;</pre>
         </details>
       </section>
+
+      <section id="figure">
+        <h2 data-zh="插图">Figure</h2>
+        <figure class="f-figure">
+          <p class="f-figure__kicker" data-zh="示意图">Diagram</p>
+          <img
+            src="assets/aurora.jpg"
+            alt="Soft bands of light over a dark horizon"
+            width="1920"
+            height="1080"
+          />
+          <figcaption data-zh="<b>调整光带。</b>镜片和滤镜把光混在一起。">
+            <b>Steer the light.</b> Mirrors and filters mix the bands.
+          </figcaption>
+        </figure>
+        <figure class="f-figure f-figure--bare">
+          <img
+            src="assets/board-1.jpg"
+            alt="Duna's board, already framed"
+            width="1280"
+            height="800"
+            style="border-radius: var(--f-r-md)"
+          />
+          <figcaption data-zh="已有自带画框的图用 <code>--bare</code>。">
+            A picture with its own frame takes <code>--bare</code>.
+          </figcaption>
+        </figure>
+        <details class="site-markup">
+          <summary data-zh="标记">Markup</summary>
+          <pre class="f-code">
+&lt;figure class="f-figure"&gt;
+  &lt;p class="f-figure__kicker"&gt;Diagram&lt;/p&gt;
+  &lt;img src="aurora.jpg" alt="…" width="1920" height="1080" /&gt;
+  &lt;figcaption&gt;&lt;b&gt;Steer the light.&lt;/b&gt; Mirrors and filters mix the bands.&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;!-- A self-framed SVG or picture: class="f-figure f-figure--bare" --&gt;</pre>
+        </details>
+      </section>
+
+      <section id="gallery">
+        <h2 data-zh="图集">Gallery</h2>
+        <ul class="f-gallery">
+          <li>
+            <img src="assets/board-1.jpg" alt="Board one" width="1280" height="800" />
+            <span class="f-gallery__label" data-zh="看板一">Board one</span>
+          </li>
+          <li>
+            <img src="assets/board-2.jpg" alt="Board two" width="1280" height="800" />
+            <span class="f-gallery__label" data-zh="看板二">Board two</span>
+          </li>
+          <li>
+            <img src="assets/board-3.jpg" alt="Board three" width="1280" height="800" />
+            <span class="f-gallery__label" data-zh="看板三">Board three</span>
+          </li>
+        </ul>
+        <details class="site-markup">
+          <summary data-zh="标记">Markup</summary>
+          <pre class="f-code">
+&lt;ul class="f-gallery" style="--f-gallery-min: 14rem"&gt;
+  &lt;li&gt;
+    &lt;img src="board-1.jpg" alt="…" width="1280" height="800" /&gt;
+    &lt;span class="f-gallery__label"&gt;Board one&lt;/span&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</pre>
+        </details>
+      </section>
+
+      <section id="variants">
+        <h2 data-zh="变体">Variants</h2>
+        <div>
+          <div class="f-segmented" role="group" aria-label="Look" data-f-variants="look" hidden>
+            <button type="button" data-variant="modern" aria-pressed="true" data-zh="现代">
+              Modern
+            </button>
+            <button type="button" data-variant="classic" aria-pressed="false" data-zh="经典">
+              Classic
+            </button>
+          </div>
+          <ul class="f-gallery">
+            <li>
+              <img
+                data-f-variant="look:modern"
+                src="assets/board-1.jpg"
+                alt="Board one, modern"
+                width="1280"
+                height="800"
+              />
+              <img
+                data-f-variant="look:classic"
+                hidden
+                src="assets/board-2.jpg"
+                alt="Board one, classic"
+                width="1280"
+                height="800"
+              />
+              <span class="f-gallery__label" data-zh="看板">Board</span>
+            </li>
+            <li>
+              <img
+                data-f-variant="look:modern"
+                src="assets/board-3.jpg"
+                alt="Board two, modern"
+                width="1280"
+                height="800"
+              />
+              <img
+                data-f-variant="look:classic"
+                hidden
+                src="assets/board-4.jpg"
+                alt="Board two, classic"
+                width="1280"
+                height="800"
+              />
+              <span class="f-gallery__label" data-zh="另一块看板">Another board</span>
+            </li>
+          </ul>
+        </div>
+        <details class="site-markup">
+          <summary data-zh="标记">Markup</summary>
+          <pre class="f-code">
+&lt;div&gt;
+  &lt;div class="f-segmented" role="group" aria-label="Look" data-f-variants="look" hidden&gt;
+    &lt;button type="button" data-variant="modern" aria-pressed="true"&gt;Modern&lt;/button&gt;
+    &lt;button type="button" data-variant="classic" aria-pressed="false"&gt;Classic&lt;/button&gt;
+  &lt;/div&gt;
+  &lt;img data-f-variant="look:modern" src="modern.jpg" alt="…" /&gt;
+  &lt;img data-f-variant="look:classic" hidden src="classic.jpg" alt="…" /&gt;
+&lt;/div&gt;</pre>
+        </details>
+      </section>
     </main>
 
     <footer class="f-footer">

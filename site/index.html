@@ -407,6 +407,18 @@ git -C vendor/facet checkout v0.1.2</pre>
                 <code>aria-hidden</code> wrapper next to the real value in visually hidden text.
               </td>
             </tr>
+            <tr>
+              <td><code>data-f-variants</code>, <code>data-f-variant</code></td>
+              <td><code>variants.js</code></td>
+              <td
+                data-zh='<code>data-f-variants="组"</code> 放在 <code>.f-segmented</code> 上，按钮写 <code>data-variant</code>；其父元素内每个 <code>data-f-variant="组:值"</code> 按所选值显示或隐藏。控件和非默认变体先写 <code>hidden</code>，没有 JavaScript 时只显示第一个，也不会出现无效按钮。'
+              >
+                On a <code>.f-segmented</code> with <code>data-variant</code> buttons: switches
+                every <code>data-f-variant="group:value"</code> inside the control's parent. The
+                control and the non-default variants ship <code>hidden</code>, so without JavaScript
+                the first variant shows and there are no dead buttons.
+              </td>
+            </tr>
           </tbody>
         </table>
 
