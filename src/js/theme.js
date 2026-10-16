@@ -24,11 +24,14 @@ export function setTheme(value) {
 }
 
 export function init(root = document) {
+  // Only a page with a toggle takes the saved choice; a page without one keeps the data-theme it
+  // ships with, since every facet site on one origin shares the key. A bogus saved value is
+  // ignored: the page's own data-theme, then dark.
+  if (!document.querySelector("[data-f-theme-toggle]")) return () => {};
   let saved = null;
   try {
     saved = valid(localStorage.getItem(KEY));
   } catch {}
-  // A bogus saved value is ignored: the page's own data-theme, then dark.
   show(saved || valid(document.documentElement.dataset.theme) || "dark");
   const off = [];
   for (const b of root.querySelectorAll("[data-f-theme-toggle]")) {

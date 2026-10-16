@@ -148,3 +148,23 @@ def test_theme_snippet_is_documented_verbatim():
     snippet = re.search(r"<script>try\{.*?</script>", fixture)[0]
     assert snippet in (root / "README.md").read_text()
     assert snippet in html.unescape((root / "site/index.html").read_text())
+
+
+def test_a_preset_theme_wins_on_a_page_without_a_toggle(page_factory, site_url):
+    page = page_factory()
+    page.add_init_script("localStorage.setItem('facet-theme', 'dark')")
+    page.goto(f"{site_url}/tests/theme-preset.html")
+    page.wait_for_load_state("load")
+    page.wait_for_timeout(100)
+    assert theme(page) == "light"
+
+
+def test_cleanup_twice_leaves_a_reinitialized_deck_alone(page_factory, site_url):
+    page = page_factory()
+    page.goto(f"{site_url}/layouts/deck.html")
+    page.evaluate(f"{FACET}.then((m) => {{ m.cleanup(); m.init(); m.cleanup(); }})")
+    texts = page.evaluate(
+        "[...document.querySelectorAll('.f-deck__cap')].filter((c) => c.textContent.trim()).length"
+    )
+    assert texts > 2
+    assert "is-ready" in page.locator("[data-f-deck]").get_attribute("class")
