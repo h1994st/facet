@@ -6,6 +6,33 @@
 //   boxes {"box": [left, top, width, height], "fade": true}.
 // A piece starts where it first appears, or at its data-f-from ([left, top] or a box).
 // Each slide is a full-page scroll stop; ←/→, Space and the bar's buttons move one slide.
+// All data is read and checked before the page is touched: a deck with bad data is left in its
+// no-JS form (stacked slides with their captions) and a warning names the problem.
+const nums = (v, n) => Array.isArray(v) && v.length >= n && v.every(Number.isFinite);
+const SHAPES = { at: 2, beam: 3, box: 4 };
+
+function readData(slides, pieceEls) {
+  const states = slides.map((s, i) => {
+    const st = JSON.parse(s.dataset.fSlide || "{}");
+    if (!st || typeof st !== "object" || Array.isArray(st))
+      throw new Error(`slide ${i + 1}: data-f-slide is not an object`);
+    for (const [id, v] of Object.entries(st)) {
+      if (!v || typeof v !== "object") throw new Error(`slide ${i + 1}: "${id}" is not an object`);
+      for (const [k, n] of Object.entries(SHAPES))
+        if (k in v && !nums(v[k], n))
+          throw new Error(`slide ${i + 1}: "${id}.${k}" needs ${n} numbers`);
+    }
+    return st;
+  });
+  const froms = pieceEls.map((p) => {
+    if (!p.dataset.fFrom) return null;
+    const from = JSON.parse(p.dataset.fFrom);
+    if (!nums(from, 2)) throw new Error(`piece "${p.dataset.fPiece}": data-f-from needs numbers`);
+    return from;
+  });
+  return { states, froms };
+}
+
 export function init(root = document) {
   const off = [];
   const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -13,10 +40,17 @@ export function init(root = document) {
     const slides = [...deck.querySelectorAll(".f-deck__slide")];
     const caps = deck.querySelector(".f-deck__caps");
     if (!slides.length || !caps) continue;
-    const states = slides.map((s) => JSON.parse(s.dataset.fSlide || "{}"));
-    const pieces = Object.fromEntries(
-      [...deck.querySelectorAll("[data-f-piece]")].map((p) => [p.dataset.fPiece, p]),
-    );
+    const pieceEls = [...deck.querySelectorAll("[data-f-piece]")];
+    let data;
+    try {
+      data = readData(slides, pieceEls);
+    } catch (err) {
+      console.warn("facet deck: bad slide data, showing the slides as plain sections.", err);
+      continue;
+    }
+    const { states, froms } = data;
+    const fromOf = new Map(pieceEls.map((p, i) => [p, froms[i]]));
+    const pieces = Object.fromEntries(pieceEls.map((p) => [p.dataset.fPiece, p]));
     const count = deck.querySelector(".f-deck__count");
     const progress = deck.querySelector(".f-deck__progress");
 
@@ -42,7 +76,7 @@ export function init(root = document) {
     const start = {};
     for (const [id, p] of Object.entries(pieces)) {
       const first = states.find((s) => s[id])?.[id] || {};
-      const from = p.dataset.fFrom ? JSON.parse(p.dataset.fFrom) : null;
+      const from = fromOf.get(p);
       if (first.beam) start[id] = first.beam.slice(0, 2);
       if (from) place(p, from);
       else if (first.at) place(p, first.at);

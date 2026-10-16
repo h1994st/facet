@@ -26,6 +26,7 @@ export function init(root = document) {
       });
     }
     host.classList.add("is-ready");
+    nav?.classList.add("is-ready");
     let current = -1;
     const update = () => {
       let best = 0;
@@ -60,6 +61,7 @@ export function init(root = document) {
       removeEventListener("resize", update);
       buttons.forEach((b) => b.remove());
       host.classList.remove("is-ready");
+      nav?.classList.remove("is-ready", "is-scrolled");
     });
   }
   return () => off.forEach((f) => f());

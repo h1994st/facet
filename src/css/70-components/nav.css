@@ -54,23 +54,24 @@
     width: fit-content;
   }
 
-  /* Over a cover image: clear until the page scrolls (JS adds .is-scrolled), then glass. */
-  .f-nav--over:not(.is-scrolled) {
+  /* Over a cover image: clear until the page scrolls past it, then glass. The clear state needs
+     the script that drives it (it adds .is-ready, then .is-scrolled); without JS it stays glass. */
+  .f-nav--over.is-ready:not(.is-scrolled) {
     border-color: transparent;
     background: transparent;
     backdrop-filter: none;
     box-shadow: none;
   }
 
-  .f-nav--over:not(.is-scrolled) .f-nav__brand {
+  .f-nav--over.is-ready:not(.is-scrolled) .f-nav__brand {
     color: #fff;
   }
 
-  .f-nav--over:not(.is-scrolled) a {
+  .f-nav--over.is-ready:not(.is-scrolled) a {
     color: rgb(255 255 255 / 0.8);
   }
 
-  .f-nav--over:not(.is-scrolled) a[aria-current] {
+  .f-nav--over.is-ready:not(.is-scrolled) a[aria-current] {
     background: rgb(255 255 255 / 0.16);
     color: #fff;
   }

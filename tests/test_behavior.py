@@ -200,7 +200,7 @@ def test_deck_keys_advance(page_factory, site_url):
     assert page.locator(".f-deck__count").inner_text().startswith("2 /")
 
 
-@pytest.mark.parametrize("path", ["story", "panels", "deck", "margin"])
+@pytest.mark.parametrize("path", ["cover", "story", "panels", "deck", "margin"])
 def test_readable_without_js(page_factory, site_url, path):
     from checks import no_hscroll
 
@@ -223,3 +223,46 @@ def test_reduced_motion_is_still(page_factory, site_url, path):
     assert running_animations(page) == 0
     if path in ("cover", "panels"):
         assert page.evaluate("[...document.querySelectorAll('video')].every(v => v.paused)")
+
+
+def test_over_cover_nav_is_readable_without_js(page_factory, site_url):
+    from checks import TO_RGB, _lum
+
+    page = page_factory(theme="light", js=False)
+    page.goto(f"{site_url}/layouts/cover.html")
+    page.evaluate("window.scrollTo(0, innerHeight * 1.2)")
+    page.wait_for_timeout(200)
+    bg = page.evaluate("getComputedStyle(document.querySelector('.f-nav')).backgroundColor")
+    assert bg not in ("transparent", "rgba(0, 0, 0, 0)")
+    fg, back = page.evaluate(
+        f"""(() => {{
+          const f = ({TO_RGB});
+          const body = f(getComputedStyle(document.body).backgroundColor);
+          const nav = f(getComputedStyle(document.querySelector('.f-nav')).backgroundColor,
+            `rgb(${{body.join(' ')}})`);
+          const link = document.querySelector('.f-nav a:not([aria-current])');
+          return [f(getComputedStyle(link).color, `rgb(${{nav.join(' ')}})`), nav];
+        }})()"""
+    )
+    a, b = sorted([_lum(fg), _lum(back)], reverse=True)
+    assert (a + 0.05) / (b + 0.05) >= 4.5
+
+
+def test_deck_with_bad_data_stays_readable(page_factory, site_url):
+    page = page_factory()
+    warnings = []
+    page.on("console", lambda m: m.type == "warning" and warnings.append(m.text))
+    page.goto(f"{site_url}/tests/deck-bad-data.html")
+    page.wait_for_timeout(300)
+    assert page.errors == []
+    assert len(warnings) >= 2
+    for deck in ["#bad-from", "#bad-slide"]:
+        assert "is-ready" not in page.locator(deck).get_attribute("class")
+        shown = page.evaluate(
+            f"""[...document.querySelectorAll('{deck} .f-deck__slide :is(h2, p)')]
+              .map(e => getComputedStyle(e))
+              .every(s => s.visibility !== 'hidden' && +s.opacity > 0 && s.display !== 'none')"""
+        )
+        assert shown, deck
+        assert page.locator(f"{deck} .f-deck__slide h2").count() == 1
+    assert "is-ready" in page.locator("#good").get_attribute("class")
