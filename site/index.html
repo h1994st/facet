@@ -339,6 +339,19 @@ git -C vendor/facet checkout v0.1.1</pre>
                 slides (the data format is below).
               </td>
             </tr>
+            <tr>
+              <td><code>data-f-type</code></td>
+              <td><code>typewriter.js</code></td>
+              <td
+                data-zh="一组短语（JSON 数组）：逐字打出、停留、清空，再打下一句，循环。元素原来的文字是静止状态，减少动效时一直保持。速度和停留时间可用 <code>data-f-type-speed</code> 和 <code>data-f-type-hold</code>（毫秒）调整。放在 <code>aria-hidden</code> 的包裹元素里，旁边用视觉上隐藏的文字写出真实内容。"
+              >
+                A JSON array of phrases: types each one, holds it, clears it and types the next,
+                looping. The element's own text is the still state, kept under reduced motion. Tune
+                with
+                <code>data-f-type-speed</code> and <code>data-f-type-hold</code> (ms). Put it in an
+                <code>aria-hidden</code> wrapper next to the real value in visually hidden text.
+              </td>
+            </tr>
           </tbody>
         </table>
 

@@ -145,8 +145,8 @@ A minimal page:
 The JavaScript is optional. Importing `dist/js/facet.js` initializes itself: each module takes over
 the elements that opt in with a `data-f-*` attribute (`data-f-theme-toggle`, `data-f-liquid`,
 `data-f-scrollspy`, `data-f-nav-cover`, `data-f-autoplay`, `data-f-story`, `data-f-panels`,
-`data-f-deck`), and calling `init()` again skips what is already set up. To use one module, import
-it and keep the cleanup it returns:
+`data-f-deck`, `data-f-type`), and calling `init()` again skips what is already set up. To use one
+module, import it and keep the cleanup it returns:
 
 ```js
 import { init } from "./vendor/facet/dist/js/deck.js";

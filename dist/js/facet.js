@@ -12,8 +12,9 @@ import * as autoplay from "./autoplay.js";
 import * as story from "./story.js";
 import * as panels from "./panels.js";
 import * as deck from "./deck.js";
+import * as typewriter from "./typewriter.js";
 
-const modules = { theme, liquid, scrollspy, nav, autoplay, story, panels, deck };
+const modules = { theme, liquid, scrollspy, nav, autoplay, story, panels, deck, typewriter };
 
 // Initializes every module under root. One module that throws is reported and skipped, so the
 // others still run. Returns a function that undoes this call; calling it again does nothing.
