@@ -70,14 +70,14 @@ CDN, pinning a tag:
 <!-- x-release-please-start-version -->
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.0/dist/facet.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.1/dist/facet.css" />
 <link
   rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.0/dist/cast/cast-layered.css"
+  href="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.1/dist/cast/cast-layered.css"
 />
 <script
   type="module"
-  src="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.0/dist/js/facet.js"
+  src="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.1/dist/js/facet.js"
 ></script>
 ```
 
@@ -90,7 +90,7 @@ jsDelivr is unreliable):
 
 ```sh
 git submodule add https://github.com/h1994st/facet vendor/facet
-git -C vendor/facet checkout v0.1.0
+git -C vendor/facet checkout v0.1.1
 ```
 
 <!-- x-release-please-end -->
