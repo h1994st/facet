@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/h1994st/facet/compare/v0.1.2...v0.1.3) (2026-10-16)
+
+
+### Features
+
+* add figure, gallery and variants components ([#12](https://github.com/h1994st/facet/issues/12)) ([8622f29](https://github.com/h1994st/facet/commit/8622f2945cfa399d8b645a307fd6119b5c16472a))
+
 ## [0.1.2](https://github.com/h1994st/facet/compare/v0.1.1...v0.1.2) (2026-10-16)
 
 
