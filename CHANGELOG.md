@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.2](https://github.com/h1994st/facet/compare/v0.1.1...v0.1.2) (2026-10-16)
+
+
+### Features
+
+* add the hero, landing and focus layouts, social icons and optional GA4 ([#9](https://github.com/h1994st/facet/issues/9)) ([1ebb2ac](https://github.com/h1994st/facet/commit/1ebb2ac4a9eb9109ea8cf50f2f0f42d2274afabd))
+* roomier tables with a wide option, and reference-site fixes ([#11](https://github.com/h1994st/facet/issues/11)) ([165e3dd](https://github.com/h1994st/facet/commit/165e3dddae21420438dd44a623558b5152eb1b1d))
+
 ## [0.1.1](https://github.com/h1994st/facet/compare/v0.1.0...v0.1.1) (2026-10-16)
 
 
