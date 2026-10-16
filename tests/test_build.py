@@ -66,3 +66,23 @@ def test_pages_site_leaves_out_the_test_fixtures():
     assert (out / "mockups" / "index.html").exists()
     assert (out / "dist" / "facet.css").exists()
     assert not (out / "tests").exists()
+
+
+def test_relative_colors_have_a_fallback():
+    # A browser without relative colors (oklch(from …)) drops the value. On a normal property
+    # that is a parse error, so an earlier declaration of the same property in the rule must
+    # carry the fallback. A custom property accepts any value, so there the relative value must
+    # sit inside @supports, after a plain declaration.
+    build()
+    css = re.sub(r"/\*.*?\*/", "", (DIST / "facet.css").read_text(), flags=re.S)
+    for m in re.finditer(r"(?<![(\w-])([\w-]+)\s*:\s*[^;{}]*oklch\(from", css):
+        prop = m.group(1)
+        if prop.startswith("--"):
+            opened = css.rfind("@supports", 0, m.start())
+            depth = 0
+            for ch in css[opened : m.start()]:
+                depth += {"{": 1, "}": -1}.get(ch, 0)
+            assert opened >= 0 and depth > 0, f"{prop} uses a relative color outside @supports"
+        else:
+            rule = css[css.rfind("{", 0, m.start()) : m.start()]
+            assert re.search(rf"(^|[;{{\s]){re.escape(prop)}\s*:", rule), f"{prop} has no fallback"
