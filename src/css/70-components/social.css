@@ -1,0 +1,32 @@
+@layer facet.components {
+  /* A row of round icon links. Each link holds an .f-icon (aria-hidden) and a visually hidden
+     name. Muted at rest; the accent on its soft tint on hover and focus. */
+  .f-social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--f-space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .f-social__link {
+    display: grid;
+    place-items: center;
+    inline-size: 2.75rem;
+    block-size: 2.75rem;
+    border-radius: 50%;
+    color: var(--f-fg-2);
+    font-size: 1.25rem;
+    text-decoration: none;
+    transition:
+      color var(--f-dur-1) var(--f-ease),
+      background-color var(--f-dur-1) var(--f-ease);
+  }
+
+  .f-social__link:hover,
+  .f-social__link:focus-visible {
+    color: var(--f-accent);
+    background: var(--f-accent-soft);
+  }
+}

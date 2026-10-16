@@ -11,6 +11,7 @@
     />
     <script src="site.js"></script>
     <link rel="stylesheet" href="dist/facet.css" />
+    <link rel="stylesheet" href="dist/icons.css" />
     <link rel="stylesheet" href="dist/cast/cast-layered.css" />
     <link rel="stylesheet" href="site.css" />
     <script type="module" src="dist/js/facet.js"></script>
@@ -52,6 +53,23 @@
         padding: var(--f-space-4);
         border-radius: var(--f-r-lg);
         background: url(assets/board-1.jpg) center / cover;
+      }
+      .site-icons {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(9.5rem, 1fr));
+        gap: var(--f-space-2) var(--f-space-4);
+        margin: var(--f-space-5) 0 0;
+        padding: 0;
+        list-style: none;
+      }
+      .site-icons li {
+        display: flex;
+        gap: var(--f-space-2);
+        align-items: center;
+        font-size: 1.25rem;
+      }
+      .site-icons code {
+        font-size: var(--f-text-xs);
       }
     </style>
   </head>
@@ -290,6 +308,103 @@
   &lt;a href="#install"&gt;Install&lt;/a&gt;
   &lt;a href="#usage"&gt;Usage&lt;/a&gt;
 &lt;/nav&gt;</pre>
+        </details>
+      </section>
+
+      <section id="social">
+        <h2 data-zh="社交链接">Social</h2>
+        <p
+          data-zh="一排圆形的图标链接。图标在 <code>dist/icons.css</code> 里（需要单独引入），每个链接都有一个视觉上隐藏的名字。"
+        >
+          A row of round icon links. The icons live in <code>dist/icons.css</code>, linked on its
+          own; every link carries a visually hidden name.
+        </p>
+        <ul class="f-social" aria-label="Elsewhere">
+          <li>
+            <a class="f-social__link" href="https://github.com/example" rel="me noopener"
+              ><span class="f-icon f-icon--github" aria-hidden="true"></span
+              ><span class="f-visually-hidden">GitHub</span></a
+            >
+          </li>
+          <li>
+            <a class="f-social__link" href="mailto:meow@example.com"
+              ><span class="f-icon f-icon--email" aria-hidden="true"></span
+              ><span class="f-visually-hidden">Email</span></a
+            >
+          </li>
+          <li>
+            <a class="f-social__link" href="https://example.com/feed.xml"
+              ><span class="f-icon f-icon--rss" aria-hidden="true"></span
+              ><span class="f-visually-hidden">RSS</span></a
+            >
+          </li>
+        </ul>
+        <ul class="site-icons">
+          <li><span class="f-icon f-icon--github" aria-hidden="true"></span><code>github</code></li>
+          <li>
+            <span class="f-icon f-icon--linkedin" aria-hidden="true"></span><code>linkedin</code>
+          </li>
+          <li>
+            <span class="f-icon f-icon--google-scholar" aria-hidden="true"></span
+            ><code>google-scholar</code>
+          </li>
+          <li>
+            <span class="f-icon f-icon--instagram" aria-hidden="true"></span><code>instagram</code>
+          </li>
+          <li><span class="f-icon f-icon--x" aria-hidden="true"></span><code>x</code></li>
+          <li><span class="f-icon f-icon--email" aria-hidden="true"></span><code>email</code></li>
+          <li><span class="f-icon f-icon--rss" aria-hidden="true"></span><code>rss</code></li>
+          <li><span class="f-icon f-icon--orcid" aria-hidden="true"></span><code>orcid</code></li>
+          <li><span class="f-icon f-icon--dblp" aria-hidden="true"></span><code>dblp</code></li>
+          <li>
+            <span class="f-icon f-icon--semantic-scholar" aria-hidden="true"></span
+            ><code>semantic-scholar</code>
+          </li>
+          <li><span class="f-icon f-icon--wechat" aria-hidden="true"></span><code>wechat</code></li>
+          <li><span class="f-icon f-icon--weibo" aria-hidden="true"></span><code>weibo</code></li>
+          <li><span class="f-icon f-icon--zhihu" aria-hidden="true"></span><code>zhihu</code></li>
+          <li>
+            <span class="f-icon f-icon--bilibili" aria-hidden="true"></span><code>bilibili</code>
+          </li>
+          <li>
+            <span class="f-icon f-icon--xiaohongshu" aria-hidden="true"></span
+            ><code>xiaohongshu</code>
+          </li>
+          <li>
+            <span class="f-icon f-icon--bluesky" aria-hidden="true"></span><code>bluesky</code>
+          </li>
+          <li>
+            <span class="f-icon f-icon--mastodon" aria-hidden="true"></span><code>mastodon</code>
+          </li>
+          <li>
+            <span class="f-icon f-icon--threads" aria-hidden="true"></span><code>threads</code>
+          </li>
+          <li>
+            <span class="f-icon f-icon--youtube" aria-hidden="true"></span><code>youtube</code>
+          </li>
+        </ul>
+        <details class="site-markup">
+          <summary data-zh="标记">Markup</summary>
+          <pre class="f-code">
+&lt;link rel="stylesheet" href="…/dist/icons.css" /&gt;
+
+&lt;ul class="f-social" aria-label="Elsewhere"&gt;
+  &lt;li&gt;
+    &lt;a class="f-social__link" href="https://github.com/example" rel="me noopener"&gt;
+      &lt;span class="f-icon f-icon--github" aria-hidden="true"&gt;&lt;/span&gt;
+      &lt;span class="f-visually-hidden"&gt;GitHub&lt;/span&gt;
+    &lt;/a&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</pre>
+        </details>
+      </section>
+
+      <section id="divider">
+        <h2 data-zh="分隔线">Divider</h2>
+        <p class="f-divider" data-zh="或者在这些地方找到我">or find me on</p>
+        <details class="site-markup">
+          <summary data-zh="标记">Markup</summary>
+          <pre class="f-code">&lt;p class="f-divider"&gt;or find me on&lt;/p&gt;</pre>
         </details>
       </section>
 

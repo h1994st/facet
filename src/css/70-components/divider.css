@@ -1,0 +1,23 @@
+@layer facet.components {
+  /* A hairline with optional text in the middle ("or find me on"). */
+  .f-divider {
+    display: flex;
+    align-items: center;
+    gap: var(--f-space-3);
+    margin: var(--f-space-5) 0;
+    color: var(--f-fg-3);
+    font-size: var(--f-text-sm);
+  }
+
+  .f-divider::before,
+  .f-divider::after {
+    content: "";
+    flex: 1;
+    block-size: 1px;
+    background: var(--f-line-2);
+  }
+
+  .f-divider:empty {
+    gap: 0;
+  }
+}

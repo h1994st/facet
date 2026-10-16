@@ -64,8 +64,16 @@ template's site.
 
 Reference site (tokens, color, type, components, layouts, the cast): https://shengtuo.me/facet/
 
-Link `facet.css` first and `cast/cast-layered.css` after it (only needed for the mascots). From a
-CDN, pinning a tag:
+Link `facet.css` first and `cast/cast-layered.css` after it (only needed for the mascots).
+
+Social icons are opt-in: link `dist/icons.css` after `facet.css` and write
+`<span class="f-icon f-icon--github" aria-hidden="true"></span>`. The 19 icons (GitHub, LinkedIn,
+Google Scholar, Instagram, X or `twitter`, Email, RSS, ORCID, DBLP, Semantic Scholar, WeChat, Weibo,
+Zhihu, Bilibili, Xiaohongshu, Bluesky, Mastodon, Threads, YouTube) are also in `dist/icons/` as SVG
+files for inlining. They come from Simple Icons (CC0) and Bootstrap Icons (MIT); brand names and
+marks belong to their owners.
+
+From a CDN, pinning a tag:
 
 <!-- x-release-please-start-version -->
 
@@ -75,6 +83,7 @@ CDN, pinning a tag:
   rel="stylesheet"
   href="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.1/dist/cast/cast-layered.css"
 />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.1/dist/icons.css" />
 <script
   type="module"
   src="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.1/dist/js/facet.js"

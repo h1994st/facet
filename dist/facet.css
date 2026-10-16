@@ -2193,6 +2193,7 @@
     .f-theme-toggle,
     .f-code-copy,
     .f-media-toggle,
+    .f-social__link,
     .f-toc,
     .f-toc a,
     .f-avatar,
@@ -2624,6 +2625,31 @@
   }
 }
 
+/* src/css/70-components/divider.css */
+@layer facet.components {
+  /* A hairline with optional text in the middle ("or find me on"). */
+  .f-divider {
+    display: flex;
+    align-items: center;
+    gap: var(--f-space-3);
+    margin: var(--f-space-5) 0;
+    color: var(--f-fg-3);
+    font-size: var(--f-text-sm);
+  }
+
+  .f-divider::before,
+  .f-divider::after {
+    content: "";
+    flex: 1;
+    block-size: 1px;
+    background: var(--f-line-2);
+  }
+
+  .f-divider:empty {
+    gap: 0;
+  }
+}
+
 /* src/css/70-components/empty.css */
 @layer facet.components {
   /* A centered message with a cat: 404s, empty search results, offline. */
@@ -2933,6 +2959,40 @@
     .f-sheet[open] {
       animation: none;
     }
+  }
+}
+
+/* src/css/70-components/social.css */
+@layer facet.components {
+  /* A row of round icon links. Each link holds an .f-icon (aria-hidden) and a visually hidden
+     name. Muted at rest; the accent on its soft tint on hover and focus. */
+  .f-social {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--f-space-2);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .f-social__link {
+    display: grid;
+    place-items: center;
+    inline-size: 2.75rem;
+    block-size: 2.75rem;
+    border-radius: 50%;
+    color: var(--f-fg-2);
+    font-size: 1.25rem;
+    text-decoration: none;
+    transition:
+      color var(--f-dur-1) var(--f-ease),
+      background-color var(--f-dur-1) var(--f-ease);
+  }
+
+  .f-social__link:hover,
+  .f-social__link:focus-visible {
+    color: var(--f-accent);
+    background: var(--f-accent-soft);
   }
 }
 

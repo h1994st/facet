@@ -133,16 +133,18 @@
       <section>
         <h2 data-zh="安装：CDN">Install: from a CDN</h2>
         <p
-          data-zh="把样式表和脚本链接到页面里。先加载 <code>facet.css</code>，再加载 <code>cast/cast-layered.css</code>（只有用到吉祥物时才需要）。固定一个标签，网站就不会随主分支变化。"
+          data-zh="把样式表和脚本链接到页面里。先加载 <code>facet.css</code>，再加载 <code>cast/cast-layered.css</code>（只有用到吉祥物时才需要）。社交图标要另外加载 <code>icons.css</code>。固定一个标签，网站就不会随主分支变化。"
         >
           Link the stylesheet and the script. Link <code>facet.css</code> first and
-          <code>cast/cast-layered.css</code> after it (only needed if you use the mascots). Pin a
-          tag so the site does not move with the main branch.
+          <code>cast/cast-layered.css</code> after it (only needed if you use the mascots). Social
+          icons need <code>icons.css</code> too. Pin a tag so the site does not move with the main
+          branch.
         </p>
         <!-- x-release-please-start-version -->
         <pre class="f-code">
 &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.1/dist/facet.css" /&gt;
 &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.1/dist/cast/cast-layered.css" /&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.1/dist/icons.css" /&gt;
 &lt;script type="module" src="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.1/dist/js/facet.js"&gt;&lt;/script&gt;</pre>
         <!-- x-release-please-end -->
         <p
@@ -170,6 +172,7 @@ git -C vendor/facet checkout v0.1.1</pre>
         <pre class="f-code">
 &lt;link rel="stylesheet" href="/vendor/facet/dist/facet.css" /&gt;
 &lt;link rel="stylesheet" href="/vendor/facet/dist/cast/cast-layered.css" /&gt;
+&lt;link rel="stylesheet" href="/vendor/facet/dist/icons.css" /&gt;
 &lt;script type="module" src="/vendor/facet/dist/js/facet.js"&gt;&lt;/script&gt;</pre>
       </section>
 
