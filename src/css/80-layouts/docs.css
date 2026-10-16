@@ -1,6 +1,8 @@
 @layer facet.layouts {
-  /* Two columns: a sticky table of contents (.f-toc), then the reading column. */
-  .f-docs {
+  /* Two columns: a sticky table of contents (.f-toc), then the reading column. .f-page--sidebar
+     puts the same grid on a .f-page (it is listed with .f-docs here, never copied). */
+  .f-docs,
+  .f-page.f-page--sidebar {
     display: grid;
     grid-template-columns: 13rem minmax(0, min(var(--f-measure), 100%));
     gap: 3.5rem;
@@ -12,11 +14,14 @@
     padding-bottom: var(--f-space-5);
   }
 
-  .f-docs > article {
+  .f-docs > article,
+  .f-page.f-page--sidebar > * {
+    grid-column: auto;
     min-width: 0;
   }
 
-  .f-docs .f-toc {
+  .f-docs .f-toc,
+  .f-page--sidebar .f-toc {
     top: calc(var(--f-nav-clear) + 0.5rem);
   }
 
@@ -35,19 +40,22 @@
     line-height: 1.1;
   }
 
-  .f-docs section {
+  .f-docs section,
+  .f-page--sidebar section {
     scroll-margin-top: calc(var(--f-nav-clear) + 0.5rem);
   }
 
   /* Below 1024px the TOC is a pill bar (see .f-toc) that stays under the nav. A block parent
      keeps it sticky for the whole page; a grid would pin it to its own row. */
   @media (max-width: 1023px) {
-    .f-docs {
+    .f-docs,
+    .f-page.f-page--sidebar {
       display: block;
       padding-top: calc(var(--f-nav-clear) + 0.5rem);
     }
 
-    .f-docs .f-toc {
+    .f-docs .f-toc,
+    .f-page--sidebar .f-toc {
       top: var(--f-nav-clear);
       margin-bottom: var(--f-space-5);
     }
@@ -56,7 +64,8 @@
       display: none;
     }
 
-    .f-docs section {
+    .f-docs section,
+    .f-page--sidebar section {
       scroll-margin-top: calc(var(--f-nav-clear) + 3.5rem);
     }
   }

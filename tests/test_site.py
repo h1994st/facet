@@ -346,3 +346,33 @@ def test_theme_switch_picks_one_value_per_mode(browser, site_url, accent):
     assert colors("auto", "light") == light
     assert colors("dark", media="print") == light
     assert colors("auto", "dark", media="print") == light
+
+
+def _leading(page, sel):
+    line, size = page.evaluate(
+        f"(() => {{ const s = getComputedStyle(document.querySelector({sel!r}));"
+        " return [s.lineHeight, s.fontSize].map(parseFloat); })()"
+    )
+    return line / size
+
+
+@pytest.mark.parametrize("where", ["html", "subtree"])
+def test_chinese_text_outside_prose_gets_the_taller_leading(page_factory, site_url, where):
+    page = page_factory(lang="zh" if where == "html" else "en")
+    page.goto(f"{site_url}/components.html")
+    if where == "subtree":
+        page.evaluate("document.querySelector('main').lang = 'zh-Hans'")
+    for sel in [".f-card__body p", ".f-alert p", ".f-alert"]:
+        assert _leading(page, sel) == pytest.approx(1.8), sel
+
+
+def test_english_text_keeps_its_leading(page_factory, site_url):
+    page = page_factory(lang="en")
+    page.goto(f"{site_url}/components.html")
+    for sel in [".f-card__body p", ".f-alert p"]:
+        assert _leading(page, sel) == pytest.approx(1.6), sel
+    # An English block inside a Chinese page.
+    page = page_factory(lang="zh")
+    page.goto(f"{site_url}/components.html")
+    page.evaluate("document.querySelector('.f-alert').lang = 'en'")
+    assert _leading(page, ".f-alert p") == pytest.approx(1.6)

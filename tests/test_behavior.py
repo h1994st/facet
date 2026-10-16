@@ -282,3 +282,28 @@ def test_resume_prints_in_light_colors_from_the_dark_theme(page_factory, site_ur
     assert page.evaluate(actions) == "none"
     page.emulate_media(media="screen")
     assert page.evaluate(actions) == "flex"
+
+
+@pytest.mark.parametrize("width", [390, 1280])
+def test_page_sidebar_shares_the_docs_grid(page_factory, site_url, width):
+    from checks import no_hscroll
+
+    page = page_factory(width=width)
+    page.goto(f"{site_url}/tests/page-sidebar.html")
+    no_hscroll(page)
+    box = page.evaluate("""() => {
+      const r = (s) => document.querySelector(s).getBoundingClientRect();
+      const main = document.querySelector('main');
+      return {toc: r('.f-toc'), art: r('article'), main: r('main'),
+              display: getComputedStyle(main).display,
+              cols: getComputedStyle(main).gridTemplateColumns};
+    }""")
+    if width == 1280:
+        assert box["display"] == "grid"
+        assert box["cols"].split()[0] == "208px"  # the 13rem sidebar track
+        assert box["art"]["left"] >= box["toc"]["right"]
+        assert abs(box["art"]["top"] - box["toc"]["top"]) < 2
+    else:
+        assert box["display"] == "block"
+        assert box["art"]["top"] >= box["toc"]["bottom"]
+        assert box["art"]["width"] > 300

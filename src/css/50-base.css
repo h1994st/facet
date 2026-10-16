@@ -5,10 +5,17 @@
     -webkit-text-size-adjust: 100%;
   }
 
+  /* The body leading comes from the tokens and is set on the root, not on body, so the Chinese
+     rule below can switch it whether lang sits on <html> or on any subtree. */
+  :where(html) {
+    line-height: var(--f-leading);
+  }
+
   body {
     background: var(--f-bg);
     color: var(--f-fg);
-    font: 16px/1.6 var(--f-font-sans);
+    font-family: var(--f-font-sans);
+    font-size: 16px;
     -webkit-font-smoothing: antialiased;
   }
 
@@ -23,6 +30,11 @@
 
   ::selection {
     background: var(--f-accent-soft);
+  }
+
+  /* An English block inside a Chinese page goes back to the Latin leading. */
+  :where([lang]:not(:lang(zh))) {
+    line-height: var(--f-leading);
   }
 
   :where([lang]:lang(zh)) {
