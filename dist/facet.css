@@ -3681,6 +3681,65 @@
   }
 }
 
+/* src/css/80-layouts/focus.css */
+@layer facet.layouts {
+  /* A page about one thing: a contact page, a link hub, a launch or signup page. One centered
+     column, vertically centered in the window below the nav. */
+  .f-focus {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-block-size: 100svh;
+    max-inline-size: 40rem;
+    margin-inline: auto;
+    padding: calc(var(--f-nav-clear) + var(--f-space-6)) var(--f-gutter) var(--f-space-7);
+    text-align: center;
+  }
+
+  .f-focus__title {
+    margin: 0 0 var(--f-space-6);
+    font-size: var(--f-text-2xl);
+  }
+
+  /* The focal link: an email, a URL or a handle, large and in mono. Long text wraps anywhere,
+     so a typed phrase never pushes the page sideways. */
+  .f-focus__link {
+    display: inline-block;
+    max-inline-size: 100%;
+    border-bottom: 2px solid var(--f-accent);
+    color: var(--f-fg);
+    font: 500 clamp(var(--f-text-xl), 4vw, var(--f-text-3xl)) / 1.25 var(--f-font-mono);
+    overflow-wrap: anywhere;
+    text-decoration: none;
+    transition: color var(--f-dur-1) var(--f-ease);
+  }
+
+  .f-focus__link:hover {
+    color: var(--f-accent);
+  }
+
+  .f-focus__typed {
+    color: var(--f-accent);
+  }
+
+  .f-focus__hint {
+    margin: var(--f-space-3) 0 0;
+    color: var(--f-fg-2);
+    font: var(--f-text-xs) / 1.5 var(--f-font-mono);
+    letter-spacing: 0.02em;
+  }
+
+  .f-focus .f-divider {
+    inline-size: min(18rem, 100%);
+    margin: var(--f-space-6) auto var(--f-space-4);
+  }
+
+  .f-focus .f-social {
+    justify-content: center;
+  }
+}
+
 /* src/css/80-layouts/grid.css */
 @layer facet.layouts {
   /* A bento grid of cards: some span two columns, some two rows. 3, 2 and 1 columns. */

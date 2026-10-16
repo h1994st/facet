@@ -372,3 +372,8 @@
 .demo-hint .site-markup pre.f-code {
   max-height: 40svh;
 }
+
+.site-credit {
+  margin: 0 auto var(--f-space-6);
+  text-align: center;
+}

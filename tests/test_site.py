@@ -225,6 +225,7 @@ def test_matrix_covers_the_layouts():
             "panels",
             "deck",
             "app",
+            "focus",
         ]
     }
 

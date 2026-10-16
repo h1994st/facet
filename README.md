@@ -178,6 +178,11 @@ link and share card on every page, JSON-LD for each layout, one URL per language
 - `mockups/assets/craft.py`: draws the demo images and video loop the mockups use
   (`uv run mockups/assets/craft.py`; the loop needs ffmpeg).
 
+## Credits
+
+The Focus layout, its typed address, and the Landing layout's hero card are inspired by
+[mldangelo.com](https://mldangelo.com/) by Michael D'Angelo.
+
 ## License
 
 MIT. Fonts keep their own licenses (SIL OFL).

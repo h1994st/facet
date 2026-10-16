@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title data-zh="聚焦版式 · facet">Focus layout · facet</title>
+    <meta
+      name="description"
+      content="facet's focus layout: a centered page about one thing, such as a contact page with a typed email address, a link hub or a launch page."
+      data-zh="facet 的聚焦版式：围绕一件事的居中页面，比如带打字动画邮箱地址的联系页、链接汇总页或发布页。"
+    />
+    <script src="../site.js"></script>
+    <link rel="stylesheet" href="../dist/facet.css" />
+    <link rel="stylesheet" href="../dist/icons.css" />
+    <link rel="stylesheet" href="../dist/cast/cast-layered.css" />
+    <link rel="stylesheet" href="../site.css" />
+    <script type="module" src="../dist/js/facet.js"></script>
+  </head>
+  <body>
+    <nav class="f-nav f-nav--fixed" aria-label="Site">
+      <span class="f-nav__brand">Duna Feline</span
+      ><a href="#" aria-current="page" data-zh="博客">Blog</a><a href="#" data-zh="项目">Projects</a
+      ><a href="#" data-zh="简历">Resume</a>
+    </nav>
+
+    <main class="f-focus">
+      <h1 class="f-focus__title" data-zh="打个招呼">Say hello</h1>
+      <a class="f-focus__link" href="mailto:meow@example.com">
+        <span class="f-visually-hidden">meow@example.com</span>
+        <span aria-hidden="true"
+          ><span
+            class="f-focus__typed"
+            data-f-type='["meow", "hi", "purr", "any-name-you-like", "well, any name a cat can type"]'
+            >meow</span
+          >@example.com</span
+        >
+      </a>
+      <p class="f-focus__hint" data-zh="通常一两个午觉之内回复">
+        Usually answers within a nap or two
+      </p>
+      <p class="f-divider" data-zh="或者在这些地方找到我">or find me on</p>
+      <ul class="f-social" aria-label="Elsewhere">
+        <li>
+          <a class="f-social__link" href="https://github.com/example" rel="me noopener"
+            ><span class="f-icon f-icon--github" aria-hidden="true"></span
+            ><span class="f-visually-hidden">GitHub</span></a
+          >
+        </li>
+        <li>
+          <a class="f-social__link" href="https://example.com/scholar" rel="me noopener"
+            ><span class="f-icon f-icon--google-scholar" aria-hidden="true"></span
+            ><span class="f-visually-hidden">Google Scholar</span></a
+          >
+        </li>
+        <li>
+          <a class="f-social__link" href="https://example.com/instagram" rel="me noopener"
+            ><span class="f-icon f-icon--instagram" aria-hidden="true"></span
+            ><span class="f-visually-hidden">Instagram</span></a
+          >
+        </li>
+        <li>
+          <a class="f-social__link" href="https://example.com/bilibili" rel="me noopener"
+            ><span class="f-icon f-icon--bilibili" aria-hidden="true"></span
+            ><span class="f-visually-hidden">Bilibili</span></a
+          >
+        </li>
+        <li>
+          <a class="f-social__link" href="https://example.com/feed.xml"
+            ><span class="f-icon f-icon--rss" aria-hidden="true"></span
+            ><span class="f-visually-hidden">RSS</span></a
+          >
+        </li>
+      </ul>
+    </main>
+    <details class="site-markup">
+      <summary data-zh="标记">Markup</summary>
+      <pre class="f-code">
+&lt;main class="f-focus"&gt;
+  &lt;h1 class="f-focus__title"&gt;Say hello&lt;/h1&gt;
+  &lt;a class="f-focus__link" href="mailto:meow@example.com"&gt;
+    &lt;span class="f-visually-hidden"&gt;meow@example.com&lt;/span&gt;
+    &lt;span aria-hidden="true"
+      &gt;&lt;span class="f-focus__typed" data-f-type='["meow", "hi", "purr"]'&gt;meow&lt;/span
+      &gt;@example.com&lt;/span
+    &gt;
+  &lt;/a&gt;
+  &lt;p class="f-focus__hint"&gt;Usually answers within a nap or two&lt;/p&gt;
+  &lt;p class="f-divider"&gt;or find me on&lt;/p&gt;
+  &lt;ul class="f-social" aria-label="Elsewhere"&gt;…&lt;/ul&gt;
+&lt;/main&gt;</pre>
+    </details>
+    <p
+      class="f-meta site-credit"
+      data-zh='设计灵感来自 <a href="https://mldangelo.com/contact/">mldangelo.com</a>。'
+    >
+      Design inspired by <a href="https://mldangelo.com/contact/">mldangelo.com</a>.
+    </p>
+  </body>
+</html>
