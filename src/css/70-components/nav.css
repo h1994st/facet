@@ -1,0 +1,83 @@
+@layer facet.components {
+  /* Floating glass pill. */
+  .f-nav {
+    z-index: 20;
+    display: flex;
+    gap: var(--f-space-1);
+    align-items: center;
+    width: fit-content;
+    max-width: 100%;
+    margin: var(--f-space-3) auto 0;
+    padding: 0.3rem 0.35rem 0.3rem 0.95rem;
+    border: 1px solid var(--f-glass-edge);
+    border-radius: var(--f-r-pill);
+    background: var(--f-glass-bg);
+    backdrop-filter: blur(var(--f-glass-blur)) saturate(140%);
+    box-shadow: var(--f-shadow);
+    font-size: var(--f-text-sm);
+    white-space: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    transition:
+      background var(--f-dur-2),
+      border-color var(--f-dur-2),
+      box-shadow var(--f-dur-2);
+  }
+
+  .f-nav__brand {
+    margin-right: var(--f-space-3);
+    font: 600 0.95rem var(--f-font-serif);
+    color: var(--f-fg);
+  }
+
+  .f-nav a {
+    padding: 0.35rem 0.75rem;
+    color: var(--f-fg-2);
+    text-decoration: none;
+  }
+
+  .f-nav a:hover {
+    color: var(--f-fg);
+  }
+
+  .f-nav a[aria-current] {
+    background: color-mix(in oklch, var(--f-fg) 10%, transparent);
+    color: var(--f-fg);
+  }
+
+  .f-nav--fixed {
+    position: fixed;
+    top: var(--f-space-3);
+    left: 0;
+    right: 0;
+    margin-inline: auto;
+    width: fit-content;
+  }
+
+  /* Over a cover image: clear until the page scrolls (JS adds .is-scrolled), then glass. */
+  .f-nav--over:not(.is-scrolled) {
+    border-color: transparent;
+    background: transparent;
+    backdrop-filter: none;
+    box-shadow: none;
+  }
+
+  .f-nav--over:not(.is-scrolled) .f-nav__brand {
+    color: #fff;
+  }
+
+  .f-nav--over:not(.is-scrolled) a {
+    color: rgb(255 255 255 / 0.8);
+  }
+
+  .f-nav--over:not(.is-scrolled) a[aria-current] {
+    background: rgb(255 255 255 / 0.16);
+    color: #fff;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .f-nav {
+      transition: none;
+    }
+  }
+}

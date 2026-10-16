@@ -36,6 +36,22 @@ def contrast(page, selector, bg_selector="body"):
     return (a + 0.05) / (b + 0.05)
 
 
+def contrast_on(page, selector):
+    """Contrast of an element's text against its own background (body's if it is transparent)."""
+    fg, bg = page.evaluate(
+        f"""(() => {{
+          const el = document.querySelector({selector!r});
+          const f = ({TO_RGB});
+          const own = getComputedStyle(el).backgroundColor;
+          const base = f(getComputedStyle(document.body).backgroundColor);
+          const bg = f(own, `rgb(${{base.join(' ')}})`);
+          return [f(getComputedStyle(el).color, `rgb(${{bg.join(' ')}})`), bg];
+        }})()"""
+    )
+    a, b = sorted([_lum(fg), _lum(bg)], reverse=True)
+    return (a + 0.05) / (b + 0.05)
+
+
 def running_animations(page):
     return page.evaluate("document.getAnimations().filter(a => a.playState === 'running').length")
 
@@ -61,5 +77,5 @@ def focus_ring(page, selector):
     page.focus(selector)
     return page.evaluate(
         f"(() => {{ const s = getComputedStyle(document.querySelector({selector!r}));"
-        " return s.outlineStyle + ' ' + s.outlineWidth; }})()"
+        " return s.outlineStyle + ' ' + s.outlineWidth; })()"
     )

@@ -1,0 +1,77 @@
+@layer facet.components {
+  .f-toc {
+    position: sticky;
+    top: var(--f-space-7);
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    padding-left: 0.9rem;
+    border-left: 1px solid var(--f-line-2);
+    font-size: var(--f-text-sm);
+  }
+
+  .f-toc a {
+    position: relative;
+    padding: 0.3rem 0;
+    color: var(--f-fg-3);
+    text-decoration: none;
+    transition: color var(--f-dur-1);
+  }
+
+  .f-toc a:hover {
+    color: var(--f-fg-2);
+  }
+
+  .f-toc a[aria-current] {
+    color: var(--f-fg);
+  }
+
+  .f-toc a[aria-current]::before {
+    content: "";
+    position: absolute;
+    left: calc(-0.9rem - 1px);
+    top: 0.3rem;
+    bottom: 0.3rem;
+    width: 2px;
+    border-radius: 2px;
+    background: var(--f-accent);
+  }
+
+  /* Below 1024px the list becomes a horizontal scrolling pill bar. */
+  @media (max-width: 1023px) {
+    .f-toc {
+      z-index: 10;
+      flex-direction: row;
+      gap: var(--f-space-1);
+      overflow-x: auto;
+      max-width: 100%;
+      padding: 0.4rem;
+      border: 1px solid var(--f-line);
+      border-radius: var(--f-r-pill);
+      background: var(--f-glass-bg);
+      backdrop-filter: blur(var(--f-glass-blur));
+    }
+
+    .f-toc a {
+      flex: none;
+      padding: 0.3rem 0.7rem;
+      border-radius: var(--f-r-pill);
+      white-space: nowrap;
+    }
+
+    .f-toc a[aria-current] {
+      background: color-mix(in oklch, var(--f-fg) 10%, transparent);
+    }
+
+    .f-toc a[aria-current]::before {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .f-toc a {
+      transition: none;
+    }
+  }
+}

@@ -23,7 +23,7 @@ def test_fonts_load(page_factory, site_url):
     assert all(n > 0 for n in loaded), loaded
 
 
-from checks import contrast  # noqa: E402
+from checks import contrast, contrast_on  # noqa: E402
 
 THEMES = ["dark", "light"]
 
@@ -70,3 +70,14 @@ def test_inline_chinese_block_in_english_prose(page_factory, site_url):
     assert float(line[:-2]) == pytest.approx(float(size[:-2]))
     h = page.evaluate("getComputedStyle(document.getElementById('zh-h')).letterSpacing")
     assert h in ("normal", "0px")
+
+
+@pytest.mark.parametrize("lang", ["en", "zh"])
+@pytest.mark.parametrize("theme", THEMES)
+@pytest.mark.parametrize("width", [390, 860, 1280])
+def test_components_page(page_factory, site_url, width, theme, lang):
+    page = page_factory(width=width, theme=theme, lang=lang)
+    page.goto(f"{site_url}/components.html")
+    no_hscroll(page)
+    assert page.errors == []
+    assert contrast_on(page, ".f-btn--primary") >= 4.5

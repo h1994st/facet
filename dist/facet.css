@@ -2250,7 +2250,24 @@
     corner-shape: squircle;
   }
 
-  :where(.f-pill, .f-btn, .f-chip, .f-nav, .f-nav a, input, .f-avatar, .f-dot) {
+  :where(
+    .f-pill,
+    .f-btn,
+    .f-chip,
+    .f-nav,
+    .f-nav a,
+    input,
+    .f-segmented,
+    .f-segmented button,
+    .f-input,
+    .f-search,
+    .f-theme-toggle,
+    .f-code-copy,
+    .f-toc,
+    .f-toc a,
+    .f-avatar,
+    .f-dot
+  ) {
     corner-shape: round;
   }
 
@@ -2399,6 +2416,503 @@
     font: 600 0.78rem/1 var(--f-font-mono);
     letter-spacing: 0.06em;
     text-transform: uppercase;
+  }
+}
+
+/* src/css/70-components/alert.css */
+@layer facet.components {
+  .f-alert {
+    --_c: var(--f-info);
+    --_soft: var(--f-info-soft);
+    --_icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round'%3E%3Ccircle cx='8' cy='8' r='6.2'/%3E%3Cpath d='M8 7.2v3.6M8 5.1v.1'/%3E%3C/svg%3E");
+    margin: var(--f-space-5) 0;
+    padding: 0.85rem 1rem;
+    border: 1px solid color-mix(in oklch, var(--_c) 35%, transparent);
+    border-radius: var(--f-r-md);
+    background: var(--_soft);
+    color: var(--f-fg);
+    font-size: 0.92rem;
+  }
+
+  .f-alert--success {
+    --_c: var(--f-success);
+    --_soft: var(--f-success-soft);
+    --_icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='8' cy='8' r='6.2'/%3E%3Cpath d='m5.3 8.2 1.8 1.8 3.6-3.8'/%3E%3C/svg%3E");
+  }
+
+  .f-alert--warning {
+    --_c: var(--f-warning);
+    --_soft: var(--f-warning-soft);
+    --_icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M8 2.2 14.2 13H1.8z'/%3E%3Cpath d='M8 6.6v3M8 11.6v.1'/%3E%3C/svg%3E");
+  }
+
+  .f-alert--danger {
+    --_c: var(--f-danger);
+    --_soft: var(--f-danger-soft);
+    --_icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.6' stroke-linecap='round'%3E%3Ccircle cx='8' cy='8' r='6.2'/%3E%3Cpath d='m5.9 5.9 4.2 4.2M10.1 5.9l-4.2 4.2'/%3E%3C/svg%3E");
+  }
+
+  .f-alert__title {
+    display: flex;
+    gap: var(--f-space-2);
+    align-items: center;
+    margin: 0 0 var(--f-space-1);
+    color: var(--_c);
+    font-weight: 600;
+  }
+
+  .f-alert__title::before {
+    content: "";
+    flex: none;
+    width: 1rem;
+    height: 1rem;
+    background: currentColor;
+    mask: var(--_icon) center / contain no-repeat;
+  }
+}
+
+/* src/css/70-components/button.css */
+@layer facet.components {
+  .f-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--f-line-2);
+    border-radius: var(--f-r-pill);
+    background: none;
+    color: var(--f-fg);
+    font: 600 0.88rem/1.2 var(--f-font-sans);
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background var(--f-dur-1),
+      border-color var(--f-dur-1),
+      transform var(--f-dur-1) var(--f-ease);
+  }
+
+  .f-btn:hover {
+    background: color-mix(in oklch, var(--f-fg) 8%, transparent);
+  }
+
+  .f-btn:active {
+    transform: translateY(1px);
+  }
+
+  .f-btn--primary {
+    border-color: var(--f-accent);
+    background: var(--f-accent);
+    color: var(--f-accent-contrast);
+  }
+
+  .f-btn--primary:hover {
+    background: color-mix(in oklch, var(--f-accent) 88%, var(--f-fg));
+  }
+
+  .f-btn--quiet {
+    border-color: transparent;
+    color: var(--f-fg-2);
+  }
+
+  .f-btn--on-media {
+    border-color: rgb(255 255 255 / 0.35);
+    color: #fff;
+  }
+
+  .f-btn--on-media:hover {
+    background: rgb(255 255 255 / 0.14);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .f-btn {
+      transition: none;
+    }
+
+    .f-btn:active {
+      transform: none;
+    }
+  }
+}
+
+/* src/css/70-components/chip.css */
+@layer facet.components {
+  .f-chip {
+    display: inline-block;
+    padding: 0.16rem 0.6rem;
+    border: 1px solid transparent;
+    border-radius: var(--f-r-pill);
+    background: color-mix(in oklch, var(--f-fg) 8%, transparent);
+    color: var(--f-fg-2);
+    font: 600 0.75rem/1.4 var(--f-font-sans);
+  }
+
+  button.f-chip {
+    cursor: pointer;
+  }
+
+  button.f-chip:hover {
+    color: var(--f-fg);
+  }
+
+  button.f-chip[aria-pressed="true"] {
+    border-color: var(--f-accent);
+    color: var(--f-fg);
+  }
+}
+
+/* src/css/70-components/code.css */
+@layer facet.components {
+  pre.f-code {
+    position: relative;
+    margin: var(--f-space-5) 0;
+    padding: 0.95rem 1.1rem;
+    overflow: auto;
+    border: 1px solid var(--f-line);
+    border-radius: var(--f-r-md);
+    background: var(--f-bg-2);
+    color: var(--f-fg);
+    font: 0.86rem/1.65 var(--f-font-mono);
+  }
+
+  .f-code__prompt {
+    color: var(--f-fg-3);
+    user-select: none;
+  }
+
+  .f-code__out {
+    color: var(--f-accent);
+  }
+
+  /* Styling only; v0.1 ships no copy script. */
+  .f-code-copy {
+    position: absolute;
+    top: var(--f-space-2);
+    right: var(--f-space-2);
+    padding: 0.2rem 0.6rem;
+    border: 1px solid var(--f-line-2);
+    border-radius: var(--f-r-pill);
+    background: var(--f-surface);
+    color: var(--f-fg-2);
+    font: 600 var(--f-text-xs) var(--f-font-sans);
+    cursor: pointer;
+  }
+}
+
+/* src/css/70-components/empty.css */
+@layer facet.components {
+  /* A centered message with a cat: 404s, empty search results, offline. */
+  .f-empty {
+    display: grid;
+    place-items: center;
+    min-height: 60svh;
+    padding: var(--f-space-6) var(--f-space-4);
+    text-align: center;
+  }
+
+  .f-empty__cat {
+    width: 120px;
+    margin: 0 auto var(--f-space-2);
+  }
+
+  .f-empty__code {
+    margin: 0;
+    color: var(--f-fg-3);
+    font: 600 0.85rem var(--f-font-mono);
+    letter-spacing: 0.1em;
+  }
+
+  .f-empty h1 {
+    margin: 0.4rem 0 0.6rem;
+    font-family: var(--f-font-serif);
+    font-size: var(--f-text-2xl);
+    line-height: 1.15;
+  }
+
+  .f-empty p:not(.f-empty__code) {
+    max-width: 26rem;
+    margin: 0 auto var(--f-space-5);
+    color: var(--f-fg-2);
+  }
+
+  .f-empty .f-cluster {
+    justify-content: center;
+  }
+}
+
+/* src/css/70-components/footer.css */
+@layer facet.components {
+  .f-footer {
+    position: relative;
+    margin-top: var(--f-space-8);
+    padding: 1.1rem var(--f-space-4) 1.4rem;
+    border-top: 1px solid var(--f-line-2);
+    color: var(--f-fg-3);
+    font-size: 0.82rem;
+    text-align: center;
+  }
+
+  /* Cats sit on the top border at the ends, clear of the centered text. */
+  .f-footer__cats .cat {
+    position: absolute;
+    bottom: calc(100% - 4px);
+    width: 56px;
+  }
+
+  .f-footer__cats .cat:nth-of-type(1) {
+    left: max(var(--f-space-4), 50% - 30rem);
+  }
+
+  .f-footer__cats .cat:nth-of-type(2) {
+    left: calc(max(var(--f-space-4), 50% - 30rem) + 3.1rem);
+  }
+
+  .f-footer__cats .cat:nth-of-type(3) {
+    right: max(var(--f-space-4), 50% - 30rem);
+  }
+}
+
+/* src/css/70-components/input.css */
+@layer facet.components {
+  .f-input {
+    min-width: 0;
+    padding: 0.5rem 0.9rem;
+    border: 1px solid var(--f-line-2);
+    border-radius: var(--f-r-pill);
+    background: var(--f-bg-2);
+    color: var(--f-fg);
+    font: 0.9rem var(--f-font-sans);
+  }
+
+  .f-input::placeholder {
+    color: var(--f-fg-3);
+  }
+
+  .f-input:focus-visible {
+    border-color: var(--f-accent);
+  }
+
+  /* Leading magnifier as a background SVG; mid-gray reads on both themes. */
+  .f-search {
+    min-width: min(14rem, 100%);
+    padding-left: 2.4rem;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23888' stroke-width='1.6' stroke-linecap='round'%3E%3Ccircle cx='7' cy='7' r='4.5'/%3E%3Cpath d='m10.5 10.5 3 3'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: 0.85rem center;
+    background-size: 1rem 1rem;
+  }
+}
+
+/* src/css/70-components/nav.css */
+@layer facet.components {
+  /* Floating glass pill. */
+  .f-nav {
+    z-index: 20;
+    display: flex;
+    gap: var(--f-space-1);
+    align-items: center;
+    width: fit-content;
+    max-width: 100%;
+    margin: var(--f-space-3) auto 0;
+    padding: 0.3rem 0.35rem 0.3rem 0.95rem;
+    border: 1px solid var(--f-glass-edge);
+    border-radius: var(--f-r-pill);
+    background: var(--f-glass-bg);
+    backdrop-filter: blur(var(--f-glass-blur)) saturate(140%);
+    box-shadow: var(--f-shadow);
+    font-size: var(--f-text-sm);
+    white-space: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    transition:
+      background var(--f-dur-2),
+      border-color var(--f-dur-2),
+      box-shadow var(--f-dur-2);
+  }
+
+  .f-nav__brand {
+    margin-right: var(--f-space-3);
+    font: 600 0.95rem var(--f-font-serif);
+    color: var(--f-fg);
+  }
+
+  .f-nav a {
+    padding: 0.35rem 0.75rem;
+    color: var(--f-fg-2);
+    text-decoration: none;
+  }
+
+  .f-nav a:hover {
+    color: var(--f-fg);
+  }
+
+  .f-nav a[aria-current] {
+    background: color-mix(in oklch, var(--f-fg) 10%, transparent);
+    color: var(--f-fg);
+  }
+
+  .f-nav--fixed {
+    position: fixed;
+    top: var(--f-space-3);
+    left: 0;
+    right: 0;
+    margin-inline: auto;
+    width: fit-content;
+  }
+
+  /* Over a cover image: clear until the page scrolls (JS adds .is-scrolled), then glass. */
+  .f-nav--over:not(.is-scrolled) {
+    border-color: transparent;
+    background: transparent;
+    backdrop-filter: none;
+    box-shadow: none;
+  }
+
+  .f-nav--over:not(.is-scrolled) .f-nav__brand {
+    color: #fff;
+  }
+
+  .f-nav--over:not(.is-scrolled) a {
+    color: rgb(255 255 255 / 0.8);
+  }
+
+  .f-nav--over:not(.is-scrolled) a[aria-current] {
+    background: rgb(255 255 255 / 0.16);
+    color: #fff;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .f-nav {
+      transition: none;
+    }
+  }
+}
+
+/* src/css/70-components/segmented.css */
+@layer facet.components {
+  .f-segmented {
+    display: inline-flex;
+    gap: var(--f-space-1);
+    padding: var(--f-space-1);
+    border: 1px solid var(--f-line);
+    border-radius: var(--f-r-pill);
+    background: var(--f-bg-2);
+  }
+
+  .f-segmented button {
+    padding: 0.4rem 0.8rem;
+    border: 1px solid transparent;
+    border-radius: var(--f-r-pill);
+    background: none;
+    color: var(--f-fg-2);
+    font: 600 var(--f-text-sm) var(--f-font-sans);
+    cursor: pointer;
+  }
+
+  .f-segmented button:hover {
+    color: var(--f-fg);
+  }
+
+  .f-segmented button[aria-pressed="true"] {
+    border-color: var(--f-line-2);
+    background: var(--f-surface);
+    color: var(--f-fg);
+  }
+}
+
+/* src/css/70-components/theme-toggle.css */
+@layer facet.components {
+  .f-theme-toggle {
+    padding: 0.35rem 0.8rem;
+    border: 1px solid var(--f-line-2);
+    border-radius: var(--f-r-pill);
+    background: none;
+    color: var(--f-fg-2);
+    font: 600 var(--f-text-xs) var(--f-font-mono);
+    cursor: pointer;
+  }
+
+  .f-theme-toggle:hover {
+    color: var(--f-fg);
+    background: color-mix(in oklch, var(--f-fg) 8%, transparent);
+  }
+}
+
+/* src/css/70-components/toc.css */
+@layer facet.components {
+  .f-toc {
+    position: sticky;
+    top: var(--f-space-7);
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    padding-left: 0.9rem;
+    border-left: 1px solid var(--f-line-2);
+    font-size: var(--f-text-sm);
+  }
+
+  .f-toc a {
+    position: relative;
+    padding: 0.3rem 0;
+    color: var(--f-fg-3);
+    text-decoration: none;
+    transition: color var(--f-dur-1);
+  }
+
+  .f-toc a:hover {
+    color: var(--f-fg-2);
+  }
+
+  .f-toc a[aria-current] {
+    color: var(--f-fg);
+  }
+
+  .f-toc a[aria-current]::before {
+    content: "";
+    position: absolute;
+    left: calc(-0.9rem - 1px);
+    top: 0.3rem;
+    bottom: 0.3rem;
+    width: 2px;
+    border-radius: 2px;
+    background: var(--f-accent);
+  }
+
+  /* Below 1024px the list becomes a horizontal scrolling pill bar. */
+  @media (max-width: 1023px) {
+    .f-toc {
+      z-index: 10;
+      flex-direction: row;
+      gap: var(--f-space-1);
+      overflow-x: auto;
+      max-width: 100%;
+      padding: 0.4rem;
+      border: 1px solid var(--f-line);
+      border-radius: var(--f-r-pill);
+      background: var(--f-glass-bg);
+      backdrop-filter: blur(var(--f-glass-blur));
+    }
+
+    .f-toc a {
+      flex: none;
+      padding: 0.3rem 0.7rem;
+      border-radius: var(--f-r-pill);
+      white-space: nowrap;
+    }
+
+    .f-toc a[aria-current] {
+      background: color-mix(in oklch, var(--f-fg) 10%, transparent);
+    }
+
+    .f-toc a[aria-current]::before {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .f-toc a {
+      transition: none;
+    }
   }
 }
 

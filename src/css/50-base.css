@@ -48,7 +48,24 @@
     corner-shape: squircle;
   }
 
-  :where(.f-pill, .f-btn, .f-chip, .f-nav, .f-nav a, input, .f-avatar, .f-dot) {
+  :where(
+    .f-pill,
+    .f-btn,
+    .f-chip,
+    .f-nav,
+    .f-nav a,
+    input,
+    .f-segmented,
+    .f-segmented button,
+    .f-input,
+    .f-search,
+    .f-theme-toggle,
+    .f-code-copy,
+    .f-toc,
+    .f-toc a,
+    .f-avatar,
+    .f-dot
+  ) {
     corner-shape: round;
   }
 
