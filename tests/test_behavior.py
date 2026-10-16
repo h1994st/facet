@@ -26,3 +26,22 @@ def test_controls_show_focus_ring(page_factory, site_url):
     ]:
         page.keyboard.press("Tab")  # ensure keyboard modality
         assert not focus_ring(page, sel).startswith("none"), sel
+
+
+def test_liquid_hover_sets_state(page_factory, site_url):
+    page = page_factory()
+    page.goto(f"{site_url}/components.html")
+    card = page.locator("#demo-card")
+    card.hover()
+    assert "is-hot" in card.get_attribute("class")
+    page.mouse.move(0, 0)
+    assert "is-hot" not in card.get_attribute("class")
+
+
+def test_sheet_is_centered_in_viewport(page_factory, site_url):
+    page = page_factory(width=1280)
+    page.goto(f"{site_url}/components.html")
+    page.evaluate("window.scrollTo(0, document.body.scrollHeight)")
+    page.click("#demo-open-sheet")
+    top = page.evaluate("document.querySelector('.f-sheet').getBoundingClientRect().top")
+    assert 0 <= top < 900
