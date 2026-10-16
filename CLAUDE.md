@@ -1,0 +1,97 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this
+repository. What facet is, and which sites use it, is in `README.md`.
+
+## Commands
+
+```bash
+brew bundle        # install tooling (just, prettier); `just deps` does the same
+just               # list recipes
+just fmt [files]   # format everything, or only the given files
+just check         # check formatting without changing files
+just serve         # serve the repo at http://localhost:8000
+```
+
+## Engineering rules
+
+- **No build step for consumers.** Ship plain CSS (custom properties and classes) and small,
+  optional vanilla JS. No framework, no preprocessor output that a consumer must compile: every
+  consuming site has a different stack.
+- **Every token has a dark and a light value.** Dark is the default (`:root`); light overrides it.
+  Never add a color, shadow or glass token for one theme only.
+- **Low saturation.** Every color is muted: in OKLCH, keep accents at chroma 0.08 or below and
+  neutrals at 0.02 or below. No saturated brand hues, including in illustrations and semantic
+  colors.
+- **Choosing an accent.** Accents vary by hue only: `oklch(0.76 0.06 H)` on dark,
+  `oklch(0.52 0.07 H)` on light, which keeps contrast equal (about 9:1 and 5:1) and saturation low.
+  Never raise chroma or change lightness to make one site stand out. Pick a free hue from the
+  README's table, at least 30° from the others, guided by the project's own imagery; an accent marks
+  a family of related sites, which may share it. When the hues run out, add near-neutrals (same
+  lightness, chroma 0.02 on dark and 0.025 on light, at least 70° apart) rather than squeezing hues
+  closer. Status colors reuse Moss, Ochre, Rose and Slate, so alerts always carry an icon and a
+  label, never color alone. Record every new accent in the README.
+- **Accent is a per-site input.** Components read the accent from a custom property and never
+  hard-code a site's color.
+- **Bilingual.** Test every component in English and Chinese (`lang="zh-Hans"`). Never assume Latin
+  text widths. Chinese text gets its own line-height, `letter-spacing: 0`, and
+  `word-break: keep-all` with `overflow-wrap: anywhere` as the fallback.
+- **Fonts.** Headings use Source Serif 4 with Noto Serif SC for Chinese; text and UI use Geist; code
+  uses Geist Mono. Chinese body text never downloads a font: it falls through to the built-in system
+  fonts (PingFang SC, Hiragino Sans GB, Microsoft YaHei, Noto/Source Han Sans CJK SC).
+- **Self-host every font.** Never load fonts from Google Fonts, jsDelivr or any other third-party
+  host: Google is blocked in mainland China and jsDelivr is unreliable there, and a stalled font
+  request can hold up the page. Font files come from each family's official release, are processed
+  by a committed script (`uv run` with fontTools), and the output is committed and served from
+  facet's own site. Latin fonts ship as variable WOFF2 subset to Latin. Chinese fonts (Noto Serif
+  SC, the opt-in LXGW WenKai, 霞鹜文楷) ship one weight split into `unicode-range` slices using
+  Google's frequency-based slicing, so a page downloads only the characters it uses. Every
+  `@font-face` sets `font-display: swap`, and every stack ends in system fonts.
+- **Corner shapes.** Continuous-curvature and cut corners use `corner-shape` (`squircle`, `bevel`),
+  which only Chromium supports. Every shape must still read correctly where it falls back to a plain
+  `border-radius` arc, so check Safari (including iOS) and Firefox before adopting one. A cut corner
+  that must survive everywhere needs `clip-path`, not `corner-shape`. Squircle applies to containers
+  and tiles only; pills and circles keep `corner-shape: round`, since a squircle pill renders as a
+  squarer capsule in Chromium but a true pill elsewhere.
+- **Responsive.** Breakpoints are 640px (phone) and 1024px (tablet); a layout collapses only when
+  its content stops fitting, not at a fixed "mobile" width (side-by-side layouts hold down to 721px,
+  so a half-screen laptop window keeps them). Check every page at 390px, 860px and 1280px, in both
+  languages, with no horizontal scroll. Grid tracks use `minmax(0, 1fr)`, never `1fr`, so long code
+  or URLs can't widen the page. On phones, nothing sticky may cover content: at most the nav plus
+  one sticky element. Hover-only effects are decoration; anything interactive needs a touch path,
+  and controls that reveal content (footnote numbers) must look tappable. Track scroll position on
+  `scroll`, not with a thin IntersectionObserver band that a fast scroll can skip.
+- **Motion.** Every animation has a still fallback under `prefers-reduced-motion: reduce`.
+- **The cats.** The canonical drawing of Duna, Dudu and Nangnang is in the my-resume template's
+  `site` branch (`site/cast.js` for the SVG and poses, `.cat[data-cat=…]` in `site/style.css` for
+  the palettes). Copy from there verbatim, noting the source commit in a header comment, and keep
+  the copies out of Prettier (`.prettierignore`) so a re-sync is a clean diff. Never redraw or
+  recolor them here. Cats are decorative (`aria-hidden`), never cover text, and get a faint white
+  outline (`--cat-edge`) on dark backgrounds.
+- **No personal information.** Sample content uses Duna Feline's fictional world (example.com, her
+  projects and posts) and the generated art in `mockups/assets/` (`craft.py`). Never add real names,
+  domains, accounts, employers, local paths or personal stories.
+
+- **American English** in code, comments, docs and UI text: color, gray, center, behavior. Verbatim
+  copies from other repos keep their source spelling.
+
+## Git
+
+- **Commits:** [Conventional Commits](https://www.conventionalcommits.org/) (`feat:`, `fix:`,
+  `docs:`, `chore:`, `refactor:`, ...). Leave the body empty in most cases. When one is really
+  needed, explain why in one or two short sentences. No attribution lines.
+- **Branches:** [Conventional Branch](https://conventional-branch.github.io/): `main` is the default
+  branch; work happens on `feature/<desc>`, `bugfix/<desc>`, `hotfix/<desc>`, `release/<version>` or
+  `chore/<desc>`, lowercase with hyphens.
+- **Merging:** always squash merge a branch back into `main` (`git merge --squash <branch>`, then
+  one Conventional Commit), so `main`'s history stays linear: no merge commits.
+  `.claude/hooks/protect-history.sh` denies any other `git merge`.
+
+## Tooling
+
+- **Dependencies:** never edit `Brewfile` directly; add or remove tools with
+  `brew bundle add <formula>` / `brew bundle remove <formula>`. `.claude/settings.json` denies
+  editing it, and `.claude/hooks/protect-brewfile.sh` denies shell writes to it.
+- **Formatting:** Prettier owns CSS, JS, HTML, Markdown, JSON and YAML (`.prettierrc.json`: width
+  100, prose wrapped). `just --fmt` owns the justfile. `.claude/hooks/format.sh` runs
+  `just fmt <file>` after every edit; run `just check` before committing.
