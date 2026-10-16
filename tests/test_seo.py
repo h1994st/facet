@@ -9,7 +9,7 @@ import tomllib
 from pathlib import Path
 
 import pytest
-from PIL import Image
+from PIL import Image, ImageChops
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "site"
@@ -139,7 +139,11 @@ def test_a_page_without_a_description_fails_the_build(tmp_path):
 def test_the_share_card_is_current():
     saved = Image.open(SITE / "card.png")
     assert saved.size == (1200, 630)
-    assert saved.convert("RGB").tobytes() == card.draw().tobytes(), "run `just card`"
+    # Text antialiasing differs a little between platforms' FreeType, so compare closely, not
+    # byte for byte: a changed script moves far more pixels than that.
+    diff = ImageChops.difference(saved.convert("RGB"), card.draw()).convert("L")
+    changed = sum(diff.point(lambda v: 255 if v > 24 else 0).histogram()[255:])
+    assert changed < 0.002 * 1200 * 630, f"{changed} pixels differ; run `just card`"
     assert (SITE / "favicon.svg").read_text() == card.icon(), "run `just card`"
 
 
