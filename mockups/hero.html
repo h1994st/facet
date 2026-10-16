@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>facet · Hero</title>
+    <link rel="stylesheet" href="base.css" />
+    <style>
+      .cands {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+      }
+      .cand.wide {
+        grid-column: 1 / -1;
+      }
+      .cand h2 {
+        margin: 0;
+        font: 700 1.2rem/1.3 var(--mk-display);
+      }
+      .cand > p {
+        margin: 0.25rem 0 0.8rem;
+        min-height: 2.8em;
+        color: var(--fg-2);
+        font-size: 0.88rem;
+      }
+
+      /* A page as a site would show it: its background, the hero card, the start of what follows.
+         The card is a deep shade of the site's accent, the same in both themes. */
+      .page {
+        --deep: oklch(from var(--accent) 0.42 min(c, 0.07) h);
+        --on-deep: oklch(from var(--accent) 0.97 min(c, 0.008) h);
+        --r-hero: 30px;
+        padding: 1.5rem 1.5rem 1.25rem;
+        border: 1px solid var(--line-2);
+        border-radius: 22px;
+        corner-shape: squircle;
+        background: var(--page-bg, var(--bg));
+        color: var(--page-fg, var(--fg));
+      }
+      /* Candidates with a fixed dark page, whatever the toolbar's theme. */
+      .page.dark {
+        --page-fg: #e8ebf2;
+        --page-fg-2: rgb(232 235 242 / 0.68);
+        --page-line: rgb(255 255 255 / 0.14);
+      }
+      .bg-15 {
+        --page-bg: oklch(0.15 0.012 260);
+      }
+      .bg-20 {
+        --page-bg: oklch(0.2 0.012 260);
+      }
+      :root[data-theme="light"] .bg-20.follow {
+        --page-bg: var(--bg);
+      }
+      .bg-24 {
+        --page-bg: oklch(0.24 0.012 260);
+      }
+      .sharp {
+        --r-hero: 0;
+      }
+      .pale {
+        --deep: var(--accent);
+        --on-deep: #0f1218;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+        gap: 1.5rem;
+        align-items: center;
+        padding: 1.6rem 1.5rem;
+        border-radius: var(--r-hero);
+        corner-shape: squircle;
+        background: var(--deep);
+        color: var(--on-deep);
+      }
+      .hero .kicker {
+        margin: 0 0 0.8rem;
+        font: 500 0.68rem/1 var(--mk-mono);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .hero h3 {
+        margin: 0 0 0.9rem;
+        font: 600 clamp(1.8rem, 3.4vw, 2.4rem) / 1.02 var(--mk-display);
+        letter-spacing: -0.02em;
+      }
+      .hero .lead {
+        margin: 0 0 0.6rem;
+        font-size: 0.98rem;
+        line-height: 1.4;
+      }
+      .hero .lead a {
+        color: inherit;
+        text-underline-offset: 0.2em;
+      }
+      .hero .body {
+        margin: 0 0 1.1rem;
+        font: 0.9rem/1.5 var(--mk-display);
+      }
+      .hero .cta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.6rem 1.1rem;
+        align-items: center;
+        font-size: 0.85rem;
+      }
+      .hero .btn {
+        padding: 0.55rem 1.1rem;
+        border-radius: 999px;
+        background: var(--on-deep);
+        color: var(--deep);
+        font-weight: 500;
+      }
+      .hero .link {
+        text-decoration: underline;
+        text-underline-offset: 0.3rem;
+      }
+      .hero figure {
+        justify-self: center;
+        width: min(100%, 9rem);
+        margin: 0;
+        text-align: center;
+      }
+      .hero figure img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 1;
+        object-fit: cover;
+        border-radius: 14px;
+        corner-shape: squircle;
+      }
+      .sharp .hero figure img {
+        border-radius: 2px;
+      }
+      .hero figcaption {
+        margin-top: 0.5rem;
+        font: 0.66rem/1 var(--mk-mono);
+      }
+      .page .after {
+        margin: 1.1rem 0 0;
+        padding-top: 0.8rem;
+        border-top: 1px solid var(--page-line, var(--line-2));
+        color: var(--page-fg-2, var(--fg-2));
+        font-size: 0.82rem;
+      }
+      @media (max-width: 860px) {
+        .cands {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+      @media (max-width: 560px) {
+        .hero {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="mk-page">
+      <header>
+        <h1 data-zh="主卡片">Hero</h1>
+        <p
+          data-zh="首页开场的大卡片，灵感来自 mldangelo.com：卡片填满网站强调色的深色调，文字是浅色；下面接着最近的文章。同时比较了更灰的深色背景。选定的是 B：背景亮度 0.20，深色调卡片，松鼠角，浅色主题下卡片保持深色（切换工具栏的 Light 查看）。卡片颜色由强调色算出，切换右上角的网站看看。"
+        >
+          The card that opens a home page, inspired by mldangelo.com: a deep shade of the site's
+          accent with light text, then the latest posts below. Compared alongside a grayer dark
+          background. The choice is B: background lightness 0.20, the deep card with squircle
+          corners, and the card stays deep on the light theme (switch the toolbar to Light). The
+          card's color comes from the accent; try each site at the top right.
+        </p>
+      </header>
+
+      <div class="cands">
+        <section class="cand wide">
+          <h2>
+            <span data-zh="B · 灰一点的深色 + 深色调卡片">B · A little gray + the deep card</span>
+            <span class="mk-chosen" data-zh="已选">Chosen</span>
+          </h2>
+          <p
+            data-zh="深色背景从近黑提到亮度 0.20，柔和但仍然是深色。卡片在浅色主题下保持深色（原来的 F）。"
+          >
+            The dark background rises from near-black to lightness 0.20: softer, still clearly dark.
+            On the light theme the card stays deep (formerly F).
+          </p>
+          <div class="page bg-20 follow"></div>
+        </section>
+        <section class="cand">
+          <h2 data-zh="A · 现在的近黑">A · Today's near-black</h2>
+          <p data-zh="亮度 0.15，facet 原来的深色背景。卡片很突出，但页面显得很重。">
+            Lightness 0.15, facet's dark background before. The card stands out, but the page feels
+            heavy.
+          </p>
+          <div class="page dark bg-15"></div>
+        </section>
+        <section class="cand">
+          <h2 data-zh="C · 炭灰">C · Charcoal</h2>
+          <p data-zh="亮度 0.24。最柔和，卡片和背景的对比最小。">
+            Lightness 0.24. The softest; the card and the page are closest in tone.
+          </p>
+          <div class="page dark bg-24"></div>
+        </section>
+        <section class="cand">
+          <h2 data-zh="D · 直角卡片">D · Square card</h2>
+          <p data-zh="和 mldangelo.com 一样的直角。和 facet 的松鼠角容器不一致。">
+            Square corners, as on mldangelo.com. Out of step with facet's squircle containers.
+          </p>
+          <div class="page dark bg-20 sharp"></div>
+        </section>
+        <section class="cand">
+          <h2 data-zh="E · 浅色强调色卡片">E · The plain accent</h2>
+          <p data-zh="卡片用原本的强调色，配深色文字。更亮，但和按钮、链接的颜色抢眼。">
+            The card in the plain accent with dark text. Brighter, but it competes with buttons and
+            links in the same color.
+          </p>
+          <div class="page dark bg-20 pale"></div>
+        </section>
+      </div>
+    </main>
+
+    <template id="scene">
+      <section class="hero">
+        <div>
+          <p class="kicker" data-zh="吉祥物 · 红点">Mascot · Red dots</p>
+          <h3 data-zh="嘟娜">Duna Feline</h3>
+          <p
+            class="lead"
+            data-zh='我以追红点为生，在 <a href="#">客厅实验室</a> 做 <a href="#">红点追踪器</a>。'
+          >
+            I chase red dots for a living, at <a href="#">Living Room Labs</a>, working on
+            <a href="#">Red Dot Tracker</a>.
+          </p>
+          <p class="body" data-zh="我记下红点碰过的每一面墙，在阳光落下的地方午睡。">
+            I map every wall the dot has touched and nap where the sun lands.
+          </p>
+          <div class="cta">
+            <span class="btn" data-zh="关于我 ↗">About me ↗</span
+            ><span class="link" data-zh="查看简历">View resume</span>
+          </div>
+        </div>
+        <figure>
+          <img src="assets/board-1.jpg" alt="" />
+          <figcaption data-zh="窗台">The windowsill</figcaption>
+        </figure>
+      </section>
+      <p class="after" data-zh="随笔 ↗">Notes and essays ↗</p>
+    </template>
+
+    <script type="module">
+      // Fill every page frame before base.js swaps the bilingual text.
+      for (const page of document.querySelectorAll(".page")) {
+        page.append(document.getElementById("scene").content.cloneNode(true));
+      }
+      await import("./base.js");
+    </script>
+  </body>
+</html>

@@ -72,7 +72,7 @@
     saved = JSON.parse(get(KEY) || "{}") || {};
   } catch (e) {}
   var state = {
-    theme: pick(get(THEME_KEY), THEMES) || pick(saved.theme, THEMES) || "dark",
+    theme: pick(get(THEME_KEY), THEMES) || pick(saved.theme, THEMES) || "auto",
     lang: pick(saved.lang, LANGS) || "en",
     accent: pick(saved.accent, ACCENT_NAMES) || "",
   };

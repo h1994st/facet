@@ -99,8 +99,17 @@ def test_bogus_stored_theme_is_ignored(page_factory, site_url, stored):
     page.add_init_script(f"localStorage.setItem('facet-theme', {stored!r})")
     page.goto(f"{site_url}/tests/theme-snippet.html")
     page.wait_for_function("document.querySelector('[data-f-theme-toggle]').ariaLabel")
-    assert theme(page) == "dark"
-    assert page.get_attribute("[data-f-theme-toggle]", "aria-label") == "Theme: Dark"
+    assert theme(page) == "auto"
+    assert page.get_attribute("[data-f-theme-toggle]", "aria-label") == "Theme: Auto"
+
+
+def test_set_theme_falls_back_to_auto(page_factory, site_url):
+    page = page_factory()
+    page.goto(f"{site_url}/tests/theme-snippet.html")
+    page.wait_for_function("document.querySelector('[data-f-theme-toggle]').ariaLabel")
+    page.evaluate("import('/dist/js/theme.js').then((m) => m.setTheme('nope'))")
+    assert theme(page) == "auto"
+    assert page.evaluate("localStorage.getItem('facet-theme')") == "auto"
 
 
 def test_scrollspy_matches_chinese_ids(page_factory, site_url):

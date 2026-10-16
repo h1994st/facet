@@ -240,7 +240,7 @@
         const [hi, lo] = [lum(a), lum(b)].sort((x, y) => y - x);
         return (hi + 0.05) / (lo + 0.05);
       };
-      const BG = [rgb("oklch(0.15 0.012 260)"), rgb("oklch(0.975 0.004 260)")];
+      const BG = [rgb("oklch(0.2 0.012 260)"), rgb("oklch(0.975 0.004 260)")];
       for (const tile of document.querySelectorAll(".site-tile")) {
         const spans = tile.querySelectorAll(".site-tile__sw span");
         spans.forEach((s, i) => {

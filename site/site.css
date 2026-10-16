@@ -121,7 +121,7 @@
 }
 
 @media (prefers-color-scheme: light) {
-  :root[data-theme="auto"] [data-hue] {
+  :root:not([data-theme="dark"]) [data-hue] {
     --sw: var(--sw-l);
   }
 }
@@ -309,7 +309,7 @@
 }
 
 @media (prefers-color-scheme: light) {
-  :root[data-theme="auto"] .site-tile__btn {
+  :root:not([data-theme="dark"]) .site-tile__btn {
     color: #fff;
   }
 }
@@ -371,4 +371,9 @@
 .f-deck .site-markup pre.f-code,
 .demo-hint .site-markup pre.f-code {
   max-height: 40svh;
+}
+
+.site-credit {
+  margin: 0 auto var(--f-space-6);
+  text-align: center;
 }

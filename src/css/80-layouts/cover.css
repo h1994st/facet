@@ -7,7 +7,7 @@
     align-items: end;
     min-height: 100svh;
     overflow: hidden;
-    background: oklch(0.15 0.012 260);
+    background: oklch(0.2 0.012 260);
     color: #fff;
   }
 

@@ -1,10 +1,11 @@
-/* Design tokens. Dark is the default; light overrides it. Every color has both values. */
+/* Design tokens. Every color has a dark and a light value; dark is the theme designed first. */
 @layer facet.tokens {
   /* The theme switch. Each color token is written once, as
        var(--f-unless-light, <dark value>) var(--f-unless-dark, <light value>)
      and the switch keeps exactly one of the two: a switch set to the empty value drops its
-     fallback, one set to initial (invalid) lets it through. Dark is the default; the light theme,
-     auto on a light system, and print flip it. */
+     fallback, one set to initial (invalid) lets it through. The switch starts on dark; the light
+     theme, a light system (unless data-theme="dark" forces dark), and print flip it, so a page
+     with no data-theme follows the system, like auto. */
   :root {
     --f-unless-light: initial;
     --f-unless-dark: ;
@@ -18,7 +19,7 @@
   }
 
   @media (prefers-color-scheme: light) {
-    :root[data-theme="auto"] {
+    :root:not([data-theme="dark"]) {
       --f-unless-light: ;
       --f-unless-dark: initial;
       color-scheme: light;
@@ -35,16 +36,15 @@
   }
 
   :root {
-    --f-bg: var(--f-unless-light, oklch(0.15 0.012 260))
-      var(--f-unless-dark, oklch(0.975 0.004 260));
-    --f-bg-2: var(--f-unless-light, oklch(0.18 0.012 260))
+    --f-bg: var(--f-unless-light, oklch(0.2 0.012 260)) var(--f-unless-dark, oklch(0.975 0.004 260));
+    --f-bg-2: var(--f-unless-light, oklch(0.23 0.012 260))
       var(--f-unless-dark, oklch(0.955 0.006 260));
-    --f-surface: var(--f-unless-light, oklch(0.21 0.012 260))
+    --f-surface: var(--f-unless-light, oklch(0.26 0.012 260))
       var(--f-unless-dark, oklch(0.995 0.002 260));
     --f-fg: var(--f-unless-light, oklch(0.95 0.01 260)) var(--f-unless-dark, oklch(0.2 0.015 260));
     --f-fg-2: var(--f-unless-light, oklch(0.95 0.01 260 / 0.7))
       var(--f-unless-dark, oklch(0.2 0.015 260 / 0.72));
-    --f-fg-3: var(--f-unless-light, oklch(0.95 0.01 260 / 0.5))
+    --f-fg-3: var(--f-unless-light, oklch(0.95 0.01 260 / 0.51))
       var(--f-unless-dark, oklch(0.2 0.015 260 / 0.65));
     --f-line: var(--f-unless-light, rgb(255 255 255 / 0.08)) var(--f-unless-dark, rgb(0 0 0 / 0.08));
     --f-line-2: var(--f-unless-light, rgb(255 255 255 / 0.14))
@@ -65,6 +65,11 @@
       var(--f-unless-dark, oklch(0.52 0.07 255));
     --f-accent-contrast: var(--f-unless-light, oklch(0.15 0.012 260)) var(--f-unless-dark, #fff);
     --f-accent-soft: color-mix(in oklch, var(--f-accent) 16%, transparent);
+    /* A deep shade of the accent for filled cards (.f-hero), the same in both themes. These are
+       Slate, for browsers without relative colors; the @supports block below derives them from
+       the accent. */
+    --f-accent-deep: oklch(0.42 0.06 255);
+    --f-on-accent-deep: oklch(0.97 0.008 255);
     --f-success: var(--f-unless-light, oklch(0.76 0.06 130))
       var(--f-unless-dark, oklch(0.52 0.07 130));
     --f-warning: var(--f-unless-light, oklch(0.76 0.06 85))
@@ -125,6 +130,19 @@
     --f-dur-1: 150ms;
     --f-dur-2: 250ms;
     --f-dur-3: 600ms;
+  }
+
+  /* The deep pair, derived from the accent where relative colors work. A custom property is never
+     validated, so a second declaration after the Slate one would always win and leave an invalid
+     color where relative colors do not work; @supports keeps the Slate values there. min() keeps
+     near-neutral accents and Graphite near-neutral, and 0.06 is the chroma both themes share.
+     .f-hero computes its own pair, so it follows an --f-accent set on any ancestor. */
+  @supports (color: oklch(from red 0.42 min(c, 0.06) h)) {
+    :root,
+    .f-hero {
+      --f-accent-deep: oklch(from var(--f-accent) 0.42 min(c, 0.06) h);
+      --f-on-accent-deep: oklch(from var(--f-accent) 0.97 min(c, 0.008) h);
+    }
   }
 
   /* A fixed .f-nav floats over the page: layouts reserve room for it. Flow navs need none. */

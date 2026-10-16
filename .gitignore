@@ -5,3 +5,4 @@ _serve/
 .venv/
 __pycache__/
 fonts/.cache/
+icons/.cache/

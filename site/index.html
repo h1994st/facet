@@ -8,8 +8,8 @@
     </title>
     <meta
       name="description"
-      content="facet is a dark-first, bilingual design system in plain CSS and small vanilla JS: tokens, self-hosted fonts, components and 13 layouts, with no build step."
-      data-zh="facet 是一套深色优先的双语设计系统，用纯 CSS 和少量原生 JavaScript 写成：设计令牌、自托管字体、组件和十三种版式，不需要构建步骤。"
+      content="facet is a dark-first, bilingual design system in plain CSS and small vanilla JS: tokens, self-hosted fonts, components and 15 layouts, with no build step."
+      data-zh="facet 是一套深色优先的双语设计系统，用纯 CSS 和少量原生 JavaScript 写成：设计令牌、自托管字体、组件和十五种版式，不需要构建步骤。"
     />
     <script src="site.js"></script>
     <link rel="stylesheet" href="dist/facet.css" />
@@ -101,8 +101,8 @@
           </li>
           <li>
             <a href="layouts/"
-              >Layouts<span data-zh="十三种页面版式，从阅读页到演示文稿。"
-                >Thirteen page layouts, from reading pages to decks.</span
+              >Layouts<span data-zh="十五种页面版式，从阅读页到演示文稿。"
+                >Fifteen page layouts, from reading pages to decks.</span
               ></a
             >
           </li>
@@ -133,16 +133,18 @@
       <section>
         <h2 data-zh="安装：CDN">Install: from a CDN</h2>
         <p
-          data-zh="把样式表和脚本链接到页面里。先加载 <code>facet.css</code>，再加载 <code>cast/cast-layered.css</code>（只有用到吉祥物时才需要）。固定一个标签，网站就不会随主分支变化。"
+          data-zh="把样式表和脚本链接到页面里。先加载 <code>facet.css</code>，再加载 <code>cast/cast-layered.css</code>（只有用到吉祥物时才需要）。社交图标要另外加载 <code>icons.css</code>。固定一个标签，网站就不会随主分支变化。"
         >
           Link the stylesheet and the script. Link <code>facet.css</code> first and
-          <code>cast/cast-layered.css</code> after it (only needed if you use the mascots). Pin a
-          tag so the site does not move with the main branch.
+          <code>cast/cast-layered.css</code> after it (only needed if you use the mascots). Social
+          icons need <code>icons.css</code> too. Pin a tag so the site does not move with the main
+          branch.
         </p>
         <!-- x-release-please-start-version -->
         <pre class="f-code">
 &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.1/dist/facet.css" /&gt;
 &lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.1/dist/cast/cast-layered.css" /&gt;
+&lt;link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.1/dist/icons.css" /&gt;
 &lt;script type="module" src="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.1/dist/js/facet.js"&gt;&lt;/script&gt;</pre>
         <!-- x-release-please-end -->
         <p
@@ -170,6 +172,7 @@ git -C vendor/facet checkout v0.1.1</pre>
         <pre class="f-code">
 &lt;link rel="stylesheet" href="/vendor/facet/dist/facet.css" /&gt;
 &lt;link rel="stylesheet" href="/vendor/facet/dist/cast/cast-layered.css" /&gt;
+&lt;link rel="stylesheet" href="/vendor/facet/dist/icons.css" /&gt;
 &lt;script type="module" src="/vendor/facet/dist/js/facet.js"&gt;&lt;/script&gt;</pre>
       </section>
 
@@ -194,14 +197,17 @@ git -C vendor/facet checkout v0.1.1</pre>
 &lt;/html&gt;</pre>
         <ul>
           <li
-            data-zh='<code>data-accent</code> 选择强调色（十三种，见色彩页）；<code>data-theme</code> 取 <code>dark</code>（默认）、<code>light</code> 或 <code>auto</code>，主题按钮把选择记在 <code>localStorage["facet-theme"]</code> 里。两者都只在 <code>&lt;html&gt;</code> 上生效（<code>:root[data-accent]</code>）；要让页面的某一部分换一种强调色，在它上面设置 <code>--f-accent</code> 和 <code>--f-accent-contrast</code>。'
+            data-zh='<code>data-accent</code> 选择强调色（十三种，见色彩页）；<code>data-theme</code> 取 <code>auto</code>（默认，跟随系统）、<code>dark</code> 或 <code>light</code>，主题按钮把选择记在 <code>localStorage["facet-theme"]</code> 里。两者都只在 <code>&lt;html&gt;</code> 上生效（<code>:root[data-accent]</code>）；要让页面的某一部分换一种强调色，在它上面设置 <code>--f-accent</code> 和 <code>--f-accent-contrast</code>。主卡片（<code>.f-hero</code>）的深色会随之改变；<code>--f-accent-soft</code>（浅色底）在 <code>:root</code> 上算好，不会跟着变，所以也在这一部分上把它设为 <code>color-mix(in oklch, var(--f-accent) 16%, transparent)</code>。'
           >
             <code>data-accent</code> picks the accent (thirteen, on the Color page);
-            <code>data-theme</code> is <code>dark</code> (the default), <code>light</code> or
-            <code>auto</code>. The theme toggle remembers its choice in
+            <code>data-theme</code> is <code>auto</code> (the default, which follows the system),
+            <code>dark</code> or <code>light</code>. The theme toggle remembers its choice in
             <code>localStorage["facet-theme"]</code>. Both work on <code>&lt;html&gt;</code> only
             (<code>:root[data-accent]</code>); to give one part of a page its own accent, set
-            <code>--f-accent</code> and <code>--f-accent-contrast</code> on it.
+            <code>--f-accent</code> and <code>--f-accent-contrast</code> on it. The deep shade of
+            the hero card (<code>.f-hero</code>) follows; <code>--f-accent-soft</code> (the tinted
+            backgrounds) is computed on <code>:root</code> and does not, so set it on that part too,
+            to <code>color-mix(in oklch, var(--f-accent) 16%, transparent)</code>.
           </li>
           <li
             data-zh="默认的 <code>.f-nav</code> 在页面流中。要让它浮在页面上，请加 <code>.f-nav--fixed</code>：页面里只要有它，<code>--f-nav-clear</code> 就会自动为内容预留位置。"
@@ -250,6 +256,28 @@ git -C vendor/facet checkout v0.1.1</pre>
             </tr>
           </thead>
           <tbody>
+            <tr>
+              <td>
+                <code>data-f-ga4</code> (on <code>&lt;html&gt;</code>), <code>data-f-event</code>,
+                <code>data-f-label</code>
+              </td>
+              <td><code>analytics.js</code></td>
+              <td
+                data-zh='可选的 Google Analytics 4：<code>&amp;lt;html data-f-ga4="G-…"&amp;gt;</code> 加载一次 gtag 并发送一次 <code>config</code>（即一次页面浏览）。浏览器发送全局隐私控制（GPC）时什么都不加载。<code>data-f-event="name"</code> 在点击时发送这个事件（链接带 <code>link_url</code>，<code>data-f-label</code> 作为 <code>label</code>）；切换主题时发送 <code>theme_change</code>。不提供 Cookie 同意横幅。要用 GA4 的同意模式，请在 <code>facet.js</code> 之前用一个普通（非模块）的 <code>&amp;lt;head&amp;gt;</code> 脚本定义 <code>window.dataLayer</code> 和 <code>gtag</code>，并调用 <code>gtag("consent", "default", …)</code>：<code>analytics.js</code> 会沿用已有的 <code>gtag</code>。不要再保留自己的 <code>gtag("config", …)</code> 代码，否则每次浏览都会被计两次。'
+              >
+                Optional Google Analytics 4: <code>&lt;html data-f-ga4="G-…"&gt;</code> loads gtag
+                once and sends one <code>config</code> (one page view). Nothing loads when the
+                browser sends Global Privacy Control. <code>data-f-event="name"</code> sends that
+                event on click (with <code>link_url</code> for links and
+                <code>data-f-label</code> as <code>label</code>); theme switches send
+                <code>theme_change</code>. A consent banner is out of scope. For GA4 consent mode,
+                define <code>window.dataLayer</code> and <code>gtag</code> and push
+                <code>gtag("consent", "default", …)</code> in a classic
+                <code>&lt;head&gt;</code> script before <code>facet.js</code>:
+                <code>analytics.js</code> reuses an existing <code>gtag</code>. Do not also keep
+                your own <code>gtag("config", …)</code> snippet, or every view is counted twice.
+              </td>
+            </tr>
             <tr>
               <td><code>data-f-theme-toggle</code></td>
               <td><code>theme.js</code></td>
@@ -334,6 +362,19 @@ git -C vendor/facet checkout v0.1.1</pre>
               >
                 On a <code>.f-deck</code>: turns the slides into one stage whose pieces move between
                 slides (the data format is below).
+              </td>
+            </tr>
+            <tr>
+              <td><code>data-f-type</code></td>
+              <td><code>typewriter.js</code></td>
+              <td
+                data-zh="一组短语（JSON 数组）：逐字打出、停留、清空，再打下一句，循环。元素原来的文字是静止状态，减少动效时一直保持。速度和停留时间可用 <code>data-f-type-speed</code> 和 <code>data-f-type-hold</code>（毫秒）调整。放在 <code>aria-hidden</code> 的包裹元素里，旁边用视觉上隐藏的文字写出真实内容。"
+              >
+                A JSON array of phrases: types each one, holds it, clears it and types the next,
+                looping. The element's own text is the still state, kept under reduced motion. Tune
+                with
+                <code>data-f-type-speed</code> and <code>data-f-type-hold</code> (ms). Put it in an
+                <code>aria-hidden</code> wrapper next to the real value in visually hidden text.
               </td>
             </tr>
           </tbody>

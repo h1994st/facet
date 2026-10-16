@@ -1,7 +1,7 @@
 from pathlib import Path
 
 import pytest
-from checks import cat_text_overlaps, contrast, contrast_on, no_hscroll
+from checks import TO_RGB, _lum, cat_text_overlaps, contrast, contrast_on, no_hscroll
 
 SITE = Path(__file__).resolve().parents[1] / "site"
 # Every reference-site page except the test fixtures; the symlinked dist/ and assets/ are skipped.
@@ -12,16 +12,84 @@ PAGES = sorted(
 )
 
 
-@pytest.mark.parametrize("lang", ["en", "zh"])
-@pytest.mark.parametrize("theme", ["dark", "light"])
-@pytest.mark.parametrize("width", [390, 860, 1280])
+# Toolbar links; on any other page no link is current, and every layouts/* page marks "Layouts".
+LINKED = {
+    "index.html",
+    "tokens.html",
+    "color.html",
+    "type.html",
+    "components.html",
+    "cast.html",
+    "seo.html",
+}
+
+
+def settle(page):
+    """Wait for web fonts, so the layout measured is the final one."""
+    page.evaluate("document.fonts.ready.then(() => true)")
+
+
+def pick(page, key, value):
+    """Press a toolbar button. Full-screen layouts (deck, panels) scroll the toolbar out of reach,
+    so this clicks it in the page rather than with the mouse."""
+    page.evaluate(
+        '([k, v]) => document.querySelector(`.site-bar button[data-k="${k}"][data-v="${v}"]`)'
+        ".click()",
+        [key, value],
+    )
+
+
 @pytest.mark.parametrize("path", PAGES)
-def test_page_matrix(page_factory, site_url, path, width, theme, lang):
-    page = page_factory(width=width, theme=theme, lang=lang)
+def test_page(page_factory, site_url, path):
+    """Every page, loaded once: the toolbar, then each language x theme x width switched in place
+    (the toolbar swaps theme and language without a reload): no sideways scroll, cats clear of
+    text, and open Markup blocks that scroll inside themselves."""
+    page = page_factory(width=1280)
     page.goto(f"{site_url}/{path}")
-    page.wait_for_timeout(100)
-    no_hscroll(page)
-    assert page.errors == []
+    settle(page)
+
+    assert page.locator("header.site-bar").count() == 1
+    assert page.locator(".site-bar .site-dot").count() == len(ACCENTS)
+    current = page.locator('.site-bar a[aria-current="page"]')
+    expected = 1 if path in LINKED or path.startswith("layouts/") else 0
+    assert current.count() == expected, path
+    if path.startswith("layouts/"):
+        assert current.inner_text() == "Layouts"
+
+    for lang in ("en", "zh"):
+        pick(page, "lang", lang)
+        for theme in ("dark", "light"):
+            pick(page, "theme", theme)
+            for width in (390, 860, 1280):
+                page.set_viewport_size({"width": width, "height": 900})
+                settle(page)
+                where = f"{path} {lang} {theme} {width}px"
+                sw, iw = page.evaluate("[document.documentElement.scrollWidth, innerWidth]")
+                assert sw <= iw, f"horizontal scroll on {where}: {sw} > {iw}"
+                assert cat_text_overlaps(page) == 0, f"a cat covers text on {where}"
+
+    if path in MARKUP_PAGES:
+        page.evaluate("document.querySelectorAll('details.site-markup').forEach(d => d.open = 1)")
+        for width in (390, 1280):
+            page.set_viewport_size({"width": width, "height": 900})
+            settle(page)
+            no_hscroll(page)
+            assert cat_text_overlaps(page) == 0, f"{path} {width}px with Markup open"
+            # Nor widen a container that clips (a full-screen panel or deck stage hides overflow).
+            for sel in ["details.site-markup", "main h2"]:
+                right = page.evaluate(
+                    f"Math.max(0, ...[...document.querySelectorAll({sel!r})]"
+                    ".filter(e => e.checkVisibility()).map(e => e.getBoundingClientRect().right))"
+                )
+                assert right <= width, (path, width, sel)
+        # Long lines scroll inside the code block.
+        for overflow in page.evaluate(
+            "[...document.querySelectorAll('details.site-markup pre')]"
+            ".map(p => getComputedStyle(p).overflowX)"
+        ):
+            assert overflow == "auto", path
+
+    assert page.errors == [], path
 
 
 ACCENTS = [
@@ -42,28 +110,14 @@ ACCENTS = [
 
 
 @pytest.mark.parametrize("theme", ["dark", "light"])
-@pytest.mark.parametrize("accent", ACCENTS)
-def test_every_accent_is_readable(page_factory, site_url, accent, theme):
-    page = page_factory(theme=theme, accent=accent)
-    page.goto(f"{site_url}/color.html")
-    assert page.evaluate("document.documentElement.dataset.accent") == accent
-    assert contrast_on(page, ".f-btn--primary") >= 4.5
-    assert contrast(page, "main a") >= 4.5
-
-
-@pytest.mark.parametrize("theme", ["dark", "light"])
-def test_meta_text_is_readable(page_factory, site_url, theme):
+def test_every_accent_is_readable(page_factory, site_url, theme):
     page = page_factory(theme=theme)
-    page.goto(f"{site_url}/index.html")
-    assert contrast(page, ".f-meta") >= 4.5
-
-
-@pytest.mark.parametrize("path", PAGES)
-def test_every_page_has_toolbar(page_factory, site_url, path):
-    page = page_factory()
-    page.goto(f"{site_url}/{path}")
-    assert page.locator("header.site-bar").count() == 1
-    assert page.locator(".site-bar .site-dot").count() == len(ACCENTS)
+    page.goto(f"{site_url}/color.html")
+    for accent in ACCENTS:
+        pick(page, "accent", accent)
+        assert page.evaluate("document.documentElement.dataset.accent") == accent
+        assert contrast_on(page, ".f-btn--primary") >= 4.5, accent
+        assert contrast(page, "main a") >= 4.5, accent
 
 
 def test_toolbar_sets_and_saves_choices(page_factory, site_url):
@@ -110,27 +164,6 @@ def test_saved_theme_applies_before_first_paint(page_factory, site_url):
     assert page.evaluate("window.__atBody") == "auto"
 
 
-def test_toolbar_marks_one_current_page(page_factory, site_url):
-    linked = {
-        "index.html",
-        "tokens.html",
-        "color.html",
-        "type.html",
-        "components.html",
-        "cast.html",
-        "seo.html",
-    }
-    for path in PAGES:
-        page = page_factory()
-        page.goto(f"{site_url}/{path}")
-        count = page.locator('.site-bar a[aria-current="page"]').count()
-        expected = 1 if path in linked or path.startswith("layouts/") else 0
-        assert count == expected, (path, count)
-        if path == "layouts/index.html":
-            label = page.locator('.site-bar a[aria-current="page"]').inner_text()
-            assert label == "Layouts"
-
-
 def test_bogus_choices_are_ignored(page_factory, site_url):
     page = page_factory()
     page.goto(f"{site_url}/index.html?theme=bogus&accent=zzz&lang=xx")
@@ -155,10 +188,44 @@ def test_bogus_saved_values_are_ignored(page_factory, site_url):
     page.goto(f"{site_url}/index.html")
     root = "document.documentElement"
     assert page.evaluate(f"[{root}.dataset.theme, {root}.lang, {root}.dataset.accent]") == [
-        "dark",
+        "auto",
         "en",
         None,
     ]
+
+
+def test_reference_site_defaults_to_auto(browser, site_url):
+    ctx = browser.new_context(color_scheme="light")
+    try:
+        page = ctx.new_page()
+        page.goto(f"{site_url}/components.html")
+        assert page.evaluate("document.documentElement.dataset.theme") == "auto"
+        assert page.get_attribute(
+            '.site-bar button[data-k="theme"][data-v="auto"]', "aria-pressed"
+        ) == ("true")
+    finally:
+        ctx.close()
+
+
+@pytest.mark.parametrize("scheme", ["dark", "light"])
+def test_no_data_theme_follows_the_system(browser, site_url, scheme):
+    bg = {"dark": "oklch(0.2 0.012 260)", "light": "oklch(0.975 0.004 260)"}
+    ctx = browser.new_context(color_scheme=scheme)
+    try:
+        page = ctx.new_page()
+        page.goto(f"{site_url}/tests/no-theme.html")
+        assert page.evaluate("document.documentElement.dataset.theme") is None
+        body = "getComputedStyle(document.body).backgroundColor"
+        assert page.evaluate(body) == bg[scheme]
+        # An explicit theme still wins over the system, and print stays light.
+        for forced in ("dark", "light"):
+            page.evaluate(f"document.documentElement.dataset.theme = {forced!r}")
+            assert page.evaluate(body) == bg[forced]
+        page.evaluate("delete document.documentElement.dataset.theme")
+        page.emulate_media(media="print")
+        assert page.evaluate(body) == bg["light"]
+    finally:
+        ctx.close()
 
 
 def test_auto_theme_shows_pressed(page_factory, site_url):
@@ -225,6 +292,8 @@ def test_matrix_covers_the_layouts():
             "panels",
             "deck",
             "app",
+            "focus",
+            "landing",
         ]
     }
 
@@ -251,6 +320,7 @@ def test_text_and_accent_contrast(page_factory, site_url, theme):
     page.goto(f"{site_url}/index.html")
     assert contrast(page, "main p:not(.f-kicker)") >= 4.5
     assert contrast(page, "main a") >= 4.5
+    assert contrast(page, ".f-meta") >= 4.5
 
 
 def test_consumer_css_wins(page_factory, site_url):
@@ -287,25 +357,6 @@ def test_inline_chinese_block_in_english_prose(page_factory, site_url):
     assert float(line[:-2]) == pytest.approx(float(size[:-2]))
     h = page.evaluate("getComputedStyle(document.getElementById('zh-h')).letterSpacing")
     assert h in ("normal", "0px")
-
-
-@pytest.mark.parametrize("lang", ["en", "zh"])
-@pytest.mark.parametrize("theme", THEMES)
-def test_primary_button_contrast(page_factory, site_url, theme, lang):
-    page = page_factory(theme=theme, lang=lang)
-    page.goto(f"{site_url}/components.html")
-    assert contrast_on(page, ".f-btn--primary") >= 4.5
-
-
-@pytest.mark.parametrize("width", [390, 1280])
-def test_cats_never_cover_text(page_factory, site_url, width):
-    from checks import cat_text_overlaps
-
-    for path in PAGES:
-        page = page_factory(width=width)
-        page.goto(f"{site_url}/{path}")
-        page.wait_for_timeout(300)
-        assert cat_text_overlaps(page) == 0, path
 
 
 def test_cast_page(page_factory, site_url):
@@ -426,30 +477,6 @@ def test_every_component_and_layout_shows_its_markup(page_factory, site_url):
             assert b["text"].lstrip().startswith("<"), (path, b["section"])
 
 
-@pytest.mark.parametrize("width", [390, 1280])
-@pytest.mark.parametrize("path", MARKUP_PAGES)
-def test_open_markup_never_scrolls_the_page_sideways(page_factory, site_url, path, width):
-    page = page_factory(width=width)
-    page.goto(f"{site_url}/{path}")
-    page.evaluate("document.querySelectorAll('details.site-markup').forEach(d => d.open = true)")
-    no_hscroll(page)
-    page.wait_for_timeout(300)
-    assert cat_text_overlaps(page) == 0
-    # Nor widen a container that clips (a full-screen panel or deck stage hides the overflow).
-    for sel in ["details.site-markup", "main h2"]:
-        right = page.evaluate(
-            f"Math.max(0, ...[...document.querySelectorAll({sel!r})]"
-            ".filter(e => e.checkVisibility()).map(e => e.getBoundingClientRect().right))"
-        )
-        assert right <= width, sel
-    # Long lines scroll inside the code block.
-    for overflow in page.evaluate(
-        "[...document.querySelectorAll('details.site-markup pre')]"
-        ".map(p => getComputedStyle(p).overflowX)"
-    ):
-        assert overflow == "auto"
-
-
 def test_chinese_lines_fill_the_measure(page_factory, site_url):
     # Chinese has no spaces, so it must break between any two characters, not only at punctuation:
     # every line but the last runs (nearly) to the edge.
@@ -475,3 +502,54 @@ def test_chinese_lines_fill_the_measure(page_factory, site_url):
     }""")
     assert len(fills) >= 3
     assert all(f >= 0.9 * 300 for f in fills), fills
+
+
+@pytest.mark.parametrize(
+    "theme, expected",
+    [
+        ("dark", ["oklch(0.2 0.012 260)", "oklch(0.23 0.012 260)", "oklch(0.26 0.012 260)"]),
+        ("light", ["oklch(0.975 0.004 260)", "oklch(0.955 0.006 260)", "oklch(0.995 0.002 260)"]),
+    ],
+)
+def test_neutral_surfaces(page_factory, site_url, theme, expected):
+    page = page_factory(theme=theme)
+    page.goto(f"{site_url}/components.html")
+    got = page.evaluate(
+        """['--f-bg', '--f-bg-2', '--f-surface'].map(v => {
+          const p = document.createElement('i');
+          p.style.background = `var(${v})`;
+          document.body.append(p);
+          return getComputedStyle(p).backgroundColor;
+        })"""
+    )
+    assert got == expected
+
+
+@pytest.mark.parametrize("theme", ["dark", "light"])
+def test_secondary_text_tokens_are_readable_on_every_neutral(page_factory, site_url, theme):
+    page = page_factory(theme=theme)
+    page.goto(f"{site_url}/components.html")
+    rgb = page.evaluate(
+        f"""(() => {{
+          const f = ({TO_RGB});
+          const resolve = (v, prop) => {{
+            const p = document.createElement('i');
+            p.style[prop] = `var(${{v}})`;
+            document.body.append(p);
+            const c = getComputedStyle(p)[prop];
+            p.remove();
+            return c;
+          }};
+          const out = {{}};
+          for (const bg of ['--f-bg', '--f-bg-2', '--f-surface']) {{
+            const back = f(resolve(bg, 'backgroundColor'));
+            const over = `rgb(${{back.join(' ')}})`;
+            for (const fg of ['--f-fg-2', '--f-fg-3'])
+              out[`${{fg}} on ${{bg}}`] = [f(resolve(fg, 'color'), over), back];
+          }}
+          return out;
+        }})()"""
+    )
+    for pair, (fg, bg) in rgb.items():
+        a, b = sorted([_lum(fg), _lum(bg)], reverse=True)
+        assert (a + 0.05) / (b + 0.05) >= 4.5, (pair, round((a + 0.05) / (b + 0.05), 2))

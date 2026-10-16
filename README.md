@@ -64,8 +64,16 @@ template's site.
 
 Reference site (tokens, color, type, components, layouts, the cast): https://shengtuo.me/facet/
 
-Link `facet.css` first and `cast/cast-layered.css` after it (only needed for the mascots). From a
-CDN, pinning a tag:
+Link `facet.css` first and `cast/cast-layered.css` after it (only needed for the mascots).
+
+Social icons are opt-in: link `dist/icons.css` after `facet.css` and write
+`<span class="f-icon f-icon--github" aria-hidden="true"></span>`. The 19 icons (GitHub, LinkedIn,
+Google Scholar, Instagram, X or `twitter`, Email, RSS, ORCID, DBLP, Semantic Scholar, WeChat, Weibo,
+Zhihu, Bilibili, Xiaohongshu, Bluesky, Mastodon, Threads, YouTube) are also in `dist/icons/` as SVG
+files for inlining. They come from Simple Icons (CC0) and Bootstrap Icons (MIT); brand names and
+marks belong to their owners.
+
+From a CDN, pinning a tag:
 
 <!-- x-release-please-start-version -->
 
@@ -75,6 +83,7 @@ CDN, pinning a tag:
   rel="stylesheet"
   href="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.1/dist/cast/cast-layered.css"
 />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.1/dist/icons.css" />
 <script
   type="module"
   src="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.1/dist/js/facet.js"
@@ -118,10 +127,13 @@ A minimal page:
 </html>
 ```
 
-- `data-accent` picks the accent (see the tables above); `data-theme` is `dark` (default), `light`
-  or `auto`. The theme toggle remembers its choice in `localStorage["facet-theme"]`. Both work on
-  `<html>` only (`:root[data-accent]`); to give part of a page its own accent, set `--f-accent` and
-  `--f-accent-contrast` on it.
+- `data-accent` picks the accent (see the tables above); `data-theme` is `auto` (the default, which
+  follows the system), `dark` or `light`. The theme toggle remembers its choice in
+  `localStorage["facet-theme"]`. Both work on `<html>` only (`:root[data-accent]`); to give part of
+  a page its own accent, set `--f-accent` and `--f-accent-contrast` on it. The deep shade of the
+  hero card (`.f-hero`) follows; `--f-accent-soft` (the tinted backgrounds) is computed on `:root`
+  and does not, so set it on that part too, to
+  `color-mix(in oklch, var(--f-accent) 16%, transparent)`.
 - A plain `.f-nav` sits in the page flow. Add `.f-nav--fixed` to float it over the page; while one
   is present, `--f-nav-clear` reserves room for it at the top of the layouts (override it if your
   nav is taller).
@@ -136,13 +148,31 @@ A minimal page:
 The JavaScript is optional. Importing `dist/js/facet.js` initializes itself: each module takes over
 the elements that opt in with a `data-f-*` attribute (`data-f-theme-toggle`, `data-f-liquid`,
 `data-f-scrollspy`, `data-f-nav-cover`, `data-f-autoplay`, `data-f-story`, `data-f-panels`,
-`data-f-deck`), and calling `init()` again skips what is already set up. To use one module, import
-it and keep the cleanup it returns:
+`data-f-deck`, `data-f-type`, `data-f-ga4` on `<html>`, `data-f-event`, `data-f-label`), and calling
+`init()` again skips what is already set up. To use one module, import it and keep the cleanup it
+returns:
 
 ```js
 import { init } from "./vendor/facet/dist/js/deck.js";
 const stop = init(document.querySelector("#talk"));
 ```
+
+Analytics is off unless `<html>` carries a GA4 measurement ID, and stays off under Global Privacy
+Control. A consent banner is out of scope. To use GA4 consent mode, define `window.dataLayer` and
+`gtag` and push the default consent in a classic `<head>` script before `facet.js`; `analytics.js`
+reuses an existing `gtag`:
+
+```html
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag() {
+    dataLayer.push(arguments);
+  }
+  gtag("consent", "default", { analytics_storage: "denied" });
+</script>
+```
+
+Do not also keep your own `gtag("config", …)` snippet, or every view is counted twice.
 
 Every hook, the deck's slide data, and the reduced-motion and no-JS behavior are documented on the
 reference site's overview page, under "Behavior".
@@ -168,6 +198,11 @@ link and share card on every page, JSON-LD for each layout, one URL per language
   http://localhost:8000/mockups/ under `just serve`.
 - `mockups/assets/craft.py`: draws the demo images and video loop the mockups use
   (`uv run mockups/assets/craft.py`; the loop needs ffmpeg).
+
+## Credits
+
+The Focus layout, its typed address, and the Landing layout's hero card are inspired by
+[mldangelo.com](https://mldangelo.com/) by Michael D'Angelo.
 
 ## License
 
