@@ -17,7 +17,7 @@ as one family. The name: each site is one facet of the same identity, cut from t
 - **Type:** Source Serif 4 and Noto Serif SC for headings, Geist for text and UI, Geist Mono for
   code. Chinese body text uses the system's built-in fonts; LXGW WenKai (霞鹜文楷) is available as
   an opt-in. All fonts are self-hosted alongside the sites, so they load wherever the sites do,
-  including mainland China.
+  including mainland China (`just fonts` rebuilds them from the pinned official releases).
 - **Color:** low saturation throughout, on cool (slightly blue) neutral grays. Accents share one
   lightness and chroma in OKLCH, so every site's buttons and links have the same contrast.
 - **Glass:** solid surfaces at rest, with frosted glass only on things that float (nav, sheets).

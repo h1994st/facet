@@ -36,7 +36,9 @@ def test_every_url_is_relative_and_resolves():
         if url.startswith("data:"):
             continue
         assert not url.startswith(("/", "http:", "https:")), url
-        assert (DIST / url).exists(), url
+        target = (DIST / url).resolve()
+        assert target.exists(), url
+        assert DIST.resolve() in target.parents, url
 
 
 def test_js_entry_is_copied():

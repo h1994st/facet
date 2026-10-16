@@ -11,6 +11,7 @@ uv sync            # install the Python environment from uv.lock
 just               # list recipes
 just fmt [files]   # format everything, or only the given files
 just check         # check formatting without changing files
+just fonts         # rebuild the self-hosted fonts (network; cached in fonts/.cache/)
 just serve         # serve the repo at http://localhost:8000
 just site          # assemble the GitHub Pages site into _site/ (what CI deploys)
 ```

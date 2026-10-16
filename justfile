@@ -43,6 +43,10 @@ check:
 build:
     uv run scripts/build.py
 
+# Rebuild the self-hosted fonts (downloads pinned releases)
+fonts:
+    uv run fonts/build.py
+
 # Run the test suite (builds first)
 test: build
     uv run pytest -q

@@ -8,3 +8,16 @@ def test_index_loads(page_factory, site_url, width):
     page.goto(f"{site_url}/index.html")
     no_hscroll(page)
     assert page.errors == []
+
+
+def test_fonts_load(page_factory, site_url):
+    page = page_factory()
+    page.goto(f"{site_url}/index.html")
+    page.evaluate("document.fonts.ready")
+    loaded = page.evaluate(
+        "Promise.all(['16px Geist','16px \"Geist Mono\"','600 16px \"Source Serif 4\"',"
+        "'600 16px \"Noto Serif SC\"']"
+        ".map(f => document.fonts.load(f, f.includes('Noto') ? '字' : 'a')))"
+        ".then(rs => rs.map(r => r.length))"
+    )
+    assert all(n > 0 for n in loaded), loaded
