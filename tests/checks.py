@@ -1,8 +1,10 @@
 """In-page checks shared by the browser tests."""
 
+# Composites the color over an opaque backdrop so translucent colors resolve to what is seen.
 TO_RGB = """
-(c) => { const x = document.createElement('canvas').getContext('2d');
-  x.fillStyle = '#000'; x.fillStyle = c; x.fillRect(0, 0, 1, 1);
+(c, backdrop) => { const x = document.createElement('canvas').getContext('2d');
+  x.fillStyle = backdrop || '#000'; x.fillRect(0, 0, 1, 1);
+  x.fillStyle = c; x.fillRect(0, 0, 1, 1);
   const d = x.getImageData(0, 0, 1, 1).data; return [d[0], d[1], d[2]]; }
 """
 
@@ -22,9 +24,13 @@ def _lum(rgb):
 
 
 def contrast(page, selector, bg_selector="body"):
-    fg = page.evaluate(f"({TO_RGB})(getComputedStyle(document.querySelector({selector!r})).color)")
     bg = page.evaluate(
         f"({TO_RGB})(getComputedStyle(document.querySelector({bg_selector!r})).backgroundColor)"
+    )
+    fg = page.evaluate(
+        f"([sel, bg]) => ({TO_RGB})(getComputedStyle(document.querySelector(sel)).color,"
+        " `rgb(${bg.join(' ')})`)",
+        [selector, bg],
     )
     a, b = sorted([_lum(fg), _lum(bg)], reverse=True)
     return (a + 0.05) / (b + 0.05)

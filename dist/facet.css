@@ -2237,15 +2237,16 @@
     background: var(--f-accent-soft);
   }
 
-  :lang(zh) {
+  :where([lang]:lang(zh)) {
     letter-spacing: 0;
     word-break: keep-all;
     overflow-wrap: anywhere;
     line-height: var(--f-leading-zh);
   }
 
-  /* Squircle containers; pills and circles keep a plain round corner. */
-  :where(*) {
+  /* Squircle facet's own containers; pills and circles keep a plain round corner. */
+  :where([class*="f-"]),
+  .f-prose :where(pre, img, video, figure, table) {
     corner-shape: squircle;
   }
 
@@ -2278,8 +2279,7 @@
     text-wrap: balance;
   }
 
-  .f-prose:lang(zh) :is(h1, h2, h3, h4),
-  .f-prose :lang(zh) :is(h1, h2, h3, h4) {
+  .f-prose:lang(zh) :where(h1, h2, h3, h4) {
     letter-spacing: 0;
   }
 
@@ -2307,8 +2307,7 @@
     line-height: 1.7;
   }
 
-  .f-prose:lang(zh) :is(p, li),
-  .f-prose :lang(zh) :is(p, li) {
+  .f-prose:lang(zh) :where(p, li) {
     line-height: var(--f-leading-zh);
   }
 

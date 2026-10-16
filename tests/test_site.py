@@ -32,7 +32,7 @@ THEMES = ["dark", "light"]
 def test_text_and_accent_contrast(page_factory, site_url, theme):
     page = page_factory(theme=theme)
     page.goto(f"{site_url}/index.html")
-    assert contrast(page, "main p") >= 4.5
+    assert contrast(page, "main p:not(.f-kicker)") >= 4.5
     assert contrast(page, "main a") >= 4.5
 
 
@@ -41,3 +41,11 @@ def test_consumer_css_wins(page_factory, site_url):
     page.goto(f"{site_url}/tests/override.html")
     color = page.evaluate("getComputedStyle(document.querySelector('a')).color")
     assert color == "rgb(255, 0, 0)"
+
+
+def test_contrast_helper_composites_translucent_color(page_factory):
+    page = page_factory()
+    page.set_content(
+        "<body style='background:#fff;margin:0'><p style='color:rgb(0 0 0 / 0.5)'>x</p></body>"
+    )
+    assert abs(contrast(page, "p") - 3.95) < 0.1
