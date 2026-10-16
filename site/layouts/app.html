@@ -3,7 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>facet · Layout · App</title>
+    <title data-zh="应用版式 · facet">App layout · facet</title>
+    <meta
+      name="description"
+      content="facet's app layout: the content fills the window and the site nav shrinks to one glass pill, for games, interactive demos and tools."
+      data-zh="facet 的应用版式：内容占满窗口，网站导航缩成一个玻璃胶囊，适合游戏、交互演示和工具。"
+    />
     <script src="../site.js"></script>
     <link rel="stylesheet" href="../dist/facet.css" />
     <link rel="stylesheet" href="../dist/cast/cast-layered.css" />
@@ -109,6 +114,7 @@
   </head>
   <body>
     <main class="f-app" id="app">
+      <h1 class="f-visually-hidden" data-zh="应用版式">App layout</h1>
       <div class="demo-game" id="game">
         <div class="demo-score">
           <span data-zh="客厅">Living room</span>
@@ -138,7 +144,7 @@
       </div>
     </main>
     <nav class="f-app__bar" aria-label="Site">
-      <a href="index.html" data-zh="← 返回">← Back</a>
+      <a href="./" data-zh="← 返回">← Back</a>
       <span class="f-app__sep" aria-hidden="true"></span>
       <span class="f-app__brand">Red Dot</span>
       <button type="button" id="fs" data-zh="全屏">Fullscreen</button>

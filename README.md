@@ -147,6 +147,14 @@ const stop = init(document.querySelector("#talk"));
 Every hook, the deck's slide data, and the reduced-motion and no-JS behavior are documented on the
 reference site's overview page, under "Behavior".
 
+### Search and sharing
+
+facet styles the page; the `<head>` and the URLs are each site's job. The reference site's
+[SEO guide](https://shengtuo.me/facet/seo.html) covers what to add: a title, description, canonical
+link and share card on every page, JSON-LD for each layout, one URL per language linked with
+`hreflang` (text swapped in the browser is never indexed), and sitemaps for project sites, whose
+`robots.txt` lives at the domain root.
+
 ## Layout
 
 - `src/`: the source CSS, JS, cast and font slices. `dist/` is generated from it by `just build` and
