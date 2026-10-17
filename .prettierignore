@@ -9,3 +9,5 @@ src/cast/cast.js
 CHANGELOG.md
 # Fetched licenses are verbatim upstream copies (icons/fetch.py); keep them diffable.
 src/icons/
+# Test caches.
+.pytest_cache/

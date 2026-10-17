@@ -70,7 +70,7 @@ The mascots, social icons, theme toggle, analytics and every other option are in
 ## Used by
 
 - [The facet docs](https://shengtuo.me/facet/), the reference site in `site/`.
-- [shengtuo.me](https://shengtuo.me/) (moving to facet).
+- [shengtuo.me](https://shengtuo.me/), a personal site.
 
 ## Develop
 
