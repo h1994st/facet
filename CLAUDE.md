@@ -17,8 +17,8 @@ just icons         # refetch the pinned social icons into src/icons/ (network)
 just serve         # build, then serve site/ + mockups/ live at http://localhost:8000
 just site          # assemble the GitHub Pages site into _site/ (what CI deploys; no site/tests)
 just card          # redraw the share card and icon (site/card.png, site/favicon.svg)
-just banner        # redraw the README banners (.github/readme/banner-*.png)
-just shots         # retake the README screenshots (.github/readme/*.webp)
+just banner        # redraw the README banners (assets/readme/banner-*.png)
+just shots         # retake the README screenshots (assets/readme/*.webp)
 ```
 
 ## Repository layout
@@ -33,7 +33,7 @@ just shots         # retake the README screenshots (.github/readme/*.webp)
   the `zh/` copies, canonical, `hreflang`, Open Graph and JSON-LD tags and `sitemap.xml`: never
   hand-write those.
 - `scripts/card.py`, `banner.py` and `shots.py` draw `site/card.png`, `site/favicon.svg` and the
-  README images in `.github/readme/`: edit the scripts, not the images.
+  README images in `assets/readme/`: edit the scripts, not the images.
 - `tests/`: Playwright tests against `site/` (contrast helpers in `checks.py`). `mockups/`: design
   explorations, left as is.
 

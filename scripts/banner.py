@@ -1,4 +1,4 @@
-"""Draw the README banner, .github/readme/banner-dark.png and banner-light.png, at 1280x400: the
+"""Draw the README banner, assets/readme/banner-dark.png and banner-light.png, at 1280x400: the
 facet mark, the name and a tagline, in each theme's tokens.
 
 uv run scripts/banner.py
@@ -17,7 +17,7 @@ import card  # noqa: E402
 import tokens  # noqa: E402
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / ".github" / "readme"
+OUT = ROOT / "assets" / "readme"
 W, H, S = 1280, 400, card.SCALE
 TAGLINE = "A shared design language for a family of websites."
 

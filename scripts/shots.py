@@ -1,4 +1,4 @@
-"""Take the README's screenshots of the reference site into .github/readme/ as WebP.
+"""Take the README's screenshots of the reference site into assets/readme/ as WebP.
 
 uv run scripts/shots.py   (or `just shots`, which builds dist/ first)
 
@@ -18,7 +18,7 @@ from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
 SITE = ROOT / "site"
-OUT = ROOT / ".github" / "readme"
+OUT = ROOT / "assets" / "readme"
 W, H = 1280, 720
 
 HIDE_BAR = ".site-bar { display: none !important; }"

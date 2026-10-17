@@ -1,7 +1,7 @@
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset=".github/readme/banner-dark.png" />
-  <source media="(prefers-color-scheme: light)" srcset=".github/readme/banner-light.png" />
-  <img alt="facet: a shared design language for a family of websites" src=".github/readme/banner-light.png" />
+  <source media="(prefers-color-scheme: dark)" srcset="assets/readme/banner-dark.png" />
+  <source media="(prefers-color-scheme: light)" srcset="assets/readme/banner-light.png" />
+  <img alt="facet: a shared design language for a family of websites" src="assets/readme/banner-light.png" />
 </picture>
 
 facet is a shared design language for a family of websites: design tokens, components and fifteen
@@ -15,17 +15,17 @@ Chinese.
 [Components](https://shengtuo.me/facet/components.html) ·
 [Color](https://shengtuo.me/facet/color.html) · [Changelog](CHANGELOG.md)
 
-![The Resume layout, dark on the left and light on the right](.github/readme/themes.webp)
+![The Resume layout, dark on the left and light on the right](assets/readme/themes.webp)
 
 <p>
-  <img src=".github/readme/landing.webp" width="49%" alt="The Landing layout, with its hero card, in dark" />
-  <img src=".github/readme/docs.webp" width="49%" alt="The Docs layout, with a sticky table of contents, in light" />
+  <img src="assets/readme/landing.webp" width="49%" alt="The Landing layout, with its hero card, in dark" />
+  <img src="assets/readme/docs.webp" width="49%" alt="The Docs layout, with a sticky table of contents, in light" />
 </p>
 
-![Components: nav, buttons, chips, inputs, a hero card and alerts](.github/readme/components.webp)
+![Components: nav, buttons, chips, inputs, a hero card and alerts](assets/readme/components.webp)
 
 <p align="center">
-  <img src=".github/readme/cast.webp" width="80%" alt="The mascots Duna, Dudu and Nangnang" />
+  <img src="assets/readme/cast.webp" width="80%" alt="The mascots Duna, Dudu and Nangnang" />
 </p>
 
 ## Use it
