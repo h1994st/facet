@@ -365,6 +365,15 @@ def test_cast_page(page_factory, site_url):
     page.wait_for_timeout(300)
     assert page.locator("main .cat").count() == 3
     assert page.locator(".f-footer .cat").count() == 3
+    # A social row in the footer is centered like the rest of the footer, not left-aligned.
+    page.goto(f"{site_url}/layouts/docs.html")
+    left, right = page.evaluate(
+        """() => { const f = document.querySelector('.f-footer').getBoundingClientRect();
+          const icons = [...document.querySelectorAll('.f-footer .f-social__link')]
+            .map(a => a.getBoundingClientRect());
+          return [icons[0].left - f.left, f.right - icons.at(-1).right]; }"""
+    )
+    assert abs(left - right) <= 2
 
 
 def test_site_css_can_resize_footer_cats(page_factory, site_url):

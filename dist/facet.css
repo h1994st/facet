@@ -3016,6 +3016,12 @@
     text-align: center;
   }
 
+  /* A social row centers with the text (it is a flex row, which text-align does not move). */
+  .f-footer .f-social {
+    justify-content: center;
+    margin-block-end: var(--f-space-2);
+  }
+
   /* Cats sit on the top border at the ends, clear of the centered text. */
   .f-footer__cats .cat {
     position: absolute;
