@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.1.4](https://github.com/h1994st/facet/compare/v0.1.3...v0.1.4) (2026-10-17)
+
+
+### Features
+
+* add line numbers, wrapping, titles and a terminal frame for code blocks ([#17](https://github.com/h1994st/facet/issues/17)) ([3105c8f](https://github.com/h1994st/facet/commit/3105c8f22edc7c6b3842ec55a33369fe88b26057))
+* switch variants without JavaScript ([#15](https://github.com/h1994st/facet/issues/15)) ([4b0adf9](https://github.com/h1994st/facet/commit/4b0adf9af044ed2671368ec633cdee7688841f43))
+
+
+### Bug Fixes
+
+* keep the current TOC link in view while scrolling ([#14](https://github.com/h1994st/facet/issues/14)) ([7ca1449](https://github.com/h1994st/facet/commit/7ca1449596159fc0db6105fd81ad2062bdd9dd44))
+* mark the last TOC section at the bottom of the page ([#20](https://github.com/h1994st/facet/issues/20)) ([7c651c2](https://github.com/h1994st/facet/commit/7c651c25eca4f0ccea28273908b036c0f7b77843))
+* round the current nav link ([#19](https://github.com/h1994st/facet/issues/19)) ([440f31c](https://github.com/h1994st/facet/commit/440f31c2d99cf07622298139492d1441a7525d06))
+
 ## [0.1.3](https://github.com/h1994st/facet/compare/v0.1.2...v0.1.3) (2026-10-16)
 
 
