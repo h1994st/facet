@@ -76,3 +76,11 @@ site: build
 # Redraw the reference site's share card and icon (site/card.png, site/favicon.svg)
 card:
     uv run scripts/card.py
+
+# Redraw the README banner (.github/readme/banner-dark.png, banner-light.png)
+banner:
+    uv run scripts/banner.py
+
+# Retake the README screenshots of the reference site (.github/readme/*.webp)
+shots: build
+    uv run scripts/shots.py

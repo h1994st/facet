@@ -1,99 +1,59 @@
-# facet
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset=".github/readme/banner-dark.png" />
+  <source media="(prefers-color-scheme: light)" srcset=".github/readme/banner-light.png" />
+  <img alt="facet: a shared design language for a family of websites" src=".github/readme/banner-light.png" />
+</picture>
 
-A shared design language for a family of websites: design tokens, components and brand assets in
-plain CSS and small vanilla JS, so every site can use them without a build step and the sites read
-as one family. The name: each site is one facet of the same identity, cut from the same glass.
+facet is a shared design language for a family of websites: design tokens, components and fifteen
+page layouts in plain CSS and a little vanilla JavaScript, with no build step. Each site picks its
+own accent and shares everything else, so every site is one facet of the same identity, cut from the
+same glass. Dark-first with a full light theme, low in saturation, and bilingual in English and
+Chinese.
 
-## Principles
+**[Docs and live examples](https://shengtuo.me/facet/)** ·
+[Layouts](https://shengtuo.me/facet/layouts/) ·
+[Components](https://shengtuo.me/facet/components.html) ·
+[Color](https://shengtuo.me/facet/color.html) · [Changelog](CHANGELOG.md)
 
-- Minimalist and modern, with glass and reflection as signature elements.
-- Dark-first, with a full light theme.
-- Each site keeps its own accent color on top of the shared system.
-- English and Chinese from the start.
-- Every animation has a still version for visitors who turn motion off.
+![The Resume layout, dark on the left and light on the right](.github/readme/themes.webp)
 
-## Design choices
+<p>
+  <img src=".github/readme/landing.webp" width="49%" alt="The Landing layout, with its hero card, in dark" />
+  <img src=".github/readme/docs.webp" width="49%" alt="The Docs layout, with a sticky table of contents, in light" />
+</p>
 
-- **Type:** Source Serif 4 and Noto Serif SC for headings, Geist for text and UI, Geist Mono for
-  code. Chinese body text uses the system's built-in fonts. An opt-in LXGW WenKai (霞鹜文楷) is
-  planned but not shipped yet. All fonts are self-hosted alongside the sites, so they load wherever
-  the sites do, including mainland China (`just fonts` rebuilds them from the pinned official
-  releases).
-- **Color:** low saturation throughout, on cool (slightly blue) neutral grays. Accents share one
-  lightness and chroma in OKLCH, so every site's buttons and links have the same contrast.
-- **Glass:** solid surfaces at rest, with frosted glass only on things that float (nav, sheets).
-  Cards pick up a liquid-glass light that follows the pointer only on hover.
-- **Shape:** continuous-curvature (squircle) corners everywhere: rounded containers, pill-shaped
-  controls and round icons.
+![Components: nav, buttons, chips, inputs, a hero card and alerts](.github/readme/components.webp)
 
-### Accents
-
-Each site picks one accent; everything else is shared. An accent marks a family of related sites
-(dev tools, games, writing), so sites in one family may share it; names, icons and the mascots tell
-them apart.
-
-| Accent   | OKLCH (dark / light)                 |
-| -------- | ------------------------------------ |
-| Rose     | 0.76 0.06 15 / 0.52 0.07 15          |
-| Clay     | 0.76 0.06 55 / 0.52 0.07 55          |
-| Ochre    | 0.76 0.06 85 / 0.52 0.07 85          |
-| Moss     | 0.76 0.06 130 / 0.52 0.07 130        |
-| Sage     | 0.76 0.06 165 / 0.52 0.07 165        |
-| Teal     | 0.76 0.06 205 / 0.52 0.07 205        |
-| Slate    | 0.76 0.06 255 / 0.52 0.07 255        |
-| Lavender | 0.76 0.06 295 / 0.52 0.07 295        |
-| Graphite | `#d5dbe3` / `#374151` (near-neutral) |
-
-When the hues run out, add near-neutral accents: the same lightness (so the same contrast) at chroma
-0.02 (0.025 on light), at least 70° apart.
-
-| Near-neutral | OKLCH (dark / light)           |
-| ------------ | ------------------------------ |
-| Stone        | 0.76 0.02 70 / 0.52 0.025 70   |
-| Lichen       | 0.76 0.02 150 / 0.52 0.025 150 |
-| Steel        | 0.76 0.02 250 / 0.52 0.025 250 |
-| Heather      | 0.76 0.02 320 / 0.52 0.025 320 |
-
-## Mascots
-
-Duna Feline (嘟娜·菲琳, gray tabby), Dudu (嘟嘟, solid gray) and Nangnang (囔囔, brown tabby). Duna
-is the fictional owner of every sample in the mockups. Their drawing is copied from the my-resume
-template's site.
+<p align="center">
+  <img src=".github/readme/cast.webp" width="80%" alt="The mascots Duna, Dudu and Nangnang" />
+</p>
 
 ## Use it
 
-Reference site (tokens, color, type, components, layouts, the cast): https://shengtuo.me/facet/
-
-Link `facet.css` first and `cast/cast-layered.css` after it (only needed for the mascots).
-
-Social icons are opt-in: link `dist/icons.css` after `facet.css` and write
-`<span class="f-icon f-icon--github" aria-hidden="true"></span>`. The 19 icons (GitHub, LinkedIn,
-Google Scholar, Instagram, X or `twitter`, Email, RSS, ORCID, DBLP, Semantic Scholar, WeChat, Weibo,
-Zhihu, Bilibili, Xiaohongshu, Bluesky, Mastodon, Threads, YouTube) are also in `dist/icons/` as SVG
-files for inlining. They come from Simple Icons (CC0) and Bootstrap Icons (MIT); brand names and
-marks belong to their owners.
-
-From a CDN, pinning a tag:
+Link the stylesheet and the optional script from jsDelivr, pinned to a tag, and pick an accent:
 
 <!-- x-release-please-start-version -->
 
 ```html
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.3/dist/facet.css" />
-<link
-  rel="stylesheet"
-  href="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.3/dist/cast/cast-layered.css"
-/>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.3/dist/icons.css" />
-<script
-  type="module"
-  src="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.3/dist/js/facet.js"
-></script>
+<html lang="en" data-accent="moss">
+  <head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.3/dist/facet.css" />
+    <script
+      type="module"
+      src="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.3/dist/js/facet.js"
+    ></script>
+  </head>
+  <body>
+    <nav class="f-nav">…</nav>
+    <main class="f-page f-prose">…</main>
+  </body>
+</html>
 ```
 
 <!-- x-release-please-end -->
 
-Or as a git submodule, serving `vendor/facet/dist/` with your site (better for mainland China, where
-jsDelivr is unreliable):
+jsDelivr is unreliable in mainland China. For sites aimed there, vendor facet as a git submodule and
+serve `vendor/facet/dist/` with the site:
 
 <!-- x-release-please-start-version -->
 
@@ -104,113 +64,25 @@ git -C vendor/facet checkout v0.1.3
 
 <!-- x-release-please-end -->
 
-To apply a saved theme before first paint (`facet.js` runs after it, so the page would flash), put
-this line in `<head>`, before the stylesheet. It accepts only `dark`, `light` or `auto`:
+The mascots, social icons, theme toggle, analytics and every other option are in the
+[docs](https://shengtuo.me/facet/).
 
-<!-- prettier-ignore -->
-```html
-<script>try{var t=localStorage.getItem("facet-theme");if(/^(dark|light|auto)$/.test(t))document.documentElement.dataset.theme=t}catch(e){}</script>
-```
+## Used by
 
-A minimal page:
+- [The facet docs](https://shengtuo.me/facet/), the reference site in `site/`.
+- [shengtuo.me](https://shengtuo.me/) (moving to facet).
 
-```html
-<html lang="en" data-accent="moss">
-  <head>
-    <link rel="stylesheet" href="/vendor/facet/dist/facet.css" />
-    <script type="module" src="/vendor/facet/dist/js/facet.js"></script>
-  </head>
-  <body>
-    <nav class="f-nav">…</nav>
-    <main class="f-page f-prose">…</main>
-  </body>
-</html>
-```
+## Develop
 
-- `data-accent` picks the accent (see the tables above); `data-theme` is `auto` (the default, which
-  follows the system), `dark` or `light`. The theme toggle remembers its choice in
-  `localStorage["facet-theme"]`. Both work on `<html>` only (`:root[data-accent]`); to give part of
-  a page its own accent, set `--f-accent` and `--f-accent-contrast` on it. The deep shade of the
-  hero card (`.f-hero`) follows; `--f-accent-soft` (the tinted backgrounds) is computed on `:root`
-  and does not, so set it on that part too, to
-  `color-mix(in oklch, var(--f-accent) 16%, transparent)`.
-- A plain `.f-nav` sits in the page flow. Add `.f-nav--fixed` to float it over the page; while one
-  is present, `--f-nav-clear` reserves room for it at the top of the layouts (override it if your
-  nav is taller).
-- Everything is in `@layer facet.*`, so your own unlayered CSS wins without `!important`, with two
-  exceptions: `[hidden]` is `display: none !important`, and under reduced motion one rule stops
-  every animation and transition on the page, yours included. A layered `!important` beats unlayered
-  CSS, even unlayered `!important`, so neither can be overridden.
-- Set `lang="zh-Hans"` on any element for Chinese typography.
-- A table that needs more room than the text column can take `class="f-wide"`: inside `.f-prose` it
-  grows to the page's wide width, centered, and never past the gutters.
-- Code blocks take line numbers, wrapping and a terminal frame, all CSS: `data-f-code-ln`,
-  `data-f-code-wrap` and `data-f-code-frame` set to `"true"` or `"false"` on a container (`main` or
-  `article`, a page-wide default) or on one block (`pre` or `code`, which wins). The pre's
-  `data-f-code-title` (or Zola's `data-name`) adds a title. Numbers and wrapping need one element
-  per line as a direct child of `code` (`.giallo-l`, `.line` or `[data-line]`); see the components
-  page.
-
-### Behavior
-
-The JavaScript is optional. Importing `dist/js/facet.js` initializes itself: each module takes over
-the elements that opt in with a `data-f-*` attribute (`data-f-theme-toggle`, `data-f-liquid`,
-`data-f-scrollspy`, `data-f-nav-cover`, `data-f-autoplay`, `data-f-story`, `data-f-panels`,
-`data-f-deck`, `data-f-type`, `data-f-variants`, `data-f-ga4` on `<html>`, `data-f-event`,
-`data-f-label`), and calling `init()` again skips what is already set up. To use one module, import
-it and keep the cleanup it returns:
-
-```js
-import { init } from "./vendor/facet/dist/js/deck.js";
-const stop = init(document.querySelector("#talk"));
-```
-
-Analytics is off unless `<html>` carries a GA4 measurement ID, and stays off under Global Privacy
-Control. A consent banner is out of scope. To use GA4 consent mode, define `window.dataLayer` and
-`gtag` and push the default consent in a classic `<head>` script before `facet.js`; `analytics.js`
-reuses an existing `gtag`:
-
-```html
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag() {
-    dataLayer.push(arguments);
-  }
-  gtag("consent", "default", { analytics_storage: "denied" });
-</script>
-```
-
-Do not also keep your own `gtag("config", …)` snippet, or every view is counted twice.
-
-Every hook, the deck's slide data, and the reduced-motion and no-JS behavior are documented on the
-reference site's overview page, under "Behavior".
-
-### Search and sharing
-
-facet styles the page; the `<head>` and the URLs are each site's job. The reference site's
-[SEO guide](https://shengtuo.me/facet/seo.html) covers what to add: a title, description, canonical
-link and share card on every page, JSON-LD for each layout, one URL per language linked with
-`hreflang` (text swapped in the browser is never indexed), and sitemaps for project sites, whose
-`robots.txt` lives at the domain root.
-
-## Layout
-
-- `src/`: the source CSS, JS, cast and font slices. `dist/` is generated from it by `just build` and
-  committed; never edit `dist/` by hand.
-- `site/`: the reference site. `just serve` serves it at http://localhost:8000 in the published
-  layout (with the mockups); `just site` assembles the GitHub Pages bundle into `_site/`.
-- `tests/`: browser tests (`just test`).
-- `fonts/`: the font build (`just fonts`).
-- `pyproject.toml`: the uv project for the Python tooling (fonts, images, tests).
-- `mockups/`: design explorations (type, color, shape, glass, layout, the cats), at
-  http://localhost:8000/mockups/ under `just serve`.
-- `mockups/assets/craft.py`: draws the demo images and video loop the mockups use
-  (`uv run mockups/assets/craft.py`; the loop needs ffmpeg).
+`brew bundle && uv sync` installs the tooling (`uv run playwright install chromium` adds the test
+browser), `just serve` serves the docs and the design mockups at http://localhost:8000, and
+`just test` runs the browser tests. `just` lists every recipe.
 
 ## Credits
 
 The Focus layout, its typed address, and the Landing layout's hero card are inspired by
-[mldangelo.com](https://mldangelo.com/) by Michael D'Angelo.
+[mldangelo.com](https://mldangelo.com/) by Michael D'Angelo. The mascots are drawn as in the
+my-resume template's site.
 
 ## License
 
