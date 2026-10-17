@@ -224,19 +224,16 @@
   /* Wrapped lines hang past their number: each line is an inline box whose left padding repeats on
      every row it wraps onto (box-decoration-break: clone), and the number pulls back into the
      first row's padding. Lines stay inline, so the newlines between them still render and copy,
-     empty lines included. The first line stops short of an unframed block's Copy button. */
+     empty lines included. */
   pre > code > :is(.giallo-l, .line, [data-line]) {
     padding-left: var(--_f-wrap) var(--_f-num);
     -webkit-box-decoration-break: clone;
     box-decoration-break: clone;
   }
 
-  pre > code > :is(.giallo-l, .line, [data-line]):first-child {
-    padding-right: var(--_f-wrap) var(--_f-clear);
-  }
-
-  /* Wrapped code with no line elements: a float keeps the first line clear of the Copy button. */
-  pre > code:not(:has(> :is(.giallo-l, .line, [data-line])))::before {
+  /* Wrapped code: a float at the top right keeps the first row clear of the Copy button. (Padding
+     on the first line element would not: an inline box's end padding lands on its last row.) */
+  pre > code::before {
     content: var(--_f-wrap) "";
     float: right;
     width: var(--_f-clear);
