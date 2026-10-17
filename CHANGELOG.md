@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.7](https://github.com/h1994st/facet/compare/v0.1.6...v0.1.7) (2026-10-17)
+
+
+### Bug Fixes
+
+* keep links, quiet buttons and the theme toggle readable on a cover ([#26](https://github.com/h1994st/facet/issues/26)) ([9ac59a4](https://github.com/h1994st/facet/commit/9ac59a4748fda163461397cd3b3a1ab473660f16))
+* ship box drawing and block elements in Geist Mono ([#25](https://github.com/h1994st/facet/issues/25)) ([36f77a3](https://github.com/h1994st/facet/commit/36f77a3d63c857436515895b9b6be8fa899186d9))
+
 ## [0.1.6](https://github.com/h1994st/facet/compare/v0.1.5...v0.1.6) (2026-10-17)
 
 
