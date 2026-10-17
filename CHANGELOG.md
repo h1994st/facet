@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.5](https://github.com/h1994st/facet/compare/v0.1.4...v0.1.5) (2026-10-17)
+
+
+### Bug Fixes
+
+* keep a wrapped first line clear of the Copy button ([#21](https://github.com/h1994st/facet/issues/21)) ([07e36ae](https://github.com/h1994st/facet/commit/07e36ae4b2fc02a2e9e207781664a22369fbbc63))
+
 ## [0.1.4](https://github.com/h1994st/facet/compare/v0.1.3...v0.1.4) (2026-10-17)
 
 
