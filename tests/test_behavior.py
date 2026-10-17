@@ -99,6 +99,12 @@ def test_scrollspy_tracks_sections(page_factory, site_url):
     # The sidebar only marks the link; it never scrolls.
     nav = "document.querySelector('[data-f-scrollspy]')"
     assert page.evaluate(f"[{nav}.scrollLeft, {nav}.scrollTop]") == [0, 0]
+    # At the bottom of the page the last section is current, even if it can't reach the line.
+    page.evaluate("window.scrollTo(0, document.documentElement.scrollHeight)")
+    page.wait_for_timeout(200)
+    assert page.evaluate(
+        "[...document.querySelectorAll('[data-f-scrollspy] a')].at(-1).hasAttribute('aria-current')"
+    )
     # On a phone the chip bar scrolls itself, never the page, to keep the current link in view.
     page = page_factory(width=390)
     page.goto(f"{site_url}/layouts/docs.html")

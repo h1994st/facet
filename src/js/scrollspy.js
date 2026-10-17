@@ -1,5 +1,6 @@
 // Scroll spy: the link whose section top has passed 30% of the viewport is current and gets
-// aria-current="location". When the nav scrolls along its inline axis (the .f-toc chip bar below
+// aria-current="location"; at the bottom of a scrolled page the last link is, so a short last
+// section still gets its turn. When the nav scrolls along its inline axis (the .f-toc chip bar below
 // 1024px), a change of current link also scrolls the nav itself, never the page, so the link is
 // fully in view with a little room on each side for the neighboring chips to peek in. The scroll is
 // smooth, or instant under prefers-reduced-motion. It waits while the reader works the bar: for 1s
@@ -59,6 +60,9 @@ export function init(root = document) {
       targets.forEach((t, i) => {
         if (t && t.getBoundingClientRect().top < innerHeight * 0.3) cur = i;
       });
+      // A short last section can never reach that line: at the bottom of a scrolled page it is current.
+      const end = document.documentElement.scrollHeight - innerHeight;
+      if (scrollY > 0 && scrollY >= end - 2 && targets.at(-1)) cur = links.length - 1;
       links.forEach((a, i) =>
         i === cur ? a.setAttribute("aria-current", "location") : a.removeAttribute("aria-current"),
       );
