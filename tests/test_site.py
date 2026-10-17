@@ -684,11 +684,14 @@ def test_code_block_options(page_factory, site_url, width, lang):
           const c = [...document.querySelectorAll('pre > code')].find(c =>
             getComputedStyle(c).whiteSpace === 'pre-wrap' &&
             getComputedStyle(c.firstElementChild, '::before').content.startsWith('counter'));
-          c.removeAttribute('data-f-code-wrap'); c.removeAttribute('data-f-code-ln');
+          const names = ['data-f-code-wrap', 'data-f-code-ln'];
+          const saved = names.map((n) => c.getAttribute(n));
+          names.forEach((n) => c.removeAttribute(n));
           c.dataset.wrap = 'false'; c.dataset.ln = 'false';
           const out = [getComputedStyle(c).whiteSpace,
                        getComputedStyle(c.firstElementChild, '::before').content];
           delete c.dataset.wrap; delete c.dataset.ln;
+          names.forEach((n, i) => saved[i] !== null && c.setAttribute(n, saved[i]));
           return out;
         }"""
     ) == ["pre", "none"]
