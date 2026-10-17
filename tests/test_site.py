@@ -726,6 +726,30 @@ def test_code_block_options(page_factory, site_url, width, lang):
     )
     assert on == "counter(f-code-ln)" and native in ("none", "normal")
 
+    # A wrapped first line that is long still keeps clear of the Copy button, numbered or not:
+    # clone the wrapped demo block, once with line elements and once as plain text.
+    hits = page.evaluate(
+        """() => {
+          const demo = [...document.querySelectorAll('#code-options pre')].find(p =>
+            p.querySelector(':scope > .f-code-copy') &&
+            getComputedStyle(p.querySelector('code')).whiteSpace === 'pre-wrap');
+          const long = 'the red dot escapes again '.repeat(12);
+          return ['lines', 'plain'].map(kind => {
+            const pre = demo.cloneNode(true), code = pre.querySelector('code');
+            if (kind === 'lines') code.firstElementChild.textContent = long;
+            else code.textContent = long + '\\nb';
+            demo.after(pre);
+            const b = pre.querySelector('.f-code-copy').getBoundingClientRect();
+            const r = document.createRange(); r.selectNodeContents(code);
+            const hit = [...r.getClientRects()].some(t => t.width > 0 && t.left < b.right &&
+              b.left < t.right && t.top < b.bottom && b.top < t.bottom);
+            pre.remove();
+            return hit;
+          });
+        }"""
+    )
+    assert hits == [False, False]
+
     # A long title ends in an ellipsis without widening anything.
     page.evaluate(
         "document.querySelector('#code-options [data-f-code-title]').dataset.fCodeTitle ="
