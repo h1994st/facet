@@ -2821,6 +2821,7 @@
 
   /* The options, through the states above; with every option off these are the defaults. */
   pre > code {
+    font: inherit; /* the block's mono; browsers give <code> their own monospace */
     display: var(--_f-display, inline);
     overflow-x: var(--_f-scroll, visible);
     white-space: var(--_f-wrap) pre-wrap;

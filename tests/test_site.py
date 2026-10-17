@@ -673,6 +673,11 @@ def test_code_block_options(page_factory, site_url, width, lang):
         assert not any(c.isdigit() for c in b["copied"].replace(b["code"], ""))
         if b["title"]:
             assert b["title"] not in b["copied"]
+    # Code takes its block's font (browsers give <code> their own monospace otherwise).
+    assert page.evaluate(
+        "[...document.querySelectorAll('pre > code')].every(c =>"
+        " getComputedStyle(c).fontFamily === getComputedStyle(c.parentElement).fontFamily)"
+    )
     # The page default numbers the article's code; a block's data-f-code-ln="false" opts out.
     assert set(opted_out["numbers"]) <= {"none", "normal"}
 
