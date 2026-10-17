@@ -553,14 +553,25 @@
 
       <section id="variants">
         <h2 data-zh="变体">Variants</h2>
+        <p
+          data-zh="一个分段控件在同一内容的几个版本之间切换，比如同一组截图的两种外观。推荐用单选按钮写：只靠 CSS 就能切换，不需要 JavaScript，方向键可以在选项之间移动。加载 <code>variants.js</code> 后由它接管，按值而不是按位置匹配。旧的按钮写法照常可用，但只在有 JavaScript 时才能切换。"
+        >
+          One segmented control switches between versions of the same content, such as two looks of
+          the same screenshots. Radios are the recommended markup: they switch with CSS alone, no
+          JavaScript needed, and arrow keys move between the options. When
+          <code>variants.js</code> loads it takes over and matches by value instead of position. The
+          older button form still works, but only switches with JavaScript.
+        </p>
         <div>
-          <div class="f-segmented" role="group" aria-label="Look" data-f-variants="look" hidden>
-            <button type="button" data-variant="modern" aria-pressed="true" data-zh="现代">
-              Modern
-            </button>
-            <button type="button" data-variant="classic" aria-pressed="false" data-zh="经典">
-              Classic
-            </button>
+          <div class="f-segmented" role="radiogroup" aria-label="Look" data-f-variants="look">
+            <label>
+              <input type="radio" name="demo-look" value="modern" checked />
+              <span data-zh="现代">Modern</span>
+            </label>
+            <label>
+              <input type="radio" name="demo-look" value="classic" />
+              <span data-zh="经典">Classic</span>
+            </label>
           </div>
           <ul class="f-gallery">
             <li>
@@ -573,7 +584,6 @@
               />
               <img
                 data-f-variant="look:classic"
-                hidden
                 src="assets/board-2.jpg"
                 alt="Board one, classic"
                 width="1280"
@@ -591,7 +601,6 @@
               />
               <img
                 data-f-variant="look:classic"
-                hidden
                 src="assets/board-4.jpg"
                 alt="Board two, classic"
                 width="1280"
@@ -601,9 +610,82 @@
             </li>
           </ul>
         </div>
+        <div>
+          <p data-zh="细节：">Edge cases:</p>
+          <ul>
+            <li
+              data-zh='控件的父元素是它的作用范围：控件切换其中所有 <code>data-f-variant="组:值"</code> 元素，组名按最后一个冒号拆分，所以组 <code>a</code> 和组 <code>a:b</code> 互不影响。'
+            >
+              The control's parent is its scope: the control switches every
+              <code>data-f-variant="group:value"</code> inside it. The value is split off at the
+              last colon, so group <code>a</code> and group <code>a:b</code> are distinct.
+            </li>
+            <li
+              data-zh="没有 JavaScript 时按位置匹配：第 n 个单选按钮显示同级元素中第 n 个变体，所以每组备选（比如一个图库项里的几张图）要按单选按钮的顺序排列，并且放在同一个父元素里；最多六个选项。有 JavaScript 时按值匹配。"
+            >
+              Without JavaScript the match is by position: the nth radio shows the nth variant among
+              its siblings, so each set of alternatives (a gallery item's images, say) shares one
+              parent and follows the radios' order. CSS covers up to six options. With JavaScript
+              the values decide.
+            </li>
+            <li
+              data-zh="没有 JavaScript 时，一个父元素只能放一个单选控件：放了两个的话，在脚本运行前所有变体都会显示。给每组一个自己的父元素（并列或嵌套都可以）；嵌套的组互不影响。"
+            >
+              Without JavaScript, give each radio control its own parent; sibling and nested groups
+              stay independent. A parent with two controls shows every variant until the script
+              runs, which then tells the groups apart by value.
+            </li>
+            <li
+              data-zh="单选按钮的 <code>name</code> 在整个页面（或表单）里必须唯一，否则两个控件会变成同一组单选按钮。单选按钮要直接放在 <code>label</code> 里，<code>label</code> 直接放在控件里。"
+            >
+              A radio's <code>name</code> must be unique in the page (or form), or two controls
+              become one radio group. Each radio sits directly in its <code>label</code>, and each
+              label directly in the control.
+            </li>
+            <li
+              data-zh="单选写法的变体不写 <code>hidden</code>，由 CSS 隐藏。这条规则在 facet 的层里，所以站点自己没有放进层的 CSS 如果给变体元素设置了 <code>display</code>（比如 <code>img { display: block }</code>），会让它重新显示；这类规则请加上 <code>:not([data-f-variant])</code>。"
+            >
+              Radio-form variants carry no <code>hidden</code>; CSS hides them. That rule is
+              layered, so unlayered site CSS that sets <code>display</code> on a variant element
+              (such as <code>img { display: block }</code>) shows it again; add
+              <code>:not([data-f-variant])</code> to such rules.
+            </li>
+            <li
+              data-zh="不支持 <code>@scope</code> 的浏览器（Firefox 146 和 Safari 17.4 之前的版本）没有 JavaScript 时会显示所有变体；有 JavaScript 时照常切换。"
+            >
+              Browsers without <code>@scope</code> (Firefox before 146, Safari before 17.4) show
+              every variant without JavaScript; with it, switching works as usual.
+            </li>
+            <li
+              data-zh="按钮写法：控件和非默认变体先写 <code>hidden</code>，没有 JavaScript 时只显示第一个变体，也不会出现无效按钮。两种写法都是：值没有对应选项的变体保持隐藏；没有选项的控件被跳过；初始化之后才加入的变体不会被处理（再调用一次 <code>init</code>）。"
+            >
+              Button form: the control and the non-default variants ship <code>hidden</code>, so
+              without JavaScript the first variant shows and there are no dead buttons. In both
+              forms, a variant whose value has no option stays hidden, a control with no options is
+              skipped, and variants added after init are not picked up (call <code>init</code>
+              again).
+            </li>
+          </ul>
+        </div>
         <details class="site-markup">
           <summary data-zh="标记">Markup</summary>
           <pre class="f-code">
+&lt;!-- Radios (recommended): switch with or without JavaScript --&gt;
+&lt;div&gt;
+  &lt;div class="f-segmented" role="radiogroup" aria-label="Look" data-f-variants="look"&gt;
+    &lt;label&gt;&lt;input type="radio" name="board-look" value="modern" checked /&gt;Modern&lt;/label&gt;
+    &lt;label&gt;&lt;input type="radio" name="board-look" value="classic" /&gt;Classic&lt;/label&gt;
+  &lt;/div&gt;
+  &lt;ul class="f-gallery"&gt;
+    &lt;li&gt;
+      &lt;img data-f-variant="look:modern" src="modern.jpg" alt="…" /&gt;
+      &lt;img data-f-variant="look:classic" src="classic.jpg" alt="…" /&gt;
+      &lt;span class="f-gallery__label"&gt;Board&lt;/span&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+
+&lt;!-- Buttons: switch only with JavaScript --&gt;
 &lt;div&gt;
   &lt;div class="f-segmented" role="group" aria-label="Look" data-f-variants="look" hidden&gt;
     &lt;button type="button" data-variant="modern" aria-pressed="true"&gt;Modern&lt;/button&gt;

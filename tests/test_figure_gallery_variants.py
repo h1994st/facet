@@ -93,12 +93,33 @@ def shown(page, sel):
     return page.evaluate(f"!document.querySelector({sel!r}).hidden")
 
 
+def displayed(page, *ids):
+    return [
+        page.evaluate(f"getComputedStyle(document.getElementById('{i}')).display") != "none"
+        for i in ids
+    ]
+
+
 def test_variants_without_js(page_factory, site_url):
     page = page_factory(js=False)
     page.goto(f"{site_url}/tests/variants.html")
-    assert not page.locator("[data-f-variants]").first.is_visible()
+    # The button form is JS-only: its control stays hidden and the first variant shows.
+    assert not page.locator("#a [data-f-variants]").is_visible()
     assert page.locator("#a-modern").is_visible()
     assert not page.locator("#a-classic").is_visible()
+    # The radio form works with CSS alone: the checked radio picks the variant.
+    assert page.locator("#e [data-f-variants]").is_visible()
+    assert displayed(page, "e-modern", "e-classic") == [True, False]
+    page.locator("#e label").nth(1).click()
+    assert displayed(page, "e-modern", "e-classic") == [False, True]
+    # Groups are independent: #f is a sibling scope, and its tone group is nested in a variant.
+    assert displayed(page, "f-small", "f-large", "f-warm", "f-cool") == [True, False, False, True]
+    page.locator("#f > [data-f-variants] label").nth(1).click()
+    page.locator("#f-large label").nth(0).click()
+    assert displayed(page, "f-small", "f-large", "f-warm", "f-cool") == [False, True, True, False]
+    assert displayed(page, "e-modern", "e-classic") == [False, True]
+    # Two controls in one parent are left to JS: without it every variant shows.
+    assert all(displayed(page, "g-modern", "g-classic", "g-small", "g-large"))
 
 
 def test_variants_switch_within_scope(page_factory, site_url):
@@ -118,6 +139,29 @@ def test_variants_switch_within_scope(page_factory, site_url):
     page.click("#b button[data-variant=large]")
     assert shown(page, "#b-large") and not shown(page, "#b-small")
     assert shown(page, "#a-classic")
+    # The radio form too, including two groups sharing one parent, which only JS can tell apart.
+    assert displayed(page, "g-modern", "g-classic", "g-small", "g-large") == [
+        True,
+        False,
+        True,
+        False,
+    ]
+    page.locator("#g label").nth(1).click()
+    assert displayed(page, "g-modern", "g-classic", "g-small", "g-large") == [
+        False,
+        True,
+        True,
+        False,
+    ]
+    page.keyboard.press("ArrowLeft")
+    assert displayed(page, "g-modern", "g-classic") == [True, False]
+    page.locator("#g label").nth(3).click()
+    assert displayed(page, "g-modern", "g-classic", "g-small", "g-large") == [
+        True,
+        False,
+        False,
+        True,
+    ]
 
 
 COUNT = """() => { window.__writes = 0; if (window.__wrapped) return; window.__wrapped = 1;

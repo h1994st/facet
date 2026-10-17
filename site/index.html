@@ -411,14 +411,13 @@ git -C vendor/facet checkout v0.1.3</pre>
               <td><code>data-f-variants</code>, <code>data-f-variant</code></td>
               <td><code>variants.js</code></td>
               <td
-                data-zh='<code>data-f-variants="组"</code> 放在 <code>.f-segmented</code> 上，按钮写 <code>data-variant</code>；其父元素内每个 <code>data-f-variant="组:值"</code> 按所选值显示或隐藏。控件和非默认变体先写 <code>hidden</code>，没有 JavaScript 时只显示第一个，也不会出现无效按钮。值没有对应按钮的变体保持隐藏；没有按钮的控件被跳过、保持隐藏；初始化之后才加入的变体不会被处理（再调用一次 <code>init</code>）。'
+                data-zh='<code>data-f-variants="组"</code> 放在 <code>.f-segmented</code> 上；其父元素内每个 <code>data-f-variant="组:值"</code> 按所选值显示或隐藏。推荐用单选按钮写，没有 JavaScript 也能切换，脚本加载后按值匹配；按钮写法（<code>data-variant</code>）只在有 JavaScript 时可用。两种写法和细节见<a href="components.html#variants">组件</a>页。'
               >
-                On a <code>.f-segmented</code> with <code>data-variant</code> buttons: switches
-                every <code>data-f-variant="group:value"</code> inside the control's parent. The
-                control and the non-default variants ship <code>hidden</code>, so without JavaScript
-                the first variant shows and there are no dead buttons. A variant whose value has no
-                button stays hidden, a control with no buttons is skipped and stays hidden, and
-                variants added after init are not picked up (call <code>init</code> again).
+                On a <code>.f-segmented</code>: switches every
+                <code>data-f-variant="group:value"</code> inside the control's parent. Radios, the
+                recommended markup, switch without JavaScript too, and the script then matches by
+                value; <code>data-variant</code> buttons switch only with JavaScript. Both forms and
+                their edge cases are on the <a href="components.html#variants">Components</a> page.
               </td>
             </tr>
           </tbody>

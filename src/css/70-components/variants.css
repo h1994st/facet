@@ -1,0 +1,25 @@
+@layer facet.components {
+  /* Variants without JS. A parent whose one [data-f-variants] control holds radios (each the
+     direct child of a <label>) is a scope: the nth radio, when checked, shows the nth
+     [data-f-variant] among its siblings and hides the others, so each set of alternatives (a
+     gallery item's images, say) lists them in the radios' order. With no radio checked, the first
+     shows. A descendant that holds a control of its own starts a nested scope and is cut out of
+     this one (the @scope limit). A parent with two controls, or one that variants.js has taken
+     over (data-f-variants-live), is left to JS, which matches by name. Positions go up to six. */
+  @scope (:has(> [data-f-variants] > label > input[type="radio"]):not(:has(> [data-f-variants] ~ [data-f-variants], > [data-f-variants-live]))) to (:scope :has(> [data-f-variants]) > *) {
+    :scope:not(:has(> [data-f-variants] > label:not(:first-of-type) > input:checked))
+      [data-f-variant]:not(:nth-child(1 of [data-f-variant])),
+    :scope:has(> [data-f-variants] > label:nth-of-type(2) > input:checked)
+      [data-f-variant]:not(:nth-child(2 of [data-f-variant])),
+    :scope:has(> [data-f-variants] > label:nth-of-type(3) > input:checked)
+      [data-f-variant]:not(:nth-child(3 of [data-f-variant])),
+    :scope:has(> [data-f-variants] > label:nth-of-type(4) > input:checked)
+      [data-f-variant]:not(:nth-child(4 of [data-f-variant])),
+    :scope:has(> [data-f-variants] > label:nth-of-type(5) > input:checked)
+      [data-f-variant]:not(:nth-child(5 of [data-f-variant])),
+    :scope:has(> [data-f-variants] > label:nth-of-type(6) > input:checked)
+      [data-f-variant]:not(:nth-child(6 of [data-f-variant])) {
+      display: none;
+    }
+  }
+}
