@@ -71,6 +71,11 @@
       .site-icons code {
         font-size: var(--f-text-xs);
       }
+      .site-code-dark {
+        /* A dark code theme, the same in both page themes. */
+        background: oklch(0.22 0.012 260);
+        color: oklch(0.92 0.01 260);
+      }
     </style>
   </head>
   <body>
@@ -177,6 +182,134 @@
 &lt;span class="f-code__out"&gt;200 OK&lt;/span&gt;&lt;/pre&gt;
 
 &lt;!-- Inline code inside .f-prose is plain &lt;code&gt;. --&gt;</pre>
+        </details>
+      </section>
+
+      <section id="code-options">
+        <h2 data-zh="代码块选项">Code block options</h2>
+        <p
+          data-zh='行号、自动换行、标题和终端外框都只用 CSS，用属性开启。<code>data-f-code-ln</code>、<code>data-f-code-wrap</code> 和 <code>data-f-code-frame</code> 取 <code>"true"</code> 或 <code>"false"</code>：写在容器上（<code>main</code> 或 <code>article</code>）是整页的默认值，写在代码块上（<code>pre</code> 或 <code>code</code>）只管这一块，并且优先于容器，开和关都一样。下面的 <code>article</code> 默认带行号，第三块用 <code>data-f-code-ln="false"</code> 退出。'
+        >
+          Line numbers, wrapping, a title and a terminal frame are CSS only, switched on by
+          attributes. <code>data-f-code-ln</code>, <code>data-f-code-wrap</code> and
+          <code>data-f-code-frame</code> take <code>"true"</code> or <code>"false"</code>: on a
+          container (<code>main</code> or <code>article</code>) they set the page's default, and on
+          the block (<code>pre</code> or <code>code</code>) they set that block alone, which wins
+          over the container either way. The <code>article</code> below numbers its code by default,
+          and the third block opts out with <code>data-f-code-ln="false"</code>.
+        </p>
+        <article data-f-code-ln="true">
+          <p data-zh="带行号（Giallo 的 <code>.giallo-l</code> 标记），长行横向滚动：">
+            Numbered (Giallo's <code>.giallo-l</code> markup); the long line scrolls:
+          </p>
+          <pre class="f-code"><code><span class="giallo-l">fn main() {</span>
+<span class="giallo-l">    let dot = RedDot::new("living-room");</span>
+<span class="giallo-l"></span>
+<span class="giallo-l">    tracker.follow(dot, Speed::Pounce).expect("the red dot always escapes, but the chase is the whole point");</span>
+<span class="giallo-l">}</span></code></pre>
+          <p
+            data-zh="带行号并自动换行（Shiki 的 <code>.line</code> 标记）：换行的部分缩进到行号之后，空行保留，第一行让开复制按钮。"
+          >
+            Numbered and wrapped (Shiki's <code>.line</code> markup): a wrapped line hangs past its
+            number, the empty line stays, and the first line keeps clear of the Copy button.
+          </p>
+          <pre
+            class="f-code"
+            data-f-code-wrap="true"
+          ><button class="f-code-copy" type="button" data-zh="复制">Copy</button><code><span class="line">fn main() {</span>
+<span class="line">    let dot = RedDot::new("living-room");</span>
+<span class="line"></span>
+<span class="line">    tracker.follow(dot, Speed::Pounce).expect("the red dot always escapes, but the chase is the whole point");</span>
+<span class="line">}</span></code></pre>
+          <p data-zh="同一页里退出默认的行号：">Opting out of the page's line numbers:</p>
+          <pre
+            class="f-code"
+            data-f-code-ln="false"
+          ><code><span class="line">duna feed --bowl kitchen</span>
+<span class="line">duna nap --spot sunbeam</span></code></pre>
+        </article>
+        <p data-zh="带标题、不带外框：文件名在代码上方的一条细栏里，复制按钮也在这里。">
+          A title with no frame: the file name sits in a quiet strip above the code, with the Copy
+          button.
+        </p>
+        <pre
+          class="f-code"
+          data-f-code-title="src/tracker.rs"
+        ><button class="f-code-copy" type="button" data-zh="复制">Copy</button><code><span class="line">pub struct RedDot {</span>
+<span class="line">    room: String,</span>
+<span class="line">}</span></code></pre>
+        <pre
+          class="f-code"
+          data-f-code-title="笔记/猫粮清单.txt"
+        ><code><span class="line">鸡肉罐头 ×3</span>
+<span class="line">冻干 ×1</span></code></pre>
+        <p data-zh="终端外框和标题，围着一个深色的代码主题（在浅色页面里也是深色）：">
+          A terminal frame with a title, around a dark code theme (dark in a light page too):
+        </p>
+        <pre
+          class="f-code site-code-dark"
+          data-f-code-frame="true"
+          data-f-code-wrap="true"
+          data-f-code-title="duna@purrometheus: ~"
+        ><button class="f-code-copy" type="button" data-zh="复制">Copy</button><code><span class="line">$ curl https://example.com/hairball</span>
+<span class="line">200 OK  red dot found in the living room, under the sofa, next to the second-best sunbeam</span>
+<span class="line"></span>
+<span class="line">$ duna pounce</span></code></pre>
+        <ul>
+          <li
+            data-zh='标题取自 <code>pre</code> 的 <code>data-f-code-title</code>，或 <code>data-name</code>（Zola 把 <code>```rust,name=src/main.rs</code> 写成 <code>code</code> 上的 <code>data-name</code>；在 <code>[markdown.highlighting]</code> 里设 <code>data_attr_position = "both"</code>，它也会写到 <code>pre</code> 上）。过长的标题在一行里省略。'
+          >
+            The title is the <code>pre</code>'s <code>data-f-code-title</code>, or
+            <code>data-name</code> (Zola writes <code>```rust,name=src/main.rs</code> as
+            <code>data-name</code> on <code>code</code>; set
+            <code>data_attr_position = "both"</code> under <code>[markdown.highlighting]</code> to
+            put it on <code>pre</code> too). A long title ends in an ellipsis on one line.
+          </li>
+          <li
+            data-zh="标题是伪元素，读屏软件不一定会读出来。名字重要时，给 <code>pre</code> 加 <code>aria-label</code>，或者把代码块放进带 <code>figcaption</code> 的 <code>figure</code>。"
+          >
+            The title is a pseudo-element, which screen readers may not announce. When the name
+            matters, give the <code>pre</code> an <code>aria-label</code>, or wrap the block in a
+            <code>figure</code> with a <code>figcaption</code>.
+          </li>
+          <li
+            data-zh="行号和换行需要每行一个元素，并且是 <code>code</code> 的直接子元素：<code>.giallo-l</code>（Zola 0.23）、<code>.line</code>（Shiki、Astro）或 <code>[data-line]</code>（rehype-pretty-code）。自带行号的代码块（Zola 的 <code>linenos</code> 产生的 <code>.giallo-ln</code>，或 <code>data-line-numbers</code>）不会再编一遍号；<code>.giallo-ln</code> 对齐到同一列。"
+          >
+            Numbers and wrapping need one element per line as a direct child of
+            <code>code</code>: <code>.giallo-l</code> (Zola 0.23), <code>.line</code> (Shiki, Astro)
+            or <code>[data-line]</code> (rehype-pretty-code). Blocks with the highlighter's own
+            numbers (<code>.giallo-ln</code> from Zola's <code>linenos</code>, or
+            <code>data-line-numbers</code>) are not numbered twice; <code>.giallo-ln</code> takes
+            the same column.
+          </li>
+          <li
+            data-zh="边界情况：没有行元素的 <code>pre &gt; code</code> 可以换行，但没法编号。标题和外框需要 <code>pre &gt; code</code>，长行在 <code>code</code> 里滚动，标题栏不动。行号列宽 3 个字符，超过 999 行时把 <code>--f-code-ln-width</code> 设宽一些。"
+          >
+            Edge cases: a <code>pre &gt; code</code> with no line elements wraps but cannot be
+            numbered. A title or frame needs <code>pre &gt; code</code>; long lines scroll inside
+            <code>code</code>, under a bar that stays put. The number column is 3 characters wide;
+            past 999 lines, widen it with <code>--f-code-ln-width</code>.
+          </li>
+        </ul>
+        <details class="site-markup">
+          <summary data-zh="标记">Markup</summary>
+          <pre class="f-code">
+&lt;!-- A page-wide default on the container --&gt;
+&lt;main data-f-code-ln="true" data-f-code-wrap="true"&gt;…&lt;/main&gt;
+
+&lt;!-- One block opts in or out; the block wins --&gt;
+&lt;pre data-f-code-ln="false"&gt;&lt;code&gt;…&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code data-f-code-wrap="true"&gt;…&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- One element per line, as code's direct children --&gt;
+&lt;pre class="f-code"&gt;&lt;code&gt;&lt;span class="line"&gt;fn main() {&lt;/span&gt;
+&lt;span class="line"&gt;&lt;/span&gt;
+&lt;span class="line"&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- A title (or Zola's data-name), and a terminal frame --&gt;
+&lt;pre class="f-code" data-f-code-title="src/tracker.rs"&gt;
+  &lt;button class="f-code-copy" type="button"&gt;Copy&lt;/button&gt;&lt;code&gt;…&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class="f-code" data-f-code-frame="true" data-f-code-title="zsh"&gt;&lt;code&gt;…&lt;/code&gt;&lt;/pre&gt;</pre>
         </details>
       </section>
 

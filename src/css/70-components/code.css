@@ -20,17 +20,227 @@
     color: var(--f-accent);
   }
 
-  /* Styling only; v0.1 ships no copy script. */
+  /* Styling only; v0.1 ships no copy script. In a block with a title or a frame it sits in the
+     header bar and takes the code's own colors. */
   .f-code-copy {
     position: absolute;
-    top: var(--f-space-2);
+    top: var(--_f-copy-top, var(--f-space-2));
     right: var(--f-space-2);
+    translate: 0 var(--_f-copy-shift, 0);
     padding: 0.2rem 0.6rem;
-    border: 1px solid var(--f-line-2);
+    border: 1px solid var(--_f-copy-line, var(--f-line-2));
     border-radius: var(--f-r-pill);
-    background: var(--f-surface);
-    color: var(--f-fg-2);
+    background: var(--_f-copy-bg, var(--f-surface));
+    color: var(--_f-copy-fg, var(--f-fg-2));
     font: 600 var(--f-text-xs) var(--f-font-sans);
     cursor: pointer;
+  }
+
+  /* Code block options: line numbers, wrapping, a title and a terminal frame, all in CSS.
+     data-f-code-ln, data-f-code-wrap and data-f-code-frame take "true" or "false", on a container
+     (main or article, for a page-wide default) or on the block (pre or code). The block wins over
+     the container, code over pre, and a container inside another wins over it (one level deep).
+     The title is the pre's data-f-code-title, or data-name (what Zola writes for name=).
+
+     Numbering and wrapping need one element per line as a direct child of code: .giallo-l
+     (Giallo, Zola 0.23), .line (Shiki) or [data-line] (rehype-pretty-code). A plain pre > code
+     still wraps but has no lines to number. Numbers are a counter, so copying never picks them up;
+     blocks with the highlighter's own numbers (.giallo-ln, data-line-numbers) keep theirs.
+
+     Each state is matched once, by a selector, and sets private properties. --_f-ln, --_f-wrap and
+     --_f-frame are switches, empty when on and unset when off, so `prop: var(--_f-wrap) value`
+     applies only to wrapped code; the others carry values read with a fallback. */
+
+  /* State: numbered by facet's counter. */
+  :is(
+    pre > code[data-f-code-ln="true"],
+    pre[data-f-code-ln="true"] > code:not([data-f-code-ln="false"]),
+    [data-f-code-ln="true"]
+      pre:not([data-f-code-ln="false"], [data-f-code-ln="true"] [data-f-code-ln="false"] pre)
+      > code:not([data-f-code-ln="false"])
+  ):not(:has(> * > .giallo-ln), [data-line-numbers]) {
+    --_f-ln: ;
+    --_f-num: calc(var(--f-code-ln-width, 3ch) + 1.5ch);
+  }
+
+  /* Giallo's own numbers (Zola's linenos) take the same column. */
+  pre > code:has(> .giallo-l > .giallo-ln) {
+    --_f-num: calc(var(--f-code-ln-width, 3ch) + 1.5ch);
+  }
+
+  /* State: wrapped. */
+  :is(
+    pre > code[data-f-code-wrap="true"],
+    pre[data-f-code-wrap="true"] > code:not([data-f-code-wrap="false"]),
+    [data-f-code-wrap="true"]
+      pre:not([data-f-code-wrap="false"], [data-f-code-wrap="true"] [data-f-code-wrap="false"] pre)
+      > code:not([data-f-code-wrap="false"])
+  ) {
+    --_f-wrap: ;
+  }
+
+  /* State: framed. */
+  :is(
+    pre:has(> code[data-f-code-frame="true"]),
+    pre[data-f-code-frame="true"]:not(:has(> code[data-f-code-frame="false"])),
+    [data-f-code-frame="true"]
+      pre:not(
+        [data-f-code-frame="false"],
+        [data-f-code-frame="true"] [data-f-code-frame="false"] pre,
+        :has(> code[data-f-code-frame="false"])
+      )
+  ) {
+    --_f-frame: ;
+    --_f-bar-pad: 4.75rem;
+  }
+
+  /* A Copy button: wrapped code and a title keep clear of it. */
+  pre:has(> .f-code-copy) {
+    --_f-clear: 4.5rem;
+    --_f-title-end: 4.75rem;
+  }
+
+  /* State: a header bar, for a title or a frame. The bar is the pre's ::before and code scrolls
+     inside itself, so the bar and the Copy button stay put when a long line scrolls. */
+  :is(
+    pre[data-f-code-title],
+    pre[data-name],
+    pre:has(> code[data-f-code-frame="true"]),
+    pre[data-f-code-frame="true"]:not(:has(> code[data-f-code-frame="false"])),
+    [data-f-code-frame="true"]
+      pre:not(
+        [data-f-code-frame="false"],
+        [data-f-code-frame="true"] [data-f-code-frame="false"] pre,
+        :has(> code[data-f-code-frame="false"])
+      )
+  ) {
+    --_f-bar: 2.25rem;
+    --_f-display: block;
+    --_f-scroll: auto;
+    --_f-clear: initial;
+    --_f-copy-top: calc(var(--_f-bar) / 2);
+    --_f-copy-shift: -50%;
+    --_f-copy-bg: transparent;
+    --_f-copy-fg: color-mix(in oklch, currentColor 72%, transparent);
+    --_f-copy-line: color-mix(in oklch, currentColor 22%, transparent);
+    position: relative;
+    padding-top: calc(var(--_f-bar) + 0.95rem);
+  }
+
+  /* The bar takes its colors from the code's own text, so it reads on a dark code theme inside a
+     light page. Framed, it gains a faint tint and three muted dots, Rose, Ochre and Moss at a
+     middle lightness that reads on dark and light code alike, and centers the title. */
+  :is(
+    pre[data-f-code-title],
+    pre[data-name],
+    pre:has(> code[data-f-code-frame="true"]),
+    pre[data-f-code-frame="true"]:not(:has(> code[data-f-code-frame="false"])),
+    [data-f-code-frame="true"]
+      pre:not(
+        [data-f-code-frame="false"],
+        [data-f-code-frame="true"] [data-f-code-frame="false"] pre,
+        :has(> code[data-f-code-frame="false"])
+      )
+  )::before {
+    --_f-dot: 0.75rem;
+    --_f-dot-gap: 1.25rem;
+    position: absolute;
+    inset: 0 0 auto;
+    box-sizing: border-box;
+    height: var(--_f-bar);
+    padding: 0 var(--_f-bar-pad, var(--_f-title-end, 1.1rem)) 0 var(--_f-bar-pad, 1.1rem);
+    overflow: hidden;
+    border-bottom: 1px solid color-mix(in oklch, currentColor 14%, transparent);
+    background:
+      var(--_f-frame)
+        radial-gradient(closest-side, var(--f-code-dot-close, oklch(0.7 0.08 15)) 85%, transparent)
+        0.85rem 50% / var(--_f-dot) var(--_f-dot) no-repeat,
+      radial-gradient(closest-side, var(--f-code-dot-minimize, oklch(0.7 0.08 85)) 85%, transparent)
+        calc(0.85rem + var(--_f-dot-gap)) 50% / var(--_f-dot) var(--_f-dot) no-repeat,
+      radial-gradient(closest-side, var(--f-code-dot-zoom, oklch(0.7 0.08 130)) 85%, transparent)
+        calc(0.85rem + 2 * var(--_f-dot-gap)) 50% / var(--_f-dot) var(--_f-dot) no-repeat,
+      color-mix(in oklch, currentColor 6%, transparent);
+    color: color-mix(in oklch, currentColor 72%, transparent);
+    font: 500 var(--f-text-xs) / var(--_f-bar) var(--f-font-mono);
+    letter-spacing: 0;
+    text-align: var(--_f-frame) center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  :where(
+    pre:has(> code[data-f-code-frame="true"]),
+    pre[data-f-code-frame="true"]:not(:has(> code[data-f-code-frame="false"])),
+    [data-f-code-frame="true"]
+      pre:not(
+        [data-f-code-frame="false"],
+        [data-f-code-frame="true"] [data-f-code-frame="false"] pre,
+        :has(> code[data-f-code-frame="false"])
+      )
+  )::before {
+    content: "";
+  }
+
+  pre[data-name]::before {
+    content: attr(data-name);
+  }
+
+  pre[data-f-code-title]::before {
+    content: attr(data-f-code-title);
+  }
+
+  /* The options, through the states above; with every option off these are the defaults. */
+  pre > code {
+    display: var(--_f-display, inline);
+    overflow-x: var(--_f-scroll, visible);
+    white-space: var(--_f-wrap) pre-wrap;
+    overflow-wrap: var(--_f-wrap) anywhere;
+    counter-reset: f-code-ln;
+  }
+
+  /* Wrapped lines hang past their number: each line is an inline box whose left padding repeats on
+     every row it wraps onto (box-decoration-break: clone), and the number pulls back into the
+     first row's padding. Lines stay inline, so the newlines between them still render and copy,
+     empty lines included. The first line stops short of an unframed block's Copy button. */
+  pre > code > :is(.giallo-l, .line, [data-line]) {
+    padding-left: var(--_f-wrap) var(--_f-num);
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
+
+  pre > code > :is(.giallo-l, .line, [data-line]):first-child {
+    padding-right: var(--_f-wrap) var(--_f-clear);
+  }
+
+  /* Wrapped code with no line elements: a float keeps the first line clear of the Copy button. */
+  pre > code:not(:has(> :is(.giallo-l, .line, [data-line])))::before {
+    content: var(--_f-wrap) "";
+    float: right;
+    width: var(--_f-clear);
+    height: 1lh;
+  }
+
+  pre > code:not([data-line-numbers]) > :is(.giallo-l, .line, [data-line])::before {
+    content: var(--_f-ln) counter(f-code-ln);
+    counter-increment: var(--_f-ln) f-code-ln;
+    display: inline-block;
+    width: var(--_f-ln) var(--f-code-ln-width, 3ch);
+    margin-right: var(--_f-ln) 1.5ch;
+    margin-left: var(--_f-wrap) calc(-1 * var(--_f-num));
+    color: var(--_f-ln) color-mix(in oklch, currentColor 45%, transparent);
+    text-align: right;
+    user-select: none;
+  }
+
+  pre > code > .giallo-l > .giallo-ln {
+    display: inline-block;
+    width: var(--f-code-ln-width, 3ch);
+    margin-right: 1.5ch;
+    margin-left: var(--_f-wrap) calc(-1 * var(--_f-num));
+    color: color-mix(in oklch, currentColor 45%, transparent);
+    text-align: right;
+    user-select: none;
   }
 }

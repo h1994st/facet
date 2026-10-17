@@ -144,6 +144,12 @@ A minimal page:
 - Set `lang="zh-Hans"` on any element for Chinese typography.
 - A table that needs more room than the text column can take `class="f-wide"`: inside `.f-prose` it
   grows to the page's wide width, centered, and never past the gutters.
+- Code blocks take line numbers, wrapping and a terminal frame, all CSS: `data-f-code-ln`,
+  `data-f-code-wrap` and `data-f-code-frame` set to `"true"` or `"false"` on a container (`main` or
+  `article`, a page-wide default) or on one block (`pre` or `code`, which wins). The pre's
+  `data-f-code-title` (or Zola's `data-name`) adds a title. Numbers and wrapping need one element
+  per line as a direct child of `code` (`.giallo-l`, `.line` or `[data-line]`); see the components
+  page.
 
 ### Behavior
 
