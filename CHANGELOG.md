@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.6](https://github.com/h1994st/facet/compare/v0.1.5...v0.1.6) (2026-10-17)
+
+
+### Bug Fixes
+
+* center a social row in the footer ([#23](https://github.com/h1994st/facet/issues/23)) ([383b993](https://github.com/h1994st/facet/commit/383b993b999ce26ffeedd00e19e8660708652627))
+
 ## [0.1.5](https://github.com/h1994st/facet/compare/v0.1.4...v0.1.5) (2026-10-17)
 
 
