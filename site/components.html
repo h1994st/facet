@@ -266,6 +266,14 @@
             put it on <code>pre</code> too). A long title ends in an ellipsis on one line.
           </li>
           <li
+            data-zh="在代码块上，短名 <code>data-ln</code>、<code>data-wrap</code> 和 <code>data-frame</code> 也有效：Zola 把代码围栏的 <code>ln=</code>、<code>wrap=</code>、<code>frame=</code> 写成这些属性，例如 <code>```txt,wrap=false</code> 让一块表格式输出保持横向滚动。"
+          >
+            On a block, the short names <code>data-ln</code>, <code>data-wrap</code> and
+            <code>data-frame</code> work too: Zola writes a fence's <code>ln=</code>,
+            <code>wrap=</code> and <code>frame=</code> as those, so <code>```txt,wrap=false</code>
+            keeps one table-like output scrolling sideways.
+          </li>
+          <li
             data-zh="标题是伪元素，读屏软件不一定会读出来。名字重要时，给 <code>pre</code> 加 <code>aria-label</code>，或者把代码块放进带 <code>figcaption</code> 的 <code>figure</code>。"
           >
             The title is a pseudo-element, which screen readers may not announce. When the name

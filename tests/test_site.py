@@ -678,6 +678,20 @@ def test_code_block_options(page_factory, site_url, width, lang):
         "[...document.querySelectorAll('pre > code')].every(c =>"
         " getComputedStyle(c).fontFamily === getComputedStyle(c.parentElement).fontFamily)"
     )
+    # On a block, Zola's short names (fence ln=, wrap=, frame=) work as well as facet's.
+    assert page.evaluate(
+        """() => {
+          const c = [...document.querySelectorAll('pre > code')].find(c =>
+            getComputedStyle(c).whiteSpace === 'pre-wrap' &&
+            getComputedStyle(c.firstElementChild, '::before').content.startsWith('counter'));
+          c.removeAttribute('data-f-code-wrap'); c.removeAttribute('data-f-code-ln');
+          c.dataset.wrap = 'false'; c.dataset.ln = 'false';
+          const out = [getComputedStyle(c).whiteSpace,
+                       getComputedStyle(c.firstElementChild, '::before').content];
+          delete c.dataset.wrap; delete c.dataset.ln;
+          return out;
+        }"""
+    ) == ["pre", "none"]
     # The page default numbers the article's code; a block's data-f-code-ln="false" opts out.
     assert set(opted_out["numbers"]) <= {"none", "normal"}
 

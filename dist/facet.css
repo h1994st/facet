@@ -2668,7 +2668,9 @@
      data-f-code-ln, data-f-code-wrap and data-f-code-frame take "true" or "false", on a container
      (main or article, for a page-wide default) or on the block (pre or code). The block wins over
      the container, code over pre, and a container inside another wins over it (one level deep).
-     The title is the pre's data-f-code-title, or data-name (what Zola writes for name=).
+     On a block, the short names data-ln, data-wrap and data-frame work too (what Zola writes for a
+     fence's ln=, wrap= and frame=), as data-name does for the title. The title is the pre's
+     data-f-code-title, or data-name (what Zola writes for name=).
 
      Numbering and wrapping need one element per line as a direct child of code: .giallo-l
      (Giallo, Zola 0.23), .line (Shiki) or [data-line] (rehype-pretty-code). A plain pre > code
@@ -2681,11 +2683,16 @@
 
   /* State: numbered by facet's counter. */
   :is(
-    pre > code[data-f-code-ln="true"],
-    pre[data-f-code-ln="true"] > code:not([data-f-code-ln="false"]),
+    pre > code:is([data-f-code-ln="true"], [data-ln="true"]),
+    pre:is([data-f-code-ln="true"], [data-ln="true"])
+      > code:not([data-f-code-ln="false"], [data-ln="false"]),
     [data-f-code-ln="true"]
-      pre:not([data-f-code-ln="false"], [data-f-code-ln="true"] [data-f-code-ln="false"] pre)
-      > code:not([data-f-code-ln="false"])
+      pre:not(
+        [data-f-code-ln="false"],
+        [data-ln="false"],
+        [data-f-code-ln="true"] [data-f-code-ln="false"] pre
+      )
+      > code:not([data-f-code-ln="false"], [data-ln="false"])
   ):not(:has(> * > .giallo-ln), [data-line-numbers]) {
     --_f-ln: ;
     --_f-num: calc(var(--f-code-ln-width, 3ch) + 1.5ch);
@@ -2698,24 +2705,31 @@
 
   /* State: wrapped. */
   :is(
-    pre > code[data-f-code-wrap="true"],
-    pre[data-f-code-wrap="true"] > code:not([data-f-code-wrap="false"]),
+    pre > code:is([data-f-code-wrap="true"], [data-wrap="true"]),
+    pre:is([data-f-code-wrap="true"], [data-wrap="true"])
+      > code:not([data-f-code-wrap="false"], [data-wrap="false"]),
     [data-f-code-wrap="true"]
-      pre:not([data-f-code-wrap="false"], [data-f-code-wrap="true"] [data-f-code-wrap="false"] pre)
-      > code:not([data-f-code-wrap="false"])
+      pre:not(
+        [data-f-code-wrap="false"],
+        [data-wrap="false"],
+        [data-f-code-wrap="true"] [data-f-code-wrap="false"] pre
+      )
+      > code:not([data-f-code-wrap="false"], [data-wrap="false"])
   ) {
     --_f-wrap: ;
   }
 
   /* State: framed. */
   :is(
-    pre:has(> code[data-f-code-frame="true"]),
-    pre[data-f-code-frame="true"]:not(:has(> code[data-f-code-frame="false"])),
+    pre:has(> code:is([data-f-code-frame="true"], [data-frame="true"])),
+    pre:is([data-f-code-frame="true"], [data-frame="true"]):not(
+        :has(> code:is([data-f-code-frame="false"], [data-frame="false"]))
+      ),
     [data-f-code-frame="true"]
       pre:not(
         [data-f-code-frame="false"],
         [data-f-code-frame="true"] [data-f-code-frame="false"] pre,
-        :has(> code[data-f-code-frame="false"])
+        :has(> code:is([data-f-code-frame="false"], [data-frame="false"]))
       )
   ) {
     --_f-frame: ;
@@ -2733,13 +2747,15 @@
   :is(
     pre[data-f-code-title],
     pre[data-name],
-    pre:has(> code[data-f-code-frame="true"]),
-    pre[data-f-code-frame="true"]:not(:has(> code[data-f-code-frame="false"])),
+    pre:has(> code:is([data-f-code-frame="true"], [data-frame="true"])),
+    pre:is([data-f-code-frame="true"], [data-frame="true"]):not(
+        :has(> code:is([data-f-code-frame="false"], [data-frame="false"]))
+      ),
     [data-f-code-frame="true"]
       pre:not(
         [data-f-code-frame="false"],
         [data-f-code-frame="true"] [data-f-code-frame="false"] pre,
-        :has(> code[data-f-code-frame="false"])
+        :has(> code:is([data-f-code-frame="false"], [data-frame="false"]))
       )
   ) {
     --_f-bar: 2.25rem;
@@ -2761,13 +2777,15 @@
   :is(
     pre[data-f-code-title],
     pre[data-name],
-    pre:has(> code[data-f-code-frame="true"]),
-    pre[data-f-code-frame="true"]:not(:has(> code[data-f-code-frame="false"])),
+    pre:has(> code:is([data-f-code-frame="true"], [data-frame="true"])),
+    pre:is([data-f-code-frame="true"], [data-frame="true"]):not(
+        :has(> code:is([data-f-code-frame="false"], [data-frame="false"]))
+      ),
     [data-f-code-frame="true"]
       pre:not(
         [data-f-code-frame="false"],
         [data-f-code-frame="true"] [data-f-code-frame="false"] pre,
-        :has(> code[data-f-code-frame="false"])
+        :has(> code:is([data-f-code-frame="false"], [data-frame="false"]))
       )
   )::before {
     --_f-dot: 0.75rem;
@@ -2799,13 +2817,15 @@
   }
 
   :where(
-    pre:has(> code[data-f-code-frame="true"]),
-    pre[data-f-code-frame="true"]:not(:has(> code[data-f-code-frame="false"])),
+    pre:has(> code:is([data-f-code-frame="true"], [data-frame="true"])),
+    pre:is([data-f-code-frame="true"], [data-frame="true"]):not(
+        :has(> code:is([data-f-code-frame="false"], [data-frame="false"]))
+      ),
     [data-f-code-frame="true"]
       pre:not(
         [data-f-code-frame="false"],
         [data-f-code-frame="true"] [data-f-code-frame="false"] pre,
-        :has(> code[data-f-code-frame="false"])
+        :has(> code:is([data-f-code-frame="false"], [data-frame="false"]))
       )
   )::before {
     content: "";
