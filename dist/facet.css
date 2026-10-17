@@ -3305,6 +3305,9 @@
   /* Over a cover image: clear until the page scrolls past it, then glass. The clear state needs
      the script that drives it (it adds .is-ready, then .is-scrolled); without JS it stays glass. */
   .f-nav--over.is-ready:not(.is-scrolled) {
+    --f-fg: #fff;
+    --f-fg-2: rgb(255 255 255 / 0.8);
+    --f-line-2: rgb(255 255 255 / 0.35);
     border-color: transparent;
     background: transparent;
     -webkit-backdrop-filter: none;
@@ -3722,6 +3725,12 @@
     overflow: hidden;
     background: oklch(0.2 0.012 260);
     color: #fff;
+    /* Media is dark in both themes, so components on it read the on-media tones. */
+    --f-fg: #fff;
+    --f-fg-2: rgb(255 255 255 / 0.78);
+    --f-fg-3: rgb(255 255 255 / 0.6);
+    --f-line: rgb(255 255 255 / 0.16);
+    --f-line-2: rgb(255 255 255 / 0.35);
   }
 
   .f-cover__media {
@@ -3780,6 +3789,12 @@
   .f-cover .f-kicker {
     margin: 0 0 0.6rem;
     color: rgb(255 255 255 / 0.75);
+    color: oklch(from var(--f-accent) 0.85 0.06 h);
+  }
+
+  /* Links take the accent's hue at a light tone, as the kicker does. */
+  .f-cover a:not(.f-btn) {
+    color: rgb(255 255 255 / 0.9);
     color: oklch(from var(--f-accent) 0.85 0.06 h);
   }
 

@@ -347,3 +347,31 @@ def test_a_wide_child_of_the_sidebar_page_spans_the_row(page_factory, site_url):
                     return [r.left, r.right]; })""")
     assert wide[0] == pytest.approx(toc[0], abs=1)
     assert wide[1] == pytest.approx(art[1], abs=1)
+
+
+def test_cover_and_its_clear_nav_read_on_media_in_light(page_factory, site_url):
+    # The cover is dark in both themes, so a link, a quiet button and the theme toggle on it (or in
+    # the clear nav over it) take on-media tones, not the light page's dark ones.
+    from checks import TO_RGB, _lum
+
+    page = page_factory(theme="light")
+    page.goto(f"{site_url}/layouts/cover.html")
+    page.evaluate("""() => {
+      document.querySelector('.f-cover .f-meta').insertAdjacentHTML('beforeend',
+        ' · <a href="#">Tag</a> <button class="f-btn f-btn--quiet" type="button">Share</button>');
+      document.querySelector('.f-nav').insertAdjacentHTML('beforeend',
+        '<button class="f-theme-toggle" type="button">Auto</button>');
+    }""")
+    sels = [".f-cover .f-meta a", ".f-cover .f-btn--quiet", ".f-nav .f-theme-toggle"]
+    bg, *fgs = page.evaluate(
+        f"""(sels) => {{
+          const f = ({TO_RGB});
+          const bg = f(getComputedStyle(document.querySelector('.f-cover')).backgroundColor);
+          return [bg, ...sels.map(s =>
+            f(getComputedStyle(document.querySelector(s)).color, `rgb(${{bg.join(' ')}})`))];
+        }}""",
+        sels,
+    )
+    for sel, fg in zip(sels, fgs, strict=True):
+        ratio = (_lum(fg) + 0.05) / (_lum(bg) + 0.05)
+        assert ratio >= 4.5, (sel, fg, round(ratio, 2))

@@ -59,6 +59,9 @@
   /* Over a cover image: clear until the page scrolls past it, then glass. The clear state needs
      the script that drives it (it adds .is-ready, then .is-scrolled); without JS it stays glass. */
   .f-nav--over.is-ready:not(.is-scrolled) {
+    --f-fg: #fff;
+    --f-fg-2: rgb(255 255 255 / 0.8);
+    --f-line-2: rgb(255 255 255 / 0.35);
     border-color: transparent;
     background: transparent;
     -webkit-backdrop-filter: none;
