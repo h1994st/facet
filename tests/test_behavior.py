@@ -165,6 +165,12 @@ def test_fixed_nav_is_cleared(page_factory, site_url):
             ".getBoundingClientRect().top"
         )
         assert top >= nav_bottom, path
+    # The current page's link is a pill inside the pill, not a square.
+    radius, height = page.evaluate(
+        "(a => [parseFloat(getComputedStyle(a).borderTopLeftRadius), a.offsetHeight])"
+        "(document.querySelector('.f-nav a[aria-current]'))"
+    )
+    assert radius >= height / 2
 
 
 def test_resume_print_rules_are_scoped(page_factory, site_url):

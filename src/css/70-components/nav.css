@@ -33,6 +33,7 @@
 
   .f-nav a {
     padding: 0.35rem 0.75rem;
+    border-radius: var(--f-r-pill);
     color: var(--f-fg-2);
     text-decoration: none;
   }
