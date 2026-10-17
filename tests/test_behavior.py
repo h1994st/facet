@@ -81,6 +81,12 @@ def test_sheet_locks_page_scroll_while_open(page_factory, site_url):
     assert page.evaluate(overflow) != "hidden"
 
 
+CURRENT_IN_BAR = """() => { const n = document.querySelector('[data-f-scrollspy]');
+  const a = n.querySelector('[aria-current]'); if (!a) return false;
+  const l = n.getBoundingClientRect().left + n.clientLeft, r = a.getBoundingClientRect();
+  return r.left >= l && r.right <= l + n.clientWidth; }"""
+
+
 def test_scrollspy_tracks_sections(page_factory, site_url):
     page = page_factory(width=1280)
     page.goto(f"{site_url}/layouts/docs.html")
@@ -90,6 +96,18 @@ def test_scrollspy_tracks_sections(page_factory, site_url):
         "document.querySelector('[data-f-scrollspy] [aria-current]').getAttribute('href')"
     )
     assert current == "#config"
+    # The sidebar only marks the link; it never scrolls.
+    nav = "document.querySelector('[data-f-scrollspy]')"
+    assert page.evaluate(f"[{nav}.scrollLeft, {nav}.scrollTop]") == [0, 0]
+    # On a phone the chip bar scrolls itself, never the page, to keep the current link in view.
+    page = page_factory(width=390)
+    page.goto(f"{site_url}/layouts/docs.html")
+    y = page.evaluate("document.querySelector('#config').scrollIntoView(), scrollY")
+    page.wait_for_function(CURRENT_IN_BAR, timeout=2000)
+    page.wait_for_timeout(600)
+    assert page.evaluate(CURRENT_IN_BAR)
+    assert page.evaluate(f"{nav}.scrollLeft") > 0
+    assert page.evaluate("scrollY") == y
 
 
 def test_footnote_opens_on_phone(page_factory, site_url):
