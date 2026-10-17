@@ -619,3 +619,123 @@ def test_a_wide_table_grows_past_the_text_column(page_factory, site_url, width):
         assert abs((table["left"] + table["right"]) / 2 - (text["left"] + text["right"]) / 2) < 2
     else:
         assert table["left"] >= 0 and table["right"] <= width
+
+
+# Each demo code block on the components page, measured: what it copies, its numbers, its bar.
+CODE_BLOCKS = """() => {
+  const hit = (a, b) =>
+    a.left < b.right && b.left < a.right && a.top < b.bottom && b.top < a.bottom;
+  return [...document.querySelectorAll('#code-options pre:has(> code)')].map(pre => {
+    const code = pre.querySelector(':scope > code'), lines = [...code.children];
+    const sel = getSelection();
+    sel.selectAllChildren(pre);
+    const copied = sel.toString();
+    sel.removeAllRanges();
+    const btn = pre.querySelector(':scope > .f-code-copy')?.getBoundingClientRect();
+    const walk = document.createTreeWalker(code, NodeFilter.SHOW_TEXT), texts = [];
+    while (walk.nextNode()) {
+      const r = document.createRange();
+      r.selectNodeContents(walk.currentNode);
+      texts.push(...[...r.getClientRects()].filter(t => t.width > 0));
+    }
+    const bar = getComputedStyle(pre, '::before'), box = pre.getBoundingClientRect();
+    return {
+      code: code.textContent,
+      copied,
+      title: pre.dataset.fCodeTitle ?? null,
+      numbers: lines.map(l => getComputedStyle(l, '::before').content),
+      tops: lines.map(l => l.getBoundingClientRect().top),
+      overflow: Math.max(code.scrollWidth - code.clientWidth, pre.scrollWidth - pre.clientWidth),
+      wraps: getComputedStyle(code).whiteSpace === 'pre-wrap',
+      dots: (bar.backgroundImage.match(/radial-gradient/g) || []).length,
+      barHeight: parseFloat(bar.height) || 0,
+      titleRight: box.right - 1 - parseFloat(bar.paddingRight),
+      btn: btn ? { left: btn.left, bottom: btn.bottom } : null,
+      btnHitsCode: !!btn && texts.some(t => hit(t, btn)),
+      codeTop: Math.min(...texts.map(t => t.top)),
+    };
+  });
+}"""
+
+
+@pytest.mark.parametrize(("width", "lang"), [(390, "zh"), (1280, "en")])
+def test_code_block_options(page_factory, site_url, width, lang):
+    page = page_factory(width=width, lang=lang)
+    page.goto(f"{site_url}/components.html")
+    settle(page)
+    numbered, wrapped, opted_out, titled, titled_zh, framed = page.evaluate(CODE_BLOCKS)
+
+    # Numbers come from a counter, so copying the block copies only the code, title included.
+    for b in (numbered, wrapped):
+        assert b["numbers"] == ["counter(f-code-ln)"] * len(b["numbers"])
+    for b in (numbered, wrapped, opted_out, titled, titled_zh, framed):
+        assert b["code"] in b["copied"]
+        assert not any(c.isdigit() for c in b["copied"].replace(b["code"], ""))
+        if b["title"]:
+            assert b["title"] not in b["copied"]
+    # Code takes its block's font (browsers give <code> their own monospace otherwise).
+    assert page.evaluate(
+        "[...document.querySelectorAll('pre > code')].every(c =>"
+        " getComputedStyle(c).fontFamily === getComputedStyle(c.parentElement).fontFamily)"
+    )
+    # On a block, Zola's short names (fence ln=, wrap=, frame=) work as well as facet's.
+    assert page.evaluate(
+        """() => {
+          const c = [...document.querySelectorAll('pre > code')].find(c =>
+            getComputedStyle(c).whiteSpace === 'pre-wrap' &&
+            getComputedStyle(c.firstElementChild, '::before').content.startsWith('counter'));
+          const names = ['data-f-code-wrap', 'data-f-code-ln'];
+          const saved = names.map((n) => c.getAttribute(n));
+          names.forEach((n) => c.removeAttribute(n));
+          c.dataset.wrap = 'false'; c.dataset.ln = 'false';
+          const out = [getComputedStyle(c).whiteSpace,
+                       getComputedStyle(c.firstElementChild, '::before').content];
+          delete c.dataset.wrap; delete c.dataset.ln;
+          names.forEach((n, i) => saved[i] !== null && c.setAttribute(n, saved[i]));
+          return out;
+        }"""
+    ) == ["pre", "none"]
+    # The page default numbers the article's code; a block's data-f-code-ln="false" opts out.
+    assert set(opted_out["numbers"]) <= {"none", "normal"}
+
+    # Wrapped: no sideways scroll, and the empty line keeps its own row and its newline.
+    for b in (wrapped, framed):
+        assert b["wraps"] and b["overflow"] <= 0
+        assert "\n\n" in b["copied"]
+        assert b["tops"][1] < b["tops"][2] < b["tops"][3]
+    assert numbered["overflow"] > 0 and not numbered["wraps"]
+
+    # A title or frame draws a bar; the frame adds three dots. The Copy button sits in the bar,
+    # clear of the title and the code; unframed, it stays clear of the wrapped first line.
+    assert framed["dots"] == 3 and titled["dots"] == 0 and wrapped["barHeight"] == 0
+    for b in (titled, titled_zh, framed):
+        assert b["barHeight"] > 0 and b["codeTop"] >= b["barHeight"]
+    for b in (wrapped, titled, framed):
+        assert not b["btnHitsCode"]
+    for b in (titled, framed):
+        assert b["btn"]["bottom"] <= b["codeTop"] and b["titleRight"] <= b["btn"]["left"]
+
+    # The block wins over its container either way, and highlighter numbers are not doubled.
+    page.evaluate("""() => document.querySelector('#code-options article').insertAdjacentHTML(
+      'beforeend', '<div data-f-code-ln="false"><pre id="t-on"><code data-f-code-ln="true">'
+        + '<span class="line">a</span></code></pre></div><pre id="t-native"><code>'
+        + '<span class="giallo-l"><span class="giallo-ln">1</span>b</span></code></pre>')""")
+    on, native = page.evaluate(
+        "['#t-on .line', '#t-native .giallo-l'].map(s =>"
+        " getComputedStyle(document.querySelector(s), '::before').content)"
+    )
+    assert on == "counter(f-code-ln)" and native in ("none", "normal")
+
+    # A long title ends in an ellipsis without widening anything.
+    page.evaluate(
+        "document.querySelector('#code-options [data-f-code-title]').dataset.fCodeTitle ="
+        " 'src/' + 'very-long-directory-name/'.repeat(12) + 'main.rs'"
+    )
+    no_hscroll(page)
+    assert (
+        page.evaluate(
+            "getComputedStyle(document.querySelector('#code-options [data-f-code-title]'),"
+            " '::before').textOverflow"
+        )
+        == "ellipsis"
+    )
