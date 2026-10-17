@@ -32,3 +32,13 @@ def test_cjk_is_sliced():
 
 def test_licenses_ship():
     assert len(list((ROOT / "src/fonts").glob("LICENSE-*.txt"))) == 3
+
+
+def test_mono_covers_box_drawing():
+    # Tree output and ASCII art stay in Geist Mono instead of a system mono with other widths.
+    from fontTools.ttLib import TTFont
+
+    (mono,) = [f for f in faces() if '"Geist Mono"' in f]
+    assert "U+2500-259F" in mono
+    cmap = TTFont(ROOT / "src/fonts/geist-mono.woff2").getBestCmap()
+    assert all(cp in cmap for cp in range(0x2500, 0x25A0))
