@@ -6,3 +6,4 @@ _serve/
 __pycache__/
 fonts/.cache/
 icons/.cache/
+.pytest_cache/

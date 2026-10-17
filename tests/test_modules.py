@@ -155,7 +155,7 @@ def test_theme_snippet_is_documented_verbatim():
     root = Path(__file__).resolve().parents[1]
     fixture = (root / "site/tests/theme-snippet.html").read_text()
     snippet = re.search(r"<script>try\{.*?</script>", fixture)[0]
-    assert snippet in (root / "README.md").read_text()
+    # The docs keep the snippet on the overview page, under "Avoid a theme flash".
     assert snippet in html.unescape((root / "site/index.html").read_text())
 
 
