@@ -63,5 +63,61 @@
     <div id="d">
       <div class="f-segmented" role="group" data-f-variants="empty" hidden></div>
     </div>
+    <div id="e">
+      <div class="f-segmented" role="radiogroup" aria-label="Look" data-f-variants="look">
+        <label><input type="radio" name="e-look" value="modern" checked />Modern</label>
+        <label><input type="radio" name="e-look" value="classic" />Classic</label>
+      </div>
+      <ul class="f-gallery">
+        <li>
+          <img
+            id="e-modern"
+            data-f-variant="look:modern"
+            src="../assets/board-1.jpg"
+            alt="Modern"
+            width="1280"
+            height="800"
+          />
+          <img
+            id="e-classic"
+            data-f-variant="look:classic"
+            src="../assets/board-2.jpg"
+            alt="Classic"
+            width="1280"
+            height="800"
+          />
+          <span class="f-gallery__label">Board</span>
+        </li>
+      </ul>
+    </div>
+    <div id="f">
+      <div class="f-segmented" role="radiogroup" aria-label="尺寸" data-f-variants="size">
+        <label><input type="radio" name="f-size" value="small" checked />小</label>
+        <label><input type="radio" name="f-size" value="large" />大</label>
+      </div>
+      <p id="f-small" data-f-variant="size:small">小</p>
+      <div id="f-large" data-f-variant="size:large">
+        <div class="f-segmented" role="radiogroup" aria-label="Tone" data-f-variants="tone">
+          <label><input type="radio" name="f-tone" value="warm" />Warm</label>
+          <label><input type="radio" name="f-tone" value="cool" checked />Cool</label>
+        </div>
+        <p id="f-warm" data-f-variant="tone:warm">Warm</p>
+        <p id="f-cool" data-f-variant="tone:cool">Cool</p>
+      </div>
+    </div>
+    <div id="g">
+      <div class="f-segmented" role="radiogroup" aria-label="Look" data-f-variants="look">
+        <label><input type="radio" name="g-look" value="modern" checked />Modern</label>
+        <label><input type="radio" name="g-look" value="classic" />Classic</label>
+      </div>
+      <div class="f-segmented" role="radiogroup" aria-label="Size" data-f-variants="size">
+        <label><input type="radio" name="g-size" value="small" checked />Small</label>
+        <label><input type="radio" name="g-size" value="large" />Large</label>
+      </div>
+      <p id="g-modern" data-f-variant="look:modern">Modern</p>
+      <p id="g-classic" data-f-variant="look:classic">Classic</p>
+      <p id="g-small" data-f-variant="size:small">Small</p>
+      <p id="g-large" data-f-variant="size:large">Large</p>
+    </div>
   </body>
 </html>
