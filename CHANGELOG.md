@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.8](https://github.com/h1994st/facet/compare/v0.1.7...v0.1.8) (2026-10-19)
+
+
+### Features
+
+* swap whole typewriter phrases under reduced motion ([#28](https://github.com/h1994st/facet/issues/28)) ([51c6311](https://github.com/h1994st/facet/commit/51c63118049f5313f3906cc03eb57f079f62dacc))
+
 ## [0.1.7](https://github.com/h1994st/facet/compare/v0.1.6...v0.1.7) (2026-10-17)
 
 
