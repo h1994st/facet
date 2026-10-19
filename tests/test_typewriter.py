@@ -62,18 +62,18 @@ def test_loops_back_to_the_first_phrase(page_factory, site_url):
     assert text(page) == "meow"
 
 
-def test_still_under_reduced_motion(page_factory, site_url):
-    page = page_factory(reduced_motion=True)
-    install_paused_clock(page)
-    page.goto(f"{site_url}/tests/typewriter.html")
-    # In view, and a frame rendered: an observer that was wrongly running would have fired by now.
-    page.wait_for_function("document.querySelector('#t').getBoundingClientRect().bottom > 0")
-    frame(page)
-    # Sample mid-cycle: a moving loop shows "", "h" or "hi" here, never "meow".
-    for ms in (2550, 2600, 2500):
-        page.clock.run_for(ms)
-        assert text(page) == "meow"
-    assert page.evaluate("document.querySelector('#t').dataset.fTypeOn") is None
+def test_swaps_whole_phrases_under_reduced_motion(page_factory, site_url):
+    page = ready(page_factory, site_url, reduced_motion=True)
+    assert text(page) == "meow"
+    # No typing and no blank: each hold ends on the next phrase, whole.
+    page.clock.run_for(2499)
+    assert text(page) == "meow"
+    page.clock.run_for(1)
+    assert text(page) == "hi"
+    page.clock.run_for(50)
+    assert text(page) == "hi"
+    page.clock.run_for(2450)
+    assert text(page) == "喵🐾"
 
 
 def test_bad_data_warns_and_leaves_the_text(page_factory, site_url):

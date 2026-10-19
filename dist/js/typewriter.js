@@ -1,9 +1,9 @@
 // Typewriter: <span data-f-type='["meow", "hi", "purr"]'>meow</span> types each phrase in turn,
 // one character at a time (50 ms each, or data-f-type-speed), holds it (2500 ms, or
 // data-f-type-hold), clears it and types the next, looping. The element's own text is the still
-// state: shown first (and, if it is one of the phrases, the loop continues from it), kept under
-// reduced motion, and restored by cleanup. It waits while the tab is hidden or the element is off
-// screen. Put it inside an aria-hidden wrapper next to the real value in visually hidden text:
+// state: shown first (if it is one of the phrases, the loop continues from it) and restored by
+// cleanup. Under reduced motion nothing is typed: each phrase replaces the last, whole, after the
+// hold. It waits while the tab is hidden or the element is off screen. Put it inside an aria-hidden wrapper next to the real value in visually hidden text:
 // screen readers should never hear the typing.
 const done = new WeakSet();
 const segmenter =
@@ -26,7 +26,7 @@ function phrasesOf(el) {
 
 export function init(root = document) {
   const off = [];
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return () => {};
+  const whole = matchMedia("(prefers-reduced-motion: reduce)").matches;
   for (const el of root.querySelectorAll("[data-f-type]")) {
     if (done.has(el)) continue;
     const phrases = phrasesOf(el);
@@ -54,8 +54,8 @@ export function init(root = document) {
       } else {
         p = (p + 1) % phrases.length;
         chars = graphemes(phrases[p]);
-        i = 0;
-        el.textContent = "";
+        i = whole ? chars.length : 0;
+        el.textContent = whole ? phrases[p] : "";
       }
       schedule();
     }
