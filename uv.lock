@@ -51,7 +51,7 @@ wheels = [
 
 [[package]]
 name = "facet"
-version = "0.1.8"
+version = "0.1.9"
 source = { virtual = "." }
 dependencies = [
     { name = "brotli" },
