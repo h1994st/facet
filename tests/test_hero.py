@@ -36,6 +36,16 @@ def test_card_text_is_readable_for_every_accent(page_factory, site_url, theme):
         assert contrast_on(page, ".f-hero .f-btn--primary") >= 4.5, accent
 
 
+@pytest.mark.parametrize("theme", ["dark", "light"])
+def test_card_text_is_readable_in_prose(page_factory, site_url, theme):
+    # Prose colors its paragraphs; every text part of the card keeps the card's own ink.
+    page = page_factory(theme=theme)
+    page.goto(f"{site_url}/{PAGE}")
+    page.evaluate("document.querySelector('.f-hero').parentElement.classList.add('f-prose')")
+    for sel in (".f-hero__title", ".f-hero__lead", ".f-hero__body", ".f-hero__kicker"):
+        assert contrast(page, sel, ".f-hero") >= 4.5, sel
+
+
 def test_card_is_deep_on_both_themes(page_factory, site_url):
     fills = []
     for theme in ("dark", "light"):

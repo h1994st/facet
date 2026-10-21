@@ -3113,6 +3113,7 @@
 
   .f-hero__kicker {
     margin: 0 0 1.25rem;
+    color: inherit;
     font: 500 var(--f-text-xs) / 1.2 var(--f-font-mono);
     letter-spacing: 0.08em;
     text-transform: uppercase;
