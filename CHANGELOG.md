@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.9](https://github.com/h1994st/facet/compare/v0.1.8...v0.1.9) (2026-10-21)
+
+
+### Bug Fixes
+
+* keep the hero kicker in the card's ink inside prose ([#30](https://github.com/h1994st/facet/issues/30)) ([eb64d2b](https://github.com/h1994st/facet/commit/eb64d2b968e4f81c6c85754d8f5474edfdf9225e))
+
 ## [0.1.8](https://github.com/h1994st/facet/compare/v0.1.7...v0.1.8) (2026-10-19)
 
 
