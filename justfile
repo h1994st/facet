@@ -81,6 +81,10 @@ card:
 banner:
     uv run scripts/banner.py
 
+# Redraw the portrait promo poster with its QR codes (assets/poster.png)
+poster: build
+    uv run --with segno scripts/poster.py
+
 # Retake the README screenshots of the reference site (assets/readme/*.webp)
 shots: build
     uv run scripts/shots.py
