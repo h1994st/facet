@@ -38,10 +38,10 @@ Link the stylesheet and the optional script from jsDelivr, pinned to a tag, and 
 ```html
 <html lang="en" data-accent="moss">
   <head>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.9/dist/facet.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.10/dist/facet.css" />
     <script
       type="module"
-      src="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.9/dist/js/facet.js"
+      src="https://cdn.jsdelivr.net/gh/h1994st/facet@v0.1.10/dist/js/facet.js"
     ></script>
   </head>
   <body>
@@ -62,7 +62,7 @@ serve `vendor/facet/dist/` with the site:
 
 ```sh
 git submodule add https://github.com/h1994st/facet vendor/facet
-git -C vendor/facet checkout v0.1.9
+git -C vendor/facet checkout v0.1.10
 ```
 
 <!-- x-release-please-end -->
