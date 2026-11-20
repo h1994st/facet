@@ -6,8 +6,8 @@
     <title data-zh="组件 · facet">Components · facet</title>
     <meta
       name="description"
-      content="facet's components with their markup: nav, buttons, chips, segmented control, inputs, select, cards, charts, code, alerts, sheet, table of contents and footer."
-      data-zh="facet 的组件和它们的标记：导航、按钮、标签、分段控件、输入框、下拉选择、卡片、图表、代码、提示、弹出面板、目录和页脚。"
+      content="facet's components with markup: nav, buttons, chips, segmented control, inputs, select, cards, charts, code, diffs, alerts, sheet, table of contents, footer."
+      data-zh="facet 的组件和它们的标记：导航、按钮、标签、分段控件、输入框、下拉选择、卡片、图表、代码、代码差异、提示、弹出面板、目录和页脚。"
     />
     <script src="site.js"></script>
     <link rel="stylesheet" href="dist/facet.css" />
@@ -454,6 +454,147 @@
 &lt;span class="f-code__out"&gt;200 OK&lt;/span&gt;&lt;/pre&gt;
 
 &lt;!-- Inline code inside .f-prose is plain &lt;code&gt;. --&gt;</pre>
+        </details>
+      </section>
+
+      <section id="syntax">
+        <h2 data-zh="语法高亮">Syntax colors</h2>
+        <p
+          data-zh="一组和高亮工具无关的类：<code>f-syn-keyword</code>、<code>-string</code>、<code>-comment</code>、<code>-number</code>、<code>-constant</code>、<code>-type</code>、<code>-function</code>、<code>-property</code>、<code>-tag</code> 和 <code>-punctuation</code>。在服务器端把高亮工具自己的作用域映射到这些类上，两种主题的颜色都由 facet 提供。颜色只是装饰：去掉它们，代码照样能读。它们用强调色的饱和度，在代码背景和差异行背景上都保持 4.5:1。"
+        >
+          A highlighter-neutral set of classes: <code>f-syn-keyword</code>, <code>-string</code>,
+          <code>-comment</code>, <code>-number</code>, <code>-constant</code>, <code>-type</code>,
+          <code>-function</code>, <code>-property</code>, <code>-tag</code> and
+          <code>-punctuation</code>. Map your highlighter's scopes to them on the server and facet
+          colors them in both themes. The colors are decoration: code reads the same without them.
+          They use the accent chroma and keep 4.5:1 on code and diff backgrounds.
+        </p>
+        <pre
+          class="f-code"
+          id="demo-syntax"
+        ><code><span class="line"><span class="f-syn-keyword">use</span> std<span class="f-syn-punctuation">::</span>time<span class="f-syn-punctuation">::</span><span class="f-syn-type">Duration</span><span class="f-syn-punctuation">;</span></span>
+<span class="line"></span>
+<span class="line"><span class="f-syn-comment">/// How fast to chase the red dot.</span></span>
+<span class="line"><span class="f-syn-keyword">pub</span> <span class="f-syn-keyword">fn</span> <span class="f-syn-function">follow</span><span class="f-syn-punctuation">(</span>dot<span class="f-syn-punctuation">:</span> <span class="f-syn-punctuation">&amp;</span><span class="f-syn-type">RedDot</span><span class="f-syn-punctuation">)</span> <span class="f-syn-punctuation">-&gt;</span> <span class="f-syn-type">Speed</span> <span class="f-syn-punctuation">{</span></span>
+<span class="line">    <span class="f-syn-keyword">let</span> room <span class="f-syn-punctuation">=</span> dot<span class="f-syn-punctuation">.</span><span class="f-syn-function">room</span><span class="f-syn-punctuation">(</span><span class="f-syn-punctuation">);</span></span>
+<span class="line">    <span class="f-syn-keyword">if</span> room <span class="f-syn-punctuation">==</span> <span class="f-syn-string">&quot;kitchen&quot;</span> <span class="f-syn-punctuation">&amp;&amp;</span> <span class="f-syn-punctuation">!</span>dot<span class="f-syn-punctuation">.</span><span class="f-syn-function">is_still</span><span class="f-syn-punctuation">(</span><span class="f-syn-punctuation">)</span> <span class="f-syn-punctuation">{</span></span>
+<span class="line">        <span class="f-syn-keyword">return</span> <span class="f-syn-type">Speed</span><span class="f-syn-punctuation">::</span>Walk<span class="f-syn-punctuation">;</span></span>
+<span class="line">    <span class="f-syn-punctuation">}</span></span>
+<span class="line">    <span class="f-syn-keyword">let</span> wait <span class="f-syn-punctuation">=</span> <span class="f-syn-type">Duration</span><span class="f-syn-punctuation">::</span><span class="f-syn-function">from_millis</span><span class="f-syn-punctuation">(</span><span class="f-syn-number">250</span><span class="f-syn-punctuation">);</span></span>
+<span class="line">    <span class="f-syn-type">Speed</span><span class="f-syn-punctuation">::</span>Pounce <span class="f-syn-punctuation">{</span> wait<span class="f-syn-punctuation">,</span> retries<span class="f-syn-punctuation">:</span> <span class="f-syn-constant">MAX_TRIES</span> <span class="f-syn-punctuation">}</span></span>
+<span class="line"><span class="f-syn-punctuation">}</span></span></code></pre>
+        <details class="site-markup">
+          <summary data-zh="标记">Markup</summary>
+          <pre class="f-code">
+&lt;pre class="f-code"&gt;&lt;code&gt;&lt;span class="f-syn-keyword"&gt;let&lt;/span&gt; room = dot.&lt;span class="f-syn-function"&gt;room&lt;/span&gt;();
+&lt;span class="f-syn-comment"&gt;// A comment&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+
+&lt;!-- Each token's color is also a variable: --f-syn-keyword, --f-syn-string, … --&gt;</pre>
+        </details>
+      </section>
+
+      <section id="diff">
+        <h2 data-zh="代码差异">Diff</h2>
+        <p
+          data-zh="用于代码审查的统一差异视图。每个文件是一个 <code>details</code>：标题栏显示路径和增删行数，点一下折叠。增加和删除的行有淡绿和淡红的底色，还有 + 和 − 标记，不只靠颜色。行号写在 <code>data-old</code> 和 <code>data-new</code> 里，由 CSS 画出来，所以复制时只会复制代码。宽屏上长行在差异框里横向滚动，手机上自动换行（加 <code>f-diff--wrap</code> 则总是换行）。"
+        >
+          A unified diff for code review. Each file is a <code>details</code>: its header shows the
+          path and the added and removed counts, and collapses the file. Added and removed lines get
+          a faint green or red background and a + or − marker, never color alone. Line numbers sit
+          in <code>data-old</code> and <code>data-new</code> and CSS draws them, so copying takes
+          only the code. Long lines scroll inside the diff on wide screens and wrap on phones
+          (always, with <code>f-diff--wrap</code>).
+        </p>
+        <!-- prettier-ignore -->
+        <details class="f-diff" id="demo-diff" open>
+          <summary class="f-diff__head">
+            <span class="f-diff__path">src/tracker.rs</span>
+            <span class="f-diff__stat"
+              ><span class="f-diff__added">+5</span> <span class="f-diff__removed">−2</span></span
+            >
+          </summary>
+          <div class="f-diff__body">
+            <div class="f-diff__lines">
+<div class="f-diff__hunk">@@ -12,9 +12,11 @@ pub fn follow(dot: &amp;RedDot) -&gt; Speed {</div>
+<div class="f-diff__line" data-old="12" data-new="12"><code class="f-diff__code"><span class="f-syn-keyword">pub</span> <span class="f-syn-keyword">fn</span> <span class="f-syn-function">follow</span><span class="f-syn-punctuation">(</span>dot<span class="f-syn-punctuation">:</span> <span class="f-syn-punctuation">&amp;</span><span class="f-syn-type">RedDot</span><span class="f-syn-punctuation">)</span> <span class="f-syn-punctuation">-&gt;</span> <span class="f-syn-type">Speed</span> <span class="f-syn-punctuation">{</span></code></div>
+<div class="f-diff__line" data-old="13" data-new="13"><code class="f-diff__code">    <span class="f-syn-keyword">let</span> room <span class="f-syn-punctuation">=</span> dot<span class="f-syn-punctuation">.</span><span class="f-syn-function">room</span><span class="f-syn-punctuation">(</span><span class="f-syn-punctuation">);</span></code></div>
+<div class="f-diff__line f-diff__line--del" data-old="14"><code class="f-diff__code">    <span class="f-syn-keyword">if</span> room <span class="f-syn-punctuation">==</span> <span class="f-syn-string">&quot;kitchen&quot;</span> <span class="f-syn-punctuation">{</span></code></div>
+<div class="f-diff__line f-diff__line--add" data-new="14"><code class="f-diff__code">    <span class="f-syn-comment">// The kitchen floor is slippery: walk first, and pounce only once the dot has stopped moving for a while.</span></code></div>
+<div class="f-diff__line f-diff__line--add" data-new="15"><code class="f-diff__code">    <span class="f-syn-keyword">if</span> room <span class="f-syn-punctuation">==</span> <span class="f-syn-string">&quot;kitchen&quot;</span> <span class="f-syn-punctuation">&amp;&amp;</span> <span class="f-syn-punctuation">!</span>dot<span class="f-syn-punctuation">.</span><span class="f-syn-function">is_still</span><span class="f-syn-punctuation">(</span><span class="f-syn-punctuation">)</span> <span class="f-syn-punctuation">{</span></code></div>
+<div class="f-diff__line" data-old="15" data-new="16"><code class="f-diff__code">        <span class="f-syn-keyword">return</span> <span class="f-syn-type">Speed</span><span class="f-syn-punctuation">::</span>Walk<span class="f-syn-punctuation">;</span></code></div>
+<div class="f-diff__line" data-old="16" data-new="17"><code class="f-diff__code">    <span class="f-syn-punctuation">}</span></code></div>
+<div class="f-diff__line f-diff__line--del" data-old="17"><code class="f-diff__code">    <span class="f-syn-type">Speed</span><span class="f-syn-punctuation">::</span>Pounce</code></div>
+<div class="f-diff__line f-diff__line--add" data-new="18"><code class="f-diff__code">    <span class="f-syn-keyword">let</span> wait <span class="f-syn-punctuation">=</span> <span class="f-syn-type">Duration</span><span class="f-syn-punctuation">::</span><span class="f-syn-function">from_millis</span><span class="f-syn-punctuation">(</span><span class="f-syn-number">250</span><span class="f-syn-punctuation">);</span></code></div>
+<div class="f-diff__line f-diff__line--add" data-new="19"><code class="f-diff__code">    <span class="f-syn-type">Speed</span><span class="f-syn-punctuation">::</span>Pounce <span class="f-syn-punctuation">{</span> wait<span class="f-syn-punctuation">,</span> retries<span class="f-syn-punctuation">:</span> <span class="f-syn-constant">MAX_TRIES</span> <span class="f-syn-punctuation">}</span></code></div>
+<div class="f-diff__line" data-old="18" data-new="20"><code class="f-diff__code"><span class="f-syn-punctuation">}</span></code></div>
+<div class="f-diff__more"><button type="button" data-zh="再显示 24 行">Show 24 more lines</button></div>
+<div class="f-diff__hunk">@@ -44,6 +46,7 @@ impl RedDot {</div>
+<div class="f-diff__line" data-old="44" data-new="46"><code class="f-diff__code">    <span class="f-syn-keyword">pub</span> <span class="f-syn-keyword">fn</span> <span class="f-syn-function">is_still</span><span class="f-syn-punctuation">(</span><span class="f-syn-punctuation">&amp;</span><span class="f-syn-keyword">self</span><span class="f-syn-punctuation">)</span> <span class="f-syn-punctuation">-&gt;</span> bool <span class="f-syn-punctuation">{</span></code></div>
+<div class="f-diff__line" data-old="45" data-new="47"><code class="f-diff__code">        <span class="f-syn-keyword">self</span><span class="f-syn-punctuation">.</span><span class="f-syn-property">moves</span><span class="f-syn-punctuation">.</span><span class="f-syn-function">is_empty</span><span class="f-syn-punctuation">(</span><span class="f-syn-punctuation">)</span></code></div>
+<div class="f-diff__line f-diff__line--add" data-new="48"><code class="f-diff__code">            <span class="f-syn-punctuation">||</span> <span class="f-syn-keyword">self</span><span class="f-syn-punctuation">.</span><span class="f-syn-property">last_move</span><span class="f-syn-punctuation">.</span><span class="f-syn-function">elapsed</span><span class="f-syn-punctuation">(</span><span class="f-syn-punctuation">)</span> <span class="f-syn-punctuation">&gt;</span> <span class="f-syn-constant">STILL_AFTER</span></code></div>
+<div class="f-diff__line" data-old="46" data-new="49"><code class="f-diff__code">    <span class="f-syn-punctuation">}</span></code></div>
+            </div>
+          </div>
+        </details>
+        <!-- prettier-ignore -->
+        <details class="f-diff" id="demo-diff-closed">
+          <summary class="f-diff__head">
+            <span class="f-diff__path">docs/笔记/追踪红点.md</span>
+            <span class="f-diff__stat"
+              ><span class="f-diff__added">+18</span> <span class="f-diff__removed">−0</span></span
+            >
+          </summary>
+          <div class="f-diff__body">
+            <div class="f-diff__lines">
+              <div class="f-diff__hunk">@@ -0,0 +1,18 @@</div>
+              <div class="f-diff__line f-diff__line--add" data-new="1">
+                <code class="f-diff__code" data-zh="# 追踪红点"># Tracking the red dot</code>
+              </div>
+            </div>
+          </div>
+        </details>
+        <ul>
+          <li
+            data-zh='“加载更多”行（<code>.f-diff__more</code>）是给分段加载的大差异用的：读者点击按钮，或者这一行滚动到接近屏幕时，由你的代码把它换成下一段。加载期间给它加 <code>aria-busy="true"</code>，按钮里会出现一个转圈（减少动态效果时静止）。facet 只提供样式和标记。'
+          >
+            The load more row (<code>.f-diff__more</code>) is for a large diff loaded in parts: when
+            the reader clicks its button, or the row nears the screen, your code replaces it with
+            the next part. Set <code>aria-busy="true"</code> on it while a part loads, and the
+            button shows a spinner (still under reduced motion). Facet ships the styling and markup
+            only.
+          </li>
+          <li
+            data-zh="行号列宽 4 个字符（手机上 3 个），超过 9999 行时把 <code>--f-diff-num-width</code> 设宽一些。行内的语法颜色用上面的 <code>f-syn-*</code> 类。"
+          >
+            The number columns are 4 characters wide (3 on phones); past 9999 lines, widen them with
+            <code>--f-diff-num-width</code>. Syntax colors inside lines use the
+            <code>f-syn-*</code> classes above.
+          </li>
+        </ul>
+        <details class="site-markup">
+          <summary data-zh="标记">Markup</summary>
+          <pre class="f-code">
+&lt;details class="f-diff" open&gt;
+  &lt;summary class="f-diff__head"&gt;
+    &lt;span class="f-diff__path"&gt;src/tracker.rs&lt;/span&gt;
+    &lt;span class="f-diff__stat"&gt;
+      &lt;span class="f-diff__added"&gt;+5&lt;/span&gt; &lt;span class="f-diff__removed"&gt;−2&lt;/span&gt;
+    &lt;/span&gt;
+  &lt;/summary&gt;
+  &lt;div class="f-diff__body"&gt;
+    &lt;div class="f-diff__lines"&gt;
+      &lt;div class="f-diff__hunk"&gt;@@ -12,9 +12,11 @@ pub fn follow(dot: &amp;amp;RedDot)&lt;/div&gt;
+      &lt;div class="f-diff__line" data-old="13" data-new="13"&gt;
+        &lt;code class="f-diff__code"&gt;    let room = dot.room();&lt;/code&gt;&lt;/div&gt;
+      &lt;div class="f-diff__line f-diff__line--del" data-old="14"&gt;
+        &lt;code class="f-diff__code"&gt;…&lt;/code&gt;&lt;/div&gt;
+      &lt;div class="f-diff__line f-diff__line--add" data-new="14"&gt;
+        &lt;code class="f-diff__code"&gt;…&lt;/code&gt;&lt;/div&gt;
+      &lt;!-- Where the next part of a large diff loads --&gt;
+      &lt;div class="f-diff__more"&gt;&lt;button type="button"&gt;Show 24 more lines&lt;/button&gt;&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+&lt;/details&gt;</pre>
         </details>
       </section>
 

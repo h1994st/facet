@@ -87,3 +87,25 @@ def focus_ring(page, selector):
         f"(() => {{ const s = getComputedStyle(document.querySelector({selector!r}));"
         " return s.outlineStyle + ' ' + s.outlineWidth; })()"
     )
+
+
+def contrast_in_place(page, selector):
+    """Contrast of an element's text against what is painted behind it: every ancestor's
+    background, translucent ones included, composited from the body up."""
+    fg, bg = page.evaluate(
+        f"""(() => {{
+          const f = ({TO_RGB});
+          const el = document.querySelector({selector!r});
+          const chain = [];
+          for (let n = el; n && n !== document.documentElement; n = n.parentElement) {{
+            chain.unshift(n);
+          }}
+          let bg = f(getComputedStyle(document.body).backgroundColor);
+          for (const n of chain) {{
+            bg = f(getComputedStyle(n).backgroundColor, `rgb(${{bg.join(' ')}})`);
+          }}
+          return [f(getComputedStyle(el).color, `rgb(${{bg.join(' ')}})`), bg];
+        }})()"""
+    )
+    a, b = sorted([_lum(fg), _lum(bg)], reverse=True)
+    return (a + 0.05) / (b + 0.05)

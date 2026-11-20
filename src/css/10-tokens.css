@@ -119,6 +119,26 @@
     --cat-edge: var(--f-unless-light, rgb(255 255 255 / 0.2)) var(--f-unless-dark, transparent);
     --cat-shadow: var(--f-unless-light, rgb(0 0 0 / 0.35))
       var(--f-unless-dark, rgb(29 35 43 / 0.13));
+    /* Syntax colors, for a highlighter's tokens (the .f-syn-* classes): facet's hues at the accent
+       chroma, a step darker on light so they keep 4.5:1 on code and diff backgrounds. Decoration
+       only: code reads the same without them. */
+    --f-syn-keyword: var(--f-unless-light, oklch(0.76 0.06 295))
+      var(--f-unless-dark, oklch(0.48 0.07 295));
+    --f-syn-string: var(--f-unless-light, oklch(0.76 0.06 165))
+      var(--f-unless-dark, oklch(0.48 0.07 165));
+    --f-syn-number: var(--f-unless-light, oklch(0.76 0.06 55))
+      var(--f-unless-dark, oklch(0.48 0.07 55));
+    --f-syn-type: var(--f-unless-light, oklch(0.76 0.06 205))
+      var(--f-unless-dark, oklch(0.48 0.07 205));
+    --f-syn-function: var(--f-unless-light, oklch(0.76 0.06 255))
+      var(--f-unless-dark, oklch(0.48 0.07 255));
+    --f-syn-property: var(--f-unless-light, oklch(0.76 0.06 85))
+      var(--f-unless-dark, oklch(0.48 0.07 85));
+    --f-syn-tag: var(--f-unless-light, oklch(0.76 0.06 15))
+      var(--f-unless-dark, oklch(0.48 0.07 15));
+    --f-syn-constant: var(--f-syn-number);
+    --f-syn-comment: var(--f-fg-2);
+    --f-syn-punctuation: var(--f-fg-2);
 
     --f-font-sans:
       "Geist", system-ui, -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB",

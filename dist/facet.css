@@ -123,6 +123,26 @@
     --cat-edge: var(--f-unless-light, rgb(255 255 255 / 0.2)) var(--f-unless-dark, transparent);
     --cat-shadow: var(--f-unless-light, rgb(0 0 0 / 0.35))
       var(--f-unless-dark, rgb(29 35 43 / 0.13));
+    /* Syntax colors, for a highlighter's tokens (the .f-syn-* classes): facet's hues at the accent
+       chroma, a step darker on light so they keep 4.5:1 on code and diff backgrounds. Decoration
+       only: code reads the same without them. */
+    --f-syn-keyword: var(--f-unless-light, oklch(0.76 0.06 295))
+      var(--f-unless-dark, oklch(0.48 0.07 295));
+    --f-syn-string: var(--f-unless-light, oklch(0.76 0.06 165))
+      var(--f-unless-dark, oklch(0.48 0.07 165));
+    --f-syn-number: var(--f-unless-light, oklch(0.76 0.06 55))
+      var(--f-unless-dark, oklch(0.48 0.07 55));
+    --f-syn-type: var(--f-unless-light, oklch(0.76 0.06 205))
+      var(--f-unless-dark, oklch(0.48 0.07 205));
+    --f-syn-function: var(--f-unless-light, oklch(0.76 0.06 255))
+      var(--f-unless-dark, oklch(0.48 0.07 255));
+    --f-syn-property: var(--f-unless-light, oklch(0.76 0.06 85))
+      var(--f-unless-dark, oklch(0.48 0.07 85));
+    --f-syn-tag: var(--f-unless-light, oklch(0.76 0.06 15))
+      var(--f-unless-dark, oklch(0.48 0.07 15));
+    --f-syn-constant: var(--f-syn-number);
+    --f-syn-comment: var(--f-fg-2);
+    --f-syn-punctuation: var(--f-fg-2);
 
     --f-font-sans:
       "Geist", system-ui, -apple-system, "Segoe UI", "PingFang SC", "Hiragino Sans GB",
@@ -3344,6 +3364,276 @@
   }
 }
 
+/* src/css/70-components/diff.css */
+@layer facet.components {
+  /* A unified diff for code review: one <details class="f-diff" open> per file. Its <summary> is
+     the file header (path, +/- counts, the collapse chevron); .f-diff__lines holds hunk rows,
+     lines and an optional "load more" row. Each .f-diff__line carries data-old and data-new line
+     numbers; CSS draws the numbers and the +/- marker, so copying a line copies only its code.
+     Added and removed lines get a tinted background and a marker, never color alone. Long lines
+     scroll inside the diff on wide screens and wrap on phones (or always, with .f-diff--wrap). */
+  .f-diff {
+    --_num: calc(var(--f-diff-num-width, 4ch) + 1.25ch);
+    margin: var(--f-space-5) 0;
+    overflow: hidden;
+    border: 1px solid var(--f-line);
+    border-radius: var(--f-r-md);
+    background: var(--f-bg-2);
+    color: var(--f-fg);
+  }
+
+  .f-diff__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--f-space-1) var(--f-space-3);
+    padding: 0.6rem 0.9rem;
+    background: var(--f-surface);
+    font: 600 var(--f-text-sm) / 1.4 var(--f-font-sans);
+    list-style: none;
+    cursor: pointer;
+  }
+
+  .f-diff[open] > .f-diff__head {
+    border-bottom: 1px solid var(--f-line);
+  }
+
+  .f-diff__head::-webkit-details-marker {
+    display: none;
+  }
+
+  /* The chevron points down while the file is open. */
+  .f-diff__head::before {
+    content: "";
+    flex: none;
+    width: 0.85rem;
+    height: 0.85rem;
+    background: var(--f-fg-2);
+    mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23000' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 4 4 4-4 4'/%3E%3C/svg%3E")
+      center / contain no-repeat;
+    transition: transform var(--f-dur-2) var(--f-ease);
+  }
+
+  .f-diff[open] > .f-diff__head::before {
+    transform: rotate(90deg);
+  }
+
+  .f-diff__path {
+    min-width: 0;
+    font: 500 0.84rem / 1.4 var(--f-font-mono);
+    overflow-wrap: anywhere;
+  }
+
+  .f-diff__stat {
+    display: inline-flex;
+    gap: 0.5rem;
+    margin-left: auto;
+    font: 600 0.8rem / 1.4 var(--f-font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .f-diff__added {
+    color: color-mix(in oklab, var(--f-success), var(--f-fg) 25%);
+  }
+
+  .f-diff__removed {
+    color: color-mix(in oklab, var(--f-danger), var(--f-fg) 25%);
+  }
+
+  .f-diff__body {
+    overflow-x: auto;
+  }
+
+  /* As wide as the longest line, so every row's background spans the scrolled width. */
+  .f-diff__lines {
+    width: max-content;
+    min-width: 100%;
+    font: 0.82rem / 1.6 var(--f-font-mono);
+  }
+
+  .f-diff__line {
+    --_tint: transparent;
+    --_edge: transparent;
+    display: grid;
+    grid-template-columns: var(--_num) var(--_num) auto;
+    background: var(--_tint);
+  }
+
+  .f-diff__line--add {
+    --_tint: color-mix(in oklch, var(--f-success) 13%, transparent);
+    --_edge: color-mix(in oklch, var(--f-success) 22%, transparent);
+  }
+
+  .f-diff__line--del {
+    --_tint: color-mix(in oklch, var(--f-danger) 13%, transparent);
+    --_edge: color-mix(in oklch, var(--f-danger) 22%, transparent);
+  }
+
+  /* Old and new line numbers, from data-old and data-new; neither is selectable. */
+  .f-diff__line::before,
+  .f-diff__line::after {
+    padding: 0 0.6ch;
+    background: var(--_edge);
+    color: var(--f-fg-3);
+    text-align: end;
+    user-select: none;
+  }
+
+  .f-diff__line::before {
+    content: attr(data-old);
+    grid-column: 1;
+  }
+
+  .f-diff__line::after {
+    content: attr(data-new);
+    grid-row: 1;
+    grid-column: 2;
+  }
+
+  .f-diff__code {
+    position: relative;
+    grid-column: 3;
+    display: block;
+    padding: 0 1rem 0 1.75ch;
+    font: inherit;
+    white-space: pre;
+    tab-size: 4;
+  }
+
+  /* The marker: + or -, announced as a word where alt text works. */
+  .f-diff__code::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 1.75ch;
+    color: var(--f-fg-2);
+    text-align: center;
+    user-select: none;
+  }
+
+  .f-diff__line--add > .f-diff__code::before {
+    content: "+";
+    content: "+" / "added";
+  }
+
+  .f-diff__line--del > .f-diff__code::before {
+    content: "−";
+    content: "−" / "removed";
+  }
+
+  .f-diff__hunk,
+  .f-diff__more {
+    display: flex;
+    align-items: center;
+    gap: var(--f-space-3);
+    min-height: 2rem;
+    padding: 0.15rem 0.9rem 0.15rem calc(2 * var(--_num) + 1.75ch);
+    background: var(--f-info-soft);
+    color: var(--f-fg-2);
+  }
+
+  .f-diff__hunk {
+    white-space: pre;
+  }
+
+  /* Where a consumer loads the next part of a large diff, on click or as it nears the screen.
+     aria-busy="true" shows that a part is on its way. */
+  .f-diff__more {
+    justify-content: flex-start;
+    background: color-mix(in oklch, var(--f-fg) 4%, transparent);
+    font-family: var(--f-font-sans);
+  }
+
+  .f-diff__more > button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.25rem 0.75rem;
+    border: 1px solid var(--f-line-2);
+    border-radius: var(--f-r-pill);
+    background: var(--f-surface);
+    color: var(--f-fg-2);
+    font: 600 var(--f-text-xs) var(--f-font-sans);
+    cursor: pointer;
+  }
+
+  .f-diff__more > button:hover {
+    color: var(--f-fg);
+  }
+
+  .f-diff__more[aria-busy="true"] > button {
+    cursor: progress;
+  }
+
+  .f-diff__more[aria-busy="true"] > button::before {
+    content: "";
+    width: 0.8em;
+    height: 0.8em;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    animation: f-diff-spin 0.8s linear infinite;
+  }
+
+  @keyframes f-diff-spin {
+    to {
+      transform: rotate(1turn);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .f-diff {
+      --_num: calc(var(--f-diff-num-width, 3ch) + 1ch);
+    }
+
+    .f-diff__lines {
+      width: auto;
+    }
+
+    .f-diff__code,
+    .f-diff__hunk {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .f-diff__line {
+      grid-template-columns: var(--_num) var(--_num) minmax(0, 1fr);
+    }
+  }
+
+  .f-diff--wrap .f-diff__lines {
+    width: auto;
+  }
+
+  .f-diff--wrap :is(.f-diff__code, .f-diff__hunk) {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  .f-diff--wrap .f-diff__line {
+    grid-template-columns: var(--_num) var(--_num) minmax(0, 1fr);
+  }
+
+  @media (forced-colors: active) {
+    .f-diff__line--add,
+    .f-diff__line--del {
+      border-inline-start: 3px solid CanvasText;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .f-diff__head::before {
+      transition: none;
+    }
+
+    .f-diff__more[aria-busy="true"] > button::before {
+      animation: none;
+      border-right-color: currentColor;
+      opacity: 0.6;
+    }
+  }
+}
+
 /* src/css/70-components/divider.css */
 @layer facet.components {
   /* A hairline with optional text in the middle ("or find me on"). */
@@ -4186,6 +4476,53 @@
   .f-social__link:focus-visible {
     color: var(--f-accent);
     background: var(--f-accent-soft);
+  }
+}
+
+/* src/css/70-components/syntax.css */
+@layer facet.components {
+  /* Syntax colors for any highlighter: map its scopes to these classes on the server (for
+     example Giallo or Shiki class output, or a Prism-like .token list) and facet colors them in
+     both themes. The colors are decoration, so code stays readable without them. */
+  .f-syn-keyword {
+    color: var(--f-syn-keyword);
+  }
+
+  .f-syn-string {
+    color: var(--f-syn-string);
+  }
+
+  .f-syn-number {
+    color: var(--f-syn-number);
+  }
+
+  .f-syn-constant {
+    color: var(--f-syn-constant);
+  }
+
+  .f-syn-type {
+    color: var(--f-syn-type);
+  }
+
+  .f-syn-function {
+    color: var(--f-syn-function);
+  }
+
+  .f-syn-property {
+    color: var(--f-syn-property);
+  }
+
+  .f-syn-tag {
+    color: var(--f-syn-tag);
+  }
+
+  .f-syn-comment {
+    color: var(--f-syn-comment);
+    font-style: italic;
+  }
+
+  .f-syn-punctuation {
+    color: var(--f-syn-punctuation);
   }
 }
 

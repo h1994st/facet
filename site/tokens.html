@@ -6,8 +6,8 @@
     <title data-zh="令牌 · facet">Tokens · facet</title>
     <meta
       name="description"
-      content="facet's design tokens: the --f-* custom properties for color, charts, type, spacing, radius, shadow, glass and motion, with dark and light values."
-      data-zh="facet 的设计令牌：颜色、图表、字体、间距、圆角、阴影、玻璃和动效的 --f-* 自定义属性，每一项都有深色和浅色两个值。"
+      content="facet's design tokens: the --f-* custom properties for color, charts, syntax, type, spacing, radius, shadow, glass and motion, with dark and light values."
+      data-zh="facet 的设计令牌：颜色、图表、语法高亮、字体、间距、圆角、阴影、玻璃和动效的 --f-* 自定义属性，每一项都有深色和浅色两个值。"
     />
     <script src="site.js"></script>
     <link rel="stylesheet" href="dist/facet.css" />
@@ -334,6 +334,60 @@
             </div>
           </div>
         </div>
+      </section>
+
+      <section>
+        <h2 data-zh="语法高亮">Syntax</h2>
+        <p
+          data-zh="代码高亮的颜色，配合 <code>.f-syn-*</code> 类使用：强调色的饱和度，浅色主题里暗一档，在代码和差异行背景上都保持 4.5:1。"
+        >
+          Code highlighting colors, used through the <code>.f-syn-*</code> classes: the accent
+          chroma, a step darker on light, at 4.5:1 on code and diff backgrounds.
+        </p>
+        <ul class="tok-list">
+          <li>
+            <code>--f-syn-keyword</code
+            ><span class="f-syn-keyword" style="font: 0.86rem var(--f-font-mono)">keyword</span>
+          </li>
+          <li>
+            <code>--f-syn-string</code
+            ><span class="f-syn-string" style="font: 0.86rem var(--f-font-mono)">string</span>
+          </li>
+          <li>
+            <code>--f-syn-number</code
+            ><span class="f-syn-number" style="font: 0.86rem var(--f-font-mono)">number</span>
+          </li>
+          <li>
+            <code>--f-syn-constant</code
+            ><span class="f-syn-constant" style="font: 0.86rem var(--f-font-mono)">constant</span>
+          </li>
+          <li>
+            <code>--f-syn-type</code
+            ><span class="f-syn-type" style="font: 0.86rem var(--f-font-mono)">type</span>
+          </li>
+          <li>
+            <code>--f-syn-function</code
+            ><span class="f-syn-function" style="font: 0.86rem var(--f-font-mono)">function</span>
+          </li>
+          <li>
+            <code>--f-syn-property</code
+            ><span class="f-syn-property" style="font: 0.86rem var(--f-font-mono)">property</span>
+          </li>
+          <li>
+            <code>--f-syn-tag</code
+            ><span class="f-syn-tag" style="font: 0.86rem var(--f-font-mono)">tag</span>
+          </li>
+          <li>
+            <code>--f-syn-comment</code
+            ><span class="f-syn-comment" style="font: 0.86rem var(--f-font-mono)">comment</span>
+          </li>
+          <li>
+            <code>--f-syn-punctuation</code
+            ><span class="f-syn-punctuation" style="font: 0.86rem var(--f-font-mono)"
+              >punctuation</span
+            >
+          </li>
+        </ul>
       </section>
     </main>
 

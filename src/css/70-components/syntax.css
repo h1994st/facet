@@ -1,0 +1,45 @@
+@layer facet.components {
+  /* Syntax colors for any highlighter: map its scopes to these classes on the server (for
+     example Giallo or Shiki class output, or a Prism-like .token list) and facet colors them in
+     both themes. The colors are decoration, so code stays readable without them. */
+  .f-syn-keyword {
+    color: var(--f-syn-keyword);
+  }
+
+  .f-syn-string {
+    color: var(--f-syn-string);
+  }
+
+  .f-syn-number {
+    color: var(--f-syn-number);
+  }
+
+  .f-syn-constant {
+    color: var(--f-syn-constant);
+  }
+
+  .f-syn-type {
+    color: var(--f-syn-type);
+  }
+
+  .f-syn-function {
+    color: var(--f-syn-function);
+  }
+
+  .f-syn-property {
+    color: var(--f-syn-property);
+  }
+
+  .f-syn-tag {
+    color: var(--f-syn-tag);
+  }
+
+  .f-syn-comment {
+    color: var(--f-syn-comment);
+    font-style: italic;
+  }
+
+  .f-syn-punctuation {
+    color: var(--f-syn-punctuation);
+  }
+}
