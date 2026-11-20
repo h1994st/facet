@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.1.10](https://github.com/h1994st/facet/compare/v0.1.9...v0.1.10) (2026-11-20)
+
+
+### Features
+
+* add a multi-select dropdown ([#34](https://github.com/h1994st/facet/issues/34)) ([acb5d5c](https://github.com/h1994st/facet/commit/acb5d5cf4576dccc032945909ac11e36c8119d33))
+* add chart colors and chart components ([#35](https://github.com/h1994st/facet/issues/35)) ([3534d93](https://github.com/h1994st/facet/commit/3534d93246a8263a21714be3a860c47459a4e49d))
+* add syntax colors and a diff view ([#36](https://github.com/h1994st/facet/issues/36)) ([11f7a68](https://github.com/h1994st/facet/commit/11f7a68f9c93eb54c01ce1a7bb1e8f851e468bfb))
+
+
+### Bug Fixes
+
+* keep the pinned versions formatted and current through releases ([#38](https://github.com/h1994st/facet/issues/38)) ([37068d8](https://github.com/h1994st/facet/commit/37068d8c0442a12f6aac15bffc88430ec00ce4c0))
+
 ## [0.1.9](https://github.com/h1994st/facet/compare/v0.1.8...v0.1.9) (2026-10-21)
 
 
