@@ -32,6 +32,7 @@ Chinese.
 
 Link the stylesheet and the optional script from jsDelivr, pinned to a tag, and pick an accent:
 
+<!-- prettier-ignore-start -->
 <!-- x-release-please-start-version -->
 
 ```html
@@ -51,10 +52,12 @@ Link the stylesheet and the optional script from jsDelivr, pinned to a tag, and 
 ```
 
 <!-- x-release-please-end -->
+<!-- prettier-ignore-end -->
 
 jsDelivr is unreliable in mainland China. For sites aimed there, vendor facet as a git submodule and
 serve `vendor/facet/dist/` with the site:
 
+<!-- prettier-ignore-start -->
 <!-- x-release-please-start-version -->
 
 ```sh
@@ -63,6 +66,7 @@ git -C vendor/facet checkout v0.1.9
 ```
 
 <!-- x-release-please-end -->
+<!-- prettier-ignore-end -->
 
 The mascots, social icons, theme toggle, analytics and every other option are in the
 [docs](https://shengtuo.me/facet/).
